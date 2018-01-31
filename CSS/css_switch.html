@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8" />
+	<title>css-switch</title>
+	<style media="screen">
+	*{ padding: 0; margin: 0; }
+	span{ display: block; margin: auto; }
+	.siwtch_btn{ width: 100px; height: 50px; border-radius: 25px; background-color: #eee; cursor: pointer; position: relative; -webkit-transition: 0.3s all; transition: 0.3s all; }
+	.siwtch_btn::before{ position: absolute; content: ''; width: 50px; height: 50px; box-shadow: 1px 1px 1px 1px rgba(0, 0, 0, 0.08); background-color: #fff; left: 0; top: 0; border-radius: 50%; transform: translateX(2%); -webkit-transition: 0.3s all; transition: 0.3s all; }
+	.siwtch_active{ background-color: #59c2f9; }
+	.siwtch_active::before{ transform: translateX(98%); }
+	</style>
+</head>
+
+<body>
+	<span class="siwtch_btn siwtch_active"></span>
+	<script>
+		var btn = document.querySelector('.siwtch_btn');
+		btn.addEventListener('click',() => {
+			btn.classList.toggle('siwtch_active');
+		});
+
+		// var test = () => console.log(!document.getElementById('switch').checked ? "选中" : "未选中");
+	</script>
+</body>
+
+</html>

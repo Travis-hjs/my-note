@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>CSS3-旋转特效</title>
+	</head>
+	<style media="screen">
+	/*change this to resize*/
+		.windmill {
+			list-style: none;
+			margin: 0;
+			padding: 0;
+			position: relative;
+			width: 5em;
+			width: 5em;
+		}
+		.windmill li {
+			position: absolute;
+			left: 0;
+			right: 0;
+			bottom: 0;
+			top: 0;
+			margin: auto;
+			border-radius: 50%;
+			-webkit-box-sizing: border-box;
+			box-sizing: border-box;
+			display: -webkit-box;
+			display: -ms-flexbox;
+			display: flex;
+			-webkit-box-pack: center;
+			-ms-flex-pack: center;
+			justify-content: center;
+			-webkit-box-align: center;
+			-ms-flex-align: center;
+			align-items: center;
+			-webkit-transform-origin: center center;
+			transform-origin: center center;
+			-webkit-animation: anim 1s ease-in-out infinite;
+			animation: anim 1s ease-in-out infinite;
+			will-change: transform, filter;
+		}
+		.windmill li:nth-child(1) {
+			width: 1em;
+			height: 1em;
+		}
+		.windmill li:nth-child(1):after {
+			content: "";
+			display: block;
+			font-size: 25%;
+			width: 1em;
+			height: 1em;
+			border-radius: 50%;
+			-webkit-box-shadow: 1em 0 0 rgba(72, 157, 138, 0.2), -1em 0 0 rgba(50, 70, 80, 0.2), 0 1em 0 rgba(211, 75, 76, 0.2), 0 -1em 0 rgba(232, 169, 97, 0.2);
+			box-shadow: 1em 0 0 rgba(72, 157, 138, 0.2), -1em 0 0 rgba(50, 70, 80, 0.2), 0 1em 0 rgba(211, 75, 76, 0.2), 0 -1em 0 rgba(232, 169, 97, 0.2);
+		}
+		.windmill li:nth-child(2) {
+			-webkit-animation-delay: 0.1s;
+			animation-delay: 0.1s;
+			width: 2em;
+			height: 2em;
+		}
+		.windmill li:nth-child(2):after {
+			content: "";
+			display: block;
+			font-size: 50%;
+			width: 1em;
+			height: 1em;
+			border-radius: 50%;
+			-webkit-box-shadow: 1.5em 0 0 rgba(72, 157, 138, 0.4), -1.5em 0 0 rgba(50, 70, 80, 0.4), 0 1.5em 0 rgba(211, 75, 76, 0.4), 0 -1.5em 0 rgba(232, 169, 97, 0.4);
+			box-shadow: 1.5em 0 0 rgba(72, 157, 138, 0.4), -1.5em 0 0 rgba(50, 70, 80, 0.4), 0 1.5em 0 rgba(211, 75, 76, 0.4), 0 -1.5em 0 rgba(232, 169, 97, 0.4);
+		}
+		.windmill li:nth-child(3) {
+			-webkit-animation-delay: 0.15s;
+			animation-delay: 0.15s;
+			width: 3em;
+			height: 3em;
+		}
+		.windmill li:nth-child(3):after {
+			content: "";
+			display: block;
+			font-size: 75%;
+			width: 1em;
+			height: 1em;
+			border-radius: 50%;
+			-webkit-box-shadow: 2em 0 0 rgba(72, 157, 138, 0.6), -2em 0 0 rgba(50, 70, 80, 0.6), 0 2em 0 rgba(211, 75, 76, 0.6), 0 -2em 0 rgba(232, 169, 97, 0.6);
+			box-shadow: 2em 0 0 rgba(72, 157, 138, 0.6), -2em 0 0 rgba(50, 70, 80, 0.6), 0 2em 0 rgba(211, 75, 76, 0.6), 0 -2em 0 rgba(232, 169, 97, 0.6);
+		}
+		.windmill li:nth-child(4) {
+			-webkit-animation-delay: 0.2s;
+			animation-delay: 0.2s;
+			width: 4em;
+			height: 4em;
+		}
+		.windmill li:nth-child(4):after {
+			content: "";
+			display: block;
+			font-size: 100%;
+			width: 1em;
+			height: 1em;
+			border-radius: 50%;
+			-webkit-box-shadow: 2.5em 0 0 rgba(72, 157, 138, 0.8), -2.5em 0 0 rgba(50, 70, 80, 0.8), 0 2.5em 0 rgba(211, 75, 76, 0.8), 0 -2.5em 0 rgba(232, 169, 97, 0.8);
+			box-shadow: 2.5em 0 0 rgba(72, 157, 138, 0.8), -2.5em 0 0 rgba(50, 70, 80, 0.8), 0 2.5em 0 rgba(211, 75, 76, 0.8), 0 -2.5em 0 rgba(232, 169, 97, 0.8);
+		}
+		.windmill li:nth-child(5) {
+		-webkit-animation-delay: 0.25s;
+			  animation-delay: 0.25s;
+		width: 5em;
+		height: 5em;
+		}
+		.windmill li:nth-child(5):after {
+			content: "";
+			display: block;
+			font-size: 125%;
+			width: 1em;
+			height: 1em;
+			border-radius: 50%;
+			-webkit-box-shadow: 3em 0 0 #489d8a, -3em 0 0 #324650, 0 3em 0 #d34b4c, 0 -3em 0 #e8a961;
+			box-shadow: 3em 0 0 #489d8a, -3em 0 0 #324650, 0 3em 0 #d34b4c, 0 -3em 0 #e8a961;
+		}
+		@-webkit-keyframes anim {
+			50% {
+				-webkit-filter: blur(2px);
+					filter: blur(2px);
+			}
+			90%, 100% {
+				-webkit-transform: rotate(1turn);
+				transform: rotate(1turn);
+				-webkit-filter: blur(0);
+				filter: blur(0);
+			}
+		}
+		@keyframes anim {
+			50% {
+				-webkit-filter: blur(2px);
+				filter: blur(2px);
+			}
+			90%, 100% {
+				-webkit-transform: rotate(1turn);
+				transform: rotate(1turn);
+				-webkit-filter: blur(0);
+				filter: blur(0);
+			}
+		}
+		html { font-size: 10px; height: 100%; }
+		body {
+			background: #fcfcfc;
+			height: 100%;
+			display: -webkit-box;
+			display: -ms-flexbox;
+			display: flex;
+			-webkit-box-pack: center;
+			-ms-flex-pack: center;
+			justify-content: center;
+			-webkit-box-align: center;
+			-ms-flex-align: center;
+			align-items: center;
+			font-size: 2em;
+		}
+	</style>
+	<body>
+		<ul class="windmill">
+			<li></li>
+			<li></li>
+			<li></li>
+			<li></li>
+			<li></li>
+		</ul>
+	</body>
+</html>
