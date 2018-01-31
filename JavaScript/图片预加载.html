@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+	<title>图片预加载</title>
+	<style media="screen">
+        *{ padding: 0; margin: 0; }
+        li{ list-style: none;}
+        img{ width: 100%; display: block;}
+        #wrap{ max-width: 500px; margin: auto;}
+        #wrap h2{ font-size: 28px; line-height: 50px; font-weight: 400; text-align: center;}
+        .photos{ width: 100%; }
+        .photos li{ margin-bottom: 20px;}
+	</style>
+</head>
+<body>
+	<div id="wrap">
+		<h2>简单的图片预加载</h2>
+		<ul class="photos">
+			<li><img class="lazy" src="img/loading.gif" data-lazy="img/big-1.jpg" alt=""></li>
+			<li><img class="lazy" src="img/loading.gif" data-lazy="img/big-2.jpg" alt=""></li>
+			<li><img class="lazy" src="img/loading.gif" data-lazy="img/big-3.jpg" alt=""></li>
+			<li><img class="lazy" src="img/loading.gif" data-lazy="img/big-4.jpg" alt=""></li>
+			<li><img class="lazy" src="img/loading.gif" data-lazy="img/big-5.jpg" alt=""></li>
+			<li><img class="lazy" src="img/loading.gif" data-lazy="img/big-6.jpg" alt=""></li>
+			<li><img class="lazy" src="img/loading.gif" data-lazy="img/big-7.jpg" alt=""></li>
+			<li><img class="lazy" src="img/loading.gif" data-lazy="img/A7.jpg" alt=""></li>
+		</ul>
+	</div>
+</body>
+</html>
+<script type="text/javascript">
+	window.imgLazyLoad = (function(window, document, undefined) {
+		var store = [],offset, throttle, poll;
+		function _inView (el) {
+			var coords = el.getBoundingClientRect();
+			return ((coords.top >= 0 && coords.left >= 0 && coords.top) <= (window.innerHeight || document.documentElement.clientHeight) + parseInt(offset));
+		};
+		function _pollImages () {
+			// console.log(store);
+			for (var i = store.length; i--;) {
+				var self = store[i];
+				if (_inView(self)) {
+					self.src = self.getAttribute('data-lazy');
+					store.splice(i, 1);
+				}
+			}
+            // 这里可以做判断，当数组为空的时候清除scroll事件
+		};
+		function _throttle () {
+			clearTimeout(poll);
+			poll = setTimeout(_pollImages, throttle);
+		};
+		function init (obj) {
+			var nodes = document.querySelectorAll('[data-lazy]');
+			var opts = obj || {};
+			offset = opts.offset || 0;
+			throttle = opts.throttle || 150;
+			for (var i = 0; i < nodes.length; i++) {
+				store.push(nodes[i]);
+			}
+            // 一开始先执行一次
+			_throttle();
+			if (document.addEventListener) {
+				window.addEventListener('scroll', _throttle, false);
+			} else {
+				window.attachEvent('onscroll', _throttle);
+			}
+		};
+		return {
+			init: init
+			// render: _throttle	//	这个目前不知道有什么用
+		};
+	})(window, document);
+
+	// imgLazyLoad.init({
+	// 	offset: 0, //离可视区域多少像素的图片可以被加载
+	// 	throttle: 0, //图片延时多少毫秒加载
+	// });
+	// 3秒后关闭滚动监听事件
+	// setTimeout(() => {
+	//     // window.removeEventListener('scroll', _throttle);
+	//     window.addEventListener('scroll', () => {
+	//         console.log('追加的滚动事件');
+	//     });
+	// },3000);
+	const LazyImg = {
+		store: [],
+		offset: 0,
+		throttle: 0,
+		poll: null,
+		init (obj) {
+			var that = this;
+			let nodes = document.querySelectorAll('[data-lazy]');
+			that.offset = obj.offset || 0;
+			that.throttle = obj.delay || 150;
+			for (let i = 0; i < nodes.length; i++) {
+				that.store.push(nodes[i]);
+			}
+            //	计算每个元素scroll值
+			function _inView (el) {
+				let coords = el.getBoundingClientRect();
+				return ((coords.top >= 0 && coords.left >= 0 && coords.top) <= (window.innerHeight || document.documentElement.clientHeight) + parseInt(that.offset));
+			}
+            //	替换图片路径
+			function _pollImages () {
+				for (let i = that.store.length; i--;) {
+					let self = that.store[i];
+					if (_inView(self)) {
+						self.src = self.getAttribute('data-lazy');
+						that.store.splice(i, 1);
+					}
+				}
+				// 全部加载完后清除滚动事件
+				if (that.store.length === 0) window.removeEventListener('scroll', _throttle);
+			}
+            // 滚动延迟
+			function _throttle() {
+				if (that.poll) clearTimeout(that.poll);
+				that.poll = setTimeout(_pollImages, that.throttle);
+			}
+            // 先启动一次
+			_throttle();
+			window.addEventListener('scroll', _throttle);
+		}
+	}
+	LazyImg.init({
+		offset: 0,
+		delay: 0
+	});
+</script>

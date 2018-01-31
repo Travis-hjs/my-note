@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>上传图片并预览</title>
+  <style>
+    *{ padding: 0; margin: 0; }
+    .click{ display: block; width: 200px; height: 200px; background-color: #ccc; color: #fff; margin: auto; font-size: 168px; text-align: center; line-height: 200px; cursor: pointer; }
+    #file{ opacity: 0; }
+    .updataImg{ width: 500px; margin: auto; display: block; }
+  </style>
+</head>
+<body>
+  <div class="img_box">
+    <label for="file" class="click">+</label>
+    <input type="file" id="file" name="picture"/>
+    <img src="" class="updataImg">
+  </div>
+
+  <script type="text/javascript">
+    document.getElementById('file').onchange = function(e) {
+      var files = e.target.files || e.dataTransfer.files
+      var supportedTypes = ['image/jpg', 'image/jpeg', 'image/png']
+      if (!files.length || supportedTypes.indexOf(files[0].type) < 0){
+        alert('文件格式只支持：jpg 和 png')
+        return ;
+      }
+      createImage(files[0]);
+    }
+    function createImage(file) {
+      let reader = new FileReader()
+      reader.onload = e => {
+        document.querySelector('.updataImg').src = e.target.result
+        // e.target.result.replace(/\+/g, "%2B").replace(/\&/g, "%26")
+        e.target.result.split('+').join('%2B').split('&').join('%26')
+        console.log(e.target.result);
+        // console.log(JSON.parse(e.target.result));
+      };
+      reader.readAsDataURL(file)
+    }
+  </script>
+</body>
+</html>

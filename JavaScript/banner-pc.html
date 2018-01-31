@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<title>PC端banner</title>
+	<style>
+		*{ padding: 0px; margin: 0px; }
+		ul,li{ list-style: none; }
+		a{ text-decoration: none; }
+
+		#box{ width: 100%; margin-top: 20px; overflow: hidden; position: relative; }
+		#banner{ position: absolute; left: 0; top: 0; transition: .5s all;}
+		#banner li{ float: left; display: block; }
+		#banner li img{ width: 100%; }
+		#btn{ width: 200px; height: 40px; position: absolute; margin-left: -100px; bottom: 20px; left: 50%; }
+		#btn li{ float: left; display: block; width: 40px; height: 40px; border-radius: 50%; background: rgba(255,255,255,0.5);; margin-right: 10px; cursor: pointer;}
+		#btn .hover{ background: lightgreen; }
+		#btn_left{ display: block; width: 40px; height: 40px; text-align: center; font-size: 40px; line-height: 40px; color: lightgreen; position: absolute; left: 0; top: 50%; margin-top: -20px; cursor: pointer;}
+		#btn_right{ display: block; width: 40px; height: 40px; text-align: center; font-size: 40px; line-height: 40px; color: lightgreen; position: absolute; right: 0; top: 50%; margin-top: -20px; cursor: pointer;}
+	</style>
+</head>
+
+<body>
+	<div id="box">
+		<ul id="banner">
+			<li><img src="img/big-4.jpg" alt=""></li>
+			<li><img src="img/big-1.jpg" alt=""></li>
+			<li><img src="img/big-2.jpg" alt=""></li>
+			<li><img src="img/big-3.jpg" alt=""></li>
+			<li><img src="img/big-4.jpg" alt=""></li>
+			<li><img src="img/big-1.jpg" alt=""></li>
+		</ul>
+		<ul id="btn">
+			<li class="hover"></li>
+			<li></li>
+			<li></li>
+			<li></li>
+		</ul>
+		<span id="btn_left"><</span>
+		<span id="btn_right">></span>
+	</div>
+</body>
+
+</html>
+<script>
+	var box = document.getElementById('box');
+	var b_ul = document.getElementById('banner');
+	var b_li = b_ul.getElementsByTagName('li');
+	var on = document.getElementById('btn');
+	var btn = on.getElementsByTagName('li');
+	var btn_left = document.getElementById('btn_left');
+	var btn_right = document.getElementById('btn_right');
+	var ind = 1;
+	//全屏样式
+	var num = 3.84; //用图片宽度除以图片高度的值
+	var w = document.body.clientWidth; //屏幕宽度
+	var h = w / num; //自适应高度值
+	var len = b_li.length; //图片li长度
+	var btnLen = btn.length; //按钮li长度
+	var btnIndex = 0; //按钮位置
+	var isExecuted = false; //鼠标重复点击
+	//li的样式
+	for (var i = 0; i < len; i++) {
+		b_li[i].style.width = w + 'px';
+		b_li[i].style.height = h + 'px';
+	}
+	box.style.height = h + 'px';
+	b_ul.style.width = w * len + 'px';
+	//开始移动
+	b_ul.style.left = -w * ind + 'px'; //初始化第一张图片
+	function move(click) {
+		//执行一次
+		setTimeout(function() {
+			if (ind === len - 1) {
+				b_ul.style.transition = '0s';
+				ind = 1;
+				btnIndex = 0;
+				var tag_l = -w * ind;
+				b_ul.style.left = '' + tag_l + '' + 'px'; //移动的目标
+
+				for (var j = 0; j < btnLen; j++) {
+					btn[j].className = '';
+				}
+				btn[btnIndex].className = 'hover';
+			}
+			if (ind === 0) {
+				b_ul.style.transition = '0s';
+				ind = len - 2;
+				btnIndex = btnLen - 1;
+				var tag_l = -w * ind;
+				b_ul.style.left = '' + tag_l + '' + 'px'; //移动的目标
+
+				for (var j = 0; j < btnLen; j++) {
+					btn[j].className = '';
+				}
+				btn[btnIndex].className = 'hover';
+			}
+		}, 300);
+		console.log(ind, 'move');
+		b_ul.style.transition = '0.3s';
+		var tag_l = -w * ind;
+		b_ul.style.left = '' + tag_l + '' + 'px'; //移动的目标
+
+		for (var j = 0; j < btnLen; j++) {
+			btn[j].className = '';
+		}
+		btn[btnIndex].className = 'hover';
+	}
+
+	function tMove() {
+		btnIndex++;
+		if (btnIndex === btnLen) {
+			btnIndex = 0;
+		}
+		console.log(ind, '加之前');
+		ind++;
+		move();
+	}
+	t = setInterval(tMove, 3000)
+	//底部按钮
+	for (var i = 0; i < btnLen; i++) {
+		btn[i].index = i;
+		btn[i].onclick = function() {
+			clearInterval(t);
+			btnIndex = this.index;
+			ind = this.index + 1;
+			t = setInterval(tMove, 3000)
+			move('1');
+		}
+	}
+	//左边按钮
+	btn_left.onclick = function() {
+		clearInterval(t);
+		if (isExecuted === true) return ;
+		isExecuted = true;
+		ind--;
+		if (btnIndex > 0) {
+			btnIndex--;
+		}
+		setTimeout(function() {
+			isExecuted = false;
+		}, 300)
+		t = setInterval(tMove, 3000)
+		move('1');
+	}
+	//右边按钮
+	btn_right.onclick = function() {
+		clearInterval(t);
+		if (isExecuted === true) return ;
+		isExecuted = true;
+		ind++;
+		if (btnIndex < btnLen - 1) {
+			btnIndex++;
+		}
+		setTimeout(function() {
+			isExecuted = false;
+		}, 300)
+		t = setInterval(tMove, 3000)
+		move('1');
+	}
+	window.onresize = function() {
+		clearInterval(t);
+		num = 3.84; //用图片宽度除以图片高度的值
+		w = document.body.clientWidth; //屏幕宽度
+		h = w / num; //自适应高度值
+		for (var i = 0; i < len; i++) {
+			b_li[i].style.width = w + 'px';
+			b_li[i].style.height = h + 'px';
+		}
+		b_ul.style.width = w * len + 'px';
+		box.style.height = h + 'px';
+		t = setInterval(tMove, 3000)
+	}
+</script>

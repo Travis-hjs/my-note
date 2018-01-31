@@ -1,0 +1,297 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="maximum-scale=1.0, minimum-scale=1.0, user-scalable=0, initial-scale=1.0, width=device-width"/>
+    <meta name="format-detection" content="telephone=no, email=no, date=no, address=no">
+    <title>用户交互提示</title>
+	<style>
+        html, body{ padding: 0px; margin: 0; font-size: 50px; }
+        /*定义rem*/
+        @media only screen and (min-width: 400px) { html { font-size: 53.33333333px !important; } }
+        @media only screen and (min-width: 414px) { html { font-size: 55.2px !important; } }
+        @media only screen and (min-width: 480px) { html { font-size: 64px !important; } }
+        /* 主要css */
+        #layer_bg, #layer_bg p, #layer_bg h2, #layer_bg i, #layer_bg span, #layer_bg div{ padding: 0px; margin: 0px; }
+        #layer_bg{ width: 100%; height: 100vh; opacity: 0; position: fixed; z-index: 999; top: 0; left: 0; display: -webkit-box; display: -ms-flexbox; display: flex; -ms-flex-wrap: wrap; flex-wrap: wrap; -webkit-box-pack: center; -ms-flex-pack: center; justify-content: center; -webkit-box-align: center; -ms-flex-align: center; align-items: center; -webkit-box-orient: vertical; -ms-flex-flow: column; flex-flow: column; -webkit-transition: 0.3s all; transition: 0.3s all; }
+        #layer_bg h2{ line-height: .5rem; font-size: .32rem; font-weight: 400; margin-bottom: .2rem; }
+        #layer_bg p{ line-height: .4rem; font-size: .28rem; }
+        #layer_bg span{ display: block; width: 1.76rem; height: .8rem; border-radius: .08rem; text-align: center; line-height: .8rem; color: #59c2f9; font-size: .32rem; cursor: pointer; margin: 0 auto .1rem; }
+        #layer_bg span:active{ background-color: #eee; }
+        #layer_bg .prompt, #layer_bg .confirm{ width: 4.6rem; background-color: #fff; text-align: center; padding: .3rem .2rem .2rem; border-radius: .12rem; }
+        #layer_bg .prompt div, #layer_bg .confirm div{ min-height: .7rem; display: -webkit-box; display: -webkit-flex;	display: flex; flex-wrap: wrap; -webkit-box-orient: vertical; -webkit-flex-flow: column; flex-flow: column; -webkit-box-pack: center; justify-content: center; -webkit-box-align: center; align-items: center; }
+        #layer_bg .confirm span{ float: left; color: #333; }
+        #layer_bg .confirm [data-confirmRight]{ float: right; color: #59c2f9; }
+        /* 加载中球类动画 */
+        #layer_bg .loding_ball{ width: 2.8rem; height: .8rem; }
+        #layer_bg .loding_ball i{ display: block; width: .8rem; height: .8rem; margin-left: .2rem; background-color: gold; border-radius: 100%; display: inline-block; -webkit-animation: bounce 1.4s ease-in-out 0s infinite both; animation: bounce 1.4s ease-in-out 0s infinite both; }
+        #layer_bg .loding_ball i:nth-child(1){ -webkit-animation-delay: -0.32s; animation-delay: -0.32s; margin-left: 0; }
+        #layer_bg .loding_ball i:nth-child(2){ -webkit-animation-delay: -0.16s; animation-delay: -0.16s; }
+        @-webkit-keyframes bounce {
+        	0%,80%,100% { -webkit-transform: scale(0); transform: scale(0); }
+        	40% { -webkit-transform: scale(1); transform: scale(1); }
+        }
+        @keyframes bounce {
+        	0%,80%,100% { -webkit-transform: scale(0); transform: scale(0); }
+        	40% { -webkit-transform: scale(1); transform: scale(1); }
+        }
+        /* 加载中 */
+        #layer_bg .loading_box{ min-width: 2.4rem; min-height: 1.8rem; padding-top: .6rem; background-color: rgba(0,0,0,0.5); border-radius: .08rem; }
+        #layer_bg .loading_box span{ display: block; width: .8rem; height: .8rem; border: solid 2px #fff; border-radius: 50%; border-right-color: rgba(0,0,0,0); margin: auto; -webkit-animation: circular 1.3s ease infinite; animation: circular 1.3s ease infinite;}
+        #layer_bg .loading_box p{ font-size: .3rem; color: #fff; text-align: center; line-height: .72rem; }
+        @-webkit-keyframes circular {
+        	0% { -webkit-transform: rotate(0deg); transform: rotate(0deg); }
+            50% { opacity: 0.5; }
+            100% { -webkit-transform: rotate(360deg); transform: rotate(360deg); opacity: 1; }
+        }
+        @keyframes circular {
+        	0% { -webkit-transform: rotate(0deg); transform: rotate(0deg); }
+            50% { opacity: 0.5; }
+            100% { -webkit-transform: rotate(360deg); transform: rotate(360deg); opacity: 1; }
+        }
+        /* toast */
+        .itoast{ display: inline-block; padding: 0 .3rem; min-height: .68rem; line-height: .68rem; font-size: .24rem; color: #fff; background-color: rgba(0,0,0,0.5); border-radius: .08rem; position: fixed; z-index: 999; bottom: 10%; left: 50%; -webkit-transform: translateX(-50%); transform: translateX(-50%); -webkit-animation: toastmove 0.4s ease; animation: toastmove 0.4s ease; -webkit-transition: 0.2s all; transition: 0.2s all; }
+        @-webkit-keyframes toastmove {
+        	0% { opacity: 0; -webkit-transform: translate(-50%, 300%); transform: translate(-50%, 300%); }
+            50% { opacity: 1; -webkit-transform: translate(-50%, -100%); transform: translate(-50%, -100%); }
+            100% { -webkit-transform: translate(-50%, 0%); transform: translate(-50%, 0%); }
+        }
+        @keyframes toastmove {
+        	0% { opacity: 0; -webkit-transform: translate(-50%, 300%); transform: translate(-50%, 300%); }
+            50% { opacity: 1; -webkit-transform: translate(-50%, -100%); transform: translate(-50%, -100%); }
+            100% { -webkit-transform: translate(-50%, 0%); transform: translate(-50%, 0%); }
+        }
+        /* 触发按钮 */
+        .click_box{ width: 2rem; overflow: hidden; margin: auto; padding-top: 100px; }
+        .click_box span{ display: block; font-size: 0.32rem; width: 2rem; height: .8rem; border-radius: .1rem; cursor: pointer; color: #fff; text-align: center; line-height: .8rem; background-color: gold; margin-bottom: .2rem; }
+        /* 选择插件 */
+        #select_logistics{ padding: 0; margin: 0; width: 100%; height: 100vh; opacity: 0; background-color: rgba(0,0,0,0.2); position: fixed; z-index: 999; top: 0; left: 0; -webkit-transition: 0.3s all; transition: 0.3s all; overflow: hidden; }
+        #select_logistics .select_box{ padding: 0; margin: 0; width: 100%; height: 4.6rem; background-color: #fff; -webkit-transition: 0.3s all; transition: 0.3s all; -webkit-transform: translateY(100%); transform: translateY(100%); position: absolute; bottom: 0; left: 0; }
+        #select_logistics header{ padding: 0; margin: 0; width: 100%; height: .8rem; background-color: #eee; display: -webkit-box; display: -webkit-flex; display: flex; flex-wrap: wrap; }
+        #select_logistics header span{ padding: 0; margin: 0; -webkit-box-flex: 1; flex: 1; font-size: .32rem; text-align: center; line-height: .8rem; -webkit-transition: 0s all; transition: 0s all; }
+        #select_logistics header span:active{ opacity: 0.7; }
+        #select_logistics header span:nth-child(1){ color: #333; }
+        #select_logistics header span:nth-child(3){ color: #59c2f9; }
+        #select_logistics header h2{ padding: 0; margin: 0; font-weight: 400; -webkit-box-flex: 4; flex: 4; font-size: .28rem; text-align: center; line-height: .8rem; color: #999; }
+        #select_list{ padding: 0; margin: 0; width: 76%; height: 3.8rem; overflow-y: auto; margin: auto; }
+        #select_list li{ padding: 0; margin: 0; line-height: .72rem; text-align: center; font-size: .28rem; -webkit-transition: 0.3s all; transition: 0.3s all; list-style: none; }
+        #select_list .li_active{ color: #59c2f9; font-size: .36rem; letter-spacing: 2px; }
+    </style>
+</head>
+<body>
+    <div class="click_box">
+        <span onclick="openAlert()">提示框</span>
+        <span onclick="openConfirm()">对话框</span>
+        <span onclick="openloading()">loading</span>
+        <span onclick="openLoadingBall()">loadingBall</span>
+        <span onclick="openToast()">toast</span>
+        <span onclick="addLogistics()">选择器</span>
+    </div>
+</body>
+<script type="text/javascript">
+    const Prompts = {
+        output (num, str, fn) {
+            let _div = document.createElement('div');
+            _div.id = 'layer_bg';
+            _div.innerHTML = str;
+            document.body.appendChild(_div);
+            _div.style.backgroundColor = 'rgba(0,0,0,'+num+')';
+            setTimeout(() => _div.style.opacity = 1, 1);
+            if (typeof fn === 'function') fn.call(this);
+        },
+        removeThis () {
+            let _div = document.getElementById('layer_bg');
+            _div.style.opacity = 0;
+            setTimeout(() => document.body.removeChild(_div), 310);
+        },
+        alertMsg (text, fn, title) {
+            let that = this;
+            let _title = title || '提示';
+            let _html = '<div class="prompt">\
+                            <h2>'+_title+'</h2>\
+                            <div><p>'+text+'</p></div>\
+                            <span data-prompt>确定</span>\
+                        </div>';
+            that.output(.3, _html, () => {
+                document.querySelector('[data-prompt]').addEventListener('click', () => {
+                    if (typeof fn === 'function') fn.call(this);
+                    that.removeThis();
+                });
+            });
+        },
+        confirmMsg (text, rightfn, title, leftfn) {
+            let that = this;
+            let _title = title || '提示';
+            let _html = '<div class="confirm">\
+                            <h2>'+_title+'</h2>\
+                            <div><p>'+text+'</p></div>\
+                            <span data-confirmLeft>取消</span>\
+                            <span data-confirmRight>确定</span>\
+                        </div>';
+            that.output(.3, _html, () => {
+                document.querySelector('[data-confirmLeft]').addEventListener('click', () => {
+                    if (typeof leftfn === 'function') leftfn.call(this);
+                    that.removeThis();
+                });
+                document.querySelector('[data-confirmRight]').addEventListener('click', () => {
+                    if (typeof rightfn === 'function') rightfn.call(this);
+                    that.removeThis();
+                });
+            });
+        },
+        loadingBall () {
+            let _html = '<div class="loding_ball"><i></i><i></i><i></i></div>';
+            this.output(.3, _html);
+        },
+        hideBall () {
+            this.removeThis()
+        },
+        loading (text) {
+            let that = this;
+            let _text = text || 'loading';
+            let _html = '<div class="loading_box">\
+                            <span></span>\
+                            <p>'+_text+'</p>\
+                        </div>';
+            that.output(0, _html);
+        },
+        hideLoading () {
+            this.removeThis()
+        },
+        toast (text, num) {
+            let _div = document.createElement('div');
+            let _text = text || '底部提示文字';
+            let _time = Number(num) || 1000;
+            _div.className = 'itoast';
+            _div.textContent = _text;
+            document.body.appendChild(_div);
+            setTimeout(() => _div.style.opacity = 0, _time);
+            setTimeout(() => document.body.removeChild(_div), _time + 200);
+        }
+    };
+    // Prompts
+    function openAlert() {
+        Prompts.alertMsg('提示框文字',() => {
+            console.log('确认按钮回调');
+        });
+    }
+    function openConfirm() {
+        Prompts.confirmMsg('对话框文字',() => {
+            console.log('确认');
+        },'标题',function () {
+            console.log('取消');
+        });
+    }
+    function openLoadingBall() {
+        Prompts.loadingBall();
+        setTimeout(() => Prompts.hideBall(), 3000);
+    }
+    function openloading() {
+        Prompts.loading('加载中...');
+        setTimeout(() => Prompts.hideLoading(), 3000);
+    }
+    function openToast() {
+        Prompts.toast('原生APP toast', 2000);
+    }
+    // 自定义选择物流插件
+    var Selector = {
+        activeText: '',
+        output: function (str, fn, title) {
+            var that = this;
+            var _title = title || '请选择~';
+            var _div = document.createElement('div');
+            _div.id = 'select_logistics';
+            _div.innerHTML = '<div class="select_box">\
+                <header>\
+                    <span>取消</span>\
+                    <h2>'+_title+'</h2>\
+                    <span>确认</span>\
+                </header>\
+                <ul id="select_list"></ul>\
+            </div>';
+            document.body.appendChild(_div);
+            document.getElementById('select_list').innerHTML = str;
+            setTimeout(function () { _div.style.opacity = 1 },1);
+            setTimeout(function () {
+                _div.querySelector('.select_box').style.WebkitTransform = 'translateY(0%)';
+                _div.querySelector('.select_box').style.transform = 'translateY(0%)';
+            },100);
+            // 点击事件
+            that.selectClick();
+            // 关闭
+            _div.querySelectorAll('span')[0].addEventListener('click', function () {
+                that.removeSelect(_div);
+            });
+            // 关闭-确认按钮触发回调
+            _div.querySelectorAll('span')[1].addEventListener('click', function () {
+                if (typeof fn === 'function') fn.call(this, that.activeText);
+                that.removeSelect(_div);
+            });
+        },
+        selectClick: function () {
+            var that = this;
+            var _ul = document.getElementById('select_list');
+            var _li = _ul.getElementsByTagName('li');
+            var _listText = ''
+            _ul.addEventListener('click', function (ev) {
+                if (ev.target.nodeName.toLowerCase() == 'li') {
+                    for (var i = 0; i < _li.length; i++) {
+                        if (i != ev.target.dataset.id) {
+                            _li[i].className = '';
+                        }
+                        ev.target.className = 'li_active';
+                        _listText = _li[ev.target.dataset.id].textContent
+                    }
+                    that.activeText = _listText;
+                }
+            })
+        },
+        removeSelect: function (el) {
+            el.querySelector('.select_box').style.WebkitTransform = 'translateY(100%)';
+            el.querySelector('.select_box').style.transform = 'translateY(100%)';
+            setTimeout(function () {
+                el.style.opacity = 0;
+            },150);
+            setTimeout(function () {
+                document.body.removeChild(el);
+            },300);
+        }
+    };
+    var _data = [{
+            value: 'ZTO',
+            title: '中通物流'
+        },{
+            value: 'STO',
+            title: '申通物流'
+        },{
+            value: 'ZTO',
+            title: '中通物流'
+        },{
+            value: 'ZTO',
+            title: '中通物流'
+        },{
+            value: 'ZTO',
+            title: '中通物流'
+        },{
+            value: 'ZTO',
+            title: '中通物流'
+        },{
+            value: 'ZTO',
+            title: '中通物流'
+        },{
+            value: 'ZTO',
+            title: '中通物流'
+        }
+    ];
+    function addLogistics() {
+        var _html = '';
+        for (var i = 0; i < _data.length; i++) {
+            _html +=  '<li data-id="'+i+'">'+_data[i].title+' '+_data[i].value+'</li>';
+        }
+        Selector.output(_html, function (str) {
+            // document.querySelector('[data-lname]').textContent = str;
+            console.log(str);
+        });
+    }
+</script>
+</html>

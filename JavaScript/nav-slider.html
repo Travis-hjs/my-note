@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="maximum-scale=1.0, minimum-scale=1.0, user-scalable=0, initial-scale=1.0, width=device-width"/>
+	    <meta name="format-detection" content="telephone=no, email=no, date=no, address=no">
+		<title>滑动导航</title>
+		<style media="screen">
+			*{ padding: 0; margin: 0; }
+			html,body{ font-size: 50px; color: #333; background: #fff; -webkit-touch-callout:none; -webkit-text-size-adjust:none; -webkit-tap-highlight-color:rgba(0, 0, 0, 0); -webkit-user-select:none; font-family: "Helvetica Neue", Helvetica, sans-serif; }
+			li{ list-style: none; }
+			span,img{ display: block; }
+			/*定义rem*/
+			@media only screen and (min-width: 400px) { html { font-size: 53.33333333px !important; } }
+			@media only screen and (min-width: 414px) { html { font-size: 55.2px !important; } }
+			@media only screen and (min-width: 480px) { html { font-size: 64px !important; } }
+			.wrap{ width: 100%; max-width: 600px; margin: auto; }
+			.nav_slider{ width: 100%; height: 3rem; background-color: #eee; overflow: hidden; }
+			.nav_slider nav{ min-width: 100%; width: 31.4rem; overflow: hidden; }
+			.nav_slider li{ float: left; margin-left: 0.2rem; height: 3rem; width: 5rem; background-color: #333; text-align: center; line-height: 3rem; color: #fff; }
+		</style>
+	</head>
+	<body>
+		<div class="wrap">
+			<div class="nav_slider">
+				<nav>
+					<li>slider-1</li>
+					<li>slider-2</li>
+					<li>slider-3</li>
+					<li>slider-4</li>
+					<li>slider-5</li>
+					<li>slider-6</li>
+				</nav>
+			</div>
+		</div>
+	</body>
+	<script type="text/javascript">
+		/*
+			el	=> 最外层元素
+			nav	=> 滚动元素
+			direction	=> 方向，true为Y，不给或false反之
+		*/
+		navSlider('.nav_slider', 'nav');
+		function navSlider(el, nav, direction) {
+			let _box = document.querySelector(el);
+			let _nav = _box.querySelector(nav);
+            // 外层容器的宽/高；开始触摸距离；结束触摸距离；移动的距离；触摸时间；触摸时间计时器
+			let [_w, _h, _start, _end, _moveP, _touchTime, _touchInterval] = [_box.offsetWidth, _box.offsetHeight, 0, 0, 0, 0, null];
+			var _sTime = 0, _eTime = 0;
+			function noAnimation() {
+				_nav.style.WebkitTransition = '0s all';
+				_nav.style.transition = '0s all'
+			}
+			function hasAnimation(num) {
+				_nav.style.WebkitTransition = num+'s all';
+				_nav.style.transition = num+'s all';
+			}
+			function touchRangeY () {
+				let _d = 0;
+				if ((_end-_start) >= _h) {
+					_d = _moveP+_h;
+				}else if ((_end-_start) <= -_h) {
+					_d = _moveP-_h
+				}else {
+					_d = _moveP+(_end-_start);
+				}
+				return _d;
+			}
+			function touchRangeX () {
+				let _d = 0;
+				if ((_end-_start) >= _w) {
+					_d = _moveP+_w;
+				}else if ((_end-_start) <= -_w) {
+					_d = _moveP-_w
+				}else {
+					_d = _moveP+(_end-_start);
+				}
+				return _d;
+			}
+			function springback () {
+				hasAnimation(.3);
+				if (!direction) {
+					_nav.style.WebkitTransform = 'translate3d('+_moveP+'px, 0px, 0px)';
+					_nav.style.transform = 'translate3d('+_moveP+'px, 0px, 0px)';
+				}else {
+					_nav.style.WebkitTransform = 'translate3d(0px, '+_moveP+'px, 0px)';
+					_nav.style.transform = 'translate3d(0px, '+_moveP+'px, 0px)';
+				}
+			}
+			function Roll() {
+				let _d = 0;
+				if ((eTime-sTime) <= 150) {
+					_d = 2.5
+				}else if ((eTime-sTime) <= 200) {
+					_d = 1.8
+				}else if ((eTime-sTime) <= 300) {
+					_d = 1.2
+				}else {
+					_d = 0
+				}
+				return _d;
+			}
+			_nav.addEventListener('touchstart', ev => {
+				sTime = new Date().getTime();
+				noAnimation();
+				if (!direction) {
+					_start = ev.touches[0].pageX
+				}else {
+					_start = ev.touches[0].pageY
+				}
+			});
+			_nav.addEventListener('touchmove', ev => {
+				ev.preventDefault();
+				if (!direction) {
+					_end = ev.touches[0].pageX;
+					_nav.style.WebkitTransform = 'translate3d('+touchRangeX()+'px, 0px, 0px)';
+					_nav.style.transform = 'translate3d('+touchRangeX()+'px, 0px, 0px)';
+				}else {
+					_end = ev.touches[0].pageY;
+					_nav.style.WebkitTransform = 'translate3d(0px, '+touchRangeY()+'px, 0px)';
+					_nav.style.transform = 'translate3d(0px, '+touchRangeY()+'px, 0px)';
+				}
+			});
+			_nav.addEventListener('touchend', ev => {
+				eTime = new Date().getTime();
+				hasAnimation(.3);
+				if (!direction) {
+					_moveP = touchRangeX();
+				}else {
+					_moveP = touchRangeY();
+				}
+				if (_end < _start) {
+					_moveP += (_end-_start)*Roll()
+				}else {
+					_moveP -= (_start-_end)*Roll()
+				}
+				_nav.style.transitionTimingFunction = 'linear';
+				if (!direction) {
+					_nav.style.WebkitTransform = 'translate3d('+_moveP+'px, 0px, 0px)';
+					_nav.style.transform = 'translate3d('+_moveP+'px, 0px, 0px)';
+				}else {
+					_nav.style.WebkitTransform = 'translate3d(0px, '+_moveP+'px, 0px)';
+					_nav.style.transform = 'translate3d(0px, '+_moveP+'px, 0px)';
+				}
+				if (!direction) {
+					if (_end < _start) {
+						if (_moveP < -(_nav.offsetWidth-_w)) {
+							_moveP = -(_nav.offsetWidth-_w);
+							springback();
+						}
+					}else {
+						if (_moveP > 0) {
+							_moveP = 0;
+							springback();
+						}
+					}
+				}else {
+					if (_end < _start) {
+						if (_moveP < -(_nav.offsetHeight-_h)) {
+							_moveP = -(_nav.offsetHeight-_h);
+							springback();
+						}
+					}else {
+						if (_moveP > 0) {
+							_moveP = 0;
+							springback();
+						}
+					}
+				}
+			});
+		}
+	</script>
+</html>

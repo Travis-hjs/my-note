@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>template标签</title>
+		<style media="screen">
+			*{ padding: 0; margin: 0; }
+			li{ list-style: none; }
+			.content{ width: 100%; max-width: 800px; padding: 10px 0; text-align: center; font-size: 14px; margin: auto; }
+			.content span{ display: block; margin: auto; width: 140px; height: 40px; border-radius: 4px; background-color: gold; text-align: center; line-height: 40px; color: #fff; cursor: pointer; }
+			.output_box{ width: 100%; }
+		</style>
+	</head>
+	<body>
+		<div class="content">
+			<span onclick="output()">click-me!</span>
+			<div class="output_box">
+				<i>输出模板位置</i>
+			</div>
+		</div>
+		<template data-myTemplate>
+			<h2></h2>
+			<p></p>
+			<ul>
+				<li></li>
+			</ul>
+		</template>
+	</body>
+	<script type="text/javascript">
+		var $ = ev => document.querySelector(ev);
+		var $$ = ev => document.querySelectorAll(ev);
+		function output() {
+			let _data = [{
+					title: 'template模板',
+					text: '这里是template模板内的文字',
+					list: [
+						{text: '列表一'},
+						{text: '列表二'},
+						{text: '列表三'}
+					]
+				},{
+					title: 'template模板《二》',
+					text: '这里是template模板内的文字《二》',
+					list: [
+						{text: '列表一《二》'},
+						{text: '列表二《二》'},
+						{text: '列表三《二》'}
+					]
+				}
+			];
+			for (var i = 0; i < _data.length; i++) {
+				Compile(_data[i]);
+			}
+		}
+		function Compile(data) {
+			var _html = '';
+			var _tem = $('[data-myTemplate]').content;
+			_tem.querySelector('h2').textContent = data.title;
+			_tem.querySelector('p').textContent = data.text;
+			for (var i = 0; i < data.list.length; i++) {
+				_html += '<li>'+data.list[i].text+'</li>'
+			}
+			_tem.querySelector('ul').innerHTML = _html;
+			$('.output_box').appendChild(document.importNode(_tem, true));
+		}
+	</script>
+</html>

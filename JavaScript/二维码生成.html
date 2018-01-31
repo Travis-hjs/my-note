@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>js生成二维码</title>
+         <style>
+    		#qrcode{ width: 50%; }
+    		#qrcode img{ width: 100%; }
+         </style>
+    </head>
+    <body>
+        <div id="qrcode"></div>
+        <input type="hidden" id="getval" value="http://fanyi.baidu.com/translate#zh/en/%E6%96%87%E7%AB%A0"/>
+    </body>
+    <script src="js/qrcode.js"></script>
+    <script>
+        var qrcode = new QRCode(document.getElementById("qrcode"), {
+            // width : 400,//设置宽高
+            // height : 400
+        });
+        document.getElementById("getval").onclick =function(){
+            qrcode.makeCode(document.getElementById("getval").value);
+        };
+        qrcode.makeCode(document.getElementById("getval").value);
+    </script>
+</html>

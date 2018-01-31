@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>简单的路由</title>
+    <style media="screen">
+        *{ padding: 0; margin: 0; }
+        ul,li{ list-style: none; }
+        nav{ width: 200px; background: lightblue; margin: auto; }
+        nav li{ line-height: 28px; text-align: center; }
+        .wrap{ width: 300px; margin: auto; border: solid 2px orange; min-height: 200px; text-align: center; }
+        .ul{ width: 100%; }
+        .ul li{ background-color: #eee; line-height: 24px; }
+        .ul li:nth-child(odd){ background: #fff; }
+    </style>
+</head>
+
+<body>
+    <nav>
+        <li><a href="#/a">导航一</a></li>
+        <li><a href="#/b">导航二</a></li>
+        <li><a href="#/c">导航三</a></li>
+    </nav>
+    <!-- 路由渲染的位置 -->
+    <div class="wrap">
+
+    </div>
+    <script type="text/javascript">
+        // function Router() {
+        //   this.routes = {};
+        //   this.currentUrl = '';
+        // }
+        // Router.prototype.route = function(path, callback) {
+        //   this.routes[path] = callback || function(){};
+        // };
+        // Router.prototype.refresh = function() {
+        //   this.currentUrl = location.hash.slice(1) || '/';
+        //   this.routes[this.currentUrl]();
+        // };
+        // Router.prototype.init = function() {
+        //   window.addEventListener('load', this.refresh.bind(this), false);
+        //   window.addEventListener('hashchange', this.refresh.bind(this), false);
+        // }
+        // window.Router = new Router();
+        // window.Router.init();
+        
+        // 对象写法
+        var Router = {
+            routes: {},
+            currentUrl: '',
+            route: function(path, callback) {
+                this.routes[path] = callback || function() {};
+            },
+            refresh: function() {
+                this.currentUrl = location.hash.slice(1) || '/';
+                this.routes[this.currentUrl]();
+            },
+            init: function() {
+                window.addEventListener('load', this.refresh.bind(this), false);
+                window.addEventListener('hashchange', this.refresh.bind(this), false);
+            }
+        }
+        Router.init();
+
+        function addHtml(title, text) {
+            var content = document.querySelector('.wrap');
+            content.innerHTML = '<ul class="ul">\
+                        <li>'+title+'</li>\
+                        <li>'+text+'</li>\
+                        <li>'+text+'</li>\
+                        <li>'+text+'</li>\
+                    </ul><strong>'+(new Date()).toString()+'</strong>';
+        }
+        Router.route('/a', function() {
+            addHtml('首页', '首页内容');
+        });
+        Router.route('/b', function() {
+            addHtml('子页面', '第二个页面内容');
+        });
+        Router.route('/c', function() {
+            addHtml('最后的页面', '嘿嘿');
+        });
+    </script>
+</body>
+
+</html>

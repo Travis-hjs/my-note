@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>模特</title>
+</head>
+	<style>
+		*{ padding: 0px; margin: 0px; font-family: 微软雅黑; }
+		#box{ width: 350px; height: 350px; margin: 120px 150px; border: solid 10px #ccc; position: relative;}
+		#small_img{ position: relative; }
+		#small_img span{ position: absolute; left: 0px; top: 0px; display: block; background: rgba(252,238,13,0.4); visibility: hidden; width: 140px; height: 140px;}
+
+		#big_img{ width: 350px; height: 350px; position: absolute; left: 380px; top: 10px; overflow: hidden; display: none;}
+		#big_img img{ position: absolute; left: 0%; top: 0%; }
+
+	</style>
+<body>
+	<div id="box">
+
+		<div id="small_img">
+			<img src="img/model.jpg" alt="">
+			<span></span>
+		</div>
+
+		<div id="big_img">
+			<img src="img/model2.jpg" alt="">
+		</div>
+
+	</div>
+</body>
+</html>
+<script>
+	var box = document.getElementById('box');
+	var s = document.getElementById('small_img');
+	var fdj = s.getElementsByTagName('span')[0];
+	var b = document.getElementById('big_img');
+	var b_img = b.getElementsByTagName('img')[0];
+
+
+	/*在小图上移动 */
+	s.onmousemove=function(ev){
+		fdj.style.visibility='visible';
+		b.style.display='block';
+		var ev=ev || window.event; //获取移动时的 事件对象。。。
+		document.title=ev.clientY+'|'+ev.clientX;
+		var x=ev.clientX; //鼠标的位置保存起来
+		var y=ev.clientY; //鼠标的位置保存起来
+
+		x-=box.offsetLeft;  //真正的x=x-fdj.offsetLeft
+		y-=box.offsetTop;   //真正的y=y-fdj.offsetTop
+
+		//左边应该是 小层的宽/2
+		var min1=fdj.offsetWidth/2;
+		var max1=box.offsetWidth-fdj.offsetWidth/2-20;//20是边框的两倍
+		//最大值= 整个元素-小层的一半-边框10
+
+		if(x<min1){
+			x=min1;	//最小移动的x值，
+		}else if(x>max1){
+			x=max1;  //最大移动的x值，
+		}
+		//高度
+		var min2=fdj.offsetHeight/2;
+		var max2=box.offsetHeight-fdj.offsetHeight/2-20;
+
+		if(y<min2){
+			y=min2;
+		}else if(y>max2){
+			y=max2;
+		}
+
+		fdj.style.top=y-min1+'px';
+		fdj.style.left=x-min1+'px';
+
+
+		// 有效的开始位置/可以走的距离
+		var leftb=(x-min1)/(box.offsetWidth-fdj.offsetWidth);
+
+		/* 鼠标在小图上的百分比  鼠标的位置/ 有效的走动范围。。。 */
+		var topb=(y-min2)/(box.offsetHeight-fdj.offsetHeight);
+		//document.title=leftb+'|'+topb;
+		b_img.style.left=-leftb*150+'%';//跟随放大镜移动(图片的大小赋值,两倍就200)
+		b_img.style.top=-topb*150+'%';
+	}
+	s.onmouseout=function(){
+		fdj.style.visibility='hidden';
+		b.style.display='none';
+	}
+
+
+</script>
