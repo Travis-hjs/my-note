@@ -12,8 +12,8 @@
 	.circle { -webkit-box-sizing: border-box; box-sizing: border-box; border: 20px solid #ccc; clip: rect(0, 200px, 200px, 100px); }
 	.clip-auto { clip: rect(auto, auto, auto, auto); }
 	.percent { -webkit-box-sizing: border-box; box-sizing: border-box; top: -20px; left: -20px; }
-	.left { border: 20px solid blue; clip: rect(0, 100px, 200px, 0); }
-	.right { border: 20px solid blue; clip: rect(0, 200px, 200px, 100px); }
+	.left { border: 20px solid gold; clip: rect(0, 100px, 200px, 0); }
+	.right { border: 20px solid gold; clip: rect(0, 200px, 200px, 100px); }
 	.no_wth { width: 0; }
 	.num { position: absolute; -webkit-box-sizing: border-box; box-sizing: border-box; width: 160px; height: 160px; line-height: 160px; text-align: center; font-size: 40px; left: 20px; top: 20px; border-radius: 50%; background-color: #fff; z-index: 1; }
 </style>
@@ -27,20 +27,20 @@
 	    <div class="num"><span>0</span>%</div>
 	</div>
 </body>
-<script src="http://apps.bdimg.com/libs/zepto/1.1.4/zepto.min.js"></script>
 <script type="text/javascript">
 	var percent = 0;
-	var loading = setInterval(function(){
-		if(percent > 100){
+	var $ = selector => document.querySelector(selector);
+	setInterval(() => {
+		if (percent > 100) {
 			percent = 0;
-			$('.circle').removeClass('clip-auto');
-			$('.right').addClass('no_wth');
-		}else if(percent > 50){
-			$('.circle').addClass('clip-auto');
-			$('.right').removeClass('no_wth');
+			$('.circle').classList.remove('clip-auto');
+			$('.right').classList.add('no_wth')
+		}else if (percent > 50) {
+			$('.circle').classList.add('clip-auto');
+			$('.right').classList.remove('no_wth')
 		}
-		$('.left').css("-webkit-transform","rotate("+(18/5)*percent+"deg)");
-		$('.num>span').text(percent);
+		$('.left').style.transform = 'rotate('+ (18 / 5) * percent +'deg)';
+		$('.num>span').textContent = percent;
 		percent++;
 	},10);
 </script>
