@@ -16,6 +16,13 @@ var _str = 'www.https/#/hjihsaih/#/sad.com';
 console.log(_str.replace(/#/i, '?#'));
 // 下面这种替换性能会更好点，但是不够灵活，只能是全局替换
 console.log(_str.split('#').join('?#'));
+var _obj = {
+    name: 'hjs',
+    tall: '178cm',
+    weight: '128kg'
+}
+console.log(Object.keys(_obj));
+console.log(String(Object.keys(_obj)));
 
 var objbox = $('#wrap'), objP = objbox.querySelector('p'), list = $(".menu");
 for (var i = 1; i <= 5; i++) {
