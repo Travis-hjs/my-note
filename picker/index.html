@@ -8,6 +8,7 @@
     <title>演示：适合移动端的省市城市联动组件</title>
     <!-- <link rel="stylesheet" href="//cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap.min.css"> -->
     <link rel="stylesheet" type="text/css" href="css/demo.css">
+    <link rel="stylesheet" href="./css/base.css">
     <style>
 
     </style>
@@ -26,6 +27,13 @@
     <script src="js/picker.min.js"></script>
     <script src="js/city.js"></script>
     <script>
+    var select = new Picker({
+        data: ['first', 'second', 'third'],
+        selectedIndex: [0],
+        title: '地址选择'
+    });
+    select.show();
+
     var nameEl = document.getElementById('sel_city');
     var first = []; /* 省，直辖市 */
     var second = []; /* 市 */
