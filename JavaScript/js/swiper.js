@@ -1,4 +1,4 @@
-const Swiper = {
+const Swiper =  {
 	_pagination: false,
 	_loop: false,
 	_direction: false,
@@ -73,43 +73,8 @@ const Swiper = {
 		let that = this;
 		let _ul = _div.querySelector('.swiper_list');
 		let _li = _ul.querySelectorAll('.swiper_slider')
-		// 触摸开始的距离;结束的距离;结束距离状态;触摸的时间;平移的距离;跳转的位置;触摸时间计时器id;自动播放定时器id
-		let [_start, _end, _endState, _t, _moveP, _index, _Interval, _auto] = [0, 0, 0, 0, 0, 0, null, null];
-		// 判断最大拖动距离 type为true时则 Y, false反之
-		function touchRange(type) {
-			let _d = 0;
-			if (type) {
-				if ((_end-_start) >= _h) {
-					_d = _moveP+_h;
-				}else if ((_end-_start) <= -_h) {
-					_d = _moveP-_h
-				}else {
-					_d = _moveP+(_end-_start);
-				}
-			}else {
-				if ((_end-_start) >= _w) {
-					_d = _moveP+_w;
-				}else if ((_end-_start) <= -_w) {
-					_d = _moveP-_w
-				}else {
-					_d = _moveP+(_end-_start);
-				}
-			}
-			return _d;
-		}
-		// 判断触摸处理函数 _d是距离X/Y
-		function judgeTouch(_d) {
-			//	这里我设置了120毫秒的有效拖拽间隔
-			if (_t < 120) return true;
-			// 这里判断方向（正值和负值）
-			if (_d < 0) {
-				if ((_end-_start) < (_d/2)) return true;
-				return false
-			}else {
-				if ((_end-_start) > (_d/2)) return true;
-				return false
-			}
-		}
+		// 触摸开始时间，触摸结束时间，开始的距离，结束的距离，结束距离状态，移动的距离，圆点位置，自动播放定时器id
+		let [sTime, eTime, _sd, _ed, _eState, _md, _index, _auto] = [0, 0, 0, 0, 0, 0, 0, null];
 		// 设置动画
 		function hasAnimation() {
 			_ul.style.WebkitTransition = that._moveTime/1000+'s all';
@@ -120,105 +85,52 @@ const Swiper = {
 			_ul.style.WebkitTransition = '0s all';
 			_ul.style.transition = '0s all'
 		}
+		// 判断最大拖动距离 X
+		function touchRangeX() {
+			let _d = 0;
+			if ((_ed - _sd) >= _w) {
+				_d = _md + _w;
+			}else if ((_ed - _sd) <= -_w) {
+				_d = _md - _w
+			}else {
+				_d = _md + (_ed - _sd);
+			}
+			return _d;
+		}
+		// Y距离
+		function touchRangeY () {
+			let _d = 0;
+			if ((_ed - _sd) >= _h) {
+				_d = _md + _h;
+			}else if ((_ed - _sd) <= -_h) {
+				_d = _md - _h
+			}else {
+				_d = _md + (_ed-_sd);
+			}
+			return _d;
+		}
+		// 判断触摸处理函数 _d是距离X/Y
+		function judgeTouch(_d) {
+			//	这里我设置了200毫秒的有效拖拽间隔
+			if ((eTime-sTime) < 200) return true;
+			// 这里判断方向（正值和负值）
+			if (_d < 0) {
+				if ((_ed-_sd) < (_d/2)) return true;
+				return false
+			}else {
+				if ((_ed-_sd) > (_d/2)) return true;
+				return false
+			}
+		}
 		// 返回原来位置
 		function returnP () {
 			hasAnimation();
 			if (that._direction) {
-				_ul.style.WebkitTransform = 'translateY('+_moveP+'px)';
-				_ul.style.transform = 'translateY('+_moveP+'px)';
+				_ul.style.WebkitTransform = 'translate3d(0px, '+_md+'px, 0px)';
+				_ul.style.transform = 'translate3d(0px, '+_md+'px, 0px)';
 			}else {
-				_ul.style.WebkitTransform = 'translateX('+_moveP+'px)';
-				_ul.style.transform = 'translateX('+_moveP+'px)';
-			}
-		}
-		// 自动播放
-		function autoPaly() {
-			if (!that._autoPaly) return ;
-			// 这里判断是否有回路loop的自动播放
-			if (that._loop) {
-				// 判断X-Y方向
-				if (that._direction) {
-					_index += 1;
-					slideMove(_moveP-_h);
-					_moveP -= _h;
-				}else {
-					_index += 1;
-					slideMove(_moveP-_w);
-					_moveP -= _w;
-				}
-			}else {
-				// 判断X-Y方向
-				if (that._direction) {
-					if (_index >= _li.length-1) {
-						_index = 0;
-						slideMove(0);
-						_moveP = 0;
-					}else {
-						_index += 1;
-						slideMove(_moveP-_h);
-						_moveP -= _h;
-					}
-				}else {
-					if (_index >= _li.length-1) {
-						_index = 0;
-						slideMove(0);
-						_moveP = 0;
-					}else {
-						_index += 1;
-						slideMove(_moveP-_w);
-						_moveP -= _w;
-					}
-				}
-			}
-		}
-		// 判断移动
-		function judgeMove() {
-			// 判断是否需要执行过渡
-			if (that._direction) {
-				if (_end < _start) {
-					// 往上拉
-					if (judgeTouch(-_h)) {
-						// 判断有loop的时候不需要执行下面的事件
-						if (!that._loop && _moveP === -(_li.length-1) * _h) return returnP();
-						_index += 1;
-						slideMove(_moveP-_h);
-						_moveP -= _h;
-					}else {
-						returnP()
-					}
-				}else {
-					// 往下拉
-					if (judgeTouch(_h)) {
-						if (!that._loop && _moveP === 0) return returnP();
-						_index -= 1;
-						slideMove(_moveP+_h);
-						_moveP += _h;
-					}else {
-						returnP()
-					}
-				}
-			}else {
-				if (_end < _start) {
-					// 向左滑动
-					if (judgeTouch(-_w)) {
-						if (!that._loop && _moveP === -(_li.length-1) * _w) return returnP();
-						_index += 1;
-						slideMove(_moveP-_w);
-						_moveP -= _w;
-					}else {
-						returnP()
-					}
-				}else {
-					// 向右滑动
-					if (judgeTouch(_w)) {
-						if (!that._loop && _moveP === 0) return returnP();
-						_index -= 1;
-						slideMove(_moveP+_w);
-						_moveP += _w;
-					}else {
-						returnP()
-					}
-				}
+				_ul.style.WebkitTransform = 'translate3d('+_md+'px, 0px, 0px)';
+				_ul.style.transform = 'translate3d('+_md+'px, 0px, 0px)';
 			}
 		}
 		// 移动
@@ -226,11 +138,11 @@ const Swiper = {
 			let _btn = _div.querySelectorAll('.swiper_btn');
 			hasAnimation();
 			if (that._direction) {
-				_ul.style.WebkitTransform = 'translateY('+_d+'px)';
-				_ul.style.transform = 'translateY('+_d+'px)';
+				_ul.style.WebkitTransform = 'translate3d(0px, '+_d+'px, 0px)';
+				_ul.style.transform = 'translate3d(0px, '+_d+'px, 0px)';
 			}else {
-				_ul.style.WebkitTransform = 'translateX('+_d+'px)';
-				_ul.style.transform = 'translateX('+_d+'px)';
+				_ul.style.WebkitTransform = 'translate3d('+_d+'px, 0px, 0px)';
+				_ul.style.transform = 'translate3d('+_d+'px, 0px, 0px)';
 			}
 			// 判断loop时回到第一张或最后一张
 			if (that._loop && _index < 0) {
@@ -238,14 +150,14 @@ const Swiper = {
 				setTimeout(() => {
 					noAnimation();
 					if (that._direction) {
-						_ul.style.WebkitTransform = 'translateY('+_h*-(_li.length-3)+'px)';
-						_ul.style.transform = 'translateY('+_h*-(_li.length-3)+'px)';
+						_ul.style.WebkitTransform = 'translate3d(0px, '+_h*-(_li.length-3)+'px, 0px)';
+						_ul.style.transform = 'translate3d(0px, '+_h*-(_li.length-3)+'px, 0px)';
 						// 重置一下位置
-						_moveP = _h*-(_li.length-3);
+						_md = _h*-(_li.length-3);
 					}else {
-						_ul.style.WebkitTransform = 'translateX('+_w*-(_li.length-3)+'px)';
-						_ul.style.transform = 'translateX('+_w*-(_li.length-3)+'px)';
-						_moveP = _w*-(_li.length-3);
+						_ul.style.WebkitTransform = 'translate3d('+_w*-(_li.length-3)+'px, 0px, 0px)';
+						_ul.style.transform = 'translate3d('+_w*-(_li.length-3)+'px, 0px, 0px)';
+						_md = _w*-(_li.length-3);
 					}
 				},that._moveTime);
 				_index = _li.length-3;
@@ -253,59 +165,133 @@ const Swiper = {
 				// 我这里是想让滑块过渡完之后再重置位置所以加的延迟
 				setTimeout(() => {
 					noAnimation();
-					if (that._direction) {
-						_ul.style.WebkitTransform = 'translateY(0px)';
-						_ul.style.transform = 'translateY(0px)';
-					}else {
-						_ul.style.WebkitTransform = 'translateX(0px)';
-						_ul.style.transform = 'translateX(0px)';
-					}
+					_ul.style.WebkitTransform = 'translate3d(0px, 0px, 0px)';
+					_ul.style.transform = 'translate3d(0px, 0px, 0px)';
 					// 重置一下位置
-					_moveP = 0;
+					_md = 0;
 				},that._moveTime);
 				_index = 0;
 			}
 			_div.querySelector('.swiper_btn_active').className = 'swiper_btn';
 			_btn[_index].classList.add('swiper_btn_active');
 		}
+		// 判断移动
+		function judgeMove() {
+			// 判断是否需要执行过渡
+			if (that._direction) {
+				if (_ed < _sd) {
+					// 往上拉
+					if (judgeTouch(-_h)) {
+						// 判断有loop的时候不需要执行下面的事件
+						if (!that._loop && _md === -(_li.length-1) * _h) return returnP();
+						_index += 1;
+						slideMove(_md-_h);
+						_md -= _h;
+					}else returnP();
+				}else {
+					// 往下拉
+					if (judgeTouch(_h)) {
+						if (!that._loop && _md === 0) return returnP();
+						_index -= 1;
+						slideMove(_md+_h);
+						_md += _h;
+					}else returnP();
+				}
+			}else {
+				if (_ed < _sd) {
+					// 向左滑动
+					if (judgeTouch(-_w)) {
+						if (!that._loop && _md === -(_li.length-1) * _w) return returnP();
+						_index += 1;
+						slideMove(_md-_w);
+						_md -= _w;
+					}else returnP();
+				}else {
+					// 向右滑动
+					if (judgeTouch(_w)) {
+						if (!that._loop && _md === 0) return returnP();
+						_index -= 1;
+						slideMove(_md+_w);
+						_md += _w;
+					}else returnP();
+				}
+			}
+		}
+		// 自动播放
+		function autoMove() {
+			if (!that._autoPaly) return ;
+			// 这里判断是否有回路loop的自动播放
+			if (that._loop) {
+				// 判断X-Y方向
+				if (that._direction) {
+					_index += 1;
+					slideMove(_md-_h);
+					_md -= _h;
+				}else {
+					_index += 1;
+					slideMove(_md-_w);
+					_md -= _w;
+				}
+			}else {
+				// 判断X-Y方向
+				if (that._direction) {
+					if (_index >= _li.length-1) {
+						_index = 0;
+						slideMove(0);
+						_md = 0;
+					}else {
+						_index += 1;
+						slideMove(_md-_h);
+						_md -= _h;
+					}
+				}else {
+					if (_index >= _li.length-1) {
+						_index = 0;
+						slideMove(0);
+						_md = 0;
+					}else {
+						_index += 1;
+						slideMove(_md-_w);
+						_md -= _w;
+					}
+				}
+			}
+		}
 		// 首次开启
-		_auto = setInterval(autoPaly, that._interval);
+		_auto = setInterval(autoMove, that._interval);
 		// 开始触摸
 		_ul.addEventListener('touchstart', ev => {
 			clearInterval(_auto);
+			_auto = null;
+			sTime = new Date().getTime();
 			noAnimation();
-			// 开始计算触摸时间
-			_Interval = setInterval(() => _t += 1,1);
 			if (that._direction) {
-				_start = ev.touches[0].pageY
+				_sd = ev.touches[0].pageY
 			}else {
-				_start = ev.touches[0].pageX
+				_sd = ev.touches[0].pageX
 			}
 		});
 		// 触摸移动
 		_ul.addEventListener('touchmove', ev => {
-			// 清除默认动作
 			ev.preventDefault();
-			// noAnimation();	// 一开始我把触摸时停止动画放在这里，不过好像没有达到我想要的效果，所以我放在了开始触摸事件那边
 			if (that._direction) {
-				_end = ev.touches[0].pageY;
-				_ul.style.WebkitTransform = 'translateY('+touchRange(true)+'px)';
-				_ul.style.transform = 'translateY('+touchRange(true)+'px)';
+				_ed = ev.touches[0].pageY;
+				_ul.style.WebkitTransform = 'translate3d(0px, '+touchRangeY()+'px, 0px)';
+				_ul.style.transform = 'translate3d(0px, '+touchRangeY()+'px, 0px)';
 			}else {
-				_end = ev.touches[0].pageX;
-				_ul.style.WebkitTransform = 'translateX('+touchRange(false)+'px)';
-				_ul.style.transform = 'translateX('+touchRange(false)+'px)';
+				_ed = ev.touches[0].pageX;
+				_ul.style.WebkitTransform = 'translate3d('+touchRangeX()+'px, 0px, 0px)';
+				_ul.style.transform = 'translate3d('+touchRangeX()+'px, 0px, 0px)';
 			}
 		});
 		// 触摸离开
 		_ul.addEventListener('touchend', () => {
-			clearInterval(_Interval);
+			eTime = new Date().getTime();
 			// 判断如果是点击的话就不执行移动
-			if (_endState !== _end) judgeMove();
-			// 开启自动播放
-			_auto = setInterval(autoPaly, that._interval);
-			// 走完之后再更改触摸距离,重置触摸时间一定要写在最后
-			[_endState, _t] = [_end, 0];
+			if (_eState !== _ed) judgeMove();
+			// 更新位置
+			_eState = _ed;
+			if (!_auto) _auto = setInterval(autoMove, that._interval);
 		});
 	}
 }

@@ -42,11 +42,11 @@
 		*/
 		navSlider('.nav_slider', 'nav');
 		function navSlider(el, nav, direction) {
+			window.myMove = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame || window.msRequestAnimationFrame;
 			let _box = document.querySelector(el);
 			let _nav = _box.querySelector(nav);
-            // 外层容器的宽/高；开始触摸距离；结束触摸距离；移动的距离；触摸时间；触摸时间计时器
-			let [_w, _h, _start, _end, _moveP, _touchTime, _touchInterval] = [_box.offsetWidth, _box.offsetHeight, 0, 0, 0, 0, null];
-			var _sTime = 0, _eTime = 0;
+            // 外层容器的宽/高；开始触摸距离；结束触摸距离；移动的距离；触摸开始时间；触摸结束时间；触摸时间计时器
+			let [_w, _h, _start, _end, _moveP, _sTime, _eTime] = [_box.offsetWidth, _box.offsetHeight, 0, 0, 0, 0, 0];
 			function noAnimation() {
 				_nav.style.WebkitTransition = '0s all';
 				_nav.style.transition = '0s all'

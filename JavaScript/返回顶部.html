@@ -24,55 +24,45 @@
 </body>
 </html>
 <script>
-function gobackTop(btn){
-	let goback = document.getElementById(btn);
-	let documentH = document.body.scrollHeight;  // 文档高度
-	let scrollTop;
-	let t1;
-	let isExecuted = true;//鼠标重复点击
-	// console.log(documentH);
-	//窗口滚动时
-	window.onscroll = function(){
-		scrollTop = document.body.scrollTop || document.documentElement.scrollTop;//谷歌不可以就换IE
-		if(scrollTop > (documentH/2.5)){
-			goback.style.visibility = 'visible';
-		}else{
-			goback.style.visibility = 'hidden';
-		}
-	}
-	// 滚滚动条缓动事件
-	function move(){
-		let speed;
-		//speed=（目标-现在的位置）除以 数值
-		speed = (0-scrollTop)/10;
-		if (scrollTop <= 0) {
-			clearInterval(t1);
-		}else{
-			document.body.scrollTop = scrollTop + speed;
-			document.documentElement.scrollTop = scrollTop + speed;//滚动时也要用到IE的值
-		}
-	}
-	// 滚轮事件
-	document.body.onmousewheel = function(event){//清楚缓动
-		clearInterval(t1);
-	}
-	// 点击事件
-   goback.onclick = function(){
-      if (isExecuted === true){
-         //改变滚动条的值
-         t1 = setInterval(move,1);
-         isExecuted = false;
-      }
-      setTimeout(function(){
-         isExecuted = true;
-      },500);
-   }
-}
+// PC端：
+// function gobackTop(clickEleSelector) {
+//     var clickEle = document.querySelector(clickEleSelector);
+//     var intervalId = null;
+//     var isExecuted = true; // 重复点击
+//     var rootNode = document.body.scrollTop === 0 ? document.documentElement : document.body;
+//     window.addEventListener('scroll', () => {
+//         if (rootNode.scrollTop > (document.body.scrollHeight / 2)) {
+//             clickEle.style.visibility = 'visible';
+//         } else {
+//             clickEle.style.visibility = 'hidden';
+//         }
+//     });
+//     // 滚轮事件
+//     document.body.addEventListener('mousewheel', () => {
+//         clearInterval(intervalId);
+// 		isExecuted = true;
+//     });
+//     // 点击事件
+//     clickEle.addEventListener('click', () => {
+//         if (isExecuted) {
+//             isExecuted = false;
+//             intervalId = setInterval(() => {
+//                 rootNode.scrollTop = rootNode.scrollTop - rootNode.scrollTop * 0.1;
+//                 if (rootNode.scrollTop <= 0) {
+//                     clearInterval(intervalId);
+// 					isExecuted = true;
+//                 }
+//             }, 10);
+//         }
+//     });
+// }
 // gobackTop("goback");
+// 兼容移动端 ie-10以上
 function goTop(clickEleSelector) {
+	window.requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame || window.msRequestAnimationFrame;
     var clickEle = document.querySelector(clickEleSelector);
-    var intervalId = null;
-    var isExecuted = true; // 重复点击
+    var isExecuted = true; 	//	重复点击
+	var isMove = true;		//	是否在运动
     var rootNode = document.body.scrollTop === 0 ? document.documentElement : document.body;
     window.addEventListener('scroll', () => {
         if (rootNode.scrollTop > (document.body.scrollHeight / 2)) {
@@ -83,24 +73,33 @@ function goTop(clickEleSelector) {
     });
     // 滚轮事件
     document.body.addEventListener('mousewheel', () => {
-        clearInterval(intervalId);
 		isExecuted = true;
+		isMove = false
     });
+	document.body.addEventListener('touchmove', () => {
+		isExecuted = true;
+		isMove = false
+    });
+	function move() {
+		rootNode.scrollTop = rootNode.scrollTop - rootNode.scrollTop * 0.1;
+		if (rootNode.scrollTop > 0 && isMove) {
+			requestAnimationFrame(move);
+			isExecuted = false;
+		}else {
+			isExecuted = true;
+			isMove = true
+		}
+	}
     // 点击事件
     clickEle.addEventListener('click', () => {
         if (isExecuted) {
-            isExecuted = false;
-            intervalId = setInterval(() => {
-                rootNode.scrollTop = rootNode.scrollTop - rootNode.scrollTop * 0.1;
-                if (rootNode.scrollTop <= 0) {
-                    clearInterval(intervalId);
-					isExecuted = true;
-                }
-            }, 10);
+			isMove = true
+			move();
         }
     });
 }
 goTop('#goback');
+
 //滚动条在Y轴上的滚动距离
 // function getScrollTop(){
 // 　　var scrollTop = 0, bodyScrollTop = 0, documentScrollTop = 0;

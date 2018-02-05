@@ -93,6 +93,7 @@
             <span class="ball"></span>
         </div>
         <script type="text/javascript">
+            window.myMove = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame || window.msRequestAnimationFrame;
             var cartAnimate = el => {
                 let _speed = 10;
                 // 定义初始化x和y的值
@@ -116,7 +117,7 @@
                       y = (x * x) / (-2 * p);
                       _ball.style.transform = `translate(${-x}px,${y}px)`;  // 这里的x为负值的时候是从左向右
                       if (x  > -xh) {
-                        requestAnimationFrame(flicker);
+                        myMove(flicker);
                       } else {
                           console.log('到达');
                         _ball.style.transform = `translate(0px, 0px)`;
