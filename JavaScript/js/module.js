@@ -24,6 +24,9 @@ var _obj = {
 console.log(Object.keys(_obj));
 console.log(String(Object.keys(_obj)));
 
+// var _code = 'CEde_128,1214534';
+// console.log(_code.slice(_code.indexOf(',')+1));
+
 var objbox = $('#wrap'), objP = objbox.querySelector('p'), list = $(".menu");
 for (var i = 1; i <= 5; i++) {
   var item = document.createElement("LI");
