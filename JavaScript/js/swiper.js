@@ -295,3 +295,21 @@ const Swiper =  {
 		});
 	}
 }
+/*
+	这里我默认的所有参数都是false,需要时再true
+	pagination: 底部圆点
+	loop：是否需要回路
+	direction：X/Y方向
+	moveTime：过渡时间（毫秒）
+	autoPaly： 自动播放
+	interval： 自动播放间隔（毫秒）
+*/
+Swiper.init({
+	el: '.swiper',
+	pagination: true,
+	autoPaly: true,
+	interval: 3000,
+	// loop: true,
+	// moveTime: 4000,
+	// direction: true
+});
