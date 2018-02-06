@@ -73,60 +73,50 @@
 			// render: _throttle	//	这个目前不知道有什么用
 		};
 	})(window, document);
-
 	// imgLazyLoad.init({
 	// 	offset: 0, //离可视区域多少像素的图片可以被加载
 	// 	throttle: 0, //图片延时多少毫秒加载
 	// });
-	// 3秒后关闭滚动监听事件
-	// setTimeout(() => {
-	//     // window.removeEventListener('scroll', _throttle);
-	//     window.addEventListener('scroll', () => {
-	//         console.log('追加的滚动事件');
-	//     });
-	// },3000);
-	const LazyImg = {
-		store: [],
-		offset: 0,
-		throttle: 0,
-		poll: null,
-		init (obj) {
-			var that = this;
-			let nodes = document.querySelectorAll('[data-lazy]');
-			that.offset = obj.offset || 0;
-			that.throttle = obj.delay || 150;
-			for (let i = 0; i < nodes.length; i++) {
-				that.store.push(nodes[i]);
-			}
-            //	计算每个元素scroll值
-			function _inView (el) {
-				let coords = el.getBoundingClientRect();
-				return ((coords.top >= 0 && coords.left >= 0 && coords.top) <= (window.innerHeight || document.documentElement.clientHeight) + parseInt(that.offset));
-			}
-            //	替换图片路径
-			function _pollImages () {
-				for (let i = that.store.length; i--;) {
-					let self = that.store[i];
-					if (_inView(self)) {
-						self.src = self.getAttribute('data-lazy');
-						that.store.splice(i, 1);
-					}
-				}
-				// 全部加载完后清除滚动事件
-				if (that.store.length === 0) window.removeEventListener('scroll', _throttle);
-			}
-            // 滚动延迟
-			function _throttle() {
-				if (that.poll) clearTimeout(that.poll);
-				that.poll = setTimeout(_pollImages, that.throttle);
-			}
-            // 先启动一次
-			_throttle();
-			window.addEventListener('scroll', _throttle);
+	
+	function LazyImg (_obj) {
+		var _store = [];	//	元素的集合
+		var _offset = 0;	// 	离可视区域多少像素的图片可以被加载
+		var _delay = 0;		//	图片延时多少毫秒加载
+		var _poll = null;	//	延迟器id
+		var nodes = document.querySelectorAll('[data-lazy]');
+		_offset = _obj.offset || 0;
+		_delay = _obj.delay || 150;
+		for (var i = 0; i < nodes.length; i++) {
+			_store.push(nodes[i]);
 		}
+		//	计算每个元素scroll值
+		function _inView (el) {
+			var coords = el.getBoundingClientRect();
+			return ((coords.top >= 0 && coords.left >= 0 && coords.top) <= (window.innerHeight || document.documentElement.clientHeight) + parseInt(_offset));
+		}
+		//	替换图片路径
+		function _pollImages () {
+			for (var i = _store.length; i--;) {
+				var self = _store[i];
+				if (_inView(self)) {
+					self.src = self.getAttribute('data-lazy');
+					_store.splice(i, 1);
+				}
+			}
+			// 全部加载完后清除滚动事件
+			if (_store.length === 0) window.removeEventListener('scroll', _throttle);
+		}
+		// 滚动延迟
+		function _throttle() {
+			if (_poll) clearTimeout(_poll);
+			_poll = setTimeout(_pollImages, throttle);
+		}
+		// 先启动一次
+		_throttle();
+		window.addEventListener('scroll', _throttle);
 	}
-	LazyImg.init({
-		offset: 0,
-		delay: 0
+	new LazyImg({
+		offset: 0,	//离可视区域多少像素的图片可以被加载
+		delay: 0	//图片延时多少毫秒加载
 	});
 </script>
