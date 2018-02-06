@@ -70,51 +70,51 @@
 		var slide2 = navSlider('.sliderY', 'ul', true);
 		// console.log(slide1, slide2);
 		function navSlider(el, nav, direction) {
-			let myMove = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame || window.msRequestAnimationFrame;
+			let myAnimation = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame || window.msRequestAnimationFrame;
 			let _box = document.querySelector(el);
 			let _nav = _box.querySelector(nav);
             // 外层容器的宽/高；开始触摸距离；结束触摸距离；移动的距离；触摸开始时间；触摸结束时间；触摸时间计时器
 			let [_w, _h, _start, _end, _moveP, _sTime, _eTime] = [_box.offsetWidth, _box.offsetHeight, 0, 0, 0, 0, 0];
+            // 定义方向
+			let _distance = direction ? _h : _w;
+			// 定义容器的宽高
+			let _navSize = direction ? _nav.offsetHeight : _nav.offsetWidth;
+            // 有动画
 			function noAnimation() {
 				_nav.style.WebkitTransition = '0s all';
 				_nav.style.transition = '0s all'
 			}
-			function hasAnimation(num) {
-				_nav.style.WebkitTransition = num+'s all';
-				_nav.style.transition = num+'s all';
+            // 无动画
+			function hasAnimation(_num) {
+				_nav.style.WebkitTransition = _num+'s all';
+				_nav.style.transition = _num+'s all';
 			}
-			function touchRangeY () {
-				let _d = 0;
-				if ((_end-_start) >= _h) {
-					_d = _moveP+_h;
-				}else if ((_end-_start) <= -_h) {
-					_d = _moveP-_h
+            // 属性样式
+			function slideStyle (_num) {
+				if (direction) {
+					_nav.style.WebkitTransform = `translate3d(0px, ${_num}px, 0px)`;
+					_nav.style.transform = `translate3d(0px, ${_num}px, 0px)`;
 				}else {
-					_d = _moveP+(_end-_start);
+					_nav.style.WebkitTransform = `translate3d(${_num}px, 0px, 0px)`;
+					_nav.style.transform = `translate3d(${_num}px, 0px, 0px)`;
 				}
-				return _d;
 			}
-			function touchRangeX () {
+            // 拖动的距离
+			function touchRange () {
 				let _d = 0;
-				if ((_end-_start) >= _w) {
-					_d = _moveP+_w;
-				}else if ((_end-_start) <= -_w) {
-					_d = _moveP-_w
+				if ((_end-_start) >= _distance) {
+					_d = _moveP + _distance;
+				}else if ((_end - _start) <= -_distance) {
+					_d = _moveP - _distance
 				}else {
-					_d = _moveP+(_end-_start);
+					_d = _moveP + (_end - _start);
 				}
 				return _d;
 			}
             // 超出范围返回动画
 			function springback () {
 				hasAnimation(.3);
-				if (!direction) {
-					_nav.style.WebkitTransform = 'translate3d('+_moveP+'px, 0px, 0px)';
-					_nav.style.transform = 'translate3d('+_moveP+'px, 0px, 0px)';
-				}else {
-					_nav.style.WebkitTransform = 'translate3d(0px, '+_moveP+'px, 0px)';
-					_nav.style.transform = 'translate3d(0px, '+_moveP+'px, 0px)';
-				}
+				slideStyle(_moveP);
 			}
             // 要滚动的距离倍数
 			function Roll() {
@@ -139,72 +139,41 @@
 			_nav.addEventListener('touchstart', ev => {
 				sTime = new Date().getTime();
 				noAnimation();
-				if (!direction) {
-					_start = ev.touches[0].pageX
-				}else {
-					_start = ev.touches[0].pageY
-				}
+				_start = direction ? ev.touches[0].pageY : ev.touches[0].pageX;
 			});
 			_nav.addEventListener('touchmove', ev => {
 				ev.preventDefault();
-				if (!direction) {
-					_end = ev.touches[0].pageX;
-					_nav.style.WebkitTransform = 'translate3d('+touchRangeX()+'px, 0px, 0px)';
-					_nav.style.transform = 'translate3d('+touchRangeX()+'px, 0px, 0px)';
-				}else {
-					_end = ev.touches[0].pageY;
-					_nav.style.WebkitTransform = 'translate3d(0px, '+touchRangeY()+'px, 0px)';
-					_nav.style.transform = 'translate3d(0px, '+touchRangeY()+'px, 0px)';
-				}
+				_end = direction ? ev.touches[0].pageY : ev.touches[0].pageX;
+				slideStyle(touchRange());
 			});
 			_nav.addEventListener('touchend', ev => {
 				// console.log(`开始距离${_start}，结束距离${_end}`);
-				console.log(Math.abs(_start-_end));
+				// console.log(Math.abs(_start-_end));
 				eTime = new Date().getTime();
 				hasAnimation(.3);
-				if (!direction) {
-					_moveP = touchRangeX();
-				}else {
-					_moveP = touchRangeY();
-				}
+				_moveP = touchRange();
 				if (_end < _start) {
 					_moveP += (_end-_start)*Roll()
 				}else {
 					_moveP -= (_start-_end)*Roll()
 				}
 				_nav.style.transitionTimingFunction = 'linear';
-				if (!direction) {
-					_nav.style.WebkitTransform = 'translate3d('+_moveP+'px, 0px, 0px)';
-					_nav.style.transform = 'translate3d('+_moveP+'px, 0px, 0px)';
-					if (_end < _start) {
-						if (_moveP < -(_nav.offsetWidth-_w)) {
-							_moveP = -(_nav.offsetWidth-_w);
-							springback();
-						}
-					}else {
-						if (_moveP > 0) {
-							_moveP = 0;
-							springback();
-						}
+				slideStyle(_moveP);
+				if (_end < _start) {
+					if (_moveP < -(_navSize - _distance)) {
+						_moveP = -(_navSize - _distance);
+						springback();
 					}
 				}else {
-					_nav.style.WebkitTransform = 'translate3d(0px, '+_moveP+'px, 0px)';
-					_nav.style.transform = 'translate3d(0px, '+_moveP+'px, 0px)';
-					if (_end < _start) {
-						if (_moveP < -(_nav.offsetHeight-_h)) {
-							_moveP = -(_nav.offsetHeight-_h);
-							springback();
-						}
-					}else {
-						if (_moveP > 0) {
-							_moveP = 0;
-							springback();
-						}
+					if (_moveP > 0) {
+						_moveP = 0;
+						springback();
 					}
 				}
 			});
 		}
-		// (function( window, undefined ) {
+		// (function( _window, undefined ) {
+			console.log();
 			var myPlug = function () {
 			}
 			myPlug.prototype = {
