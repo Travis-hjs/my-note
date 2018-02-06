@@ -15,9 +15,12 @@
 			@media only screen and (min-width: 414px) { html { font-size: 55.2px !important; } }
 			@media only screen and (min-width: 480px) { html { font-size: 64px !important; } }
 			.wrap{ width: 100%; max-width: 600px; margin: auto; }
-			.nav_slider{ width: 100%; height: 3rem; background-color: #eee; overflow: hidden; }
-			.nav_slider nav{ min-width: 100%; width: 31.4rem; overflow: hidden; }
+			.nav_slider{ width: 100%; height: 3rem; background-color: #eee; overflow: hidden; margin-bottom: .3rem; }
+			.nav_slider nav{ min-width: 100%; width: 62.4rem; overflow: hidden; }
 			.nav_slider li{ float: left; margin-left: 0.2rem; height: 3rem; width: 5rem; background-color: #333; text-align: center; line-height: 3rem; color: #fff; }
+			.sliderY{ width: 100%; height: 5rem; overflow: hidden; background-color: #eee; }
+			.sliderY ul{ width: 100%; }
+			.sliderY li{ width: 100%; height: 4rem; margin-bottom: .2rem; background-color: #333; text-align: center; line-height: 4rem; color: #fff; }
 		</style>
 	</head>
 	<body>
@@ -30,7 +33,29 @@
 					<li>slider-4</li>
 					<li>slider-5</li>
 					<li>slider-6</li>
+					<li>slider-7</li>
+					<li>slider-8</li>
+					<li>slider-9</li>
+					<li>slider-10</li>
+					<li>slider-11</li>
+					<li>slider-12</li>
 				</nav>
+			</div>
+			<div class="sliderY">
+				<ul>
+					<li>slider-1</li>
+					<li>slider-2</li>
+					<li>slider-3</li>
+					<li>slider-4</li>
+					<li>slider-5</li>
+					<li>slider-6</li>
+					<li>slider-7</li>
+					<li>slider-8</li>
+					<li>slider-9</li>
+					<li>slider-10</li>
+					<li>slider-11</li>
+					<li>slider-12</li>
+				</ul>
 			</div>
 		</div>
 	</body>
@@ -40,9 +65,12 @@
 			nav	=> 滚动元素
 			direction	=> 方向，true为Y，不给或false反之
 		*/
-		navSlider('.nav_slider', 'nav');
+        //
+		var slide1 = new navSlider('.nav_slider', 'nav');
+		var slide2 = navSlider('.sliderY', 'ul', true);
+		// console.log(slide1, slide2);
 		function navSlider(el, nav, direction) {
-			window.myMove = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame || window.msRequestAnimationFrame;
+			let myMove = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame || window.msRequestAnimationFrame;
 			let _box = document.querySelector(el);
 			let _nav = _box.querySelector(nav);
             // 外层容器的宽/高；开始触摸距离；结束触摸距离；移动的距离；触摸开始时间；触摸结束时间；触摸时间计时器
@@ -77,6 +105,7 @@
 				}
 				return _d;
 			}
+            // 超出范围返回动画
 			function springback () {
 				hasAnimation(.3);
 				if (!direction) {
@@ -87,15 +116,22 @@
 					_nav.style.transform = 'translate3d(0px, '+_moveP+'px, 0px)';
 				}
 			}
+            // 要滚动的距离倍数
 			function Roll() {
 				let _d = 0;
-				if ((eTime-sTime) <= 150) {
+				if ((eTime-sTime) <= 150 && Math.abs(_start-_end) > 80) {
 					_d = 2.5
-				}else if ((eTime-sTime) <= 200) {
+				}else {
+					_d = 15
+				} if ((eTime-sTime) <= 200 && Math.abs(_start-_end) > 100) {
 					_d = 1.8
-				}else if ((eTime-sTime) <= 300) {
+				}else {
+					_d = 10
+				}if ((eTime-sTime) <= 300 && Math.abs(_start-_end) > 120) {
 					_d = 1.2
 				}else {
+					_d = 5
+				}if ((eTime-sTime) >= 300) {
 					_d = 0
 				}
 				return _d;
@@ -122,6 +158,8 @@
 				}
 			});
 			_nav.addEventListener('touchend', ev => {
+				// console.log(`开始距离${_start}，结束距离${_end}`);
+				console.log(Math.abs(_start-_end));
 				eTime = new Date().getTime();
 				hasAnimation(.3);
 				if (!direction) {
@@ -138,11 +176,6 @@
 				if (!direction) {
 					_nav.style.WebkitTransform = 'translate3d('+_moveP+'px, 0px, 0px)';
 					_nav.style.transform = 'translate3d('+_moveP+'px, 0px, 0px)';
-				}else {
-					_nav.style.WebkitTransform = 'translate3d(0px, '+_moveP+'px, 0px)';
-					_nav.style.transform = 'translate3d(0px, '+_moveP+'px, 0px)';
-				}
-				if (!direction) {
 					if (_end < _start) {
 						if (_moveP < -(_nav.offsetWidth-_w)) {
 							_moveP = -(_nav.offsetWidth-_w);
@@ -155,6 +188,8 @@
 						}
 					}
 				}else {
+					_nav.style.WebkitTransform = 'translate3d(0px, '+_moveP+'px, 0px)';
+					_nav.style.transform = 'translate3d(0px, '+_moveP+'px, 0px)';
 					if (_end < _start) {
 						if (_moveP < -(_nav.offsetHeight-_h)) {
 							_moveP = -(_nav.offsetHeight-_h);
@@ -169,5 +204,17 @@
 				}
 			});
 		}
+		// (function( window, undefined ) {
+			var myPlug = function () {
+			}
+			myPlug.prototype = {
+				teste () {
+					console.log(this)
+				}
+			}
+			window.myPlug = myPlug
+		// })(window);
+		var dialog = new myPlug();
+		dialog.teste()
 	</script>
 </html>
