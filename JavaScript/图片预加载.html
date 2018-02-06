@@ -77,7 +77,7 @@
 	// 	offset: 0, //离可视区域多少像素的图片可以被加载
 	// 	throttle: 0, //图片延时多少毫秒加载
 	// });
-	
+
 	function LazyImg (_obj) {
 		var _store = [];	//	元素的集合
 		var _offset = 0;	// 	离可视区域多少像素的图片可以被加载
@@ -109,7 +109,7 @@
 		// 滚动延迟
 		function _throttle() {
 			if (_poll) clearTimeout(_poll);
-			_poll = setTimeout(_pollImages, throttle);
+			_poll = setTimeout(_pollImages, _delay);
 		}
 		// 先启动一次
 		_throttle();
