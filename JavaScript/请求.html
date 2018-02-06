@@ -112,7 +112,7 @@
 	// });
 
 	const Fetch = {
-		website: 'http://longrenhui.ws.6-315.com/index.php/wap',
+		website: 'https://dev.yunjiaxiang.com/api/',
 		post (url, sendData, successHandler, errorHandler) {
 			// 解析对象传参
 			var _data = '';
@@ -156,11 +156,14 @@
 	// });
     //
     // // POST
-	// Fetch.post('/agent/mine.html',{ deviceid: '864147010086266' }, ret => {  // , agent_id: '88'
-	// 	console.log(ret);
-	// },err => {
-	// 	console.log(err);
-	// });
+	let _obj = {
+		"type": ["10"]
+	}
+	Fetch.post('v1.0/data/dict/list', _obj, ret => {  // , agent_id: '88'
+		console.log(ret);
+	},err => {
+		console.log(err);
+	});
 	// $.ajax({
 	// 	url:  'http://longrenhui.ws.6-315.com/index.php/wap/agent/mine.html',
 	// 	data: {
