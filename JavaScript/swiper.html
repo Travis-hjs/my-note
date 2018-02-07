@@ -27,7 +27,7 @@
 	</head>
 	<body>
 		<section class="wrap">
-			<div class="swiper">
+			<div class="swiper" style="margin-bottom: .4rem;">
 				<ul class="swiper_list">
 					<li class="swiper_slider">
 						<p>silder-1</p>
@@ -56,13 +56,13 @@
 		var _html = `<div class="swiper mybanner">
 			<ul class="swiper_list">
 				<li class="swiper_slider">
-					<img src="./img/big-1.jpg" alt="第一张图片">
+					<p>silder-1</p>
 				</li>
 				<li class="swiper_slider">
-					<img src="./img/big-2.jpg" alt="第二张图片">
+					<p>silder-2</p>
 				</li>
 				<li class="swiper_slider">
-					<img src="./img/big-3.jpg" alt="第三张图片">
+					<p>silder-3</p>
 				</li>
 			</ul>
 			<div class="swiper_pagination"></div>
@@ -100,6 +100,7 @@
 		let touch = (_div, _w, _h) => {
 			let _ul = _div.querySelector('.swiper_list');
 			let _li = _ul.querySelectorAll('.swiper_slider');
+			let _btn = _div.querySelectorAll('.swiper_btn');
 			// 触摸开始时间，触摸结束时间，开始的距离，结束的距离，结束距离状态，移动的距离，圆点位置，自动播放定计算数值
 			let [sTime, eTime, _sd, _ed, _eState, _md, _index, _t] = [0, 0, 0, 0, 0, 0, 0, 0, 0];
 			// 选择方向距离
@@ -158,7 +159,6 @@
 			}
 			// 移动
 			function slideMove (_d) {
-				let _btn = _div.querySelectorAll('.swiper_btn');
 				hasAnimation();
 				slideStyle(_d);
 				// 判断loop时回到第一张或最后一张
