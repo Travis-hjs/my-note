@@ -101,8 +101,8 @@
 			let _ul = _div.querySelector('.swiper_list');
 			let _li = _ul.querySelectorAll('.swiper_slider');
 			let _btn = _div.querySelectorAll('.swiper_btn');
-			// 触摸开始时间，触摸结束时间，开始的距离，结束的距离，结束距离状态，移动的距离，圆点位置，自动播放定计算数值
-			let [sTime, eTime, _sd, _ed, _eState, _md, _index, _t] = [0, 0, 0, 0, 0, 0, 0, 0, 0];
+			// 触摸开始时间，触摸结束时间，开始的距离，结束的距离，结束距离状态，移动的距离，圆点位置，自动播放定计算数值，loop定时器计算值
+			let [sTime, eTime, _sd, _ed, _eState, _md, _index, _t, _loopNum] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
 			// 选择方向距离
 			let _distance = _direction ? _h : _w;
             // 定义 requestAnimationFrame
@@ -161,22 +161,29 @@
 			function slideMove (_d) {
 				hasAnimation();
 				slideStyle(_d);
+				_loopNum = 0;
 				// 判断loop时回到第一张或最后一张
 				if (_loop && _index < 0) {
-					// 我这里是想让滑块过渡完之后再重置位置所以加的延迟
-					setTimeout(() => {
+					// 我这里是想让滑块过渡完之后再重置位置所以加的延迟 (之前用setTimeout，快速滑动有问题，然后换成 requestAnimationFrame解决了这类问题)
+					function loopMoveMin() {
+						_loopNum += 1;
+						if (_loopNum < _moveTime/1000*60) return myAnimation(loopMoveMin);
 						noAnimation();
 						slideStyle(_distance * -(_li.length-3));
 						// 重置一下位置
 						_md = _distance * -(_li.length-3);
-					},_moveTime);
+					}
+					loopMoveMin()
 					_index = _li.length-3;
-				}if (_loop && _index > _li.length-3) {
-					setTimeout(() => {
+				}else if (_loop && _index > _li.length-3) {
+					function loopMoveMax() {
+						_loopNum += 1;
+						if (_loopNum < _moveTime/1000*60) return myAnimation(loopMoveMax);
 						noAnimation();
 						slideStyle(0);
 						_md = 0;
-					},_moveTime);
+					}
+					loopMoveMax()
 					_index = 0;
 				}
 				_div.querySelector('.swiper_btn_active').className = 'swiper_btn';
@@ -235,7 +242,8 @@
 			if (_autoPaly) startAuto();
 			// 开始触摸
 			_ul.addEventListener('touchstart', ev => {
-				[sTime, _t] = [new Date().getTime(), 0]
+				// _loopNum = _moveTime/1000*60;
+				[sTime, _t, _loopNum] = [new Date().getTime(), 0, _moveTime/1000*60]
 				noAnimation();
 				_sd = _direction ? ev.touches[0].pageY : ev.touches[0].pageX;
 			});
