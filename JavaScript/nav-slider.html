@@ -26,36 +26,10 @@
 	<body>
 		<div class="wrap">
 			<div class="nav_slider">
-				<nav>
-					<li>slider-1</li>
-					<li>slider-2</li>
-					<li>slider-3</li>
-					<li>slider-4</li>
-					<li>slider-5</li>
-					<li>slider-6</li>
-					<li>slider-7</li>
-					<li>slider-8</li>
-					<li>slider-9</li>
-					<li>slider-10</li>
-					<li>slider-11</li>
-					<li>slider-12</li>
-				</nav>
+				<nav></nav>
 			</div>
 			<div class="sliderY">
-				<ul>
-					<li>slider-1</li>
-					<li>slider-2</li>
-					<li>slider-3</li>
-					<li>slider-4</li>
-					<li>slider-5</li>
-					<li>slider-6</li>
-					<li>slider-7</li>
-					<li>slider-8</li>
-					<li>slider-9</li>
-					<li>slider-10</li>
-					<li>slider-11</li>
-					<li>slider-12</li>
-				</ul>
+				<ul></ul>
 			</div>
 		</div>
 	</body>
@@ -65,9 +39,16 @@
 			nav	=> 滚动元素
 			direction	=> 方向，true为Y，不给或false反之
 		*/
-        //
-		var slide1 = new navSlider('.nav_slider', 'nav');
-		var slide2 = navSlider('.sliderY', 'ul', true);
+		for (var i = 1; i <= 20; i++) {
+			document.querySelector('.nav_slider nav').innerHTML += `<li>slider-${i}</li>`
+		}
+		for (var i = 1; i <= 20; i++) {
+			document.querySelector('.sliderY ul').innerHTML += `<li>slider-${i}</li>`
+		}
+    	setTimeout(() => {
+			new navSlider('.nav_slider', 'nav');
+			navSlider('.sliderY', 'ul', true);
+		},300)
 		// console.log(slide1, slide2);
 		function navSlider(el, nav, direction) {
 			let myAnimation = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame || window.msRequestAnimationFrame;
@@ -119,21 +100,14 @@
             // 要滚动的距离倍数
 			function Roll() {
 				let _d = 0;
-				if ((eTime-sTime) <= 150 && Math.abs(_start-_end) > 80) {
-					_d = 2.5
-				}else {
-					_d = 15
-				} if ((eTime-sTime) <= 200 && Math.abs(_start-_end) > 100) {
-					_d = 1.8
-				}else {
-					_d = 10
-				}if ((eTime-sTime) <= 300 && Math.abs(_start-_end) > 120) {
-					_d = 1.2
-				}else {
-					_d = 5
-				}if ((eTime-sTime) >= 300) {
+				if ((eTime-sTime) >= 300) {
 					_d = 0
+				}else if((eTime-sTime) < 200 && (eTime-sTime) > 100) {
+					_d = Math.ceil(_distance/Math.abs(_start-_end)/1.2);
+				}else if ((eTime-sTime) < 100) {
+					_d = Math.ceil(_distance/Math.abs(_start-_end))
 				}
+				// console.log(_d);
 				return _d;
 			}
 			_nav.addEventListener('touchstart', ev => {
@@ -147,8 +121,6 @@
 				slideStyle(touchRange());
 			});
 			_nav.addEventListener('touchend', ev => {
-				// console.log(`开始距离${_start}，结束距离${_end}`);
-				// console.log(Math.abs(_start-_end));
 				eTime = new Date().getTime();
 				hasAnimation(.3);
 				_moveP = touchRange();
