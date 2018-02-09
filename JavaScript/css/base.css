@@ -17,6 +17,9 @@ a{ text-decoration: none; color: #333; }
 span,img{ display: block; }
 img{ display: block; width: 100%; }
 h1,h2,h3,h4,h5,h6,b,i{ font-weight: 400; font-style: normal }
+input, textarea{ outline: none; background-color: rgba(0, 0, 0, 0); -webkit-user-select: auto; }
+input::-webkit-input-placeholder { color: #999; }
+textarea { resize: none; display: block; }
 .flex{ display: -webkit-box; display: -webkit-flex;	display: flex; flex-wrap: wrap; }
 .flex_center{ -webkit-box-pack: center; justify-content: center; -webkit-box-align: center; align-items: center; }
 .flex_vertical{ -webkit-box-orient: vertical; -webkit-flex-flow: column; flex-flow: column; }
