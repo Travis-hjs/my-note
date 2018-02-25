@@ -1,5 +1,5 @@
-var $ = selector => document.querySelector(selector);
-var $$ = selector => document.querySelectorAll(selector);
+var $ = el => document.querySelector(el);
+var $$ = el => document.querySelectorAll(el);
 // $("#wrap").style.background = '#ccc';
 // var objbox = document.getElementById('wrap');
 /*
