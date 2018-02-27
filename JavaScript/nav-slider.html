@@ -15,12 +15,18 @@
 			@media only screen and (min-width: 414px) { html { font-size: 55.2px !important; } }
 			@media only screen and (min-width: 480px) { html { font-size: 64px !important; } }
 			.wrap{ width: 100%; max-width: 600px; margin: auto; }
+			/* X布局 */
 			.nav_slider{ width: 100%; height: 3rem; background-color: #eee; overflow: hidden; margin-bottom: .3rem; }
-			.nav_slider nav{ min-width: 100%; width: 62.4rem; overflow: hidden; }
+			.nav_slider nav{ min-width: 100%; width: 104.2rem; overflow: hidden; }
 			.nav_slider li{ float: left; margin-left: 0.2rem; height: 3rem; width: 5rem; background-color: #333; text-align: center; line-height: 3rem; color: #fff; }
-			.sliderY{ width: 100%; height: 5rem; overflow: hidden; background-color: #eee; }
+			.sliderY{ width: 100%; height: 5rem; overflow: hidden; background-color: #eee; margin-bottom: .3rem; }
+			/* Y布局 */
 			.sliderY ul{ width: 100%; }
 			.sliderY li{ width: 100%; height: 4rem; margin-bottom: .2rem; background-color: #333; text-align: center; line-height: 4rem; color: #fff; }
+
+			.test{ width: 100%; height: 3rem; background-color: #eee; overflow: auto; -webkit-overflow-scrolling: touch; margin-bottom: .3rem;  }
+			.test ul{ min-width: 100%; width: 104.2rem; overflow: hidden; }
+			.test li{ float: left; margin-left: 0.2rem; height: 3rem; width: 5rem; background-color: #333; text-align: center; line-height: 3rem; color: #fff; }
 		</style>
 	</head>
 	<body>
@@ -30,6 +36,11 @@
 			</div>
 			<div class="sliderY">
 				<ul></ul>
+			</div>
+			<div class="test">
+				<ul>
+
+				</ul>
 			</div>
 		</div>
 	</body>
@@ -41,9 +52,8 @@
 		*/
 		for (var i = 1; i <= 20; i++) {
 			document.querySelector('.nav_slider nav').innerHTML += `<li>slider-${i}</li>`
-		}
-		for (var i = 1; i <= 20; i++) {
 			document.querySelector('.sliderY ul').innerHTML += `<li>slider-${i}</li>`
+			document.querySelector('.test ul').innerHTML += `<li>slider-${i}</li>`
 		}
     	setTimeout(() => {
 			new navSlider('.nav_slider', 'nav');
