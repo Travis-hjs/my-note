@@ -20,30 +20,14 @@
 			.swiper .swiper_list{ overflow: hidden; position: relative; width: 100%; -webkit-transition: 0s all; transition: 0s all; }
 			.swiper .swiper_slider{ float: left; width: 100%; height: 4rem; background-color: #333; text-align: center; line-height: 4rem; color: #fff; }
 			.swiper img{ width: 100%; }
-			.swiper .swiper_pagination{ position: absolute; left: 50%; bottom: 10px; height: 8px; -webkit-transform: translateX(-50%); transform: translateX(-50%); }
+			.swiper .swiper_pagination{ position: absolute; left: 50%; max-width: 100%; bottom: 10px; height: 8px; -webkit-transform: translateX(-50%); transform: translateX(-50%); overflow: auto; }
 			.swiper .swiper_btn{ float: left; margin-left: 8px; width: 8px; height: 8px; background-color: rgba(0,0,0,0.5); border-radius: 50%; }
 			.swiper .swiper_btn_active{ background-color: #fff; }
 		</style>
 	</head>
 	<body>
 		<section class="wrap">
-			<div class="swiper" style="margin-bottom: .4rem;">
-				<ul class="swiper_list">
-					<li class="swiper_slider">
-						<p>silder-1</p>
-						<!-- <img src="./img/big-1.jpg" alt="第一张图片"> -->
-					</li>
-					<li class="swiper_slider">
-						<p>silder-2</p>
-						<!-- <img src="./img/big-2.jpg" alt="第二张图片"> -->
-					</li>
-					<li class="swiper_slider">
-						<p>silder-3</p>
-						<!-- <img src="./img/big-3.jpg" alt="第三张图片"> -->
-					</li>
-				</ul>
-				<div class="swiper_pagination"></div>
-			</div>
+
 		</section>
 		<p onclick="addSwiper()" style="text-align: center">add a swiper</p>
 	</body>
@@ -76,14 +60,30 @@
 			direction: true
 		})
 	}
-	new Swiper({
-		el: '.swiper',
-		pagination: true,
-		autoPaly: true,
-		interval: 3000,
-		// loop: true,
-		// moveTime: 400,
-		// direction: true
+	// 动态生成html
+	function createList(_num, isBtn, fn) {
+		let [_swiper, _ul, _li, _btn] = [document.createElement('div'), document.createElement('ul'), '', document.createElement('div')];
+		_swiper.className = 'swiper';
+		_swiper.style.marginBottom = '.4rem';
+		_ul.className = 'swiper_list';
+		_btn.className = 'swiper_pagination';
+		for (let i = 0; i < _num; i++) _li += `<li class="swiper_slider"><p>silder-${i+1}</p></li>`;
+		_ul.innerHTML = _li;
+		_swiper.appendChild(_ul);
+		if (isBtn) _swiper.appendChild(_btn);
+		document.querySelector('.wrap').appendChild(_swiper);
+		if (typeof fn === 'function') fn.call(this);
+	}
+	createList(16, true, () => {
+		new Swiper({
+			el: '.swiper',
+			pagination: true,
+			autoPaly: true,
+			interval: 3000,
+			// loop: true,
+			// moveTime: 400,
+			// direction: true
+		});
 	});
 	/*
 		默认全部 false

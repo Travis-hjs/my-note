@@ -154,9 +154,6 @@
             let _html = '<div class="loding_ball"><i></i><i></i><i></i></div>';
             this.output(.3, _html);
         },
-        hideBall () {
-            this.removeThis()
-        },
         loading (text) {
             let that = this;
             let _text = text || 'loading';
@@ -166,18 +163,20 @@
                         </div>';
             that.output(0, _html);
         },
-        hideLoading () {
-            this.removeThis()
-        },
-        toast (text, num) {
+        toast (text, num, fn) {
             let _div = document.createElement('div');
             let _text = text || '底部提示文字';
             let _time = Number(num) || 1000;
             _div.className = 'itoast';
             _div.textContent = _text;
             document.body.appendChild(_div);
-            setTimeout(() => _div.style.opacity = 0, _time);
-            setTimeout(() => document.body.removeChild(_div), _time + 200);
+            setTimeout(() => {
+                _div.style.opacity = 0;
+                setTimeout(() => {
+                    document.body.removeChild(_div);
+                    if (typeof fn === 'function') fn.call(this);
+                }, 200);
+            }, _time);
         }
     };
     // Prompts
@@ -201,8 +200,110 @@
         Prompts.loading('加载中...');
         setTimeout(() => Prompts.hideLoading(), 3000);
     }
+    
+    // 函数封装：
+    (function () {
+        var Msg = function () {
+            //
+        };
+        Msg.prototype = {
+            output (num, str, fn) {
+                let _div = document.createElement('div');
+                _div.id = 'layer_bg';
+                _div.innerHTML = str;
+                document.body.appendChild(_div);
+                _div.style.backgroundColor = 'rgba(0,0,0,'+num+')';
+                setTimeout(() => {
+                    _div.style.opacity = 1;
+                    if (typeof fn === 'function') fn.call(this);
+                }, 20);
+            },
+            removeThis () {
+                let _div = document.getElementById('layer_bg');
+                _div.style.opacity = 0;
+                setTimeout(() => document.body.removeChild(_div), 301);
+            },
+            alertMsg (text, fn, title) {
+                let that = this;
+                let _title = title || '提示';
+                let _html = '<div class="prompt">\
+                                <h2>'+_title+'</h2>\
+                                <div><p>'+text+'</p></div>\
+                                <span data-prompt>确定</span>\
+                            </div>';
+                that.output(.3, _html, () => {
+                    let _self = document.querySelector('.prompt');
+                    _self.classList.add('boxScale');
+                    document.querySelector('[data-prompt]').addEventListener('click', () => {
+                        if (typeof fn === 'function') fn.call(this);
+                        _self.classList.remove('boxScale');
+                        that.removeThis();
+                    });
+                });
+            },
+            confirmMsg (text, rightfn, title, leftfn) {
+                let that = this;
+                let _title = title || '提示';
+                let _html = '<div class="confirm">\
+                                <h2>'+_title+'</h2>\
+                                <div><p>'+text+'</p></div>\
+                                <span data-confirmLeft>取消</span>\
+                                <span data-confirmRight>确定</span>\
+                            </div>';
+                that.output(.3, _html, () => {
+                    let _self = document.querySelector('.confirm');
+                    _self.classList.add('boxScale');
+                    document.querySelector('[data-confirmLeft]').addEventListener('click', () => {
+                        if (typeof leftfn === 'function') leftfn.call(this);
+                        _self.classList.remove('boxScale');
+                        that.removeThis();
+                    });
+                    document.querySelector('[data-confirmRight]').addEventListener('click', () => {
+                        if (typeof rightfn === 'function') rightfn.call(this);
+                        _self.classList.remove('boxScale');
+                        that.removeThis();
+                    });
+                });
+            },
+            loadingBall () {
+                let _html = '<div class="loding_ball"><i></i><i></i><i></i></div>';
+                this.output(.3, _html);
+            },
+            loading (text) {
+                let that = this;
+                let _text = text || 'loading';
+                let _html = '<div class="loading_box">\
+                                <span></span>\
+                                <p>'+_text+'</p>\
+                            </div>';
+                that.output(0, _html);
+            },
+            toast (text, num, fn) {
+                let _div = document.createElement('div');
+                let _text = text || '底部提示文字';
+                let _time = Number(num) || 1000;
+                _div.className = 'itoast';
+                _div.textContent = _text;
+                document.body.appendChild(_div);
+                setTimeout(() => {
+                    _div.style.opacity = 0;
+                    setTimeout(() => {
+                        document.body.removeChild(_div);
+                        if (typeof fn === 'function') fn.call(this);
+                    }, 200);
+                }, _time);
+            }
+        }
+        window.Msg = Msg;
+    })()
+    var dialog = new Msg();
     function openToast() {
-        Prompts.toast('原生APP toast', 2000);
+        dialog.toast('原生APP toast', 2000, () => {
+            console.log('触发的回调');
+            dialog.alertMsg('哈哈', () => {
+
+            })
+        });
     }
     // 自定义选择物流插件
     var Selector = {

@@ -4,7 +4,7 @@
  * 作者：黄磊
  *
  * 邮箱：xfhxbb@yeah.net
- * 
+ *
  * Copyright 2016
  *
  * 创建于：2016-01-08
@@ -443,7 +443,7 @@ window.lCalendar = (function() {
 				var target = e.target;
 				while (true) {
 					if (!target.classList.contains("gear")) {
-						target = target.parentElement;
+						target = target.parentNode;
 					} else {
 						break
 					}
@@ -464,7 +464,7 @@ window.lCalendar = (function() {
 				var target = e.target;
 				while (true) {
 					if (!target.classList.contains("gear")) {
-						target = target.parentElement;
+						target = target.parentNode;
 					} else {
 						break
 					}
@@ -483,7 +483,7 @@ window.lCalendar = (function() {
 				var target = e.target;
 				while (true) {
 					if (!target.classList.contains("gear")) {
-						target = target.parentElement;
+						target = target.parentNode;
 					} else {
 						break;
 					}

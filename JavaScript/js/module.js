@@ -213,10 +213,11 @@ function timeInterval(minInterval) {   // minInterval 时间（5分钟间隔）
 // console.log(timeInterval(120));
 function timeStr() {
     var _date = new Date();
+    // '0'+_data.getSeconds().slice(-2);
     var hour = _date.getHours() < 10 ? "0" + _date.getHours() : _date.getHours();
     var minute = _date.getMinutes() < 10 ? "0" + _date.getMinutes() : _date.getMinutes();
     var second = _date.getSeconds() < 10 ? "0" + _date.getSeconds() : _date.getSeconds();
-  //   字符串拼接
+    //   字符串拼接
     var dayArr = _date.getFullYear() + '-' + (_date.getMonth()+1) + '-' + _date.getDate();
     var timeArr = hour + ':' + minute + ':' + second;
     console.log(dayArr, timeArr);
