@@ -29,7 +29,7 @@
 			}
 			_data = _data.slice(1);
 			// 检测请求类型
-			if (window.fetch !== undefined) {
+			if (window.fetch) {
 				// , { credentials: 'include' } 这个是打开 cookie
 				fetch(this.website + url, {
 					method: 'POST',
@@ -41,21 +41,21 @@
 					// 注意，这里不转换 json 下面会 undefined
 					return response.json();
 				}).then(indexContentData => {
-					if (successHandler !== undefined) successHandler(indexContentData);
+					if (typeof successHandler === 'function') successHandler(indexContentData);
 				}).catch(error => {
-					if (errorHandler !== undefined) errorHandler(error);
+					if (typeof errorHandler === 'function') errorHandler(error);
 				})
 			} else {
 				var xhr = new XMLHttpRequest();
-				xhr.open('POST', this.website+url);
+				xhr.open('POST', this.website + url);
 				// xhr.responseType = 'json';
 				xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
 				xhr.onreadystatechange = function (event){
-					if (event.target.readyState !== 4) { return ; }
+					if (event.target.readyState !== 4) return ;
 					if (event.target.status === 200 || event.target.status === 304) {
-						if (successHandler !== undefined) successHandler(JSON.parse(event.target.responseText));
+						if (typeof successHandler === 'function') successHandler(JSON.parse(event.target.responseText));
 					} else {
-						if (errorHandler !== undefined)	errorHandler(event.target.status);
+						if (typeof errorHandler === 'function') errorHandler(event.target.status);
 					}
 				}
 				// xhr.withCredentials = true;		// 打开cookie
@@ -70,23 +70,23 @@
 			}
 			_data = '?'+_data.slice(1);
 			// 检测请求类型
-			if (window.fetch !== undefined) {
+			if (window.fetch) {
 				fetch(this.website + url + _data).then(response => {
 					return response.json();
 				}).then(indexContentData => {
-					if (successHandler !== undefined) successHandler(indexContentData);
+					if (typeof successHandler === 'function') successHandler(indexContentData);
 				}).catch(error => {
-					if (errorHandler !== undefined) errorHandler(error);
+					if (typeof errorHandler === 'function') errorHandler(error);
 				})
 			} else {
 				var xhr = new XMLHttpRequest();
-				xhr.open('GET', this.website+url+_data);
+				xhr.open('GET', this.website + url + _data);
 				xhr.onreadystatechange = function (event){
-					if (event.target.readyState !== 4) { return ; }
+					if (event.target.readyState !== 4) return ;
 					if (event.target.status === 200 || event.target.status === 304) {
-						if (successHandler !== undefined) successHandler(JSON.parse(event.target.responseText));
+						if (typeof successHandler === 'function') successHandler(JSON.parse(event.target.responseText));
 					} else {
-						if (errorHandler !== undefined) errorHandler(event.target.status);
+						if (typeof errorHandler === 'function') errorHandler(event.target.status);
 					}
 				}
 				// xhr.withCredentials = true;
@@ -98,18 +98,18 @@
 	// str.toUpperCase()
 
     // GET
-	// Ajax.get('/home/test.html',{ id: 1 }, ret => {
-	// 	console.log(ret);
-	// },err => {
-	// 	console.log(err);
-	// });
+	Ajax.get('/home/test.html',{ id: 1 }, ret => {
+		console.log(ret);
+	},err => {
+		console.log(err);
+	});
     //
     // // POST
-	// Ajax.post('/Agent/trustee_list.html',{ deviceid: '864147010086266', agent_id: '88' }, ret => {
-	// 	console.log(ret);
-	// },err => {
-	// 	console.log(err);
-	// });
+	Ajax.post('/Agent/trustee_list.html',{ deviceid: '864147010086266', agent_id: '88' }, ret => {
+		console.log(ret);
+	},err => {
+		console.log(err);
+	});
 
 	const Fetch = {
 		website: 'https://dev.yunjiaxiang.com/api/',
@@ -128,9 +128,9 @@
 			}).then(response => {
 				return response.json();
 			}).then(indexContentData => {
-				if (successHandler !== undefined) successHandler(indexContentData);
+				if (typeof successHandler === 'function') successHandler(indexContentData);
 			}).catch(error => {
-				if (errorHandler !== undefined) errorHandler(error);
+				if (typeof errorHandler === 'function') errorHandler(error);
 			})
 		},
 		get (url, sendData, successHandler, errorHandler) {
@@ -142,9 +142,9 @@
 			fetch(this.website + url + _data).then(response => {
 				return response.json();
 			}).then(indexContentData => {
-				if (successHandler !== undefined) successHandler(indexContentData);
+				if (typeof successHandler === 'function') successHandler(indexContentData);
 			}).catch(error => {
-				if (errorHandler !== undefined) errorHandler(error);
+				if (typeof errorHandler === 'function') errorHandler(error);
 			})
 		}
 	}
