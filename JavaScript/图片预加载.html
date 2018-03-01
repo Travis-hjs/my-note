@@ -11,21 +11,25 @@
         #wrap{ max-width: 500px; margin: auto;}
         #wrap h2{ font-size: 28px; line-height: 50px; font-weight: 400; text-align: center;}
         .photos{ width: 100%; }
-        .photos li{ margin-bottom: 20px;}
+        .photos li{ margin-bottom: 20px; }
 	</style>
 </head>
 <body>
 	<div id="wrap">
 		<h2>简单的图片预加载</h2>
 		<ul class="photos">
-			<li><img class="lazy" src="img/loading.gif" data-lazy="img/big-1.jpg" alt=""></li>
-			<li><img class="lazy" src="img/loading.gif" data-lazy="img/big-2.jpg" alt=""></li>
-			<li><img class="lazy" src="img/loading.gif" data-lazy="img/big-3.jpg" alt=""></li>
-			<li><img class="lazy" src="img/loading.gif" data-lazy="img/big-4.jpg" alt=""></li>
-			<li><img class="lazy" src="img/loading.gif" data-lazy="img/big-5.jpg" alt=""></li>
-			<li><img class="lazy" src="img/loading.gif" data-lazy="img/big-6.jpg" alt=""></li>
-			<li><img class="lazy" src="img/loading.gif" data-lazy="img/big-7.jpg" alt=""></li>
-			<li><img class="lazy" src="img/loading.gif" data-lazy="img/A7.jpg" alt=""></li>
+			<li><img class="lazy" src="img/loading.gif" data-lazy="http://img.bizhi.sogou.com/images/2012/03/04/87770.jpg" alt=""></li>
+			<li><img class="lazy" src="img/loading.gif" data-lazy="http://img.bizhi.sogou.com/images/2013/12/06/436991.jpg" alt=""></li>
+			<li><img class="lazy" src="img/loading.gif" data-lazy="http://img.bizhi.sogou.com/images/2015/06/26/1214905.jpg" alt=""></li>
+			<li><img class="lazy" src="img/loading.gif" data-lazy="http://img.bizhi.sogou.com/images/2013/11/05/397860.jpg" alt=""></li>
+			<li><img class="lazy" src="img/loading.gif" data-lazy="http://img.bizhi.sogou.com/images/2014/02/18/523326.jpg" alt=""></li>
+			<li><img class="lazy" src="img/loading.gif" data-lazy="http://img0.imgtn.bdimg.com/it/u=252425940,257883462&fm=27&gp=0.jpg" alt=""></li>
+			<li><img class="lazy" src="img/loading.gif" data-lazy="https://img3.duitang.com/uploads/item/201505/10/20150510002613_MmRsY.jpeg" alt=""></li>
+			<li><img class="lazy" src="img/loading.gif" data-lazy="http://img01.sogoucdn.com/app/a/100540002/412727.jpg" alt=""></li>
+			<li><img class="lazy" src="img/loading.gif" data-lazy="http://imgstore.cdn.sogou.com/app/a/100540002/435825.jpg" alt=""></li>
+			<li><img class="lazy" src="img/loading.gif" data-lazy="http://attachments.gfan.com/forum/attachments2/201304/24/134256oe4lamvbxm7bb2hq.jpg" alt=""></li>
+			<li><img class="lazy" src="img/loading.gif" data-lazy="http://pic1.win4000.com/wallpaper/4/5489069c8aa80.jpg" alt=""></li>
+			<li><img class="lazy" src="img/loading.gif" data-lazy="http://www.auicss.com/demo/image/1.jpg" alt=""></li>
 		</ul>
 	</div>
 </body>
@@ -115,8 +119,43 @@
 		_throttle();
 		window.addEventListener('scroll', _throttle);
 	}
-	new LazyImg({
-		offset: 0,	//离可视区域多少像素的图片可以被加载
-		delay: 0	//图片延时多少毫秒加载
-	});
+	// new LazyImg({
+	// 	offset: 0,	//离可视区域多少像素的图片可以被加载
+	// 	delay: 0	//图片延时多少毫秒加载
+	// });
+	//
+	function Lazyload (params, fn) {
+		var errorImage = params.errorImage || false;	//	加载失败时显示的图片
+		var loadImgNodes = [];							//	元素的集合
+		function loadImage(el) {
+			var img = new Image();
+			img.src = el.getAttribute('data-lazy');
+			el.src = el.getAttribute('data-lazy');
+			el.removeAttribute('data-lazy');
+			// 图片加载失败
+			img.onerror = () => {
+				el.src = errorImage || el.getAttribute('src');
+				el.removeAttribute('data-lazy');
+			};
+		}
+		function judgeImages() {
+			loadImgNodes = document.querySelectorAll('[data-lazy]');
+			if (loadImgNodes.length) {
+				for(var i = 0;  i < loadImgNodes.length; i++){
+					if (loadImgNodes[i].getBoundingClientRect().top <= (window.innerHeight || document.documentElement.clientHeight)) {
+						loadImage(loadImgNodes[i]);
+					}
+				}
+			}else {
+				window.removeEventListener('scroll', judgeImages);
+				if (typeof fn === 'function') fn.call(this);
+			}
+		}
+		judgeImages();
+		window.addEventListener('scroll', judgeImages);
+	}
+	new Lazyload({
+		errorImage: './img/big-1.jpg'
+	}, () => console.log('全部加载完成'));
+
 </script>
