@@ -50,6 +50,7 @@
 				xhr.open('POST', this.website + url);
 				// xhr.responseType = 'json';
 				xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+				xhr.send(_data);
 				xhr.onreadystatechange = function (event){
 					if (event.target.readyState !== 4) return ;
 					if (event.target.status === 200 || event.target.status === 304) {
@@ -59,7 +60,6 @@
 					}
 				}
 				// xhr.withCredentials = true;		// 打开cookie
-				xhr.send(_data);
 			}
 		},
 		get (url, sendData, successHandler, errorHandler) {
@@ -81,6 +81,7 @@
 			} else {
 				var xhr = new XMLHttpRequest();
 				xhr.open('GET', this.website + url + _data);
+				// xhr.send();
 				xhr.onreadystatechange = function (event){
 					if (event.target.readyState !== 4) return ;
 					if (event.target.status === 200 || event.target.status === 304) {
@@ -90,7 +91,6 @@
 					}
 				}
 				// xhr.withCredentials = true;
-				xhr.send();
 			}
 		}
 	}
@@ -184,6 +184,22 @@
 	// 	   }
 	//    }
 	// })
+function ajaxDemo() {
+	var xhr = new XMLHttpRequest();
+	xhr.open('POST', 'http://longrenhui.ws.6-315.com/index.php/wap/Agent/trustee_list.html');
+	// xhr.responseType = 'json';
+	xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+	xhr.send('deviceid=864147010086266&agent_id=88');
+	xhr.onreadystatechange = e => {
+		if (e.target.readyState !== 4) return ;
+		if (e.target.status === 200 || e.target.status === 304) {
+			console.log(JSON.parse(e.target.responseText));
+		} else {
+			console.log(e.target.status);
+		}
+	}
+}
+// ajaxDemo()
 </script>
 
 </html>
