@@ -200,12 +200,10 @@
         Prompts.loading('加载中...');
         setTimeout(() => Prompts.hideLoading(), 3000);
     }
-    
+
     // 函数封装：
     (function () {
-        var Msg = function () {
-            //
-        };
+        var Msg = function () {};
         Msg.prototype = {
             output (num, str, fn) {
                 let _div = document.createElement('div');
