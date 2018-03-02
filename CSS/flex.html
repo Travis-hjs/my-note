@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Flex-布局</title>
+	<style>
+		*{ padding: 0px; margin: 0px; }
+		ul,li{ list-style: none; }
+		.wrap{ width: 800px; height: 600px; border: dashed 1px #333; margin: auto; display: flex; align-items: center; }
+		.list{ display: flex; width: 90%; margin: auto; }
+		.list li{ flex: 1; display: flex; align-items: center; justify-content: center; height: 44px; color: #333; background: gold; margin-left: 10px; }
+		.list li:nth-child(1){ margin-left: 0px; }
+	</style>
+</head>
+<body>
+	<div class="wrap">
+		<!-- <h2>align-items: center (垂直居中)</h2>
+		<h2>justify-content: center (水平居中)</h2> -->
+		<ul class="list">
+			<li>flex-1</li>
+			<li>flex-2</li>
+			<li>flex-3</li>
+			<li>flex-4</li>
+		</ul>
+	</div>
+	<script type="text/javascript">
+		
+	</script>
+</body>
+</html>
