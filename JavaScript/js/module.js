@@ -425,19 +425,17 @@ function contrast() {
   console.log(createFunctions());
     // 数组拼接
     // ES5的 写法
-    // var arr1 = [0, 1, 2];
-    // var arr2 = [3, 4, 5];
-    // Array.prototype.push.apply(arr1, arr2);
-    // 或者(好像不生效)
-    // arr1.concat(arr2);
-    // console.log(arr1);
+    var arr1 = [0, 1, 2];
+    var arr2 = [3, 4, 5];
+    var _newArr = Array.prototype.push.apply(arr1, arr2);
+    console.log(arr1.concat(arr2), _newArr);
 
     // ES6 的写法
-    let arr1 = [0, 1, 2];
-    let arr2 = [3, 4, 5];
-    arr1.push(...arr2);
-    console.log(arr1);
+    // let arr1 = [0, 1, 2];
+    // let arr2 = [3, 4, 5];
+    // arr1.push(...arr2);
+    // console.log(arr1);
     // 或者
-    console.log([...arr1,...arr2]);
+    // console.log([...arr1,...arr2]);
 }
 // contrast();

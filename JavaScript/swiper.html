@@ -74,6 +74,7 @@
 		document.querySelector('.wrap').appendChild(_swiper);
 		if (typeof fn === 'function') fn.call(this);
 	}
+	// 这里有个布局的瑕疵，底部最多只能显示11个点
 	createList(16, true, () => {
 		new Swiper({
 			el: '.swiper',

@@ -51,7 +51,7 @@
 				// xhr.responseType = 'json';
 				xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
 				xhr.send(_data);
-				xhr.onreadystatechange = function (event){
+				xhr.onreadystatechange = event => {
 					if (event.target.readyState !== 4) return ;
 					if (event.target.status === 200 || event.target.status === 304) {
 						if (typeof successHandler === 'function') successHandler(JSON.parse(event.target.responseText));
@@ -81,8 +81,9 @@
 			} else {
 				var xhr = new XMLHttpRequest();
 				xhr.open('GET', this.website + url + _data);
+				// xhr.withCredentials = true;
 				// xhr.send();
-				xhr.onreadystatechange = function (event){
+				xhr.onreadystatechange = event => {
 					if (event.target.readyState !== 4) return ;
 					if (event.target.status === 200 || event.target.status === 304) {
 						if (typeof successHandler === 'function') successHandler(JSON.parse(event.target.responseText));
@@ -90,7 +91,6 @@
 						if (typeof errorHandler === 'function') errorHandler(event.target.status);
 					}
 				}
-				// xhr.withCredentials = true;
 			}
 		}
 	}
