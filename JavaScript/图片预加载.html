@@ -123,23 +123,24 @@
 	// 	offset: 0,	//离可视区域多少像素的图片可以被加载
 	// 	delay: 0	//图片延时多少毫秒加载
 	// });
-	//
+	//	最终版本：
 	function Lazyload (params, fn) {
 		var errorImage = params.errorImage || false;	//	加载失败时显示的图片
+		var lazyAttr = params.attr || 'data-lazy';		//  自定义加载的属性
 		var loadImgNodes = [];							//	元素的集合
 		function loadImage(el) {
 			var img = new Image();
-			img.src = el.getAttribute('data-lazy');
-			el.src = el.getAttribute('data-lazy');
-			el.removeAttribute('data-lazy');
+			img.src = el.getAttribute(lazyAttr);
+			el.src = el.getAttribute(lazyAttr);
+			el.removeAttribute(lazyAttr);
 			// 图片加载失败
 			img.onerror = () => {
 				el.src = errorImage || el.getAttribute('src');
-				el.removeAttribute('data-lazy');
+				el.removeAttribute(lazyAttr);
 			};
 		}
 		function judgeImages() {
-			loadImgNodes = document.querySelectorAll('[data-lazy]');
+			loadImgNodes = document.querySelectorAll('['+lazyAttr+']');
 			if (loadImgNodes.length) {
 				for(var i = 0;  i < loadImgNodes.length; i++){
 					if (loadImgNodes[i].getBoundingClientRect().top <= (window.innerHeight || document.documentElement.clientHeight)) {
@@ -155,7 +156,8 @@
 		window.addEventListener('scroll', judgeImages);
 	}
 	new Lazyload({
-		errorImage: './img/big-1.jpg'
+		errorImage: './img/big-1.jpg',
+		lazyAttr: 'data-lazy'
 	}, () => console.log('全部加载完成'));
 
 </script>

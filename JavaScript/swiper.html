@@ -110,8 +110,8 @@
 			window.myAnimation = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame || window.msRequestAnimationFrame;
 			// 设置动画
 			function hasAnimation() {
-				_ul.style.WebkitTransition = _moveTime/1000+'s all';
-				_ul.style.transition = _moveTime/1000+'s all';
+				_ul.style.WebkitTransition = `${_moveTime/1000}s all`;
+				_ul.style.transition = `${_moveTime/1000}s all`;
 			}
 			// 关闭动画
 			function noAnimation() {
@@ -269,16 +269,15 @@
 		}
 		// 动态布局
 		let layout = (_div, _w, _h) => {
-			let _ul = _div.querySelector('.swiper_list');
-			let _li = _div.querySelectorAll('.swiper_slider');
+			let [_ul, _li] = [_div.querySelector('.swiper_list'), _div.querySelectorAll('.swiper_slider')];
 			if (_direction) {
 				for (let i = 0; i < _li.length; i++) {
-					_li[i].style.height = _h + 'px';
+					_li[i].style.height = `${_h}px`;
 				}
 			}else {
-				_ul.style.width = _w * _li.length + 'px';
+				_ul.style.width = `${_w * _li.length}px`;
 				for (let i = 0; i < _li.length; i++) {
-					_li[i].style.width = _w + 'px';
+					_li[i].style.width = `${_w}px`;
 				}
 			}
 			touch(_div, _w, _h);
@@ -292,9 +291,9 @@
 			_ul.insertBefore(_last, _li[0]);
 			_ul.appendChild(_first);
 			if (_direction) {
-				_ul.style.top = -_h + 'px';
+				_ul.style.top = `${-_h}px`;
 			}else {
-				_ul.style.left = -_w + 'px';
+				_ul.style.left = `${-_w}px`;
 			}
 			layout(_div, _w, _h)
 		}
@@ -312,8 +311,7 @@
 		// 动态布局初始化
 		let format = _el => {
 			let _swiper = document.querySelector(_el);
-			let _moveWidth = _swiper.offsetWidth;
-			let _moveHeight = _swiper.offsetHeight;
+			let [_moveWidth, _moveHeight] = [_swiper.offsetWidth, _swiper.offsetHeight];
 			if (_pagination) outputPagination(_swiper);
 			if (_loop) {
 				outputLoop(_swiper,_moveWidth,_moveHeight);

@@ -169,9 +169,8 @@
 	</body>
 	<script type="text/javascript">
 		function chatList() {
-			let _list = document.querySelector('.list_left');
-			let _li = document.querySelectorAll('.list_left li');
-			_list.addEventListener('click', (e) => {
+			let [_list, _li] = [document.querySelector('.list_left'), document.querySelectorAll('.list_left li')];
+			_list.addEventListener('click', e => {
 				let _target = e.target;
 				while(_target !== _list ){
 					if(_target.tagName.toLowerCase() == 'li'){
@@ -193,7 +192,7 @@
 			// 鼠标点击拖动的对象
 			let _header = document.querySelector(minbox);
 			let [_left,_top] = [0,0];
-			let [boxPositionLeft,boxPositionTop] = [_box.getBoundingClientRect().left, _box.getBoundingClientRect().top];
+			let [boxPositionLeft, boxPositionTop] = [_box.getBoundingClientRect().left, _box.getBoundingClientRect().top];
 			let headerPosition = {
 				x:0,
 				_x:0,
@@ -201,11 +200,11 @@
 				_y:0
 			}
 			// 当鼠标在指定元素按下时
-			_header.addEventListener('mousedown', (e) => {
-				var e = e || window.event; //获取移动时的 事件对象。。。
+			_header.addEventListener('mousedown', e => {
+				var _el = e || window.event; //获取移动时的 事件对象。。。
 				// console.log(_left, _top);
-				headerPosition.x = e.clientX;
-				headerPosition.y = e.clientY;
+				headerPosition.x = _el.clientX;
+				headerPosition.y = _el.clientY;
 				_left = headerPosition.x - _box.getBoundingClientRect().left;
 				_top = headerPosition.y - _box.getBoundingClientRect().top;
 				document.addEventListener('mousemove', boxMove);
@@ -224,16 +223,16 @@
 				_box.style.opacity = 1;
 				_box.style.transition = '0s all';
 				// _box.style.cssText = `top: ${headerPosition._y}px; left: ${headerPosition._x}px; margin: 0; transition: 0s all; opacity: 1`;
-				if(_box.getBoundingClientRect().left <= 0){
+				if (_box.getBoundingClientRect().left <= 0) {
 					_box.style.left = '0px';
 				}
-				if(_box.getBoundingClientRect().left >= document.documentElement.clientWidth - _box.offsetWidth){
+				if (_box.getBoundingClientRect().left >= document.documentElement.clientWidth - _box.offsetWidth) {
 					_box.style.left =  document.documentElement.clientWidth - _box.offsetWidth + 'px';
 				}
-				if(_box.getBoundingClientRect().top <= 0){
+				if (_box.getBoundingClientRect().top <= 0) {
 					_box.style.top = '0px';
 				}
-				if(_box.getBoundingClientRect().top >= document.documentElement.clientHeight - _box.offsetHeight){
+				if (_box.getBoundingClientRect().top >= document.documentElement.clientHeight - _box.offsetHeight) {
 					_box.style.top =  document.documentElement.clientHeight - _box.offsetHeight + 'px';
 				}
 			}
@@ -248,13 +247,11 @@
 			let _box = document.querySelector('.msg_content');
 			_box.style.transition = '0.3s all';
 			_box.style.transform = 'scale(1.1,1.1)';
-			setTimeout(()=>{
+			setTimeout(() => {
 				_box.style.transform = 'scale(0.5,0.5)';
 				_box.style.opacity = 0;
 			},100)
-			setTimeout(()=>{
-				_box.style.zIndex = '-1';
-			},500);
+			setTimeout(() => _box.style.zIndex = '-1', 500);
 		}
 		// 打开界面
 		function openMsg(_li) {
@@ -267,14 +264,12 @@
 			let _box = document.querySelector('.msg_content');
 			_box.style.transition = '0.3s all';
 			_box.style.zIndex = '10';
-			setTimeout(()=>{
+			setTimeout(() => {
 				// _box.style.cssText = 'transform: scale(1.1,1.1); opacity: 1';
 				_box.style.transform = 'scale(1.1,1.1)';
 				_box.style.opacity = 1
 			},10);
-			setTimeout(()=>{
-				_box.style.transform = 'scale(1,1)';
-			},310);
+			setTimeout(() => _box.style.transform = 'scale(1,1)', 310);
 		}
 		// 关闭联系人列表
 		function contactList() {
@@ -282,9 +277,7 @@
 			_list.style.transition = '0.3s all';
 			_list.style.transform = 'scale(0.5,0.5)';
 			_list.style.opacity = 0;
-			setTimeout(()=>{
-				_list.style.zIndex = '-1';
-			},300);
+			setTimeout(() => _list.style.zIndex = '-1', 300);
 			document.querySelector('#openList').style.display = 'block';
 		}
 		// 打开联系人
@@ -293,7 +286,7 @@
 			var _list = document.querySelector('.msg_list');
 			_list.style.transition = '0.3s all';
 			_list.style.zIndex = '5';
-			setTimeout(()=>{
+			setTimeout(() => {
 				_list.style.transform = 'scale(1,1)';
 				_list.style.opacity = 1;
 			},10);

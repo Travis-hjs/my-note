@@ -18,7 +18,7 @@
   </div>
 
   <script type="text/javascript">
-    document.getElementById('file').onchange = function(e) {
+    document.getElementById('file').onchange = e => {
       var files = e.target.files || e.dataTransfer.files
       var supportedTypes = ['image/jpg', 'image/jpeg', 'image/png']
       if (!files.length || supportedTypes.indexOf(files[0].type) < 0){

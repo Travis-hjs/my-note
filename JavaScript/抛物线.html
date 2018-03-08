@@ -1,130 +1,133 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="maximum-scale=1.0, minimum-scale=1.0, user-scalable=0, initial-scale=1.0, width=device-width"/>
-        <title>抛物线</title>
-        <style media="screen">
-            *{ padding: 0; margin: 0; }
-            html{ font-size: 20px; }
-            ul,li{ list-style: none; }
-            span,img{ display: block; }
-            img{ width: 100%; }
-            #content{ width: 100%; max-width: 500px; overflow: hidden; margin: auto; }
-            #content h2{ font-size: 18px; line-height: 26px; text-indent: 0.75rem; }
-            .shop_list{ width: 92%; padding: 4%; }
-            .shop_list li{ width: 48%; float: left; margin-right: 4%; margin-bottom: 0.75rem; box-shadow: 0 0 15px 0 rgba(0,0,0,0.3); }
-            .shop_list li:nth-child(even){ margin-right: 0; }
-            .shop_photos{ width: 100%; overflow: hidden; margin-bottom: 0.5rem; }
-            .shop_list p{ font-size: 0.8rem; text-indent: 0.5rem; }
-            .shop_list i{ display: block; width: 1.8rem; height: 1.8rem; background-color: pink; }
-            /*购物车状态*/
-            .cartState{ width: 3rem; height: 3rem; line-height: 3rem; box-shadow: 0 0 15px 0 rgba(0,0,0,0.3); font-size: 1.6rem; position: fixed; bottom: 20%; right: 0.75rem; border-radius: 50%; background: gold; text-align: center; color: #fff; }
-            /*小球*/
-            .ball{ position: fixed; top: 0; left: 0; background-color: gold; border-radius: 100%; width: 1rem; height: 1rem; }
-        </style>
-    </head>
-    <body>
-        <div id="content">
-            <h2>点击粉红色的点加入购物车</h2>
-            <ul class="shop_list">
-                <li>
-                    <span class="shop_photos"><img src="./img/big-1.jpg" alt=""></span>
-                    <p>商品描述...</p>
-                    <i onclick="cartAnimate(this)"></i>
-                </li>
-                <li>
-                    <span class="shop_photos"><img src="./img/big-2.jpg" alt=""></span>
-                    <p>商品描述...</p>
-                    <i onclick="cartAnimate(this)"></i>
-                </li>
-                <li>
-                    <span class="shop_photos"><img src="./img/big-3.jpg" alt=""></span>
-                    <p>商品描述...</p>
-                    <i onclick="cartAnimate(this)"></i>
-                </li>
-                <li>
-                    <span class="shop_photos"><img src="./img/big-4.jpg" alt=""></span>
-                    <p>商品描述...</p>
-                    <i onclick="cartAnimate(this)"></i>
-                </li>
-                <li>
-                    <span class="shop_photos"><img src="./img/big-5.jpg" alt=""></span>
-                    <p>商品描述...</p>
-                    <i onclick="cartAnimate(this)"></i>
-                </li>
-                <li>
-                    <span class="shop_photos"><img src="./img/big-6.jpg" alt=""></span>
-                    <p>商品描述...</p>
-                    <i onclick="cartAnimate(this)"></i>
-                </li>
-                <li>
-                    <span class="shop_photos"><img src="./img/big-7.jpg" alt=""></span>
-                    <p>商品描述...</p>
-                    <i onclick="cartAnimate(this)"></i>
-                </li>
-                <li>
-                    <span class="shop_photos"><img src="./img/big-1.jpg" alt=""></span>
-                    <p>商品描述...</p>
-                    <i onclick="cartAnimate(this)"></i>
-                </li>
-                <li>
-                    <span class="shop_photos"><img src="./img/big-2.jpg" alt=""></span>
-                    <p>商品描述...</p>
-                    <i onclick="cartAnimate(this)"></i>
-                </li>
-                <li>
-                    <span class="shop_photos"><img src="./img/big-3.jpg" alt=""></span>
-                    <p>商品描述...</p>
-                    <i onclick="cartAnimate(this)"></i>
-                </li>
-                <li>
-                    <span class="shop_photos"><img src="./img/big-4.jpg" alt=""></span>
-                    <p>商品描述...</p>
-                    <i onclick="cartAnimate(this)"></i>
-                </li>
-                <li>
-                    <span class="shop_photos"><img src="./img/big-5.jpg" alt=""></span>
-                    <p>商品描述...</p>
-                    <i onclick="cartAnimate(this)"></i>
-                </li>
-            </ul>
-            <span class="cartState"></span>
-            <span class="ball"></span>
-        </div>
-        <script type="text/javascript">
-            window.myMove = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame || window.msRequestAnimationFrame;
-            var cartAnimate = el => {
-                let _speed = 10;
-                // 定义初始化x和y的值
-                let x = 0, y = 0;
-                let _el = el.getBoundingClientRect();
-                // 小球
-                let _ball = document.querySelector('.ball');
-                // 先让小球去到当前点击位置
-                _ball.style.cssText = `top: ${_el.top}px; left: ${_el.left}px`;
-                // 购物车
-                let _cart = document.querySelector('.cartState').getBoundingClientRect();
-                // 计算动态速度
-                if (_cart.left/2 < _el.left) _speed = 5;
-                // xh是目标的X距离，yh是目标的y距离
-                // -(_cart.right*1.5-_el.right)     购物车在右边的时候
-                let xh = _cart.left-_el.left, yh = _cart.top-_el.top, p = xh * xh / (-2 * yh);
-                let flicker = () => {
-                      // 抛物线公式：x2=-2py
-                      // x 可以控制速度
-                      x -= _speed;
-                      y = (x * x) / (-2 * p);
-                      _ball.style.transform = `translate(${-x}px,${y}px)`;  // 这里的x为负值的时候是从左向右
-                      if (x  > -xh) {
-                        myMove(flicker);
-                      } else {
-                          console.log('到达');
-                        _ball.style.transform = `translate(0px, 0px)`;
-                      }
-                }
-                flicker()
-            }
-        </script>
-    </body>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="maximum-scale=1.0, minimum-scale=1.0, user-scalable=0, initial-scale=1.0, width=device-width" />
+	<title>抛物线</title>
+	<style media="screen">
+        *{ padding: 0; margin: 0; }
+        html{ font-size: 20px; }
+        ul,li{ list-style: none; }
+        span,img{ display: block; }
+        img{ width: 100%; }
+        #content{ width: 100%; max-width: 500px; overflow: hidden; margin: auto; }
+        #content h2{ font-size: 18px; line-height: 26px; text-indent: 0.75rem; }
+        .shop_list{ width: 92%; padding: 4%; }
+        .shop_list li{ width: 48%; float: left; margin-right: 4%; margin-bottom: 0.75rem; box-shadow: 0 0 15px 0 rgba(0,0,0,0.3); }
+        .shop_list li:nth-child(even){ margin-right: 0; }
+        .shop_photos{ width: 100%; overflow: hidden; margin-bottom: 0.5rem; }
+        .shop_list p{ font-size: 0.8rem; text-indent: 0.5rem; }
+        .shop_list i{ display: block; width: 1.8rem; height: 1.8rem; background-color: pink; }
+        /*购物车状态*/
+        .cartState{ width: 3rem; height: 3rem; line-height: 3rem; box-shadow: 0 0 15px 0 rgba(0,0,0,0.3); font-size: 1.6rem; position: fixed; bottom: 20%; right: 0.75rem; border-radius: 50%; background: gold; text-align: center; color: #fff; }
+        /*小球*/
+        .ball{ position: fixed; top: 0; left: 0; background-color: gold; border-radius: 100%; width: 1rem; height: 1rem; }
+	</style>
+</head>
+<body>
+	<div id="content">
+		<h2>点击粉红色的点加入购物车</h2>
+		<ul class="shop_list">
+			<li>
+				<span class="shop_photos"><img src="./img/big-1.jpg" alt=""></span>
+				<p>商品描述...</p>
+				<i onclick="cartAnimate(this)"></i>
+			</li>
+			<li>
+				<span class="shop_photos"><img src="./img/big-2.jpg" alt=""></span>
+				<p>商品描述...</p>
+				<i onclick="cartAnimate(this)"></i>
+			</li>
+			<li>
+				<span class="shop_photos"><img src="./img/big-3.jpg" alt=""></span>
+				<p>商品描述...</p>
+				<i onclick="cartAnimate(this)"></i>
+			</li>
+			<li>
+				<span class="shop_photos"><img src="./img/big-4.jpg" alt=""></span>
+				<p>商品描述...</p>
+				<i onclick="cartAnimate(this)"></i>
+			</li>
+			<li>
+				<span class="shop_photos"><img src="./img/big-5.jpg" alt=""></span>
+				<p>商品描述...</p>
+				<i onclick="cartAnimate(this)"></i>
+			</li>
+			<li>
+				<span class="shop_photos"><img src="./img/big-6.jpg" alt=""></span>
+				<p>商品描述...</p>
+				<i onclick="cartAnimate(this)"></i>
+			</li>
+			<li>
+				<span class="shop_photos"><img src="./img/big-7.jpg" alt=""></span>
+				<p>商品描述...</p>
+				<i onclick="cartAnimate(this)"></i>
+			</li>
+			<li>
+				<span class="shop_photos"><img src="./img/big-1.jpg" alt=""></span>
+				<p>商品描述...</p>
+				<i onclick="cartAnimate(this)"></i>
+			</li>
+			<li>
+				<span class="shop_photos"><img src="./img/big-2.jpg" alt=""></span>
+				<p>商品描述...</p>
+				<i onclick="cartAnimate(this)"></i>
+			</li>
+			<li>
+				<span class="shop_photos"><img src="./img/big-3.jpg" alt=""></span>
+				<p>商品描述...</p>
+				<i onclick="cartAnimate(this)"></i>
+			</li>
+			<li>
+				<span class="shop_photos"><img src="./img/big-4.jpg" alt=""></span>
+				<p>商品描述...</p>
+				<i onclick="cartAnimate(this)"></i>
+			</li>
+			<li>
+				<span class="shop_photos"><img src="./img/big-5.jpg" alt=""></span>
+				<p>商品描述...</p>
+				<i onclick="cartAnimate(this)"></i>
+			</li>
+		</ul>
+		<span class="cartState"></span>
+		<span class="ball"></span>
+	</div>
+	<script type="text/javascript">
+		window.myMove = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame || window.msRequestAnimationFrame;
+		var _isMove = false;
+		var cartAnimate = el => {
+			if (_isMove) return;
+			_isMove = true;
+			// 定义初始化x和y的值
+			let [_speed, x, y, _el, _ball] = [10, 0, 0, el.getBoundingClientRect(), document.querySelector('.ball')];
+			// 先让小球去到当前点击位置
+			_ball.style.cssText = `top: ${_el.top}px; left: ${_el.left}px`;
+			// 购物车
+			let _cart = document.querySelector('.cartState').getBoundingClientRect();
+			// 计算动态速度
+			if (_cart.left / 2 < _el.left) _speed = 5;
+			// xh是目标的X距离，yh是目标的y距离
+			// -(_cart.right*1.5-_el.right)     购物车在右边的时候
+			let xh = _cart.left - _el.left,
+				yh = _cart.top - _el.top,
+				p = xh * xh / (-2 * yh);
+			let flicker = () => {
+				// 抛物线公式：x2=-2py
+				// x 可以控制速度
+				x -= _speed;
+				y = (x * x) / (-2 * p);
+				_ball.style.transform = `translate(${-x}px,${y}px)`; // 这里的x为负值的时候是从左向右
+				if (x > -xh) {
+					myMove(flicker);
+				} else {
+					console.log('到达');
+					_isMove = false;
+					_ball.style.transform = `translate(0px, 0px)`;
+				}
+			}
+			flicker()
+		}
+	</script>
+</body>
+
 </html>
