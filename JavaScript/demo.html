@@ -1,53 +1,45 @@
 <!doctype html>
 <html>
-<head>
-    <meta charset="utf-8"/>
-    <title>抛物线运动</title>
-    <style>
-        .pwx_rect{position:absolute;left:10px;top:300px;background-color:#888;height:50px;width:50px;}
-        .pwx_hr{border-top:2px solid #ddd;position:absolute;width:98%;left:0px;top:350px;}
-    </style>
-    <script>
-        test = function(){
-            var rect = document.getElementById("rect");
-            pwx(rect,60,5); //参数2：抛物线角度，参数3：横向速度每次增加5
 
-        }
-        function pwx(rect,radian,step){
-            var animate = function(opt){
-                var cos = Math.cos(opt.radian*Math.PI/180);//邻边比斜边,60度的话等于1/2
-                var sin = Math.sin(opt.radian*Math.PI/180);//对边比斜边,30度的话等于1/2
-                var left = opt.rect.offsetLeft;
-                var top = opt.rect.offsetTop;
-                if(opt.radian>0){
-                    left+=opt.step;
-                    opt.radian-=1; //角度递减1
-                    var a = left - opt.initLeft;
-                    var c = (a/cos);
-                    var b = (sin*c);
-                    opt.rect.style.left = opt.initLeft+a+"px";
-                    opt.rect.style.top = opt.initTop-b+"px";
-                    setTimeout(function(){
-                        animate(opt);
-                    },10);
-                }else{
-                    opt.rect.style.left = left+opt.step+"px";
-                    opt.rect.style.top = opt.initTop+"px";
-                }
-            }
-            animate({
-                step : step,
-                rect : rect,
-                radian : radian,
-                initTop : rect.offsetTop,
-                initLeft : rect.offsetLeft
-            });
-        }
-    </script>
+<head>
+	<meta charset="utf-8" />
+	<title>抛物线运动</title>
+	<style>
+        *{ padding: 0; margin: 0; }
+		.pagination {
+			float: left;
+			width: 100%;
+			overflow: hidden;
+			position: relative;
+		}
+
+		.pagination ul {
+			clear: left;
+			float: left;
+			position: relative;
+			left: 50%;
+			/*整个分页向右边移动宽度的50%*/
+			text-align: center;
+		}
+
+		.pagination li { line-height: 25px; margin: 0 5px; display: block; float: left; position: relative; right: 50%; /*将每个分页项向左边移动宽度的50%*/ }
+		.pagination a { display: block; color: #f2f2f2; text-shadow: 1px 0 0 #101011; padding: 0 10px; border-radius: 2px; box-shadow: 0 1px 0 #5a5b5c inset, 0 1px 0 #080808; background: linear-gradient(top, #434345, #2f3032); }
+		.pagination a:hover { text-decoration: none; box-shadow: 0 1px 0 #f9bd71 inset, 0 1px 0 #0a0a0a; background: linear-gradient(top, #f48b03, #c87100); }
+	</style>
 </head>
+
 <body>
-    <input type="button" value="抛物线" onclick="test()"/>
-    <div class="pwx_rect" id="rect"></div>
-    <div class="pwx_hr"></div>
+	<div class="pagination">
+		<ul>
+			<li><a href="#">Prev</a></li>
+			<li><a href="#">1</a></li>
+			<li><a href="#">2</a></li>
+			<li><a href="#">3</a></li>
+			<li><a href="#">4</a></li>
+			<li><a href="#">5</a></li>
+			<li><a href="#">Next</a></li>
+		</ul>
+	</div>
 </body>
+
 </html>

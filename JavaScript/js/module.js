@@ -277,7 +277,7 @@ function objFunction(){
 }
 // objFunction();
 
-// class事件
+// class处理事件
 function classFunction(){
   function hasClass(obj, cls) {
     return obj.className.match(new RegExp('(\\s|^)' + cls + '(\\s|$)'));
