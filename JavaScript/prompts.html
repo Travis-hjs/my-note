@@ -1,0 +1,218 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="maximum-scale=1.0, minimum-scale=1.0, user-scalable=0, initial-scale=1.0, width=device-width"/>
+    <meta name="format-detection" content="telephone=no, email=no, date=no, address=no">
+    <title>用户交互提示</title>
+	<style>
+        html, body{ padding: 0px; margin: 0; font-size: 50px; }
+        /*定义rem*/
+        @media only screen and (min-width: 400px) { html { font-size: 53.33333333px !important; } }
+        @media only screen and (min-width: 414px) { html { font-size: 55.2px !important; } }
+        @media only screen and (min-width: 480px) { html { font-size: 64px !important; } }
+        /* 主要css */
+        .layer_bg, .layer_bg p, .layer_bg h2, .layer_bg div{ padding: 0px; margin: 0px; -webkit-box-sizing: content-box; box-sizing: content-box; }
+        .layer_bg{ width: 100%; height: 100vh; opacity: 0; position: fixed; z-index: 999; top: 0; left: 0; display: -webkit-box; display: -ms-flexbox; display: flex; -ms-flex-wrap: wrap; flex-wrap: wrap; -webkit-box-pack: center; -ms-flex-pack: center; justify-content: center; -webkit-box-align: center; -ms-flex-align: center; align-items: center; -webkit-box-orient: vertical; -ms-flex-flow: column; flex-flow: column; -webkit-transition: 0.3s all; transition: 0.3s all; }
+        .layer_bg h2{ line-height: .5rem; font-size: .36rem; font-weight: 400; margin-bottom: .2rem; }
+        .layer_bg p{ line-height: .4rem; font-size: .3rem; }
+        .layer_bg .callback_btn{ display: block; width: 1.76rem; height: .8rem; border-radius: .08rem; text-align: center; line-height: .8rem; color: #59c2f9; font-size: .34rem; cursor: pointer; margin: 0 auto .1rem; }
+        .layer_bg .callback_btn:active{ background-color: #eee; }
+        .layer_bg .prompt, .layer_bg .confirm{ width: 5rem; background-color: #fff; text-align: center; padding: .3rem .2rem .2rem; border-radius: .12rem; -webkit-transform: scale(0.8); transform: scale(0.8); -webkit-transition: .3s all; transition: .3s all; }
+        .layer_bg .prompt .text_box, .layer_bg .confirm .text_box{ min-height: .88rem; display: -webkit-box; display: -webkit-flex;	display: flex; flex-wrap: wrap; -webkit-box-orient: vertical; -webkit-flex-flow: column; flex-flow: column; -webkit-box-pack: center; justify-content: center; -webkit-box-align: center; align-items: center; }
+        .layer_bg .confirm .callback_btn{ float: left; color: #333; }
+        .layer_bg .confirm .callback_right{ float: right; color: #59c2f9; }
+        .layer_bg .boxScale{ -webkit-transform: scale(1); transform: scale(1); }
+        /* 加载中球类动画 */
+        .layer_bg .loding_ball{ width: 2.8rem; height: .8rem; }
+        .layer_bg .loding_ball div{ display: block; width: .8rem; height: .8rem; margin-left: .2rem; background-color: gold; border-radius: 100%; display: inline-block; -webkit-animation: bounce 1.4s ease-in-out 0s infinite both; animation: bounce 1.4s ease-in-out 0s infinite both; }
+        .layer_bg .loding_ball div:nth-child(1){ -webkit-animation-delay: -0.32s; animation-delay: -0.32s; margin-left: 0; }
+        .layer_bg .loding_ball div:nth-child(2){ -webkit-animation-delay: -0.16s; animation-delay: -0.16s; }
+        @-webkit-keyframes bounce {
+        	0%,80%,100% { -webkit-transform: scale(0); transform: scale(0); }
+        	40% { -webkit-transform: scale(1); transform: scale(1); }
+        }
+        @keyframes bounce {
+        	0%,80%,100% { -webkit-transform: scale(0); transform: scale(0); }
+        	40% { -webkit-transform: scale(1); transform: scale(1); }
+        }
+        /* 加载中 */
+        .layer_bg .loading_box{ min-width: 2.4rem; min-height: 1.8rem; padding-top: .6rem; background-color: rgba(0,0,0,0.5); border-radius: .08rem; }
+        .layer_bg .loading_box div{ display: block; width: .8rem; height: .8rem; border: solid 2px #fff; border-radius: 50%; border-right-color: rgba(0,0,0,0); margin: auto; -webkit-animation: circular 1.3s ease infinite; animation: circular 1.3s ease infinite;}
+        .layer_bg .loading_box p{ font-size: .3rem; color: #fff; text-align: center; line-height: .72rem; }
+        @-webkit-keyframes circular {
+        	0% { -webkit-transform: rotate(0deg); transform: rotate(0deg); }
+            50% { opacity: 0.5; }
+            100% { -webkit-transform: rotate(360deg); transform: rotate(360deg); opacity: 1; }
+        }
+        @keyframes circular {
+        	0% { -webkit-transform: rotate(0deg); transform: rotate(0deg); }
+            50% { opacity: 0.5; }
+            100% { -webkit-transform: rotate(360deg); transform: rotate(360deg); opacity: 1; }
+        }
+        /* toast */
+        .itoast{ display: inline-block; padding: 0 .3rem; min-height: .7rem; line-height: .7rem; font-size: .24rem; color: #fff; background-color: rgba(0,0,0,0.5); border-radius: .08rem; position: fixed; z-index: 999; bottom: 10%; left: 50%; -webkit-transform: translateX(-50%); transform: translateX(-50%); -webkit-animation: toastmove 0.4s ease; animation: toastmove 0.4s ease; -webkit-transition: 0.2s all; transition: 0.2s all; }
+        @-webkit-keyframes toastmove {
+        	0% { opacity: 0; -webkit-transform: translate(-50%, 300%); transform: translate(-50%, 300%); }
+            50% { opacity: 1; -webkit-transform: translate(-50%, -100%); transform: translate(-50%, -100%); }
+            100% { -webkit-transform: translate(-50%, 0%); transform: translate(-50%, 0%); }
+        }
+        @keyframes toastmove {
+        	0% { opacity: 0; -webkit-transform: translate(-50%, 300%); transform: translate(-50%, 300%); }
+            50% { opacity: 1; -webkit-transform: translate(-50%, -100%); transform: translate(-50%, -100%); }
+            100% { -webkit-transform: translate(-50%, 0%); transform: translate(-50%, 0%); }
+        }
+        /* 触发按钮 */
+        .click_box{ width: 2rem; overflow: hidden; margin: auto; padding-top: 100px; }
+        .click_box span{ display: block; font-size: 0.32rem; width: 2rem; height: .8rem; border-radius: .1rem; cursor: pointer; color: #fff; text-align: center; line-height: .8rem; background-color: gold; margin-bottom: .2rem; }
+    </style>
+</head>
+<body>
+    <div class="click_box">
+        <span onclick="myAlert()">提示框</span>
+        <span onclick="myComfirm()">对话框</span>
+        <span onclick="myLoad()">loading</span>
+        <span onclick="myBall()">loadingBall</span>
+        <span onclick="myToast()">toast</span>
+    </div>
+</body>
+<script type="text/javascript">
+    function Prompts(params, Afn, Bfn) {
+        let _fn = params.type || null;
+        let _title = params.title || '提示';
+        let _content = params.text || '内容';
+        let _time = Number(params.time) || 1000;
+        // 输出html
+        let _div = document.createElement('div');
+        function output(_num, _html, fun) {
+            _div.className = 'layer_bg';
+            _div.appendChild(_html);
+            document.body.appendChild(_div);
+            _div.style.backgroundColor = 'rgba(0,0,0,'+_num+')';
+            setTimeout(() => {
+                _div.style.opacity = 1;
+                if (typeof fun === 'function') fun.call(this);
+            }, 10);
+        }
+        // 清除当前DOM
+        function removeThis () {
+            _div.style.opacity = 0;
+            setTimeout(() => document.body.removeChild(_div), 301);
+        }
+        // 确认框
+        function alertMsg() {
+			let [_module, _btn] = [document.createElement('div'), document.createElement('div')];
+			[_module.className, _btn.className, _btn.textContent] = ['prompt', 'callback_btn', '确认'];
+            _module.innerHTML = '<h2>'+_title+'</h2><div class="text_box"><p>'+_content+'</p></div>';
+            _module.appendChild(_btn);
+            output(.3, _module, () => {
+                _module.classList.add('boxScale');
+                _btn.addEventListener('click', () => {
+                    if (typeof Afn === 'function') Afn.call(this);
+                    _module.classList.remove('boxScale');
+                    removeThis();
+                });
+            });
+        }
+		// 操作确认框
+		function confirmMsg () {
+			let [_module, _Lbtn, _Rbtn] = [document.createElement('div'),document.createElement('div'),document.createElement('div')];
+			[_module.className, _Lbtn.className, _Lbtn.textContent, _Rbtn.className, _Rbtn.textContent] = ['confirm', 'callback_btn','取消','callback_btn callback_right','确认'];
+			_module.innerHTML = '<h2>'+_title+'</h2><div class="text_box"><p>'+_content+'</p></div>';
+			_module.appendChild(_Lbtn);
+			_module.appendChild(_Rbtn);
+			output(.3, _module, () => {
+                _module.classList.add('boxScale');
+                _Rbtn.addEventListener('click', () => {
+                    if (typeof Afn === 'function') Afn.call(this);
+                    _module.classList.remove('boxScale');
+                    removeThis();
+                });
+				_Lbtn.addEventListener('click', () => {
+                    if (typeof Bfn === 'function') Bfn.call(this);
+                    _module.classList.remove('boxScale');
+                    removeThis();
+                });
+            });
+		}
+		//	加载球
+		function loadingBall() {
+			let _module = document.createElement('div');
+			_module.className = 'loding_ball';
+			_module.innerHTML = '<div></div><div></div><div></div>';
+			output(.3, _module);
+		}
+		//	加载中
+		function loading() {
+			let _module = document.createElement('div');
+			_module.className = 'loading_box';
+			_module.innerHTML = '<div></div><p>'+_content+'</p>';
+			output(0, _module);
+		}
+		// toast
+		function toast() {
+			let _module = document.createElement('div');
+            _module.className = 'itoast';
+            _module.textContent = _content;
+            document.body.appendChild(_module);
+            setTimeout(() => {
+                _module.style.opacity = 0;
+                setTimeout(() => {
+                    document.body.removeChild(_module);
+                    if (typeof Afn === 'function') Afn.call(this);
+                }, 200);
+            }, _time);
+		}
+		// 判断执行哪个方法
+        if (_fn === 'alert') {
+            alertMsg()
+        }else if (_fn === 'confirm') {
+			confirmMsg();
+        }else if (_fn === 'ball') {
+        	loadingBall();
+        }else if (_fn === 'load') {
+        	loading();
+        }else if (_fn === 'toast') {
+        	toast();
+        }else if (_fn === 'remove') {
+			let _self = document.querySelector('.layer_bg');
+            _self.style.opacity = 0;
+            setTimeout(() => document.body.removeChild(_self), 301);
+        }
+    }
+	//
+    function myAlert() {
+        Prompts({
+            type: 'alert',
+            title: 'title',
+            text: '确认框文字描述'
+        }, function () {
+            console.log('确认');
+            // myAlert()
+        })
+    }
+	function myComfirm() {
+		Prompts({
+            type: 'confirm',
+            text: '操作确认框文字描述'
+        }, function () {
+            console.log('确认');
+            // myAlert()
+        }, function () {
+        	console.log('取消');
+        })
+	}
+	function myBall() {
+		new Prompts({ type: 'ball' });
+		setTimeout(() => new Prompts({ type: 'remove' }), 1000);
+	}
+	function myLoad() {
+		Prompts({ type: 'load', text: '加载中' });
+		setTimeout(() => Prompts({ type: 'remove' }), 2000);
+	}
+	function myToast() {
+		Prompts({ type: 'toast', text: '这里是底部弹出文字', time: 2500 });
+	}
+
+</script>
+</html>
