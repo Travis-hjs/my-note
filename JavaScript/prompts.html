@@ -14,14 +14,14 @@
         /* 主要css */
         .layer_bg, .layer_bg p, .layer_bg h2, .layer_bg div{ padding: 0px; margin: 0px; -webkit-box-sizing: content-box; box-sizing: content-box; }
         .layer_bg{ width: 100%; height: 100vh; opacity: 0; position: fixed; z-index: 999; top: 0; left: 0; display: -webkit-box; display: -ms-flexbox; display: flex; -ms-flex-wrap: wrap; flex-wrap: wrap; -webkit-box-pack: center; -ms-flex-pack: center; justify-content: center; -webkit-box-align: center; -ms-flex-align: center; align-items: center; -webkit-box-orient: vertical; -ms-flex-flow: column; flex-flow: column; -webkit-transition: 0.3s all; transition: 0.3s all; }
-        .layer_bg h2{ line-height: .5rem; font-size: .36rem; font-weight: 400; margin-bottom: .2rem; }
+        .layer_bg h2{ line-height: .7rem; font-size: .36rem; font-weight: 400; margin-bottom: .2rem; }
         .layer_bg p{ line-height: .4rem; font-size: .3rem; }
-        .layer_bg .callback_btn{ display: block; width: 1.76rem; height: .8rem; border-radius: .08rem; text-align: center; line-height: .8rem; color: #59c2f9; font-size: .34rem; cursor: pointer; margin: 0 auto .1rem; }
-        .layer_bg .callback_btn:active{ background-color: #eee; }
-        .layer_bg .prompt, .layer_bg .confirm{ width: 5rem; background-color: #fff; text-align: center; padding: .3rem .2rem .2rem; border-radius: .12rem; -webkit-transform: scale(0.8); transform: scale(0.8); -webkit-transition: .3s all; transition: .3s all; }
-        .layer_bg .prompt .text_box, .layer_bg .confirm .text_box{ min-height: .88rem; display: -webkit-box; display: -webkit-flex;	display: flex; flex-wrap: wrap; -webkit-box-orient: vertical; -webkit-flex-flow: column; flex-flow: column; -webkit-box-pack: center; justify-content: center; -webkit-box-align: center; align-items: center; }
-        .layer_bg .confirm .callback_btn{ float: left; color: #333; }
-        .layer_bg .confirm .callback_right{ float: right; color: #59c2f9; }
+        .layer_bg .callback_btn{ display: block; width: 1.76rem; height: .7rem; border-radius: .08rem; text-align: center; line-height: .7rem; background-color: #59c2f9; color: #fff; font-size: .34rem; cursor: pointer; margin: 0 auto .1rem; box-shadow: 0 0 20px 0 rgba(0,0,0,0.2); }
+        .layer_bg .callback_btn:active{ opacity: .8; }
+        .layer_bg .prompt, .layer_bg .confirm{ width: 5rem; background-color: #fff; text-align: center; padding: .2rem; border-radius: .12rem; -webkit-transform: scale(0.8); transform: scale(0.8); -webkit-transition: .3s all; transition: .3s all; }
+        .layer_bg .prompt .text_box, .layer_bg .confirm .text_box{ min-height: .88rem; margin-bottom: .2rem; display: -webkit-box; display: -webkit-flex;	display: flex; flex-wrap: wrap; -webkit-box-orient: vertical; -webkit-flex-flow: column; flex-flow: column; -webkit-box-pack: center; justify-content: center; -webkit-box-align: center; align-items: center; }
+        .layer_bg .confirm .callback_btn{ float: left; background-color: #fb0455; color: #fff; box-shadow: 0 0 20px 0 rgba(0,0,0,0.2); }
+        .layer_bg .confirm .callback_right{ float: right; background-color: #59c2f9; color: #fff; box-shadow: 0 0 20px 0 rgba(0,0,0,0.2); }
         .layer_bg .boxScale{ -webkit-transform: scale(1); transform: scale(1); }
         /* 加载中球类动画 */
         .layer_bg .loding_ball{ width: 2.8rem; height: .8rem; }
@@ -92,7 +92,7 @@
             setTimeout(() => {
                 _div.style.opacity = 1;
                 if (typeof fun === 'function') fun.call(this);
-            }, 10);
+            }, 20);
         }
         // 清除当前DOM
         function removeThis () {
@@ -213,6 +213,5 @@
 	function myToast() {
 		Prompts({ type: 'toast', text: '这里是底部弹出文字', time: 2500 });
 	}
-
 </script>
 </html>

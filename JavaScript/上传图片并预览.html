@@ -1,43 +1,61 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>上传图片并预览</title>
-  <style>
-    *{ padding: 0; margin: 0; }
-    .click{ display: block; width: 200px; height: 200px; background-color: #ccc; color: #fff; margin: auto; font-size: 168px; text-align: center; line-height: 200px; cursor: pointer; }
-    #file{ opacity: 0; }
-    .updataImg{ width: 500px; margin: auto; display: block; }
-  </style>
-</head>
-<body>
-  <div class="img_box">
-    <label for="file" class="click">+</label>
-    <input type="file" id="file" name="picture"/>
-    <img src="" class="updataImg">
-  </div>
 
-  <script type="text/javascript">
-    document.getElementById('file').onchange = e => {
-      var files = e.target.files || e.dataTransfer.files
-      var supportedTypes = ['image/jpg', 'image/jpeg', 'image/png']
-      if (!files.length || supportedTypes.indexOf(files[0].type) < 0){
-        alert('文件格式只支持：jpg 和 png')
-        return ;
-      }
-      createImage(files[0]);
-    }
-    function createImage(file) {
-      let reader = new FileReader()
-      reader.onload = e => {
-        document.querySelector('.updataImg').src = e.target.result
-        // e.target.result.replace(/\+/g, "%2B").replace(/\&/g, "%26")
-        e.target.result.split('+').join('%2B').split('&').join('%26')
-        console.log(e.target.result);
-        // console.log(JSON.parse(e.target.result));
-      };
-      reader.readAsDataURL(file)
-    }
-  </script>
+<head>
+	<meta charset="UTF-8">
+	<title>上传图片并预览</title>
+	<style>
+        *{ padding: 0; margin: 0; }
+        .click{ display: block; width: 200px; height: 200px; background-color: #ccc; color: #fff; margin: auto; font-size: 168px; text-align: center; line-height: 200px; cursor: pointer; }
+        #file{ opacity: 0; }
+        .updataImg{ width: 500px; margin: auto; display: block; }
+	</style>
+</head>
+
+<body>
+	<div class="img_box">
+		<label for="file" class="click">+</label>
+		<input type="file" id="file" name="picture" />
+		<img src="" class="updataImg">
+	</div>
+
+	<script type="text/javascript">
+		document.getElementById('file').onchange = e => {
+			var files = e.target.files || e.dataTransfer.files
+			var supportedTypes = ['image/jpg', 'image/jpeg', 'image/png']
+			if (!files.length || supportedTypes.indexOf(files[0].type) < 0) return alert('文件格式只支持：jpg 和 png');
+			createImage(files[0]);
+            var _url = getObjectURL(files[0]);
+            console.log(_url);
+		}
+        // 获取base64
+		function createImage(file) {
+			let reader = new FileReader()
+			reader.onload = e => {
+				document.querySelector('.updataImg').src = e.target.result
+				// e.target.result.replace(/\+/g, "%2B").replace(/\&/g, "%26")
+				e.target.result.split('+').join('%2B').split('&').join('%26')
+				console.log(e.target.result);
+				// console.log(JSON.parse(e.target.result));
+			};
+			reader.readAsDataURL(file)
+		}
+        // 获取路径（需要打开服务器调试）
+		function getObjectURL(file) {
+			var url = null;
+			if (window.createObjectURL) {    // basic
+				url = window.createObjectURL(file);
+                console.log('执行1');
+			} else if (window.URL) {         // mozilla(firefox)
+				url = window.URL.createObjectURL(file);
+                console.log('执行2');
+			} else if (window.webkitURL) {   // webkit or chrome
+				url = window.webkitURL.createObjectURL(file);
+                console.log('执行3');
+			}
+			return url;
+		}
+	</script>
 </body>
+
 </html>

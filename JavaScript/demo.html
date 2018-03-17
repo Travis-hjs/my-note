@@ -1,45 +1,35 @@
-<!doctype html>
+<!DOCTYPE html>
 <html>
-
-<head>
-	<meta charset="utf-8" />
-	<title>抛物线运动</title>
-	<style>
-        *{ padding: 0; margin: 0; }
-		.pagination {
-			float: left;
-			width: 100%;
-			overflow: hidden;
-			position: relative;
-		}
-
-		.pagination ul {
-			clear: left;
-			float: left;
-			position: relative;
-			left: 50%;
-			/*整个分页向右边移动宽度的50%*/
-			text-align: center;
-		}
-
+  <head>
+    <meta charset="UTF-8" />
+    <title>Hello World</title>
+	<style media="screen">
+		*{ padding: 0; margin: 0; }
+		.pagination { float: left; width: 100%; overflow: hidden; position: relative; }
+		.pagination ul { clear: left; float: left; position: relative; text-align: center; left: 50%; /*整个分页向右边移动宽度的50%*/ }
 		.pagination li { line-height: 25px; margin: 0 5px; display: block; float: left; position: relative; right: 50%; /*将每个分页项向左边移动宽度的50%*/ }
 		.pagination a { display: block; color: #f2f2f2; text-shadow: 1px 0 0 #101011; padding: 0 10px; border-radius: 2px; box-shadow: 0 1px 0 #5a5b5c inset, 0 1px 0 #080808; background: linear-gradient(top, #434345, #2f3032); }
 		.pagination a:hover { text-decoration: none; box-shadow: 0 1px 0 #f9bd71 inset, 0 1px 0 #0a0a0a; background: linear-gradient(top, #f48b03, #c87100); }
 	</style>
-</head>
+  </head>
+  <body>
+    <div id="root"></div>
+	<script src="https://unpkg.com/react@16/umd/react.development.js"></script>
+	<script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+	<script src="https://unpkg.com/babel-standalone@6.15.0/babel.min.js"></script>
+    <script type="text/babel">
+		const numbers = ['Prev',1, 2, 3, 4, 5, 'Next'];
 
-<body>
-	<div class="pagination">
-		<ul>
-			<li><a href="#">Prev</a></li>
-			<li><a href="#">1</a></li>
-			<li><a href="#">2</a></li>
-			<li><a href="#">3</a></li>
-			<li><a href="#">4</a></li>
-			<li><a href="#">5</a></li>
-			<li><a href="#">Next</a></li>
-		</ul>
-	</div>
-</body>
-
+		const listItems = numbers.map((number, index) =>
+		    <li key={index}><a href="###">{number}</a></li>
+		);
+		ReactDOM.render(
+			<div className="pagination">
+				<h1>Hello, world!</h1>
+				<ul>{listItems}</ul>
+			</div>,
+			document.getElementById('root')
+		);
+    </script>
+  </body>
 </html>
