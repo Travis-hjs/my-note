@@ -17,20 +17,22 @@ a{ text-decoration: none; color: #333; }
 span,img{ display: block; }
 img{ display: block; width: 100%; }
 h1,h2,h3,h4,h5,h6,b,i{ font-weight: 400; font-style: normal }
-input, textarea{ outline: none; background-color: rgba(0, 0, 0, 0); -webkit-user-select: auto; }
+input, textarea{ outline: none; background-color: rgba(0, 0, 0, 0); -webkit-user-select: auto; border: none; }
 input::-webkit-input-placeholder { color: #999; }
 textarea { resize: none; display: block; }
-.flex{ display: -webkit-box; display: -webkit-flex;	display: flex; flex-wrap: wrap; }
-.flex_center{ -webkit-box-pack: center; justify-content: center; -webkit-box-align: center; align-items: center; }
-.flex_vertical{ -webkit-box-orient: vertical; -webkit-flex-flow: column; flex-flow: column; }
-.f1{ -webkit-box-flex: 1; flex: 1; }
-.f2{ -webkit-box-flex: 2; flex: 2; }
-.f3{ -webkit-box-flex: 3; flex: 3; }
 [data-active]:active{ background-color: #eee; }
 [data-opacity]:active{ opacity: 0.8; }
-/*定义rem*/
-@media only screen and (min-width: 320px) { html { font-size: 42.6667px !important; } }
-@media only screen and (min-width: 360px) { html { font-size: 48px !important; } }
-@media only screen and (min-width: 400px) { html { font-size: 53.33333333px !important; } }
-@media only screen and (min-width: 414px) { html { font-size: 55.2px !important; } }
-@media only screen and (min-width: 480px) { html { font-size: 64px !important; } }
+.app{ width: 100%; overflow: hidden; margin: 0 auto; max-width: 680px; }
+.flex{ display: -webkit-box; display: -webkit-flex; display: flex; flex-wrap: wrap }
+/* 垂直平居中 */
+.vertical{ -webkit-box-align: center; -ms-flex-align: center; align-items: center; }
+/* 水平居中 */
+.center{ -webkit-box-pack: center; -ms-flex-pack: center; justify-content: center; }
+.f1{ -webkit-box-flex: 1; -webkit-flex: 1; flex: 1; }
+.f2{ -webkit-box-flex: 2; -webkit-flex: 2; flex: 2; }
+.f3{ -webkit-box-flex: 3; -webkit-flex: 3; flex: 3; }
+.ellipsis{ overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+/* .textWrap(@num){ display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: @num; text-overflow: ellipsis; overflow: hidden; } */
+.priceColor{ color: #f53e3e; }
+.themeColor{ color: #0066ff}
+.no_more{ line-height: .8rem; font-size: .28rem; color: #999; text-align: center; background-color: #fff; }
