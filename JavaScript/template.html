@@ -26,9 +26,15 @@
 			</ul>
 		</template>
 	</body>
+	<script type="text/template" class="my-template">
+		<div>
+			<li></li>
+		</div>
+	</script>
 	<script type="text/javascript">
 		var $ = ev => document.querySelector(ev);
 		var $$ = ev => document.querySelectorAll(ev);
+		console.log($('.my-template').innerHTML);
 		function output() {
 			let _data = [{
 					title: 'template模板',
