@@ -7,6 +7,17 @@
     <title>用户交互提示</title>
 	<style>
         html, body{ padding: 0px; margin: 0; font-size: 50px; }
+        /*
+            default     #212121
+            primary     #00bcd4
+            success     #009688
+            info        #03a9f4
+            warning     #ffc107
+            danger      #e51c23
+            pink        #e91e63
+            purple      #673ab7
+            indigo      #3f51b5
+        */
         /*定义rem*/
         @media only screen and (min-width: 400px) { html { font-size: 53.33333333px !important; } }
         @media only screen and (min-width: 414px) { html { font-size: 55.2px !important; } }
@@ -20,7 +31,7 @@
         .layer_bg .callback_btn:active{ opacity: .8; }
         .layer_bg .prompt, .layer_bg .confirm{ width: 5rem; background-color: #fff; text-align: center; padding: .2rem; border-radius: .12rem; -webkit-transform: scale(0.8); transform: scale(0.8); -webkit-transition: .3s all; transition: .3s all; }
         .layer_bg .prompt .text_box, .layer_bg .confirm .text_box{ min-height: .88rem; margin-bottom: .2rem; display: -webkit-box; display: -webkit-flex;	display: flex; flex-wrap: wrap; -webkit-box-orient: vertical; -webkit-flex-flow: column; flex-flow: column; -webkit-box-pack: center; justify-content: center; -webkit-box-align: center; align-items: center; }
-        .layer_bg .confirm .callback_btn{ float: left; background-color: #fb0455; color: #fff; box-shadow: 0 0 20px 0 rgba(0,0,0,0.2); }
+        .layer_bg .confirm .callback_btn{ float: left; background-color: rgba(251,4,85,0.5); color: #fff; box-shadow: 0 0 20px 0 rgba(0,0,0,0.2); }
         .layer_bg .confirm .callback_right{ float: right; background-color: #59c2f9; color: #fff; box-shadow: 0 0 20px 0 rgba(0,0,0,0.2); }
         .layer_bg .boxScale{ -webkit-transform: scale(1); transform: scale(1); }
         /* 加载中球类动画 */
@@ -64,7 +75,7 @@
         }
         /* 触发按钮 */
         .click_box{ width: 2rem; overflow: hidden; margin: auto; padding-top: 100px; }
-        .click_box span{ display: block; font-size: 0.32rem; width: 2rem; height: .8rem; border-radius: .1rem; cursor: pointer; color: #fff; text-align: center; line-height: .8rem; background-color: gold; margin-bottom: .2rem; }
+        .click_box span{ display: block; font-size: 0.32rem; width: 2rem; height: .8rem; border-radius: .1rem; cursor: pointer; color: #fff; text-align: center; line-height: .8rem; background-color: #009688; margin-bottom: .2rem; }
     </style>
 </head>
 <body>
@@ -178,7 +189,7 @@
 			let _self = document.querySelector('.layer_bg');
             _self.style.opacity = 0;
             setTimeout(() => document.body.removeChild(_self), 301);
-        }
+        }else console.log('没有可执行的type对象');
     }
 	//
     function myAlert() {
