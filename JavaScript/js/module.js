@@ -5,6 +5,8 @@ var $$ = el => document.querySelectorAll(el);
 /*
 阻止事件冒泡
 event.cancelBubble = true;
+event.stopPropagation(); //  阻止事件向上传播
+event.preventDefault();  //  取消事件的默认动作。submit类型标签有效
 addEventListener中的第三个参 数是useCapture,一个bool类型。
 当为false时为冒泡获取(由里向外)，true为capture方式(由外向里)
 等价于jQuery的 $(document).ready()
