@@ -187,6 +187,7 @@
 					loopMoveMax()
 					_index = 0;
 				}
+				console.log(`index: ${ _index }`);	//	这里可以做滑动结束回调
 				if (_pagination) {
 					_div.querySelector('.swiper_btn_active').className = 'swiper_btn';
 					_btn[_index].classList.add('swiper_btn_active');
@@ -233,7 +234,7 @@
 					}
 				}
 			}
-			// 首次开启自动播放
+			// 自动播放
 			function startAuto () {
 				_t += 1;
 				//	这里是1秒60次
@@ -242,6 +243,7 @@
 				autoMove();
 				startAuto()
 			}
+			// 首次开启自动播放
 			if (_autoPaly) startAuto();
 			// 开始触摸
 			_ul.addEventListener('touchstart', ev => {
@@ -262,7 +264,7 @@
 				eTime = new Date().getTime();
 				// 判断如果是点击的话就不执行移动
 				if (_eState !== _ed) judgeMove();
-				console.log(`new:${_index}`);	//这里可以做触发回调
+				// console.log(`index: ${_index}`);	//  这里可以做触摸之后位置回调
 				// 更新位置 && 重新打开自动播放要放到最后
 				[_eState, _t] = [_ed, 0];
 			});

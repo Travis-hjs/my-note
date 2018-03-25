@@ -11,17 +11,31 @@
 	.siwtch_btn::before{ position: absolute; content: ''; width: 50px; height: 50px; box-shadow: 1px 1px 1px 1px rgba(0, 0, 0, 0.08); background-color: #fff; left: 0; top: 0; border-radius: 50%; transform: translateX(2%); -webkit-transition: 0.3s all; transition: 0.3s all; }
 	.siwtch_active{ background-color: #59c2f9; }
 	.siwtch_active::before{ transform: translateX(98%); }
+	.aui-switch {
+		width: 2.3rem;
+    	height: 1.2rem; position: relative; vertical-align: top; border: 1px solid #dddddd;
+	    background-color: #dddddd; border-radius: 0.6rem; background-clip: content-box; display: inline-block; outline: none;
+	    -webkit-appearance: none;
+	    appearance: none;
+	    -webkit-user-select: none;
+        user-select: none;
+	    -webkit-box-sizing: border-box;
+        box-sizing: border-box;
+	    -webkit-background-clip: padding-box;
+        background-clip: padding-box;
+	    -webkit-transition: all 0.2s linear;
+        transition: all 0.2s linear;
+	}
+	.aui-switch:before { width: 1.1rem; height: 1.1rem; position: absolute; top: 0; left: 0; border-radius: 0.6rem; background-color: #fff; content: ''; -webkit-transition: left 0.2s; transition: left 0.2s; }
+	.aui-switch:checked { border-color: #03a9f4; background-color: #03a9f4; }
+	.aui-switch:checked:before { left: 1.1rem; }
 	</style>
 </head>
 
 <body>
-	<span class="siwtch_btn siwtch_active"></span>
+	<span class="siwtch_btn siwtch_active" onclick="this.classList.toggle('siwtch_active')"></span>
+	<input class="aui-switch" type="checkbox" name="" value="">
 	<script>
-		var btn = document.querySelector('.siwtch_btn');
-		btn.addEventListener('click',() => {
-			btn.classList.toggle('siwtch_active');
-		});
-
 		// var test = () => console.log(!document.getElementById('switch').checked ? "选中" : "未选中");
 	</script>
 </body>
