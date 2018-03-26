@@ -15,9 +15,14 @@
             <li>2</li>
         </ul>
         <script type="text/javascript">
+            // 貌似浏览器还不支持导出导入
+            // var _exportTest = require('./js/export-test.js');
+            // import { exportOne, exportTwo } from './js/export-test.js'
+            // console.log(exportOne, exportTwo);
+
             // let or var
             var _functions = [];
-            // ES5告诉我们可以利用闭包解决这个问题
+            // ES5 可以利用闭包解决这个问题
             // for (var i = 0; i < 10; i++) {
             //     _functions.push((function(value) {
             //         return function() {
@@ -157,15 +162,30 @@
             // run(createIterator)
 
 
+            //  set 和 for..of
             const setArr = new Set();
             [2, 3, 5, 4, 5, 2, 2].forEach(x => setArr.add(x));
             for (let i of setArr) {
                 console.log(`set: ${ i }`);
             }
-            for (let i of document.querySelectorAll('.list li')) {
-                console.log(`li: ${ i.textContent }`)
+            const typeArr = ['type-1', 'type-2', { type: 'type-3' }];
+            for(let index in typeArr){
+                console.log(`for-in: ${typeArr[index]}, index: ${ index }, obj: ${ typeArr }`);
             }
-            console.log(new Set(document.querySelectorAll('.list li')));
+
+            var _obj = new Proxy({}, {
+                get: function (target, key, receiver) {
+                    console.log(`getting ${key}!`);
+                    return Reflect.get(target, key, receiver);
+                },
+                set: function (target, key, value, receiver) {
+                    console.log(`setting ${key}!`);
+                    return Reflect.set(target, key, value, receiver);
+                }
+            });
+
+
+
         </script>
     </body>
 </html>
