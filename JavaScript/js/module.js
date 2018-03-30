@@ -459,3 +459,18 @@ function contrast() {
     console.log(createFunctions());
 }
 // contrast();
+
+// bind()
+this.num = 9;
+var mymodule = {
+    num: 81,
+    getNum () {
+        console.log(this.num)
+    }
+};
+mymodule.getNum(); // 81
+var getNum = mymodule.getNum;
+getNum(); // 9, 因为在这个例子中，"this"指向全局对象
+// 创建一个'this'绑定到mymodule的函数
+var boundGetNum = getNum.bind(mymodule);
+boundGetNum(); // 81

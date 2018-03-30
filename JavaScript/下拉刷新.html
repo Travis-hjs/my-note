@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="maximum-scale=1.0, minimum-scale=1.0, user-scalable=0, initial-scale=1.0, width=device-width"/>
+	    <meta name="format-detection" content="telephone=no, email=no, date=no, address=no">
+		<title>下拉刷新</title>
+        <link rel="stylesheet" href="./css/base.css">
+		<style media="screen">
+
+		</style>
+	</head>
+	<body>
+        <div class="wrap">
+            <img src="http://img.hb.aicdn.com/c92655454f83982dcdf7b7d97e9c2defcbfbf0ea1c7c9-Bkn1cE_fw658" alt="">
+            <img src="http://img.hb.aicdn.com/618cf3624b263e559540e01d29d5c154708c1e7bb370-9VPSEn_fw658" alt="">
+        </div>
+
+        <script type="text/javascript">
+
+            function DropDownRefresh(el) {
+                const rootNode = document.body.scrollTop === 0 ? document.documentElement : document.body;
+                let _page = document.querySelector(el);
+                let _sd = 0;    // 开始距离
+                let _ed = 0;    // 结束距离
+                // 设置动画
+    			function hasAnimation() {
+    				_page.style.WebkitTransition = '0.3s all';
+    				_page.style.transition = '0.3s all';
+    			}
+    			// 关闭动画
+    			function noAnimation() {
+    				_page.style.WebkitTransition = '0s all';
+    				_page.style.transition = '0s all'
+    			}
+                // 滑动样式
+                function slideStyle (_num) {
+                    _page.style.WebkitTransform = `translate3d(0px, ${_num}px, 0px)`;
+					_page.style.transform = `translate3d(0px, ${_num}px, 0px)`;
+                }
+                // 触摸开始
+                _page.addEventListener('touchstart', ev => {
+                    _sd = ev.touches[0].pageY
+                    noAnimation()
+                });
+                // 触摸移动
+                _page.addEventListener('touchmove', ev => {
+                    // 这里判断的应该是整个页面的滚动条是否到达顶部，否则不会执行下拉刷新
+                    if (rootNode.scrollTop != 0) return ;
+                    _ed = ev.touches[0].pageY
+                    slideStyle(_ed-_sd);
+                    console.log(`滑动的距离：${_ed-_sd}`);
+                });
+                // 触摸结束
+                _page.addEventListener('touchend', e => {
+                    hasAnimation()
+                    slideStyle(0)
+                });
+            }
+            DropDownRefresh('.wrap');
+        </script>
+	</body>
+</html>
