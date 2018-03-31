@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>loading-ball</title>
+    <style lang="">
+        .preloader-inner { position: relative; display: block; width: 100%; height: 100%; -webkit-animation: md-preloader-inner-rotate 5.25s cubic-bezier(.35,0,.25,1) infinite; animation: md-preloader-inner-rotate 5.25s cubic-bezier(.35,0,.25,1) infinite; }
+        .preloader-inner .preloader-inner-gap { 
+            position: absolute; 
+            width: 2px; 
+            left: 50%; 
+            margin-left: -1px; 
+            top: 0; bottom: 0;  
+            -webkit-box-sizing: border-box; box-sizing: border-box; 
+            border-top: 4px solid orange; }
+        .preloader-inner .preloader-inner-left,.preloader-inner .preloader-inner-right {
+            position: absolute;
+            top: 0;
+            height: 100%;
+            width: 50%;
+            overflow: hidden
+        }
+        .preloader-inner .preloader-inner-half-circle {
+            position: absolute;
+            top: 0;
+            height: 100%;
+            width: 200%;
+            -webkit-box-sizing: border-box;
+            box-sizing: border-box;
+            border: 4px solid orange;
+            border-bottom-color: transparent!important;
+            border-radius: 50%;
+            -webkit-animation-iteration-count: infinite;
+            animation-iteration-count: infinite;
+            -webkit-animation-duration: 1.3125s;
+            animation-duration: 1.3125s;
+            -webkit-animation-timing-function: cubic-bezier(.35,0,.25,1);
+            animation-timing-function: cubic-bezier(.35,0,.25,1)
+        }
+        .preloader-inner .preloader-inner-left { left: 0 }
+        .preloader-inner .preloader-inner-left .preloader-inner-half-circle { left: 0; border-right-color: transparent!important; -webkit-animation-name: md-preloader-left-rotate; animation-name: md-preloader-left-rotate; }
+        .preloader-inner .preloader-inner-right { right: 0; }
+        .preloader-inner .preloader-inner-right .preloader-inner-half-circle { right: 0; border-left-color: transparent!important; -webkit-animation-name: md-preloader-right-rotate; animation-name: md-preloader-right-rotate; }
+        @-webkit-keyframes md-preloader-left-rotate {
+            0%,100% {
+                -webkit-transform: rotate(130deg);
+                transform: rotate(130deg)
+            }
+            50% {
+                -webkit-transform: rotate(-5deg);
+                transform: rotate(-5deg)
+            }
+        }
+        @keyframes md-preloader-left-rotate {
+            0%,100% {
+                -webkit-transform: rotate(130deg);
+                transform: rotate(130deg)
+            }
+            50% {
+                -webkit-transform: rotate(-5deg);
+                transform: rotate(-5deg)
+            }
+        }
+        @-webkit-keyframes md-preloader-right-rotate {
+            0%,100% {
+                -webkit-transform: rotate(-130deg);
+                transform: rotate(-130deg)
+            }
+            50% {
+                -webkit-transform: rotate(5deg);
+                transform: rotate(5deg)
+            }
+        }
+        @keyframes md-preloader-right-rotate {
+            0%,100% {
+                -webkit-transform: rotate(-130deg);
+                transform: rotate(-130deg)
+            }
+            50% {
+                -webkit-transform: rotate(5deg);
+                transform: rotate(5deg)
+            }
+        }
+        @-webkit-keyframes md-preloader-inner-rotate {
+            12.5% {
+                -webkit-transform: rotate(135deg);
+                transform: rotate(135deg)
+            }
+            25% {
+                -webkit-transform: rotate(270deg);
+                transform: rotate(270deg)
+            }
+            37.5% {
+                -webkit-transform: rotate(405deg);
+                transform: rotate(405deg)
+            }
+            50% {
+                -webkit-transform: rotate(540deg);
+                transform: rotate(540deg)
+            }
+            62.5% {
+                -webkit-transform: rotate(675deg);
+                transform: rotate(675deg)
+            }
+            75% {
+                -webkit-transform: rotate(810deg);
+                transform: rotate(810deg)
+            }
+            87.5% {
+                -webkit-transform: rotate(945deg);
+                transform: rotate(945deg)
+            }
+            100% {
+                -webkit-transform: rotate(1080deg);
+                transform: rotate(1080deg)
+            }
+        }
+        @keyframes md-preloader-inner-rotate {
+            12.5% {
+                -webkit-transform: rotate(135deg);
+                transform: rotate(135deg)
+            }
+            25% {
+                -webkit-transform: rotate(270deg);
+                transform: rotate(270deg)
+            }
+            37.5% {
+                -webkit-transform: rotate(405deg);
+                transform: rotate(405deg)
+            }
+            50% {
+                -webkit-transform: rotate(540deg);
+                transform: rotate(540deg)
+            }
+            62.5% {
+                -webkit-transform: rotate(675deg);
+                transform: rotate(675deg)
+            }
+            75% {
+                -webkit-transform: rotate(810deg);
+                transform: rotate(810deg)
+            }
+            87.5% {
+                -webkit-transform: rotate(945deg);
+                transform: rotate(945deg)
+            }
+            100% {
+                -webkit-transform: rotate(1080deg);
+                transform: rotate(1080deg)
+            }
+        }
+        .preloader{ display: inline-block; width: 32px; height: 32px; -webkit-animation: md-preloader-outer 3.3s linear infinite; animation: md-preloader-outer 3.3s linear infinite; }
+        @-webkit-keyframes md-preloader-outer {
+            0% { -webkit-transform: rotate(0); transform: rotate(0) }
+            100% { -webkit-transform: rotate(360deg); transform: rotate(360deg) }
+        }
+        @keyframes md-preloader-outer {
+            0% { -webkit-transform: rotate(0); transform: rotate(0) }
+            100% { -webkit-transform: rotate(360deg); transform: rotate(360deg) }
+        }
+        .md{ text-align: center; }
+    </style>
+</head>
+<body>
+    <div class="md">
+        <div class="preloader">
+            <span class="preloader-inner">
+                <span class="preloader-inner-gap"></span>
+                <span class="preloader-inner-left">
+                    <span class="preloader-inner-half-circle"></span>
+                </span>
+                <span class="preloader-inner-right">
+                    <span class="preloader-inner-half-circle"></span>
+                </span>
+            </span>
+        </div>
+
+    </div>
+</body>
+</html>

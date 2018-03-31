@@ -6,58 +6,149 @@
 	    <meta name="format-detection" content="telephone=no, email=no, date=no, address=no">
 		<title>下拉刷新</title>
         <link rel="stylesheet" href="./css/base.css">
+        <link rel="stylesheet" href="./css/loading.css">
 		<style media="screen">
-
+            .wrap li{ background-color: gold; height: 5rem; position: relative; z-index: 10; }
+            .wrap li:nth-child(even){ background-color: #212121; }
+            .refresh_bg{ position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0); z-index: 100; }
+            /* 下拉提示盒子样式 */
+			.refresh_title{
+                position: fixed;
+                width: 100%;
+                top: -80px;
+                left: 0;
+                height: 80px;
+                z-index: 99;
+                display: -webkit-box; display: -webkit-flex; display: flex; -webkit-flex-wrap: wrap; flex-wrap: wrap;
+                -webkit-box-align: center; -webkit-align-items: center; align-items: center;
+                -webkit-box-pack: center; -webkit-justify-content: center; justify-content: center;
+            }
+            .preloader_hover{ background-color: orange; border-radius: 50%; border: 2px solid orange; }
 		</style>
 	</head>
 	<body>
         <div class="wrap">
-            <img src="http://img.hb.aicdn.com/c92655454f83982dcdf7b7d97e9c2defcbfbf0ea1c7c9-Bkn1cE_fw658" alt="">
-            <img src="http://img.hb.aicdn.com/618cf3624b263e559540e01d29d5c154708c1e7bb370-9VPSEn_fw658" alt="">
+            <ul>
+                <li></li>
+            </ul>
         </div>
-
+		<!-- 下拉头部状态盒子 -->
+		<div class="refresh_title">
+			<!-- 旋转的圈圈 -->
+            <div class="preloader preloader_hover">
+                <span class="preloader-inner">
+                    <span class="preloader-inner-gap"></span>
+                    <span class="preloader-inner-left">
+                        <span class="preloader-inner-half-circle"></span>
+                    </span>
+                    <span class="preloader-inner-right">
+                        <span class="preloader-inner-half-circle"></span>
+                    </span>
+                </span>
+            </div>
+		</div>
         <script type="text/javascript">
-
-            function DropDownRefresh(el) {
+            let _html = ''
+            for (let i = 0; i < 20; i++) {
+                _html += '<li></li>'
+            }
+            document.querySelector('.wrap ul').innerHTML = _html;
+			//	开始下拉
+            function DropDownRefresh(params, fn, numFn) {
                 const rootNode = document.body.scrollTop === 0 ? document.documentElement : document.body;
-                let _page = document.querySelector(el);
-                let _sd = 0;    // 开始距离
-                let _ed = 0;    // 结束距离
+                let _el = params.el || 'body';
+                let _page = document.querySelector(_el);
+                let _max = params.maxRange || 100  // 最大距离默认100
+                // 下拉刷新的提示元素
+                const _titleBox = document.querySelector('.refresh_title');
+                _titleBox.style.height = _max + 'px';
+                _titleBox.style.top = -_max + 'px';
+				// 开始距离,结束距离,最后移动的距离
+				let [_sd, _ed, _range] = [0, 0, 0];
                 // 设置动画
-    			function hasAnimation() {
-    				_page.style.WebkitTransition = '0.3s all';
-    				_page.style.transition = '0.3s all';
-    			}
-    			// 关闭动画
-    			function noAnimation() {
-    				_page.style.WebkitTransition = '0s all';
-    				_page.style.transition = '0s all'
+    			function getAnimation(el, time) {
+    				el.style.WebkitTransition = `${ time }s all`;
+    				el.style.transition = `${ time }s all`;
     			}
                 // 滑动样式
-                function slideStyle (_num) {
-                    _page.style.WebkitTransform = `translate3d(0px, ${_num}px, 0px)`;
-					_page.style.transform = `translate3d(0px, ${_num}px, 0px)`;
+                function slideStyle (el, _num) {
+                    el.style.WebkitTransform = `translate3d(0px, ${_num}px, 0px)`;
+					el.style.transform = `translate3d(0px, ${_num}px, 0px)`;
                 }
+				// 输出遮挡层
+				function outPutLayer () {
+	                let _layer = document.createElement('div');
+	                _layer.className = 'refresh_bg';
+	                document.body.appendChild(_layer);
+	            }
                 // 触摸开始
                 _page.addEventListener('touchstart', ev => {
                     _sd = ev.touches[0].pageY
-                    noAnimation()
+                    getAnimation(_page, 0)
+                    getAnimation(_titleBox, 0)
                 });
                 // 触摸移动
                 _page.addEventListener('touchmove', ev => {
-                    // 这里判断的应该是整个页面的滚动条是否到达顶部，否则不会执行下拉刷新
-                    if (rootNode.scrollTop != 0) return ;
-                    _ed = ev.touches[0].pageY
-                    slideStyle(_ed-_sd);
-                    console.log(`滑动的距离：${_ed-_sd}`);
+					// 没到达顶部就 停止
+					if (rootNode.scrollTop != 0) return ;
+                    _ed = ev.touches[0].pageY;
+                    _range = Math.floor(_ed-_sd);
+					// 判断如果是上滑才执行
+					if (_range > 0) {
+						// 最主要的物理回弹公式计算距离
+						_range = _range-(_range*0.5);
+						slideStyle(_page, _range);
+						slideStyle(_titleBox, _range);
+						// 回调距离函数 如果有需要
+						if (typeof numFn === 'function') numFn(_range);
+					}
                 });
                 // 触摸结束
                 _page.addEventListener('touchend', e => {
-                    hasAnimation()
-                    slideStyle(0)
+					getAnimation(_page, 0.3);
+					getAnimation(_titleBox, 0.3);
+					// console.log(`移动的距离：${_range}, 最大距离：${_max}`);
+                    if (_range > _max && _range > 1 && rootNode.scrollTop == 0) {
+						document.querySelector('html').style.overflowY = 'hidden';
+						slideStyle(_page, _max);
+						slideStyle(_titleBox, _max);
+                        outPutLayer();
+						// 回调成功下拉到最大距离并松开函数
+						if (typeof fn === 'function') fn.call(this);
+                    }else {
+						slideStyle(_page, 0);
+						slideStyle(_titleBox, 0);
+                    }
                 });
             }
-            DropDownRefresh('.wrap');
+            // 结束下拉功能
+            function refreshEnd(el) {
+                document.body.removeChild(document.querySelector('.refresh_bg'));
+				document.querySelector('html').style.overflowY = '';
+                let [_page, _titleBox] = [document.querySelector(el), document.querySelector('.refresh_title')];
+				function resetStyle(el) {
+					el.style.WebkitTransition = '0.3s all';
+	                el.style.transition = '0.3s all';
+	                el.style.WebkitTransform = 'translate3d(0px, 0px, 0px)';
+					el.style.transform = 'translate3d(0px, 0px, 0px)';
+				}
+				resetStyle(_titleBox);
+				resetStyle(_page);
+            }
+			// 调用
+            new DropDownRefresh({
+                el: '.wrap',
+                maxRange: 80
+            }, function () {
+                console.log('成功下拉');
+				document.querySelector('.preloader').classList.remove('preloader_hover');
+                setTimeout(() => {
+                    new refreshEnd('.wrap')
+					document.querySelector('.preloader').classList.add('preloader_hover');
+                },2000)
+            }, function(num){
+                // console.log(`滑动的距离：${ num }`);
+            });
         </script>
 	</body>
 </html>
