@@ -75,7 +75,7 @@
 		if (typeof fn === 'function') fn.call(this);
 	}
 	// 这里有个布局的瑕疵，底部最多只能显示11个点
-	createList(16, true, () => {
+	createList(4, true, () => {
 		new Swiper({
 			el: '.swiper',
 			pagination: true,
@@ -187,7 +187,7 @@
 					loopMoveMax()
 					_index = 0;
 				}
-				console.log(`index: ${ _index }`);	//	这里可以做滑动结束回调
+				// console.log(`index: ${ _index }`);	//	这里可以做滑动结束回调
 				if (_pagination) {
 					_div.querySelector('.swiper_btn_active').className = 'swiper_btn';
 					_btn[_index].classList.add('swiper_btn_active');

@@ -70,15 +70,10 @@
 			let _distance = direction ? _h : _w;
 			// 定义容器的宽高
 			let _navSize = direction ? _nav.offsetHeight : _nav.offsetWidth;
-            // 有动画
-			function noAnimation() {
-				_nav.style.WebkitTransition = '0s all';
-				_nav.style.transition = '0s all'
-			}
-            // 无动画
-			function hasAnimation(_num) {
-				_nav.style.WebkitTransition = _num+'s all';
-				_nav.style.transition = _num+'s all';
+            // 设置动画
+			function setAnimation(_num) {
+				_nav.style.WebkitTransition = `${ _num }s all`;
+				_nav.style.transition = `${ _num }s all`;
 			}
             // 属性样式
 			function slideStyle (_num) {
@@ -122,36 +117,36 @@
 			}
 			_nav.addEventListener('touchstart', ev => {
 				sTime = new Date().getTime();
-				noAnimation();
+				// noAnimation();
 				_start = direction ? ev.touches[0].pageY : ev.touches[0].pageX;
 			});
 			_nav.addEventListener('touchmove', ev => {
 				ev.preventDefault();
 				_end = direction ? ev.touches[0].pageY : ev.touches[0].pageX;
-				slideStyle(touchRange());
+				// slideStyle(touchRange());
 			});
 			_nav.addEventListener('touchend', ev => {
 				eTime = new Date().getTime();
-				hasAnimation(.3);
-				_moveP = touchRange();
-				if (_end < _start) {
-					_moveP += (_end-_start)*Roll()
-				}else {
-					_moveP -= (_start-_end)*Roll()
-				}
-				_nav.style.transitionTimingFunction = 'linear';
-				slideStyle(_moveP);
-				if (_end < _start) {
-					if (_moveP < -(_navSize - _distance)) {
-						_moveP = -(_navSize - _distance);
-						springback();
-					}
-				}else {
-					if (_moveP > 0) {
-						_moveP = 0;
-						springback();
-					}
-				}
+				// hasAnimation(.3);
+				// _moveP = touchRange();
+				// if (_end < _start) {
+				// 	_moveP += (_end-_start)*Roll()
+				// }else {
+				// 	_moveP -= (_start-_end)*Roll()
+				// }
+				// _nav.style.transitionTimingFunction = 'linear';
+				// slideStyle(_moveP);
+				// if (_end < _start) {
+				// 	if (_moveP < -(_navSize - _distance)) {
+				// 		_moveP = -(_navSize - _distance);
+				// 		springback();
+				// 	}
+				// }else {
+				// 	if (_moveP > 0) {
+				// 		_moveP = 0;
+				// 		springback();
+				// 	}
+				// }
 			});
 		}
 		// (function( _window, undefined ) {
