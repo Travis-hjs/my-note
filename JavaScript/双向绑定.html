@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <link rel="stylesheet" href="./css/base.css">
+        <title>双向绑定</title>
+        <style media="screen">
+            .wrap {
+                width: 100%;
+                max-width: 650px;
+                margin: 0 auto;
+                font-size: .3rem;
+                box-sizing: border-box;
+                padding: .3rem;
+            }
+            .wrap input {
+                display: block;
+                width: 100%;
+                height: .88rem;
+                border: solid 1px orange;
+                border-radius: 4px;
+                box-sizing: border-box;
+                padding: 0 .3rem;
+                font-size: .3rem;
+                color: orange;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="wrap">
+            <input class="obj" type="text" name="" value="" placeholder="随便输入点什么">
+            <span class="dom"></span>
+        </div>
+        <script type="text/javascript">
+            let $ = el => document.querySelector(el);
+            let obj = {};
+            Object.defineProperty(obj, 'hello', {
+                get() {
+                    console.log('val');
+                },
+                set(val) {
+                    console.log(val);
+                    $('.dom').textContent = val;
+                    $('.obj').value = val;
+                }
+            });
+            $('.obj').onkeyup = e => obj.hello = e.target.value;
+            obj.hello = '';
+        </script>
+    </body>
+</html>

@@ -355,10 +355,11 @@ function contrast() {
     arr.join('&')
     arr.split(',')
     arr.shift(); 移除第一项
+    arr.pop();  移除最后一项      
     arr.unshift(); 在第一项添加
     arr.reverse(); 反转数组
     Math.ceil(25.9) 向上取舍
-    Math.round(25.9) 四舍五入有
+    Math.round(25.9) 四舍五入
     Math.floor(25.9) 向下取舍
     */
     // arr.every() & arr.some() 历遍数
