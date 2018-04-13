@@ -72,8 +72,8 @@
     			}
                 // 滑动样式
                 function slideStyle (el, _num) {
-                    el.style.WebkitTransform = `translate3d(0px, ${_num}px, 0px)`;
-					el.style.transform = `translate3d(0px, ${_num}px, 0px)`;
+                    el.style.WebkitTransform = `translate3d(0px, ${ _num }px, 0px)`;
+					el.style.transform = `translate3d(0px, ${ _num }px, 0px)`;
                 }
 				// 输出遮挡层
 				function outPutLayer () {
@@ -93,8 +93,10 @@
 					if (rootNode.scrollTop != 0) return ;
                     _ed = ev.touches[0].pageY;
                     _range = Math.floor(_ed-_sd);
-					// 判断如果是上滑才执行
+					// 判断如果是下滑才执行
 					if (_range > 0) {
+                        // 阻止浏览自带的下拉效果
+						ev.preventDefault();
 						// 最主要的物理回弹公式计算距离
 						_range = _range-(_range*0.5);
 						slideStyle(_page, _range);
@@ -104,7 +106,7 @@
 					}
                 });
                 // 触摸结束
-                _page.addEventListener('touchend', e => {
+                _page.addEventListener('touchend', ev => {
 					getAnimation(_page, 0.3);
 					getAnimation(_titleBox, 0.3);
 					// console.log(`移动的距离：${_range}, 最大距离：${_max}`);
@@ -122,7 +124,7 @@
                 });
             }
             // 结束下拉功能
-            function refreshEnd(el) {
+            function RefreshEnd(el) {
                 document.body.removeChild(document.querySelector('.refresh_bg'));
 				document.querySelector('html').style.overflowY = '';
                 let [_page, _titleBox] = [document.querySelector(el), document.querySelector('.refresh_title')];
@@ -138,12 +140,12 @@
 			// 调用
             new DropDownRefresh({
                 el: '.wrap',
-                maxRange: 80
+                maxRange: 150
             }, function () {
                 console.log('成功下拉');
 				document.querySelector('.preloader').classList.remove('preloader_hover');
                 setTimeout(() => {
-                    new refreshEnd('.wrap')
+                    new RefreshEnd('.wrap')
 					document.querySelector('.preloader').classList.add('preloader_hover');
                 },2000)
             }, function(num){
