@@ -20,8 +20,8 @@
 			.swiper .swiper_list{ overflow: hidden; position: relative; width: 100%; -webkit-transition: 0s all; transition: 0s all; }
 			.swiper .swiper_slider{ float: left; width: 100%; height: 4rem; background-color: #333; text-align: center; line-height: 4rem; color: #fff; }
 			.swiper img{ width: 100%; }
-			.swiper .swiper_pagination{ position: absolute; left: 50%; max-width: 100%; bottom: 10px; height: 8px; -webkit-transform: translateX(-50%); transform: translateX(-50%); overflow: auto; }
-			.swiper .swiper_btn{ float: left; margin-left: 8px; width: 8px; height: 8px; background-color: rgba(0,0,0,0.5); border-radius: 50%; }
+			.swiper .swiper_pagination{ position: absolute; width: 100%; height: 10px; bottom: 48px; left: 0; text-align: center; }
+			.swiper .swiper_btn{ display: inline-block; margin-left: 8px; width: 8px; height: 8px; background-color: rgba(0,0,0,0.5); border-radius: 50%; }
 			.swiper .swiper_btn_active{ background-color: #fff; }
 		</style>
 	</head>
@@ -74,8 +74,7 @@
 		document.querySelector('.wrap').appendChild(_swiper);
 		if (typeof fn === 'function') fn.call(this);
 	}
-	// 这里有个布局的瑕疵，底部最多只能显示11个点
-	createList(4, true, () => {
+	createList(3, true, () => {
 		new Swiper({
 			el: '.swiper',
 			pagination: true,
@@ -110,8 +109,8 @@
 			window.myAnimation = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame || window.msRequestAnimationFrame;
 			// 设置动画
 			function hasAnimation() {
-				_ul.style.WebkitTransition = `${_moveTime/1000}s all`;
-				_ul.style.transition = `${_moveTime/1000}s all`;
+				_ul.style.WebkitTransition = `${ _moveTime/1000 }s all`;
+				_ul.style.transition = `${ _moveTime/1000 }s all`;
 			}
 			// 关闭动画
 			function noAnimation() {
@@ -121,22 +120,34 @@
             // 属性样式
 			function slideStyle(_num) {
 				if (_direction) {
-					_ul.style.WebkitTransform = `translate3d(0px, ${_num}px, 0px)`;
-					_ul.style.transform = `translate3d(0px, ${_num}px, 0px)`;
+					_ul.style.WebkitTransform = `translate3d(0px, ${ _num }px, 0px)`;
+					_ul.style.transform = `translate3d(0px, ${ _num }px, 0px)`;
 				}else {
-					_ul.style.WebkitTransform = `translate3d(${_num}px, 0px, 0px)`;
-					_ul.style.transform = `translate3d(${_num}px, 0px, 0px)`;
+					_ul.style.WebkitTransform = `translate3d(${ _num }px, 0px, 0px)`;
+					_ul.style.transform = `translate3d(${ _num }px, 0px, 0px)`;
 				}
 			}
 			// 判断最大拖动距离
 			function touchRange() {
 				let _num = 0;
+				// 默认这个公式
+				_num = _md + (_ed - _sd);
+				// 判断最大正负值
 				if ((_ed - _sd) >= _distance) {
-					_num = _md + _distance;
+					_num = _md + _distance
 				}else if ((_ed - _sd) <= -_distance) {
 					_num = _md - _distance
-				}else {
-					_num = _md + (_ed - _sd);
+				}
+				// _md : 移动的距离 _ed : 结束的距离 _sd 开始的距离
+				// 没有loop的时候惯性拖拽
+				if (!_loop) {
+					if ((_ed - _sd) > 0 && _index === 0) {
+						// console.log('到达最初');
+						_num = _md + ((_ed - _sd) - ((_ed - _sd) * 0.6))
+					}else if ((_ed - _sd) < 0 && _index === _li.length-1) {
+						// console.log('到达最后');
+						_num = _md + ((_ed - _sd) - ((_ed - _sd) * 0.6))
+					}
 				}
 				return _num;
 			}
@@ -187,7 +198,7 @@
 					loopMoveMax()
 					_index = 0;
 				}
-				// console.log(`index: ${ _index }`);	//	这里可以做滑动结束回调
+				// console.log(`第${ _index+1 }张`);	//	这里可以做滑动结束回调
 				if (_pagination) {
 					_div.querySelector('.swiper_btn_active').className = 'swiper_btn';
 					_btn[_index].classList.add('swiper_btn_active');
@@ -200,7 +211,7 @@
 					// 往上滑动 or 向左滑动
 					if (judgeTouch(-_distance)) {
 						// 判断有loop的时候不需要执行下面的事件
-						if (!_loop && _md === -(_li.length-1) * _distance) return returnP();
+						if (!_loop && _md === (-(_li.length-1) * _distance)) return returnP();
 						_index += 1;
 						slideMove(_md - _distance);
 						_md -= _distance;
@@ -237,14 +248,14 @@
 			// 自动播放
 			function startAuto () {
 				_t += 1;
-				//	这里是1秒60次
+				//	这里帧数是1秒60次
 				if (_t < _interval/1000*60) return myAnimation(startAuto);
 				_t = 0;
 				autoMove();
 				startAuto()
 			}
-			// 首次开启自动播放
-			if (_autoPaly) startAuto();
+			// 判断是否需要开启自动播放
+			if (_autoPaly && _li.length-1) startAuto();
 			// 开始触摸
 			_ul.addEventListener('touchstart', ev => {
 				// _loopNum = _moveTime/1000*60;
@@ -262,8 +273,13 @@
 			// 触摸离开
 			_ul.addEventListener('touchend', () => {
 				eTime = new Date().getTime();
-				// 判断如果是点击的话就不执行移动
-				if (_eState !== _ed) judgeMove();
+				// 判断是否点击
+				if (_eState !== _ed) {
+					judgeMove();
+				}else {
+					console.log('执行');
+					returnP()
+				}
 				// console.log(`index: ${_index}`);	//  这里可以做触摸之后位置回调
 				// 更新位置 && 重新打开自动播放要放到最后
 				[_eState, _t] = [_ed, 0];
@@ -274,12 +290,12 @@
 			let [_ul, _li] = [_div.querySelector('.swiper_list'), _div.querySelectorAll('.swiper_slider')];
 			if (_direction) {
 				for (let i = 0; i < _li.length; i++) {
-					_li[i].style.height = `${_h}px`;
+					_li[i].style.height = `${ _h }px`;
 				}
 			}else {
 				_ul.style.width = `${_w * _li.length}px`;
 				for (let i = 0; i < _li.length; i++) {
-					_li[i].style.width = `${_w}px`;
+					_li[i].style.width = `${ _w }px`;
 				}
 			}
 			touch(_div, _w, _h);
@@ -293,9 +309,9 @@
 			_ul.insertBefore(_last, _li[0]);
 			_ul.appendChild(_first);
 			if (_direction) {
-				_ul.style.top = `${-_h}px`;
+				_ul.style.top = `${ -_h }px`;
 			}else {
-				_ul.style.left = `${-_w}px`;
+				_ul.style.left = `${ -_w }px`;
 			}
 			layout(_div, _w, _h)
 		}
