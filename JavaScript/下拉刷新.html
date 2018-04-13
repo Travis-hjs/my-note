@@ -90,6 +90,7 @@
                 // 触摸移动
                 _page.addEventListener('touchmove', ev => {
 					// 没到达顶部就 停止
+					console.log(rootNode.scrollTop);
 					if (rootNode.scrollTop != 0) return ;
                     _ed = ev.touches[0].pageY;
                     _range = Math.floor(_ed-_sd);
