@@ -10,6 +10,7 @@
 		<style media="screen">
             .wrap li{ background-color: gold; height: 5rem; position: relative; z-index: 10; }
             .wrap li:nth-child(even){ background-color: #212121; }
+			/* 遮挡层背景 */
             .refresh_bg{ position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0); z-index: 100; }
             /* 下拉提示盒子样式 */
 			.refresh_title{
@@ -24,6 +25,7 @@
                 -webkit-box-pack: center; -webkit-justify-content: center; justify-content: center;
             }
             .preloader_hover{ background-color: orange; border-radius: 50%; border: 2px solid orange; }
+			.text_box{ position: fixed; z-index: 11; background-color: pink; color: #fff; font-size: .3rem; top: 40%; left: 0; }
 		</style>
 	</head>
 	<body>
@@ -32,6 +34,11 @@
                 <li></li>
             </ul>
         </div>
+		<div class="text_box">
+			<p class="one"></p>
+			<p class="two"></p>
+			<p class="three"></p>
+		</div>
 		<!-- 下拉头部状态盒子 -->
 		<div class="refresh_title">
 			<!-- 旋转的圈圈 -->
@@ -53,9 +60,14 @@
                 _html += '<li></li>'
             }
             document.querySelector('.wrap ul').innerHTML = _html;
+			/*
+				这里我做的不是用window的滚动事件，而是用最外层的绑定触摸下拉事件去实现
+				好处是我用在Vue这类单页应用的时候，路由销毁时不用去解绑window的scroll事件
+				但是滑动到底部事件就必须要用window的scroll事件，这点需要注意
+			*/
 			//	开始下拉
             function DropDownRefresh(params, fn, numFn) {
-                const rootNode = document.body.scrollTop === 0 ? document.documentElement : document.body;
+                const rootNode = document.body;	// 谷歌浏览器要document.documentElement
                 let _el = params.el || 'body';
                 let _page = document.querySelector(_el);
                 let _max = params.maxRange || 100  // 最大距离默认100
@@ -90,7 +102,6 @@
                 // 触摸移动
                 _page.addEventListener('touchmove', ev => {
 					// 没到达顶部就 停止
-					console.log(rootNode.scrollTop);
 					if (rootNode.scrollTop != 0) return ;
                     _ed = ev.touches[0].pageY;
                     _range = Math.floor(_ed-_sd);
@@ -112,7 +123,7 @@
 					getAnimation(_titleBox, 0.3);
 					// console.log(`移动的距离：${_range}, 最大距离：${_max}`);
                     if (_range > _max && _range > 1 && rootNode.scrollTop == 0) {
-						document.querySelector('html').style.overflowY = 'hidden';
+						// document.querySelector('html').style.overflowY = 'hidden'; 这个貌似只在pc端生效,所以就禁掉了
 						slideStyle(_page, _max);
 						slideStyle(_titleBox, _max);
                         outPutLayer();
@@ -127,7 +138,7 @@
             // 结束下拉功能
             function RefreshEnd(el) {
                 document.body.removeChild(document.querySelector('.refresh_bg'));
-				document.querySelector('html').style.overflowY = '';
+				// document.querySelector('html').style.overflowY = ''; 这个貌似只在pc端生效,所以就禁掉了
                 let [_page, _titleBox] = [document.querySelector(el), document.querySelector('.refresh_title')];
 				function resetStyle(el) {
 					el.style.WebkitTransition = '0.3s all';
