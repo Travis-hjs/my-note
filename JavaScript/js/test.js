@@ -233,6 +233,7 @@ function timeInterval(minInterval) { // minInterval 时间（5分钟间隔）
     return arr;
 }
 // console.log(timeInterval(120));
+// 一般的做法
 function timeStr() {
     var _date = new Date();
     // '0'+_data.getSeconds().slice(-2);
@@ -244,7 +245,20 @@ function timeStr() {
     var timeArr = hour + ':' + minute + ':' + second;
     console.log(dayArr, timeArr);
 }
-
+// 我的做法
+function timeFormat(_num = 0) {
+    let _Appoint,_month,_day,_hour,_minute,_second,_date;
+    // 指定天数 _num: 1时为昨天，2为前天，以此类推
+    _Appoint = new Date(new Date()-(_num*24*60*60*1000));
+    _month = ('0'+(_Appoint.getMonth()+1)).slice(-2);
+    _day = ('0'+_Appoint.getDate()).slice(-2);
+    _hour = ('0'+_Appoint.getHours()).slice(-2);
+    _minute = ('0'+_Appoint.getMinutes()).slice(-2);
+    _second = ('0'+_Appoint.getSeconds()).slice(-2);
+    _date = `${ _Appoint.getFullYear() }-${ _month }-${ _day } ${ _hour }:${ _minute }:${ _second }`
+    return _date;
+}
+// console.log(`日期：${ timeFormat(2) }`);
 
 // new 理解
 function newFunction() {
@@ -355,7 +369,7 @@ function contrast() {
     arr.join('&')
     arr.split(',')
     arr.shift(); 移除第一项
-    arr.pop();  移除最后一项      
+    arr.pop();  移除最后一项
     arr.unshift(); 在第一项添加
     arr.reverse(); 反转数组
     Math.ceil(25.9) 向上取舍

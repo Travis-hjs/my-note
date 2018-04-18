@@ -1,6 +1,6 @@
 require.config({
   paths: {
-    "JavaScript": "module",
+    "JavaScript": "test",
     "qrCode": 'qrcode'
   }
 });
