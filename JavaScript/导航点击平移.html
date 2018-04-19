@@ -38,7 +38,7 @@ function navSlide(btn, className, slide) {
     // 窗口变动时的值
 	var resizeIndex = 0;
 
-	for (let i = 0; i < _li.length; i++) {
+	for (var i = 0; i < _li.length; i++) {
 		_li[i].addEventListener('click', () => {
 			document.querySelector('.'+className).classList.remove(className);
 			// 移动的时候改变这个窗口变动值
