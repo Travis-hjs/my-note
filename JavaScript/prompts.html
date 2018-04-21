@@ -8,20 +8,20 @@
     <link rel="stylesheet" type="text/css" href="./css/base.css"/>
 	<style>
         /* 主要css */
-        .prompts, .prompts p, .prompts h2, .prompts div{ padding: 0px; margin: 0px; -webkit-box-sizing: content-box; box-sizing: content-box; }
+        .prompts, .prompts p, .prompts h2, .prompts div{ padding: 0px; margin: 0px; -webkit-box-sizing: border-box; box-sizing: border-box; }
         .prompts{ width: 100%; height: 100vh; opacity: 0; position: fixed; z-index: 999; top: 0; left: 0; display: -webkit-box; display: -webkit-flex; display: flex; flex-wrap: wrap; -webkit-box-align: center; align-items: center; -webkit-box-pack: center; justify-content: center; -webkit-transition: 0.3s all; transition: 0.3s all; }
-        .prompts h2{ line-height: .7rem; font-size: .36rem; font-weight: 400; margin-bottom: .2rem; }
+        .prompts h2{ line-height: .7rem; font-size: .4rem; font-weight: 400; margin-bottom: .2rem; }
         .prompts p{ line-height: .4rem; font-size: .3rem; }
-        .prompts .callback_btn{ display: block; width: 1.76rem; height: .7rem; border-radius: .08rem; text-align: center; line-height: .7rem; background-color: #0066ff; color: #fff; font-size: .34rem; cursor: pointer; margin: 0 auto .1rem; box-shadow: 0 0 20px 0 rgba(0,0,0,0.2); }
+        .prompts .callback_btn{ display: block; width: 2.2rem; height: .78rem; border-radius: .08rem; text-align: center; line-height: .78rem; background-color: #2196f3; color: #fff; font-size: .34rem; cursor: pointer; margin: 0 auto .1rem; -webkit-box-shadow: 0 1px 3px rgba(0,0,0,.12), 0 1px 2px rgba(0,0,0,.24); box-shadow: 0 1px 3px rgba(0,0,0,.12), 0 1px 2px rgba(0,0,0,.24); }
         .prompts .callback_btn:active{ opacity: .8; }
-        .prompts .prompt, .prompts .confirm{ width: 5rem; background-color: #fff; text-align: center; padding: .2rem; border-radius: .12rem; -webkit-transform: scale(0.8); transform: scale(0.8); -webkit-transition: .3s all; transition: .3s all; }
+        .prompts .prompt, .prompts .confirm{ width: 5.6rem; background-color: #fff; text-align: center; padding: .2rem; border-radius: .12rem; -webkit-transform: scale(0.8); transform: scale(0.8); -webkit-transition: .3s all; transition: .3s all; }
         .prompts .prompt .text_box, .prompts .confirm .text_box{ min-height: .88rem; margin-bottom: .2rem; display: -webkit-box; display: -webkit-flex; display: flex; flex-wrap: wrap; -webkit-box-align: center; align-items: center; -webkit-box-pack: center; justify-content: center; }
         .prompts .confirm .callback_btn{ float: left; margin-left: .2rem; background-color: #ccc; color: #fff; }
-        .prompts .confirm .callback_right{ float: right; margin: 0 .2rem 0 0; background-color: #0066ff; color: #fff; }
+        .prompts .confirm .callback_right{ float: right; margin: 0 .2rem 0 0; background-color: #2196f3; color: #fff; }
         .prompts .boxScale{ -webkit-transform: scale(1); transform: scale(1); }
         /* 加载中球类动画 */
-        .prompts .loding_ball{ width: 2.8rem; height: .8rem; }
-        .prompts .loding_ball div{ display: block; width: .8rem; height: .8rem; margin-left: .2rem; background-color: gold; border-radius: 100%; display: inline-block; -webkit-animation: bounce 1.4s ease-in-out 0s infinite both; animation: bounce 1.4s ease-in-out 0s infinite both; }
+        .prompts .loding_ball{ width: 3.22rem; height: .88rem; }
+        .prompts .loding_ball div{ display: inline-block; width: .88rem; height: .88rem; margin-left: .2rem; background-color: gold; border-radius: 100%; -webkit-animation: bounce 1.4s ease-in-out 0s infinite both; animation: bounce 1.4s ease-in-out 0s infinite both; }
         .prompts .loding_ball div:nth-child(1){ -webkit-animation-delay: -0.32s; animation-delay: -0.32s; margin-left: 0; }
         .prompts .loding_ball div:nth-child(2){ -webkit-animation-delay: -0.16s; animation-delay: -0.16s; }
         @-webkit-keyframes bounce {
@@ -33,7 +33,7 @@
         	40% { -webkit-transform: scale(1); transform: scale(1); }
         }
         /* 加载中 */
-        .prompts .loading_box{ min-width: 2.4rem; min-height: 1.8rem; padding-top: .6rem; background-color: rgba(0,0,0,0.7); border-radius: .08rem; }
+        .prompts .loading_box{ min-width: 2.4rem; min-height: 2.4rem; padding-top: .6rem; background-color: rgba(0,0,0,0.7); border-radius: .08rem; }
         .prompts .loading_box div{ display: block; width: .8rem; height: .8rem; box-sizing: border-box; border: solid 3px #fff; border-radius: 50%; border-right-color: rgba(0,0,0,0); margin: auto; -webkit-animation: circular 1.3s ease infinite; animation: circular 1.3s ease infinite;}
         .prompts .loading_box p{ font-size: .3rem; color: #fff; text-align: center; line-height: .72rem; }
         @-webkit-keyframes circular {
@@ -47,7 +47,7 @@
             100% { -webkit-transform: rotate(360deg); transform: rotate(360deg); opacity: 1; }
         }
         /* toast */
-        .itoast{ display: inline-block; padding: 0 .3rem; min-height: .7rem; line-height: .7rem; font-size: .24rem; color: #fff; background-color: rgba(0,0,0,0.5); border-radius: .08rem; position: fixed; z-index: 999; bottom: 10%; left: 50%; -webkit-transform: translateX(-50%); transform: translateX(-50%); -webkit-animation: toastmove 0.4s ease; animation: toastmove 0.4s ease; -webkit-transition: 0.2s all; transition: 0.2s all; }
+        .itoast{ display: inline-block; padding: 0 .3rem; min-height: .78rem; line-height: .78rem; font-size: .24rem; color: #fff; background-color: rgba(0,0,0,0.5); border-radius: .08rem; position: fixed; z-index: 999; bottom: 10%; left: 50%; -webkit-transform: translateX(-50%); transform: translateX(-50%); -webkit-animation: toastmove 0.4s ease; animation: toastmove 0.4s ease; -webkit-transition: 0.2s all; transition: 0.2s all; }
         @-webkit-keyframes toastmove {
         	0% { opacity: 0; -webkit-transform: translate(-50%, 300%); transform: translate(-50%, 300%); }
             50% { opacity: 1; -webkit-transform: translate(-50%, -100%); transform: translate(-50%, -100%); }
@@ -60,7 +60,7 @@
         }
         /* 触发按钮 */
         .click_box{ width: 2rem; overflow: hidden; margin: auto; padding-top: 100px; }
-        .click_box span{ display: block; font-size: 0.32rem; width: 2rem; height: .8rem; border-radius: .1rem; cursor: pointer; color: #fff; text-align: center; line-height: .8rem; background-color: #009688; margin-bottom: .2rem; }
+        .click_box span{ display: block; font-size: 0.32rem; width: 2rem; height: .8rem; border-radius: .1rem; cursor: pointer; color: #fff; text-align: center; line-height: .8rem; background-color: #2196f3; margin-bottom: .2rem; -webkit-box-shadow: 0 1px 3px rgba(0,0,0,.12), 0 1px 2px rgba(0,0,0,.24); box-shadow: 0 1px 3px rgba(0,0,0,.12), 0 1px 2px rgba(0,0,0,.24); }
     </style>
 </head>
 <body>
@@ -101,7 +101,7 @@
 			[_module.className, _btn.className, _btn.textContent] = ['prompt', 'callback_btn', '确认'];
             _module.innerHTML = '<h2>'+_title+'</h2><div class="text_box"><p>'+_content+'</p></div>';
             _module.appendChild(_btn);
-            output(.3, _module, () => {
+            output(.4, _module, () => {
                 _module.classList.add('boxScale');
                 _btn.addEventListener('click', () => {
                     if (typeof Afn === 'function') Afn.call(this);
@@ -117,7 +117,7 @@
 			_module.innerHTML = '<h2>'+_title+'</h2><div class="text_box"><p>'+_content+'</p></div>';
 			_module.appendChild(_Lbtn);
 			_module.appendChild(_Rbtn);
-			output(.3, _module, () => {
+			output(.4, _module, () => {
                 _module.classList.add('boxScale');
                 _Rbtn.addEventListener('click', () => {
                     if (typeof Afn === 'function') Afn.call(this);
@@ -136,7 +136,7 @@
 			let _module = document.createElement('div');
 			_module.className = 'loding_ball';
 			_module.innerHTML = '<div></div><div></div><div></div>';
-			output(.3, _module);
+			output(.4, _module);
 		}
 		//	加载中
 		function loading() {
@@ -200,11 +200,11 @@
 	}
 	function myBall() {
 		new Prompts({ type: 'ball' });
-		setTimeout(() => new Prompts({ type: 'remove' }), 1000);
+		setTimeout(() => new Prompts({ type: 'remove' }), 3000);
 	}
 	function myLoad() {
 		Prompts({ type: 'load', text: '加载中' });
-		setTimeout(() => Prompts({ type: 'remove' }), 2000);
+		setTimeout(() => Prompts({ type: 'remove' }), 3000);
 	}
 	function myToast() {
 		Prompts({ type: 'toast', text: '这里是底部弹出文字', time: 2500 });
