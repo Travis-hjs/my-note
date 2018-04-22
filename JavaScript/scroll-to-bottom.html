@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="maximum-scale=1.0, minimum-scale=1.0, user-scalable=0, initial-scale=1.0, width=device-width"/>
+        <meta name="format-detection" content="telephone=no, email=no, date=no, address=no">
+        <title>滚动事件</title>
+        <link rel="stylesheet" href="./css/base.css">
+        <style media="screen">
+            .app li{ background-color: gold; height: 5rem; position: relative; z-index: 10; }
+            .app li:nth-child(even){ background-color: #212121; }
+        </style>
+    </head>
+    <body>
+        <div class="app">
+            <ul></ul>
+        </div>
+        <script>
+            let _html = '';
+            for (let i = 0; i < 20; i++) {
+                _html += '<li></li>'
+            }
+            document.querySelector('.app ul').innerHTML = _html;
+            // 参数：距离底部多少像素触发，回调函数，是否为一次性（防止重复用）
+            function scrollToBottom(_num = 0, fn, isClearScroll) {
+                // 滚动事件
+                function isScroll() {
+                    let _scrollTop = document.documentElement.scrollTop === 0 ? document.body.scrollTop : document.documentElement.scrollTop;
+                    let _scrollHeight = document.documentElement.scrollTop === 0 ? document.body.scrollHeight : document.documentElement.scrollHeight;
+                    if (_scrollHeight-_scrollTop-_num <= window.innerHeight) {
+                        if (typeof fn === 'function') fn.call(this);
+                        if (isClearScroll) window.removeEventListener('scroll',isScroll);
+                    }
+                }
+                window.addEventListener('scroll',isScroll);
+            }
+            new scrollToBottom(100, () => console.log('到底底部~'),true)
+        </script>
+    </body>
+</html>
