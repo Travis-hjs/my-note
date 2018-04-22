@@ -67,7 +67,7 @@
 			*/
 			//	开始下拉
             function DropDownRefresh(params, fn, numFn) {
-                const rootNode = document.body;	// 谷歌浏览器要document.documentElement
+                const rootNode = document.body.scrollTop;	// 谷歌浏览器要document.documentElement
                 let _el = params.el || 'body';
                 let _page = document.querySelector(_el);
                 let _max = params.maxRange || 100  // 最大距离默认100
@@ -102,7 +102,7 @@
                 // 触摸移动
                 _page.addEventListener('touchmove', ev => {
 					// 没到达顶部就 停止
-					if (rootNode.scrollTop != 0) return ;
+					if (rootNode != 0) return ;
                     _ed = ev.touches[0].pageY;
                     _range = Math.floor(_ed-_sd);
 					// 判断如果是下滑才执行
@@ -122,7 +122,7 @@
 					getAnimation(_page, 0.3);
 					getAnimation(_titleBox, 0.3);
 					// console.log(`移动的距离：${_range}, 最大距离：${_max}`);
-                    if (_range > _max && _range > 1 && rootNode.scrollTop == 0) {
+                    if (_range > _max && _range > 1 && rootNode == 0) {
 						// document.querySelector('html').style.overflowY = 'hidden'; 这个貌似只在pc端生效,所以就禁掉了
 						slideStyle(_page, _max);
 						slideStyle(_titleBox, _max);
