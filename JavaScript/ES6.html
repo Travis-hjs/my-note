@@ -51,8 +51,8 @@
 
             //  ES5
             function action(num) {
-                num = num || 200;
-                return num
+                let _num = num || 200;
+                return _num
             }
             //  ES6
             function action(num = 200) {
@@ -130,6 +130,15 @@
             });
             console.log(5);
 
+            // function timeout(_time) {
+            //     return new Promise(function(resolve,reject){
+            //         setTimeout(resolve, _time);
+            //     })
+            // }
+            // timeout(3000).then(function(){
+            //     console.log('执行');
+                
+            // })
 
             // 生成器
             function *createIterator() {

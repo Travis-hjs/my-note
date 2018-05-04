@@ -3,14 +3,14 @@ var $$ = el => document.querySelectorAll(el);
 // $("#wrap").style.background = '#ccc';
 // var objbox = document.getElementById('wrap');
 /*
-阻止事件冒泡
-event.cancelBubble = true;
-event.stopPropagation(); //  阻止事件向上传播
-event.preventDefault();  //  取消事件的默认动作。submit类型标签有效
-addEventListener中的第三个参 数是useCapture,一个bool类型。
-当为false时为冒泡获取(由里向外)，true为capture方式(由外向里)
-等价于jQuery的 $(document).ready()
-addEventListener('DOMContentLoaded',functionName) // mouseover,mouseout:hover()
+    阻止事件冒泡
+    event.cancelBubble = true;
+    event.stopPropagation(); //  阻止事件向上传播
+    event.preventDefault();  //  取消事件的默认动作。submit类型标签有效
+    addEventListener中的第三个参 数是useCapture,一个bool类型。
+    当为false时为冒泡获取(由里向外)，true为capture方式(由外向里)
+    等价于jQuery的 $(document).ready()
+    window.addEventListener('DOMContentLoaded',functionName) // mouseover,mouseout:hover()
 */
 // 字符串替换
 var _str = 'www.https/#/hjihsaih/#/sad.com';
@@ -67,87 +67,6 @@ list.addEventListener('click', ev => {
 // 		console.log(e.target.dataset.id);
 // 	}
 // })
-
-// 正则表达式
-function regular() {
-    var phoneNum = '13265317656';
-    var standard = /^1(3[0-9]|4[57]|5[0-35-9]|7[0135678]|8[0-9])\d{8}$/;
-    // var aa = standard.exec(5).index
-    if (standard.test(phoneNum)) {
-        console.log('正确的手机号码');
-    } else {
-        console.log('错误的手机号码');
-    }
-}
-// regular();
-
-// 循环语句
-var loopStatement = () => {
-    let loopArr = new Array(); //  等价于 loopArr = []
-    let testArr = [{
-            id: '今天',
-            value: '青瓜瘦肉',
-            childs: [{
-                state: false
-            }, {
-                state: true
-            }]
-        },
-        {
-            id: '明天',
-            value: '肉末豆腐',
-            childs: [{
-                state: false
-            }, {
-                state: true
-            }]
-        },
-        {
-            id: '明天',
-            value: '尖椒牛肉',
-            childs: [{
-                state: false
-            }, {
-                state: true
-            }]
-        },
-        {
-            id: '昨天',
-            value: '剁椒鱼头',
-            childs: [{
-                state: false
-            }, {
-                state: true
-            }]
-        }
-    ];
-    let nameArr = ["字符串一", "字符串二", "字符串三", "字符串四", "字符串五", "字符串六"];
-    let valueArr = {
-        one_key: {
-            text: 'asdsad'
-        },
-        two_key: {
-            text: 'ggxdfdxf'
-        },
-        three_key: {
-            text: 'qweretw'
-        }
-    };
-    // for in (循环数组和对象！)
-    for (let key in valueArr) {
-        console.log(key, valueArr[key].text);
-    }
-    // forEach (循环数组)
-    testArr.forEach((str, index, arr) => {
-        console.log(str.childs, index);
-        str.childs.forEach((child, index) => {
-            console.log(child.state, index);
-        })
-        loopArr.push(index + ':' + str.value);
-    });
-    console.log(loopArr);
-}
-// loopStatement();
 
 // 判断语句
 function judge() {
@@ -315,28 +234,26 @@ function objFunction() {
 
 // class处理事件
 function classFunction() {
-    function hasClass(obj, cls) {
-        return obj.className.match(new RegExp('(\\s|^)' + cls + '(\\s|$)'));
+    function hasClass(e, c) {
+        return e.className.match(new RegExp('(\\s|^)' + c + '(\\s|$)'));
     }
-
-    function addClass(obj, cls) {
-        if (!hasClass(obj, cls)) {
-            obj.className += ' ' + cls;
+    function addClass(e, c) {
+        if (!hasClass(e, c)) {
+            var _c = e.className.charAt(e.className.length - 1) === ' ' ? c : ' ' + c;
+            e.className += _c;
         }
     }
-
-    function removeClass(obj, cls) {
-        if (hasClass(obj, cls)) {
-            var reg = new RegExp('(\\s|^)' + cls + '(\\s|$)');
-            obj.className = obj.className.replace(reg, '');
+    function removeClass(e, c) {
+        if (hasClass(e, c)) {
+            var reg = new RegExp('(\\s|^)' + c + '(\\s|$)');
+            e.className = e.className.replace(reg, ' ');
         }
     }
-
-    function toggleClass(obj, cls) {
-        if (hasClass(obj, cls)) {
-            removeClass(obj, cls);
+    function toggleClass(e, c) {
+        if (hasClass(e, c)) {
+            removeClass(e, c);
         } else {
-            addClass(obj, cls);
+            addClass(e, c);
         }
     }
     // IE10+
@@ -352,12 +269,12 @@ function classFunction() {
 classFunction();
 
 /*
-永久储存
-localStorage.setItem("key","value");//以“key”为名称存储一个值“value”
-localStorage.getItem("key");//获取名称为“key”的值
-周期储存（浏览器关闭之前）
-sessionStorage.setItem('','')
-sessionStorage.getItem('')
+    永久储存
+    localStorage.setItem("key","value");//以“key”为名称存储一个值“value”
+    localStorage.getItem("key");//获取名称为“key”的值
+    周期储存（浏览器关闭之前）
+    sessionStorage.setItem('','')
+    sessionStorage.getItem('')
 */
 
 
@@ -366,15 +283,15 @@ function contrast() {
     // 数组
     var arr = [23, 4, 4, 78, 3, 5, 1];
     /*
-    arr.join('&')
-    arr.split(',')
-    arr.shift(); 移除第一项
-    arr.pop();  移除最后一项
-    arr.unshift(); 在第一项添加
-    arr.reverse(); 反转数组
-    Math.ceil(25.9) 向上取舍
-    Math.round(25.9) 四舍五入
-    Math.floor(25.9) 向下取舍
+        arr.join('&')
+        arr.split(',')
+        arr.shift(); 移除第一项
+        arr.pop();  移除最后一项
+        arr.unshift(); 在第一项添加
+        arr.reverse(); 反转数组
+        Math.ceil(25.9) 向上取舍
+        Math.round(25.9) 四舍五入
+        Math.floor(25.9) 向下取舍
     */
     // arr.every() & arr.some() 历遍数
     var everyResult = arr.every(function(item, index, array) {
@@ -489,3 +406,36 @@ getNum(); // 9, 因为在这个例子中，"this"指向全局对象
 // 创建一个'this'绑定到mymodule的函数
 var boundGetNum = getNum.bind(mymodule);
 boundGetNum(); // 81
+
+
+/**
+ *工厂模式 
+ *工厂模式下不需要 new 因为他本身就是创建一个新的对象
+ */
+function createPerson(name,age,say){
+    var obj = new Object();
+    obj.name = name;
+    obj.age = age;
+    obj.say = say;
+    obj.should = function(){
+        alert(this.say);
+    }
+    return obj;
+}
+
+/** 
+ * 构造函数
+ * 注意构造函数名第一个字母大写
+ */
+function Person(name, url) {    
+    this.name = name;
+    this.url = url;
+    this.alertUrl = myalert; // 函数定义可以写在外面（工厂模式也一样），不推荐
+    // this.alertUrl = function () {
+    //     alert(this.url);
+    // };
+}
+function myalert(params) {
+    alert(this.url);
+}
+// new Person('hjs','www.com').alertUrl() // 调用

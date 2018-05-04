@@ -71,20 +71,129 @@
         <span onclick="myLoad()">loading</span>
         <span onclick="myBall()">loadingBall</span>
         <span onclick="myToast()">toast</span>
-        <span onclick="testBtn()">test</span>
+        <span onclick="testBtn()">原型链式调用</span>
+        <span onclick="$test()">工厂模式式调用</span>
     </div>
 </body>
 <script type="text/javascript">
-    var Msg = function () {
-        let _newdiv = document.createElement('div');
-        this._div = _newdiv;
-        this._div.className = 'prompts';
-        // console.log(this);
-        
-    } 
-    Msg.prototype = {
-        output (_num, _html, fun){
-            // console.log(this._div);
+    let _stop = 0;
+    /**
+     * 原型链 模式
+    */
+    
+    let _Msg = function() {}
+    _Msg.prototype = {
+        createNode () {
+            let _box = document.createElement('div');
+            _box.className = 'prompts';
+            return _box;
+        },
+        output (_box, _num, _html, fun){
+            _box.appendChild(_html);
+            document.body.appendChild(_box);
+            _box.style.backgroundColor = 'rgba(0,0,0,'+_num+')';
+            setTimeout(() => {
+                _box.style.opacity = 1;
+                if (typeof fun === 'function') fun.call(this);
+            }, 20);
+        },
+        removeThis (_box) {
+            _box.style.opacity = 0;
+            setTimeout(() => document.body.removeChild(_box), 241);
+        },
+        remove () {
+            let _prompts = document.getElementsByClassName('prompts');
+            if (!_prompts.length) return;
+            for (let i = 0; i < _prompts.length; i++) this.removeThis(_prompts[i]);
+        },
+        alertMsg (_text = '内容', fn, _title = '提示') {
+            let [_div, _module, _btn] = [this.createNode(), document.createElement('div'), document.createElement('div')];
+            [_module.className, _btn.className, _btn.textContent] = ['prompt', 'callback_btn', '确认'];
+            _module.innerHTML = '<h2>'+_title+'</h2><div class="text_box"><p>'+_text+'</p></div>';
+            _module.appendChild(_btn);
+            this.output(_div, .4, _module, () => {
+                _module.classList.add('scale_in');
+                _btn.addEventListener('click', () => {
+                    if (typeof fn === 'function') fn.call(this);
+                    _module.classList.add('scale_out');
+                    this.removeThis(_div);
+                });
+            });
+        },
+        confirmMsg (_text = '内容', Afn, _title = '提示', Bfn) {
+            let [_div, _module, _Lbtn, _Rbtn] = [this.createNode(), document.createElement('div'),document.createElement('div'),document.createElement('div')];
+            [_module.className, _Lbtn.className, _Lbtn.textContent, _Rbtn.className, _Rbtn.textContent] = ['confirm', 'callback_btn','取消','callback_btn callback_right','确认'];
+            _module.innerHTML = '<h2>'+_title+'</h2><div class="text_box"><p>'+_text+'</p></div>';
+            _module.appendChild(_Lbtn);
+            _module.appendChild(_Rbtn);
+            this.output(_div, .4, _module, () => {
+                _module.classList.add('scale_in');
+                _Rbtn.addEventListener('click', () => {
+                    if (typeof Afn === 'function') Afn.call(this);
+                    _module.classList.add('scale_out');
+                    this.removeThis(_div);
+                });
+                _Lbtn.addEventListener('click', () => {
+                    if (typeof Bfn === 'function') Bfn.call(this);
+                    _module.classList.add('scale_out');
+                    this.removeThis(_div);
+                });
+            });
+        },
+        loadBall () {
+            let [_div, _module] = [this.createNode(), document.createElement('div')];
+            _module.className = 'loding_ball';
+            _module.innerHTML = '<div></div><div></div><div></div>';
+            this.output(_div, .4, _module);
+        },
+        loading (_text = 'loading') {
+            let [_div, _module] = [this.createNode(), document.createElement('div')];
+            _module.className = 'loading_box';
+            _module.innerHTML = '<div></div><p>'+_text+'</p>';
+            this.output(_div, 0, _module);
+        },
+        toast (_text = 'toast', _time, fn) {
+            let _module = document.createElement('div');
+            _module.className = 'itoast';
+            _module.textContent = _text;
+            document.body.appendChild(_module);
+            setTimeout(() => {
+                _module.style.opacity = 0;
+                setTimeout(() => {
+                    document.body.removeChild(_module);
+                    if (typeof fn === 'function') fn.call(this);
+                }, 200);
+            }, _time);
+        }
+    }
+    let Msg =  new _Msg();
+    function testBtn() {
+        if (_stop >= 2) return;
+        Msg.loading();
+        setTimeout(() => { 
+            Msg.remove();
+            Msg.alertMsg('这是一个原型链提示框~',function () {
+                Msg.confirmMsg('还要继续吗？', function () {
+                    Msg.toast('接下来是一个加载球的动画，然后就没有了', 1000, function () {
+                        Msg.loadBall();
+                        setTimeout(() => { Msg.remove() }, 1500)
+                    });
+                },'确认提示', function () {
+                    console.log('你取消了~');
+                });
+            }, 'hello');
+        },3000)
+    }
+
+    /**
+     * 工厂模式 
+    */
+    function $msg() {
+        const _obj = new Object();
+        _obj._div = document.createElement('div');
+        _obj._div.className = 'prompts';
+        _obj.output = function (_num, _html, fun) {
+            // console.log(this, _obj); //两者相等
             this._div.appendChild(_html);
             document.body.appendChild(this._div);
             this._div.style.backgroundColor = 'rgba(0,0,0,'+_num+')';
@@ -92,14 +201,19 @@
                 this._div.style.opacity = 1;
                 if (typeof fun === 'function') fun.call(this);
             }, 20);
-        },
-        removeThis () {
+        }
+        _obj.removeThis = function () {
             this._div.style.opacity = 0;
-            setTimeout(() => document.body.removeChild(this._div), 241);
-        },
-        alertMsg (_text='内容', fn, _title = '提示') {
+            setTimeout(() => {
+                document.body.removeChild(this._div);
+                // 不知道重复调用所创建的对象会不会占用内存，所以在方法结束时删除对象属性
+                for (let key in this) delete this[key];
+                // console.log(_obj,this);
+            }, 241);
+        }
+        _obj.alertMsg = function (_text = '内容', fn, _title = '提示') {
             let [_module, _btn] = [document.createElement('div'), document.createElement('div')];
-			[_module.className, _btn.className, _btn.textContent] = ['prompt', 'callback_btn', '确认'];
+            [_module.className, _btn.className, _btn.textContent] = ['prompt', 'callback_btn', '确认'];
             _module.innerHTML = '<h2>'+_title+'</h2><div class="text_box"><p>'+_text+'</p></div>';
             _module.appendChild(_btn);
             this.output(.4, _module, () => {
@@ -110,16 +224,22 @@
                     this.removeThis();
                 });
             });
-        },
+        }
+        return _obj;
     }
-    let Mymsg =  new Msg();
-    function testBtn() {
-        Mymsg.alertMsg('alert弹出框',function () {
-            console.log('回调函数');
-        })
+    function $test() {
+        if (_stop >= 2) return;
+        $msg().alertMsg('工厂模式调用',function () {
+            // console.log('回调~', window, this);
+            // myComfirm = new Function
+            _stop ++
+            $test()
+        },'提示~')
     }
-
-
+    
+    /**
+     * 普通函数模式
+    */
     function Prompts(params, Afn, Bfn) {
         let _fn = params.type || null;
         let _title = params.title || '提示';
@@ -218,9 +338,13 @@
         }else if (_fn === 'toast') {
         	toast();
         }else if (_fn === 'remove') {
-            let _self = document.querySelectorAll('.prompts');
-            _self.forEach(item => item.style.opacity = 0);
-            setTimeout(() => _self.forEach(item => document.body.removeChild(item)), 241);
+            let _prompts = document.getElementsByClassName('prompts');
+            for (let i = 0; i < _prompts.length; i++) {
+                _prompts[i].style.opacity = 0;
+                setTimeout(() => {
+                    document.body.removeChild(_prompts[i]);
+                }, 241);
+            }
         }else console.log('没有可执行的type对象');
     }
 	//
@@ -255,6 +379,7 @@
 	}
 	function myToast() {
 		Prompts({ type: 'toast', text: '这里是底部弹出文字', time: 2500 });
-	}
+    }
+    
 </script>
 </html>
