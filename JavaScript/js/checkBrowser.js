@@ -17,8 +17,8 @@ function checkVersion() {
             msg = "通过";
         }else{
             window.location.href = "http://modesign.cc/outdatedbrowser/";
-        }  
+        }
     }
     // alert(msg);
 }
-checkVersion()
+checkVersion();

@@ -1,50 +1,52 @@
-.prompts, .prompts p, .prompts h2, .prompts div{ padding: 0px; margin: 0px; -webkit-box-sizing: content-box; box-sizing: content-box; }
-        .prompts{ width: 100%; height: 100vh; opacity: 0; position: fixed; z-index: 999; top: 0; left: 0; display: -webkit-box; display: -webkit-flex; display: flex; flex-wrap: wrap; -webkit-box-align: center; align-items: center; -webkit-box-pack: center; justify-content: center; -webkit-transition: 0.3s all; transition: 0.3s all; }
-        .prompts h2{ line-height: .7rem; font-size: .36rem; font-weight: 400; margin-bottom: .2rem; }
-        .prompts p{ line-height: .4rem; font-size: .3rem; }
-        .prompts .callback_btn{ display: block; width: 1.76rem; height: .7rem; border-radius: .08rem; text-align: center; line-height: .7rem; background-color: #0066ff; color: #fff; font-size: .34rem; cursor: pointer; margin: 0 auto .1rem; box-shadow: 0 0 20px 0 rgba(0,0,0,0.2); }
-        .prompts .callback_btn:active{ opacity: .8; }
-        .prompts .prompt, .prompts .confirm{ width: 5rem; background-color: #fff; text-align: center; padding: .2rem; border-radius: .12rem; -webkit-transform: scale(0.8); transform: scale(0.8); -webkit-transition: .3s all; transition: .3s all; }
-        .prompts .prompt .text_box, .prompts .confirm .text_box{ min-height: .88rem; margin-bottom: .2rem; display: -webkit-box; display: -webkit-flex; display: flex; flex-wrap: wrap; -webkit-box-align: center; align-items: center; -webkit-box-pack: center; justify-content: center; }
-        .prompts .confirm .callback_btn{ float: left; margin-left: .2rem; background-color: #ccc; color: #fff; }
-        .prompts .confirm .callback_right{ float: right; margin: 0 .2rem 0 0; background-color: #0066ff; color: #fff; }
-        .prompts .boxScale{ -webkit-transform: scale(1); transform: scale(1); }
-        /* 加载中球类动画 */
-        .prompts .loding_ball{ width: 2.8rem; height: .8rem; }
-        .prompts .loding_ball div{ display: block; width: .8rem; height: .8rem; margin-left: .2rem; background-color: gold; border-radius: 100%; display: inline-block; -webkit-animation: bounce 1.4s ease-in-out 0s infinite both; animation: bounce 1.4s ease-in-out 0s infinite both; }
-        .prompts .loding_ball div:nth-child(1){ -webkit-animation-delay: -0.32s; animation-delay: -0.32s; margin-left: 0; }
-        .prompts .loding_ball div:nth-child(2){ -webkit-animation-delay: -0.16s; animation-delay: -0.16s; }
-        @-webkit-keyframes bounce {
-        	0%,80%,100% { -webkit-transform: scale(0); transform: scale(0); }
-        	40% { -webkit-transform: scale(1); transform: scale(1); }
-        }
-        @keyframes bounce {
-        	0%,80%,100% { -webkit-transform: scale(0); transform: scale(0); }
-        	40% { -webkit-transform: scale(1); transform: scale(1); }
-        }
-        /* 加载中 */
-        .prompts .loading_box{ min-width: 2.4rem; min-height: 1.8rem; padding-top: .6rem; background-color: rgba(0,0,0,0.7); border-radius: .08rem; }
-        .prompts .loading_box div{ display: block; width: .8rem; height: .8rem; box-sizing: border-box; border: solid 3px #fff; border-radius: 50%; border-right-color: rgba(0,0,0,0); margin: auto; -webkit-animation: circular 1.3s ease infinite; animation: circular 1.3s ease infinite;}
-        .prompts .loading_box p{ font-size: .3rem; color: #fff; text-align: center; line-height: .72rem; }
-        @-webkit-keyframes circular {
-        	0% { -webkit-transform: rotate(0deg); transform: rotate(0deg); }
-            50% { opacity: 0.5; }
-            100% { -webkit-transform: rotate(360deg); transform: rotate(360deg); opacity: 1; }
-        }
-        @keyframes circular {
-        	0% { -webkit-transform: rotate(0deg); transform: rotate(0deg); }
-            50% { opacity: 0.5; }
-            100% { -webkit-transform: rotate(360deg); transform: rotate(360deg); opacity: 1; }
-        }
-        /* toast */
-        .itoast{ display: inline-block; padding: 0 .3rem; min-height: .7rem; line-height: .7rem; font-size: .24rem; color: #fff; background-color: rgba(0,0,0,0.5); border-radius: .08rem; position: fixed; z-index: 999; bottom: 10%; left: 50%; -webkit-transform: translateX(-50%); transform: translateX(-50%); -webkit-animation: toastmove 0.4s ease; animation: toastmove 0.4s ease; -webkit-transition: 0.2s all; transition: 0.2s all; }
-        @-webkit-keyframes toastmove {
-        	0% { opacity: 0; -webkit-transform: translate(-50%, 300%); transform: translate(-50%, 300%); }
-            50% { opacity: 1; -webkit-transform: translate(-50%, -100%); transform: translate(-50%, -100%); }
-            100% { -webkit-transform: translate(-50%, 0%); transform: translate(-50%, 0%); }
-        }
-        @keyframes toastmove {
-        	0% { opacity: 0; -webkit-transform: translate(-50%, 300%); transform: translate(-50%, 300%); }
-            50% { opacity: 1; -webkit-transform: translate(-50%, -100%); transform: translate(-50%, -100%); }
-            100% { -webkit-transform: translate(-50%, 0%); transform: translate(-50%, 0%); }
-        }
+/* 主要css */
+.prompts, .prompts p, .prompts h2, .prompts div{ padding: 0px; margin: 0px; -webkit-box-sizing: border-box; box-sizing: border-box; }
+.prompts{ width: 100%; height: 100vh; opacity: 0; position: fixed; z-index: 999; top: 0; left: 0; display: -webkit-box; display: -webkit-flex; display: flex; flex-wrap: wrap; -webkit-box-align: center; align-items: center; -webkit-box-pack: center; justify-content: center; -webkit-transition: .24s all; transition: .24s all; }
+.prompts h2{ line-height: .7rem; font-size: .4rem; font-weight: 400; margin-bottom: .2rem; }
+.prompts p{ line-height: .4rem; font-size: .3rem; }
+.prompts .callback_btn{ display: block; width: 2.2rem; height: .78rem; border-radius: .08rem; text-align: center; line-height: .78rem; background-color: #2196f3; color: #fff; font-size: .34rem; cursor: pointer; margin: 0 auto .1rem; -webkit-box-shadow: 0 1px 3px rgba(0,0,0,.12), 0 1px 2px rgba(0,0,0,.24); box-shadow: 0 1px 3px rgba(0,0,0,.12), 0 1px 2px rgba(0,0,0,.24); }
+.prompts .callback_btn:active{ opacity: .8; }
+.prompts .prompt, .prompts .confirm{ width: 5.6rem; background-color: #fff; text-align: center; padding: .2rem; border-radius: .12rem; -webkit-transform: scale(1.1); transform: scale(1.1); -webkit-transition: .24s all; transition: .24s all; }
+.prompts .prompt .text_box, .prompts .confirm .text_box{ min-height: .88rem; margin-bottom: .2rem; display: -webkit-box; display: -webkit-flex; display: flex; flex-wrap: wrap; -webkit-box-align: center; align-items: center; -webkit-box-pack: center; justify-content: center; }
+.prompts .confirm .callback_btn{ float: left; margin-left: .2rem; background-color: #ccc; color: #fff; }
+.prompts .confirm .callback_right{ float: right; margin: 0 .2rem 0 0; background-color: #2196f3; color: #fff; }
+.prompts .scale_in{ -webkit-transform: scale(1); transform: scale(1); }
+.prompts .scale_out{ -webkit-transform: scale(0.8); transform: scale(0.8); }
+/* 加载中球类动画 */
+.prompts .loding_ball{ width: 3.22rem; height: .88rem; }
+.prompts .loding_ball div{ display: inline-block; width: .88rem; height: .88rem; margin-left: .2rem; background-color: gold; border-radius: 100%; -webkit-animation: bounce 1.4s ease-in-out 0s infinite both; animation: bounce 1.4s ease-in-out 0s infinite both; }
+.prompts .loding_ball div:nth-child(1){ -webkit-animation-delay: -0.32s; animation-delay: -0.32s; margin-left: 0; }
+.prompts .loding_ball div:nth-child(2){ -webkit-animation-delay: -0.16s; animation-delay: -0.16s; }
+@-webkit-keyframes bounce {
+    0%,80%,100% { -webkit-transform: scale(0); transform: scale(0); }
+    40% { -webkit-transform: scale(1); transform: scale(1); }
+}
+@keyframes bounce {
+    0%,80%,100% { -webkit-transform: scale(0); transform: scale(0); }
+    40% { -webkit-transform: scale(1); transform: scale(1); }
+}
+/* 加载中 */
+.prompts .loading_box{ min-width: 2.4rem; min-height: 2.4rem; padding-top: .6rem; background-color: rgba(0,0,0,0.7); border-radius: .08rem; }
+.prompts .loading_box div{ display: block; width: .8rem; height: .8rem; box-sizing: border-box; border: solid 3px #fff; border-radius: 50%; border-right-color: rgba(0,0,0,0); margin: auto; -webkit-animation: circular 1.3s ease infinite; animation: circular 1.3s ease infinite;}
+.prompts .loading_box p{ font-size: .3rem; color: #fff; text-align: center; line-height: .72rem; }
+@-webkit-keyframes circular {
+    0% { -webkit-transform: rotate(0deg); transform: rotate(0deg); }
+    50% { opacity: 0.5; }
+    100% { -webkit-transform: rotate(360deg); transform: rotate(360deg); opacity: 1; }
+}
+@keyframes circular {
+    0% { -webkit-transform: rotate(0deg); transform: rotate(0deg); }
+    50% { opacity: 0.5; }
+    100% { -webkit-transform: rotate(360deg); transform: rotate(360deg); opacity: 1; }
+}
+/* toast */
+.itoast{ display: inline-block; padding: 0 .3rem; min-height: .78rem; line-height: .78rem; font-size: .24rem; color: #fff; background-color: rgba(0,0,0,0.5); border-radius: .08rem; position: fixed; z-index: 999; bottom: 10%; left: 50%; -webkit-transform: translateX(-50%); transform: translateX(-50%); -webkit-animation: toastmove 0.4s ease; animation: toastmove 0.4s ease; -webkit-transition: 0.2s all; transition: 0.2s all; }
+@-webkit-keyframes toastmove {
+    0% { opacity: 0; -webkit-transform: translate(-50%, 300%); transform: translate(-50%, 300%); }
+    50% { opacity: 1; -webkit-transform: translate(-50%, -100%); transform: translate(-50%, -100%); }
+    100% { -webkit-transform: translate(-50%, 0%); transform: translate(-50%, 0%); }
+}
+@keyframes toastmove {
+    0% { opacity: 0; -webkit-transform: translate(-50%, 300%); transform: translate(-50%, 300%); }
+    50% { opacity: 1; -webkit-transform: translate(-50%, -100%); transform: translate(-50%, -100%); }
+    100% { -webkit-transform: translate(-50%, 0%); transform: translate(-50%, 0%); }
+}
