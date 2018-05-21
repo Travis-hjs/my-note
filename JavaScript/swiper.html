@@ -26,17 +26,12 @@
 		</style>
 	</head>
 	<body>
-		<section class="wrap">
-
-		</section>
-		<p onclick="addSwiper()" style="text-align: center">add a swiper</p>
+		<section class="wrap"></section>
+		<p onclick="addSwiper(this)" style="text-align: center">add a swiper</p>
 	</body>
 	<!-- <script type="text/javascript" src="./js/swiper.js"></script> -->
 	<script type="text/javascript">
-	var isClick = false;
-	function addSwiper () {
-		if (isClick) return ;
-		isClick = !isClick;
+	function addSwiper (el) {
 		var _html = `<div class="swiper mybanner">
 			<ul class="swiper_list">
 				<li class="swiper_slider">
@@ -59,6 +54,7 @@
 			moveTime: 400,
 			direction: true
 		})
+		el.parentNode.removeChild(el)
 	}
 	// 动态生成html
 	function createList(_num, isBtn, fn) {
@@ -95,18 +91,18 @@
 		_interval： 自动播放间隔（秒）
 	*/
 	function Swiper (_params) {
-		let [_pagination, _loop, _direction, _moveTime, _autoPaly, _interval] = [false, false, false, 300, false, 3000];
+		let _pagination = false, _loop = false, _direction = false, _autoPaly = false, _interval = 3000, _moveTime = 300;
 		// 触摸事件
 		let touch = (_div, _w, _h) => {
 			let _ul = _div.querySelector('.swiper_list');
 			let _li = _ul.querySelectorAll('.swiper_slider');
 			let _btn = _div.querySelectorAll('.swiper_btn');
 			// 触摸开始时间，触摸结束时间，开始的距离，结束的距离，结束距离状态，移动的距离，圆点位置，自动播放定计算数值，loop定时器计算值
-			let [sTime, eTime, _sd, _ed, _eState, _md, _index, _t, _loopNum] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-			// 选择方向距离
-			let _distance = _direction ? _h : _w;
-            // 定义 requestAnimationFrame
-			window.myAnimation = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame || window.msRequestAnimationFrame;
+			let sTime = 0, eTime = 0, _sd = 0, _ed = 0, _eState = 0, _md = 0, _index = 0, _t = 0, _loopNum = 0, 
+				// 选择方向距离
+				_distance = _direction ? _h : _w,
+				// 定义 requestAnimationFrame	
+				myAnimation = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame || window.msRequestAnimationFrame;
 			// 设置动画
 			function hasAnimation() {
 				_ul.style.WebkitTransition = `${ _moveTime/1000 }s all`;
@@ -277,7 +273,7 @@
 				if (_eState !== _ed) {
 					judgeMove();
 				}else {
-					console.log('执行');
+					// console.log('执行');
 					returnP()
 				}
 				// console.log(`index: ${_index}`);	//  这里可以做触摸之后位置回调
@@ -317,9 +313,9 @@
 		}
 		// 输出底部圆点
 		let outputPagination = _div => {
-			let _btnList = _div.querySelector('.swiper_pagination');
-			let _liNum = _div.querySelectorAll('.swiper_slider').length;
-			let _html = '';
+			let _btnList = _div.querySelector('.swiper_pagination'),
+			 	_liNum = _div.querySelectorAll('.swiper_slider').length,
+			 	_html = '';
 			for (let i = 0; i < _liNum; i++) {
 				_html += '<div class="swiper_btn"></div>'
 			}
@@ -329,7 +325,7 @@
 		// 动态布局初始化
 		let format = _el => {
 			let _swiper = document.querySelector(_el);
-			let [_moveWidth, _moveHeight] = [_swiper.offsetWidth, _swiper.offsetHeight];
+			let _moveWidth = _swiper.offsetWidth, _moveHeight = _swiper.offsetHeight;
 			if (_pagination) outputPagination(_swiper);
 			if (_loop) {
 				outputLoop(_swiper,_moveWidth,_moveHeight);
@@ -339,13 +335,13 @@
 		}
 		// 配置传参
 		let init = () => {
+			if (!_params.el) return console.log('没有可执行的元素！');
 			_pagination = _params.pagination || false;
 			_direction = _params.direction || false;
 			_autoPaly = _params.autoPaly || false;
 			_loop = _params.loop || false;
 			_moveTime = _params.moveTime || 300;
 			_interval = _params.interval || 3000;
-			if (!_params.el) return console.log('没有可执行的元素！');
 			format(_params.el);
 		}
 		init();

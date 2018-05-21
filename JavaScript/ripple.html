@@ -31,7 +31,7 @@
                     centerX = 0,
                     centerY = 0,
                     radius = 0,
-                    scale = 8,
+                    scale = 8,  // 这个值和扩散速度有关
                     color = el.dataset.color || '#999999',
                     myAinmFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame || window.msRequestAnimationFrame;
                 // canvas
@@ -45,15 +45,15 @@
                 centerX = event.offsetX;
                 centerY = event.offsetY;
                 // console.log(canvas.width, canvas.height, centerX, centerY);
-                context.clearRect(0, 0, canvas.width, canvas.height);
+                // context.clearRect(0, 0, canvas.width, canvas.height);
                 if (canvas.offsetWidth <= 60) scale = 3;
                 // 开始绘画
                 function draw() {
-                    context.beginPath();
-                    context.arc(centerX, centerY, radius, 0, 2 * Math.PI, true);
+                    // context.beginPath();
+                    context.arc(centerX, centerY, radius, 0, 2 * Math.PI, false);
                     context.fillStyle = color;
                     context.fill();
-                    radius += scale;    // 这个值和扩散速度有关
+                    radius += scale;    
                     // console.log(`绘画半径：${ radius }，canvas宽度：${ canvas.width }`);
                     if (radius < canvas.width) {
                         myAinmFrame(draw);
