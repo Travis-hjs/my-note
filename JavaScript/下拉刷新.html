@@ -9,7 +9,7 @@
         <link rel="stylesheet" href="./css/loading.css">
 		<link rel="stylesheet" href="./css/refresh.css">
 		<style media="screen">
-			body{ background-color: #ccc; }
+			body{ background-color: #eee; }
             .wrap li{ background-color: gold; height: 5rem; position: relative; z-index: 10; }
             .wrap li:nth-child(even){ background-color: #212121; }
 		</style>
@@ -53,7 +53,7 @@
 			// 类定义
 		    class Ddr {
 		    	constructor (el) {
-					if (!el) return console.log('没有可下拉的元素');
+					if (!el) return console.warn('没有可下拉的元素');
 		    		this._page = document.querySelector(el);
 					this._layer = document.createElement('div');
 					this._layer.style.cssText = 'position: fixed;top: 0;left: 0;width: 100%;height: 100%;background-color: rgba(0,0,0,0);z-index: 100;';
@@ -122,7 +122,9 @@
 						// console.log(`移动的距离：${_range}, 最大距离：${_max}`);
 	                    if (_range > _max && _range > 1 && rootNode == 0) {
 							this.setStyle(_max);
-	                        document.body.appendChild(this._layer);
+							document.body.appendChild(this._layer);
+							// 阻止往上滑动
+							this._layer.ontouchmove = e => e.preventDefault();
 							// 回调成功下拉到最大距离并松开函数
 							if (typeof fn === 'function') fn.call(this);
 	                    }else {
@@ -139,15 +141,15 @@
 		    }
 			// 调用
 			let _Ddr = new Ddr('.wrap');
-			_Ddr.start(100, function(){
+			_Ddr.start(100, function() {
 				console.log('下拉成功');
-				setTimeout(function(){
+				setTimeout(function() {
 					_Ddr.end();
-				},2000)
-			}, function(num){
+				},2000);
+			}, function(num) {
 				// console.log(`下拉的值：${ num }`);
-			})
-			// document.querySelector('body').addEventListener('touchmove', ev => { ev.preventDefault() })
+			});
+			
 			/**
 			 * 原型链定义
 			*/
@@ -213,7 +215,10 @@
 						_self.getAnimation(0.3);
 	                    if (_range > _max && _range > 1 && rootNode == 0) {
 							_self.setStyle(_max);
-	                        document.body.appendChild(_self._layer);
+							document.body.appendChild(_self._layer);
+							_self._layer.ontouchmove = function (e) { 
+								e.preventDefault(); 
+							}
 							if (typeof fn === 'function') fn.call(_self);
 	                    }else {
 							_self.setStyle(0);
