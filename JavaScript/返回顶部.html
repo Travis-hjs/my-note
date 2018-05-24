@@ -59,12 +59,13 @@
 // gobackTop("goback");
 // 兼容移动端 ie-10以上
 function goTop(clickEleSelector) {
-	window.requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame || window.msRequestAnimationFrame;
-    var clickEle = document.querySelector(clickEleSelector);
-    var isExecuted = true; 	//	重复点击
-	var isMove = true;		//	是否在运动
-    var rootNode = document.body.scrollTop === 0 ? document.documentElement : document.body;
+	var myAnimation = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame || window.msRequestAnimationFrame,
+        clickEle = document.querySelector(clickEleSelector),
+        isExecuted = true, 	//	重复点击
+	    isMove = true,		//	是否在运动
+        rootNode = 0;
     window.addEventListener('scroll', () => {
+		rootNode = document.body.scrollTop === 0 ? document.documentElement : document.body;
         if (rootNode.scrollTop > (document.body.scrollHeight / 2)) {
             clickEle.style.visibility = 'visible';
         } else {
@@ -83,7 +84,7 @@ function goTop(clickEleSelector) {
 	function move() {
 		rootNode.scrollTop = rootNode.scrollTop - rootNode.scrollTop * 0.1;
 		if (rootNode.scrollTop > 0 && isMove) {
-			requestAnimationFrame(move);
+			myAnimation(move);
 			isExecuted = false;
 		}else {
 			isExecuted = true;

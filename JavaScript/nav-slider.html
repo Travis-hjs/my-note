@@ -38,17 +38,15 @@
 				<ul></ul>
 			</div>
 			<div class="test">
-				<ul>
-
-				</ul>
+				<ul></ul>
 			</div>
 		</div>
 	</body>
 	<script type="text/javascript">
 		/*
-			el	=> 最外层元素
-			nav	=> 滚动元素
-			direction	=> 方向，true为Y，不给或false反之
+		 *	el	=> 最外层元素
+		 *	nav	=> 滚动元素
+		 *	direction	=> 方向，true为Y，不给或false反之
 		*/
 		for (var i = 1; i <= 20; i++) {
 			document.querySelector('.nav_slider nav').innerHTML += `<li>slider-X${i}</li>`
@@ -64,19 +62,19 @@
 			let myAnimation = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame || window.msRequestAnimationFrame;
 			let _box = document.querySelector(el);
 			let _nav = _box.querySelector(nav);
-            // 外层容器的宽/高；开始触摸距离；结束触摸距离；移动的距离；触摸开始时间；触摸结束时间；结束状态；触摸计时器
-			let [_w, _h, _start, _end, _moveP, _sTime, _eTime, _eState, touchNum] = [_box.offsetWidth, _box.offsetHeight, 0, 0, 0, 0, 0, 0, 0];
-            // 定义方向
-			let _distance = direction ? _h : _w;
-			// 定义容器的宽高
-			let _navSize = direction ? _nav.offsetHeight : _nav.offsetWidth;
+			// 外层容器的宽/高；开始触摸距离；结束触摸距离；移动的距离；触摸开始时间；触摸结束时间；结束状态；触摸计时器
+			let _w = _box.offsetWidth, _h = _box.offsetHeight, _start = 0, _end = 0, _moveP = 0, _sTime = 0, _eTime = 0, _eState = 0, touchNum = 0,
+            	// 定义方向
+				_distance = direction ? _h : _w,
+				// 定义容器的宽高
+				_navSize = direction ? _nav.offsetHeight : _nav.offsetWidth;
             // 设置动画
 			function setAnimation(_num) {
 				_nav.style.WebkitTransition = `${ _num }s all`;
 				_nav.style.transition = `${ _num }s all`;
 			}
             // 属性样式
-			function slideStyle (_num) {
+			function slideStyle(_num) {
 				if (direction) {
 					_nav.style.WebkitTransform = `translate3d(0px, ${ _num }px, 0px)`;
 					_nav.style.transform = `translate3d(0px, ${ _num }px, 0px)`;
@@ -86,44 +84,44 @@
 				}
 			}
             // 拖动的距离
-			function touchRange () {
+			function touchRange() {
 				let _d = 0;
 				if ((_end-_start) >= _distance) {
 					_d = _moveP + _distance;
 				}else if ((_end - _start) <= -_distance) {
-					_d = _moveP - _distance
+					_d = _moveP - _distance;
 				}else {
 					_d = _moveP + (_end - _start);
 				}
 				if (_end < _start && _d < -(_navSize - _distance)) {
 					// console.log('到达最后');
-					_d = _moveP + ((_end - _start) - ((_end - _start) * 0.6))
+					_d = _moveP + ((_end - _start) - ((_end - _start) * 0.6));
 				}else if (_end > _start && _d > 0) {
 					// console.log('到达最初');
-					_d = _moveP + ((_end - _start) - ((_end - _start) * 0.6))
+					_d = _moveP + ((_end - _start) - ((_end - _start) * 0.6));
 				}
 				return _d;
 			}
 			// 滚动方法
 			function slideMove() {
-				if (touchNum >= 200) return ;
+				if (touchNum >= 200) return;
 				touchNum += 1;
 				let _touch = (_end - _start)/2;	// 1的时候为速度最快
-				_moveP += _touch - (_touch * (touchNum/200))
+				_moveP += _touch - (_touch * (touchNum/200));
 				// console.log(`移动的距离：${_moveP} 触摸倒计时：${touchNum}`);
 				slideStyle(_moveP);
 				if (_moveP < -(_navSize - _distance)) {
 					_moveP = -(_navSize - _distance);
 					setAnimation(.3);
 					slideStyle(_moveP);
-					return ;
+					return;
 				}else if (_moveP > 0) {
 					_moveP = 0;
 					setAnimation(.3);
 					slideStyle(_moveP);
-					return ;
+					return;
 				}
-				myAnimation(slideMove)
+				myAnimation(slideMove);
 			}
 			_nav.addEventListener('touchstart', ev => {
 				sTime = new Date().getTime();
@@ -159,23 +157,10 @@
 				}else {
 					// console.log('可以滚动');
 					touchNum = eTime-sTime;
-					slideMove()
+					slideMove();
 				}
-				_eState = _end
+				_eState = _end;
 			});
 		}
-		// (function( _window, undefined ) {
-			console.log();
-			var myPlug = function () {
-			}
-			myPlug.prototype = {
-				teste () {
-					console.log(this)
-				}
-			}
-			window.myPlug = myPlug
-		// })(window);
-		var dialog = new myPlug();
-		dialog.teste()
 	</script>
 </html>

@@ -27,97 +27,57 @@
 <body>
 	<div id="content">
 		<h2>点击粉红色的点加入购物车</h2>
-		<ul class="shop_list">
-			<li>
-				<span class="shop_photos"><img src="./img/big-1.jpg" alt=""></span>
-				<p>商品描述...</p>
-				<i onclick="cartAnimate(this)"></i>
-			</li>
-			<li>
-				<span class="shop_photos"><img src="./img/big-2.jpg" alt=""></span>
-				<p>商品描述...</p>
-				<i onclick="cartAnimate(this)"></i>
-			</li>
-			<li>
-				<span class="shop_photos"><img src="./img/big-3.jpg" alt=""></span>
-				<p>商品描述...</p>
-				<i onclick="cartAnimate(this)"></i>
-			</li>
-			<li>
-				<span class="shop_photos"><img src="./img/big-4.jpg" alt=""></span>
-				<p>商品描述...</p>
-				<i onclick="cartAnimate(this)"></i>
-			</li>
-			<li>
-				<span class="shop_photos"><img src="./img/big-5.jpg" alt=""></span>
-				<p>商品描述...</p>
-				<i onclick="cartAnimate(this)"></i>
-			</li>
-			<li>
-				<span class="shop_photos"><img src="./img/big-6.jpg" alt=""></span>
-				<p>商品描述...</p>
-				<i onclick="cartAnimate(this)"></i>
-			</li>
-			<li>
-				<span class="shop_photos"><img src="./img/big-7.jpg" alt=""></span>
-				<p>商品描述...</p>
-				<i onclick="cartAnimate(this)"></i>
-			</li>
-			<li>
-				<span class="shop_photos"><img src="./img/big-1.jpg" alt=""></span>
-				<p>商品描述...</p>
-				<i onclick="cartAnimate(this)"></i>
-			</li>
-			<li>
-				<span class="shop_photos"><img src="./img/big-2.jpg" alt=""></span>
-				<p>商品描述...</p>
-				<i onclick="cartAnimate(this)"></i>
-			</li>
-			<li>
-				<span class="shop_photos"><img src="./img/big-3.jpg" alt=""></span>
-				<p>商品描述...</p>
-				<i onclick="cartAnimate(this)"></i>
-			</li>
-			<li>
-				<span class="shop_photos"><img src="./img/big-4.jpg" alt=""></span>
-				<p>商品描述...</p>
-				<i onclick="cartAnimate(this)"></i>
-			</li>
-			<li>
-				<span class="shop_photos"><img src="./img/big-5.jpg" alt=""></span>
-				<p>商品描述...</p>
-				<i onclick="cartAnimate(this)"></i>
-			</li>
-		</ul>
+		<ul class="shop_list"></ul>
 		<span class="cartState"></span>
 		<span class="ball"></span>
 	</div>
 	<script type="text/javascript">
-		window.myMove = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame || window.msRequestAnimationFrame;
-		var _isMove = false;
-		var cartAnimate = el => {
+		let myMove = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame || window.msRequestAnimationFrame,
+			_isMove = false;
+		function radom(min, max) {
+			let length = max - min + 1;	
+			return Math.floor(Math.random() * length) + min;
+		}
+		function createList(_num) {
+			let _ul = document.querySelector('.shop_list'),
+				_li = '';
+			for (let i = 0; i < _num; i++) {
+				_li += `<li>
+							<span class="shop_photos"><img src="./img/big-${ radom(1, 6) }.jpg" alt=""></span>
+							<p>big-${ radom(1, 6) }.jpg</p>
+							<i onclick="ballParabola(this)"></i>
+						</li>`
+			}
+			_ul.innerHTML = _li
+		}
+		createList(20);
+		/**
+		 * 购物车小球动画(只能够定义速度)
+		*/
+		function cartAnimate(el) {
 			if (_isMove) return;
 			_isMove = true;
-			// 定义初始化x和y的值
-			let [_speed, x, y, _el, _ball] = [10, 0, 0, el.getBoundingClientRect(), document.querySelector('.ball')];
+			let _speed = 10,// 速度
+				_x = 0, 	// 定义初始化x和y的值
+				_y = 0,
+				_el = el.getBoundingClientRect(),			// 点击节点坐标
+				_ball = document.querySelector('.ball'),	// 小球
+				_cart = document.querySelector('.cartState').getBoundingClientRect();	// 购物车坐标
 			// 先让小球去到当前点击位置
 			_ball.style.cssText = `top: ${_el.top}px; left: ${_el.left}px`;
-			// 购物车
-			let _cart = document.querySelector('.cartState').getBoundingClientRect();
 			// 计算动态速度
 			if (_cart.left / 2 < _el.left) _speed = 5;
 			// xh是目标的X距离，yh是目标的y距离
-			// -(_cart.right*1.5-_el.right)     购物车在右边的时候
-			let xh = _cart.left - _el.left,
+			let xh = _cart.left - _el.left,	// -(_cart.right*1.5-_el.right)     购物车在右边的时候
 				yh = _cart.top - _el.top,
 				p = xh * xh / (-2 * yh);
-			let flicker = () => {
+			function flicker() {
 				// 抛物线公式：x2=-2py
 				// x 可以控制速度
-				x -= _speed;
-				y = (x * x) / (-2 * p);
-				_ball.style.transform = `translate(${-x}px,${y}px)`; // 这里的x为负值的时候是从左向右
-				if (x > -xh) {
+				_x -= _speed;
+				_y = (_x * _x) / (-2 * p);
+				_ball.style.transform = `translate(${-_x}px,${_y}px)`; // 这里的x为负值的时候是从左向右
+				if (_x > -xh) {
 					myMove(flicker);
 				} else {
 					console.log('到达');
@@ -125,8 +85,53 @@
 					_ball.style.transform = `translate(0px, 0px)`;
 				}
 			}
-			flicker()
+			flicker();
 		}
+		/**
+		 * 可以定义速度和弧度(宽度小于一定程度时两点Y距离大于一定数值时没有抛物弧度)
+		*/
+		function ballParabola(el) { 
+			if (_isMove) return;
+			_isMove = true;
+			// 元素集合
+			let cart = document.querySelector('.cartState'),// 购物车按钮
+				ball = document.querySelector('.ball'),		// 小球
+				ratio = 8,
+				speed = 10;
+			// 坐标集合 
+			let nStartX = Math.round(el.getBoundingClientRect().left),
+				nStartY = Math.round(el.getBoundingClientRect().top),
+				nEndX = Math.round(cart.getBoundingClientRect().left),
+				nEndY = Math.round(cart.getBoundingClientRect().top);
+			// 判断距离超过购物车按钮弧度值
+			if (nStartY < nEndY) ratio = 20;
+			// 判断左右两边距离速度
+			if (nEndX / 2 < nStartX) speed = 5;
+			// console.log(ratio, speed);
+			// 抛物线弧度变量
+			let	nTopX = nEndX - 10,
+				nTopY = nEndY - ratio;
+			// 先让小球去到当前点击位置
+			ball.style.transform = `translate(${nStartX}px,${nStartY}px)`;
+			// 储存3个值的变量
+			let _a = ((nStartY - nEndY) * (nStartX - nTopX) - (nStartY - nTopY) * (nStartX - nEndX)) / ((nStartX * nStartX - nEndX * nEndX) * (nStartX - nTopX) - (nStartX * nStartX - nTopX * nTopX) * (nStartX - nEndX));
+			let _b = ((nEndY - nStartY) - _a * (nEndX * nEndX - nStartX * nStartX)) / (nEndX - nStartX);
+			let _c = nStartY - _a * nStartX * nStartX - _b * nStartX;
+			function _move() {
+				// 抛物线公式：y = a * x*x + b*x +c;
+				if (nStartX < nEndX) {
+					nStartX = nStartX + speed;	
+					nStartY = _a * nStartX * nStartX + _b * nStartX + _c;
+					ball.style.transform = `translate(${nStartX}px,${nStartY}px)`;
+					myMove(_move);
+				} else {
+					console.log('到达');
+					_isMove = false;
+					ball.style.transform = `translate(0px, 0px)`;
+				}
+			}
+			_move();
+		}	
 	</script>
 </body>
 

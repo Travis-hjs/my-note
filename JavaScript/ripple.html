@@ -33,7 +33,8 @@
                     radius = 0,
                     scale = 8,  // 这个值和扩散速度有关
                     color = el.dataset.color || '#999999',
-                    myAinmFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame || window.msRequestAnimationFrame;
+                    myAinmFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame || window.msRequestAnimationFrame,
+                    ev = window.event || arguments.callee.caller.arguments[0];   // 解决firefox没有event
                 // canvas
                 canvas = document.createElement('canvas');
                 el.appendChild(canvas);
@@ -42,8 +43,9 @@
                 canvas.height = canvas.offsetHeight;
                 // console.log(canvas.width, canvas.height);
                 context = canvas.getContext('2d');
-                centerX = event.offsetX;
-                centerY = event.offsetY;
+                centerX = ev.offsetX;
+                centerY = ev.offsetY;
+                console.log(ev.target, arguments);
                 // console.log(canvas.width, canvas.height, centerX, centerY);
                 // context.clearRect(0, 0, canvas.width, canvas.height);
                 if (canvas.offsetWidth <= 60) scale = 3;
@@ -66,9 +68,8 @@
                 }
                 draw();
             }
-
             // 全局添加点击事件
-            document.querySelectorAll('.ripple_btn').forEach(item => {
+            document.querySelectorAll('.list li').forEach(item => {
                 item.addEventListener('click', function () {
                     rippleClick(this)
                 })
