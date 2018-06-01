@@ -39,7 +39,7 @@
             /* ripple CSS */
             /* canvas 方法 */
             [ripple]{ position: relative; cursor: pointer; overflow: hidden; }
-            [ripple] canvas{ position: absolute; top: 0; left: 0; transition: 0.2s all !important; }
+            [ripple] canvas{ position: absolute; top: 0; left: 0; }
             /* JS+CSS 方法 */
             [ripple] .ripple_box{ position: absolute; border-radius: 50%; opacity: 0; -webkit-animation-name: ripple-move; animation-name: ripple-move; }
             @-webkit-keyframes ripple-move {
@@ -74,10 +74,13 @@
                     <span class="button rectangle" ripple="rgba(255,255,255,0.25)" onclick="rippleClick(this)" style="background-color: #2196f3">default</span>
                 </li>
                 <li>
-                    <span class="button rectangle" ripple="rgba(55,255,255,0.3)" onclick="rippleClick(this)" style="background-color: orange">warning</span>
+                    <span class="button rectangle" ripple="rgba(255,255,255,0.3)" onclick="rippleClick(this)" style="background-color: orange">warning</span>
                 </li>
                 <li>
                     <span class="button rectangle" ripple="rgba(255,255,255,0.3)" onclick="rippleClick(this)" style="background-color: rgb(225, 0, 80)">delete</span>
+                </li>
+                <li>
+                    <span class="button rectangle" ripple onclick="rippleClick(this)" style="color: #333">button-ripple</span>
                 </li>
                 <li>
                     <span class="button-circular circular" ripple="rgba(255,255,255,0.3)" onclick="rippleClick(this)">circula</span>
@@ -86,10 +89,10 @@
                     <span class="button long" ripple="rgba(187,221,249, 0.25)" onclick="rippleClick(this)">canvas</span>
                 </li>
                 <li>
-                    <span class="button long ripple" ripple="rgba(255,255,255,0.5)">CSS+js</span>
+                    <span class="button long ripple" ripple="rgba(255,255,255,0.5)" onclick="rippleClick(this)">CSS+js</span>
                 </li>
                 <li>
-                    <span class="CSS+js long ripple" ripple="rgba(255,255,255,0.5)" time="1000">CSS+js</span>
+                    <span class="CSS+js long ripple" ripple="rgba(255,255,255,0.5)" onclick="rippleClick(this)">CSS+js</span>
                 </li>
             </ul>
             <ul class="progress-list section hide">
@@ -108,12 +111,12 @@
                             <h2>蜥蜴</h2>
                             <p>蜥蜴是广泛的squamate爬行动物，有超过6000种，遍布各大洲，除了南极洲</p>
                         </div>
-                    </li>`;               
+                    </li>`;
                 }
                 document.querySelector('.card-list').innerHTML = _li;
             }
             createCrads(10);
-            let state = 0;
+            let state = 1;
             function menuSwitch(_num) {
                 if (state === _num) return;
                 state = _num;
@@ -138,14 +141,16 @@
                     centerY = 0,
                     radius = 0,
                     scale = 8,      // 这个值和扩散速度有关
-                    color = `rgb(${values[0]}, ${values[1]}, ${values[2]})` || 'rgb(153,153,153)',
-                    opacity = `${values[3]}.${values[4]}` || '0.3',
+                    color = 'rgb(153,153,153)',
+                    opacity = '0.3',
                     maxSize = 0;    //  宽高选一个最大值
                     myAinmFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame || window.msRequestAnimationFrame,
                     ev = window.event || arguments.callee.caller.arguments[0];   // 解决firefox没有event
-                    
+                if (values[0] && values[1] && values[2]) color = `rgb(${values[0]}, ${values[1]}, ${values[2]})`;
+                if (values[4]) opacity = `${values[3]}.${values[4]}`;
                 // console.log(values, color, opacity);
                 canvas.style.opacity = opacity;
+                canvas.style.WebkitTransitionDuration = canvas.style.transitionDuration = '0.2s';
                 el.appendChild(canvas);
                 canvas.style.width = canvas.style.height = '100%';
                 canvas.width = canvas.offsetWidth;
@@ -154,17 +159,17 @@
                 context = canvas.getContext('2d');
                 centerX = ev.offsetX;
                 centerY = ev.offsetY;
-                // console.log(ev.target, arguments);
-                // console.log(canvas.width, canvas.height, centerX, centerY);
-                // context.clearRect(0, 0, canvas.width, canvas.height);
+                /**
+                 * canvas好像不会有冒泡事件，
+                 * 如果用div这类标签去实现的时候就不能多次点击保持ev.X/Y的值和父节点的值一致
+                */
+                // console.log(centerX, ev.target);
+                // console.log(maxSize, canvas.height, centerX, centerY);
+                // context.clearRect(0, 0, maxSize, canvas.height);
                 maxSize = Math.max(canvas.offsetWidth, canvas.offsetHeight)
-                if (maxSize <= 60) {
-                    scale = 3;
-                }else if (maxSize > 150) {
-                    scale = 15;
-                }
-                // console.log(scale);
-                
+                // console.log(Math.floor(maxSize / 60) * 4, maxSize / 60);
+                scale = Math.floor(maxSize / 60) * 4;
+                if (maxSize < 200 && maxSize > 60) scale = 8;
                 // 开始绘画
                 function draw() {
                     // context.beginPath();
@@ -172,53 +177,21 @@
                     context.fillStyle = color;
                     context.fill();
                     radius += scale;
-                    // canvas.style.opacity = ((canvas.width / radius) / 10).toFixed(1);
-                    // console.log(((canvas.width / radius) / 10).toFixed(1));
-
-                    // console.log(`绘画半径：${ radius }，canvas宽度：${ canvas.width }`);
-                    if (radius < canvas.width) {
+                    // canvas.style.opacity = ((maxSize / radius) / 10).toFixed(1);
+                    // console.log(((maxSize / radius) / 10).toFixed(1));
+                    // console.log(maxSize, canvas.offsetWidth);
+                    // console.log(`绘画半径：${ radius }，canvas宽度：${ maxSize }`);
+                    if (radius < maxSize) {
                         myAinmFrame(draw);
-                    } else if (radius >= canvas.width) {
+                    }else if (radius > maxSize / 2) {
                         canvas.style.opacity = '0';
-                        setTimeout(() => {
-                            el.removeChild(canvas);
-                        }, 200);
+                    } else if (radius >= maxSize) {
+                        el.removeChild(canvas);
                     }
                 }
                 draw();
             }
-            /**
-             * 水波纹(CSS+js)
-            */
-            function ripple(el) {
-                const ev = window.event || arguments.callee.caller.arguments[0];
-                if (el != ev.target) return;
-                let w = Math.max(el.offsetWidth - ev.offsetX, ev.offsetX) * 2,
-                    h = Math.max(el.offsetHeight - ev.offsetY, ev.offsetY) * 2;
-                let box = document.createElement('div'),
-                    size = Math.max(w, h),
-                    color = el.getAttribute('ripple') || 'rgba(0,0,0,0.4)',
-                    time = Number(el.getAttribute('time')) || 450;
-                box.className = 'ripple_box';
-                box.style.width = box.style.height = size + 'px';
-                box.style.backgroundColor = color;
-                box.style.top = ev.offsetY + 'px';
-                box.style.left = ev.offsetX + 'px';
-                box.style.margin = -(size / 2) + 'px';
-                el.appendChild(box);
-                box.style.WebkitAnimationDuration = box.style.animationDuration = time/1000 + 's';
-                setTimeout(() => {
-                    box.parentNode.removeChild(box)
-                }, time);
-            }
-            document.querySelectorAll('.ripple').forEach(item => {
-                item.onclick = e => {
-                    console.log('click');
-                    
-                   ripple(item) 
-                }
-            })
-            
+
         </script>
     </body>
 </html>
