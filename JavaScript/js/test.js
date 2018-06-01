@@ -12,6 +12,14 @@ var $$ = el => document.querySelectorAll(el);
     等价于jQuery的 $(document).ready()
     window.addEventListener('DOMContentLoaded',functionName) // mouseover,mouseout:hover()
 */
+// 判断设备是否为移动端
+function checkBrowser() {
+    var userAgentInfo = navigator.userAgent,
+        Agents = ['Android', 'iPhone', 'SymbianOS', 'Windows Phone', 'iPad', 'iPod'];
+    return Agents.some(function (item) {
+        return (userAgentInfo.indexOf(item) > 0)
+    })
+}
 // 字符串替换
 var _str = 'www.https/#/hjihsaih/#/sad.com';
 // 正则替换：i是首个，g是全局
@@ -167,7 +175,7 @@ function timeStr() {
 // 我的做法
 function timeFormat(_num = 0) {
     let _Appoint,_month,_day,_hour,_minute,_second,_date;
-    // 指定天数 _num: 1时为昨天，2为前天，以此类推
+    // 指定天数 _num: 1时为昨天，2为前天，以此类推  增加天数则：new Date(new Date().getTime()+(_num*24*60*60*1000));
     _Appoint = new Date(new Date()-(_num*24*60*60*1000));
     _month = ('0'+(_Appoint.getMonth()+1)).slice(-2);
     _day = ('0'+_Appoint.getDate()).slice(-2);

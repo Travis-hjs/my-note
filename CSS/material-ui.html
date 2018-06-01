@@ -5,7 +5,6 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta http-equiv="X-UA-Compatible" content="ie=edge">
         <title>Material-UI</title>
-        <link rel="stylesheet" href="">
         <style>
             *{ padding: 0; margin: 0; }
             html, body{ background-color: #f4f4f4; -webkit-touch-callout:none; -webkit-text-size-adjust: none; -webkit-tap-highlight-color:rgba(0, 0, 0, 0); -webkit-user-select:none; }
@@ -38,10 +37,22 @@
             .flex{ display: flex; flex-wrap: wrap; }
 		    .f1{ flex: 1; }
             /* ripple CSS */
-            [ripple]{ position: relative; cursor: pointer; }
-            [ripple] canvas{ position: absolute; top: 0; left: 0; opacity: 0.3; transition: 0.2s all; }
+            /* canvas 方法 */
+            [ripple]{ position: relative; cursor: pointer; overflow: hidden; }
+            [ripple] canvas{ position: absolute; top: 0; left: 0; transition: 0.2s all !important; }
+            /* JS+CSS 方法 */
+            [ripple] .ripple_box{ position: absolute; border-radius: 50%; opacity: 0; -webkit-animation-name: ripple-move; animation-name: ripple-move; }
+            @-webkit-keyframes ripple-move {
+                0% { transform: scale(0, 0); opacity: 1; }
+                100% { transform: scale(1, 1); opacity: .1; }
+            }
+            @keyframes ripple-move {
+                0% { transform: scale(0, 0); opacity: 1; }
+                100% { transform: scale(1, 1); opacity: .1; }
+            }
             /* hide */
             .hide{ display: none; }
+            .mu-circle-ripple .mu-ripple-leave-active .mu-ripple-leave-to{ display: inline; }
         </style>
     </head>
     <body>
@@ -57,22 +68,28 @@
             </div>
         </header>
         <div class="wrap">
-            <ul class="card-list section"></ul>
-            <ul class="btn-list section hide">
+            <ul class="card-list section hide"></ul>
+            <ul class="btn-list section">
                 <li>
-                    <span class="button rectangle" ripple="#fff" onclick="rippleClick(this)" style="background-color: #2196f3">default</span>
+                    <span class="button rectangle" ripple="rgba(255,255,255,0.25)" onclick="rippleClick(this)" style="background-color: #2196f3">default</span>
                 </li>
                 <li>
-                    <span class="button rectangle" ripple="#fff" onclick="rippleClick(this)" style="background-color: orange">warning</span>
+                    <span class="button rectangle" ripple="rgba(55,255,255,0.3)" onclick="rippleClick(this)" style="background-color: orange">warning</span>
                 </li>
                 <li>
-                    <span class="button rectangle" ripple="#fff" onclick="rippleClick(this)" style="background-color: rgb(225, 0, 80)">delete</span>
+                    <span class="button rectangle" ripple="rgba(255,255,255,0.3)" onclick="rippleClick(this)" style="background-color: rgb(225, 0, 80)">delete</span>
                 </li>
                 <li>
-                    <span class="button-circular circular" ripple="#fff" onclick="rippleClick(this)">circula</span>
+                    <span class="button-circular circular" ripple="rgba(255,255,255,0.3)" onclick="rippleClick(this)">circula</span>
                 </li>
                 <li>
-                    <span class="button long" ripple="#bbddf9" onclick="rippleClick(this)">button</span>
+                    <span class="button long" ripple="rgba(187,221,249, 0.25)" onclick="rippleClick(this)">canvas</span>
+                </li>
+                <li>
+                    <span class="button long ripple" ripple="rgba(255,255,255,0.5)">CSS+js</span>
+                </li>
+                <li>
+                    <span class="CSS+js long ripple" ripple="rgba(255,255,255,0.5)" time="1000">CSS+js</span>
                 </li>
             </ul>
             <ul class="progress-list section hide">
@@ -110,18 +127,25 @@
                 }
             }
             /**
-            * 水波纹点击
+            * 水波纹点击(canvas)
             */
             function rippleClick(el) {
+                // 先把传入的值拼装成数组
+                const values = el.getAttribute('ripple').replace(/[^0-9]/g, ',').split(',').filter(item => (item));
                 let canvas = document.createElement('canvas'),
                     context = {},
                     centerX = 0,
                     centerY = 0,
                     radius = 0,
-                    scale = 8,  // 这个值和扩散速度有关
-                    color = el.getAttribute('ripple') || '#999999',
+                    scale = 8,      // 这个值和扩散速度有关
+                    color = `rgb(${values[0]}, ${values[1]}, ${values[2]})` || 'rgb(153,153,153)',
+                    opacity = `${values[3]}.${values[4]}` || '0.3',
+                    maxSize = 0;    //  宽高选一个最大值
                     myAinmFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame || window.msRequestAnimationFrame,
                     ev = window.event || arguments.callee.caller.arguments[0];   // 解决firefox没有event
+                    
+                // console.log(values, color, opacity);
+                canvas.style.opacity = opacity;
                 el.appendChild(canvas);
                 canvas.style.width = canvas.style.height = '100%';
                 canvas.width = canvas.offsetWidth;
@@ -133,11 +157,14 @@
                 // console.log(ev.target, arguments);
                 // console.log(canvas.width, canvas.height, centerX, centerY);
                 // context.clearRect(0, 0, canvas.width, canvas.height);
-                if (canvas.offsetWidth <= 60) {
+                maxSize = Math.max(canvas.offsetWidth, canvas.offsetHeight)
+                if (maxSize <= 60) {
                     scale = 3;
-                }else if (canvas.offsetWidth > 150) {
+                }else if (maxSize > 150) {
                     scale = 15;
                 }
+                // console.log(scale);
+                
                 // 开始绘画
                 function draw() {
                     // context.beginPath();
@@ -160,6 +187,38 @@
                 }
                 draw();
             }
+            /**
+             * 水波纹(CSS+js)
+            */
+            function ripple(el) {
+                const ev = window.event || arguments.callee.caller.arguments[0];
+                if (el != ev.target) return;
+                let w = Math.max(el.offsetWidth - ev.offsetX, ev.offsetX) * 2,
+                    h = Math.max(el.offsetHeight - ev.offsetY, ev.offsetY) * 2;
+                let box = document.createElement('div'),
+                    size = Math.max(w, h),
+                    color = el.getAttribute('ripple') || 'rgba(0,0,0,0.4)',
+                    time = Number(el.getAttribute('time')) || 450;
+                box.className = 'ripple_box';
+                box.style.width = box.style.height = size + 'px';
+                box.style.backgroundColor = color;
+                box.style.top = ev.offsetY + 'px';
+                box.style.left = ev.offsetX + 'px';
+                box.style.margin = -(size / 2) + 'px';
+                el.appendChild(box);
+                box.style.WebkitAnimationDuration = box.style.animationDuration = time/1000 + 's';
+                setTimeout(() => {
+                    box.parentNode.removeChild(box)
+                }, time);
+            }
+            document.querySelectorAll('.ripple').forEach(item => {
+                item.onclick = e => {
+                    console.log('click');
+                    
+                   ripple(item) 
+                }
+            })
+            
         </script>
     </body>
 </html>
