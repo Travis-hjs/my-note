@@ -1,25 +1,25 @@
 var $ = el => document.querySelector(el);
 var $$ = el => document.querySelectorAll(el);
-// $("#wrap").style.background = '#ccc';
-// var objbox = document.getElementById('wrap');
-/*
-    阻止事件冒泡
-    event.cancelBubble = true;
-    event.stopPropagation(); //  阻止事件向上传播
-    event.preventDefault();  //  取消事件的默认动作。submit类型标签有效
-    addEventListener中的第三个参 数是useCapture,一个bool类型。
-    当为false时为冒泡获取(由里向外)，true为capture方式(由外向里)
-    等价于jQuery的 $(document).ready()
-    window.addEventListener('DOMContentLoaded',functionName) // mouseover,mouseout:hover()
+/**
+ * 判断设备是否为移动端
 */
-// 判断设备是否为移动端
 function checkBrowser() {
     var userAgentInfo = navigator.userAgent,
         Agents = ['Android', 'iPhone', 'SymbianOS', 'Windows Phone', 'iPad', 'iPod'];
     return Agents.some(function (item) {
-        return (userAgentInfo.indexOf(item) > 0)
-    })
+        return (userAgentInfo.indexOf(item) > 0);
+    });
 }
+/*
+ * 阻止事件冒泡
+ * event.cancelBubble = true;
+ * event.stopPropagation(); //  阻止事件向上传播
+ * event.preventDefault();  //  取消事件的默认动作。submit类型标签有效
+ * addEventListener中的第三个参 数是useCapture,一个bool类型。
+ * 当为false时为冒泡获取(由里向外)，true为capture方式(由外向里)
+ * 等价于jQuery的 $(document).ready()
+ * window.addEventListener('DOMContentLoaded',functionName) // mouseover,mouseout:hover()
+*/
 // 字符串替换
 var _str = 'www.https/#/hjihsaih/#/sad.com';
 // 正则替换：i是首个，g是全局
@@ -30,13 +30,11 @@ var _obj = {
     name: 'hjs',
     tall: '178cm',
     weight: '128kg'
-}
+};
 console.log(Object.keys(_obj));
 console.log(String(Object.keys(_obj)));
-
 // var _code = 'CEde_128,1214534';
 // console.log(_code.slice(_code.indexOf(',')+1));
-
 var objbox = $('#wrap'),
     objP = objbox.querySelector('p'),
     list = $(".menu");
@@ -45,7 +43,10 @@ for (var i = 1; i <= 5; i++) {
     item.dataset.index = i;
     item.appendChild(document.createTextNode("测试li " + i));
     list.appendChild(item);
-    // 不用let的传统写法，添加function完成闭包
+    /**
+     * 不用let的传统写法，添加function完成闭包
+     * 1、添加点击事件
+    */
     // (function (j) {
     //   // var j = i;
     //   item.addEventListener('click',() => {
@@ -53,7 +54,10 @@ for (var i = 1; i <= 5; i++) {
     //   });
     // })(i)
 }
-// 使用事假代理 (事件委托就是利用事件冒泡，只指定一个事件处理程序，就可以管理某一类型的所有事件)
+/**
+ * 2、添加点击事件
+ * 使用事假代理 (事件委托就是利用事件冒泡，只指定一个事件处理程序，就可以管理某一类型的所有事件)
+*/
 list.addEventListener('click', ev => {
     console.log(`第 ${ev.target.dataset.index} 个li`);
 });
@@ -115,7 +119,10 @@ function judge() {
     console.log(x);
 }
 // judge();
-// 日期生成
+
+/**
+ * 日期生成
+*/
 function dayJson() {
     var calendar = [];
     var minYears = new Date().getFullYear();
@@ -123,60 +130,65 @@ function dayJson() {
     var monthCount = 1;
     var dayCount = 1;
     for (var i = minYears; i <= maxYears; i++) {
-        var yearObj = {}; // 这里的定义变量放在外面会导致变量key一直重复
-        yearObj.name = i.toString();
-        yearObj.sub = [];
+        var _year = {}; // 这里的定义变量放在外面会导致变量key一直重复
+        _year.name = i.toString();
+        _year.sub = [];
         for (var j = monthCount; j <= 12; j++) {
-            var monthObj = {};
-            monthObj.name = j.toString();
-            monthObj.sub = [];
-            yearObj.sub.push(monthObj);
+            var _month = {};
+            _month.name = j.toString();
+            _month.sub = [];
+            _year.sub.push(_month);
             dayCount = new Date(i, j, 0).getDate();
             for (var k = 1; k <= dayCount; k++) {
-                var dayObj = {};
-                dayObj.name = k.toString();
-                monthObj.sub.push(dayObj)
+                _month.sub.push({
+                    name: k.toString()
+                });
             }
         }
-        calendar.push(yearObj)
+        calendar.push(_year);
     }
     // 这里是限制不能选小于之前的日期
     calendar[0].sub.splice(0, new Date().getMonth());
     calendar[0].sub[0].sub.splice(0, new Date().getDate());
-    return calendar
+    return calendar;
 }
-// 时间生成器
-function timeInterval(minInterval) { // minInterval 时间（5分钟间隔）
-    let arr = [];
-    let minTotal = 0;
-    while (minTotal < 1440) { // while 循环，如果（）内值为 true 时会一直循环执行
-        let hour = parseInt(minTotal / 60);
-        let min = parseInt(minTotal % 60);
-        hour = hour < 10 ? `0${hour}` : hour;
-        min = min < 10 ? `0${min}` : min;
-        arr.push(`${hour}:${min}`);
+// console.log(dayJson());
+
+/**
+ * 时间生成器
+ *  params: minInterval 时间（5分钟间隔）
+*/
+function timeInterval(minInterval) {
+    var arr = [],
+        minTotal = 0;
+    while (minTotal < 1440) {
+        var hour = parseInt(minTotal / 60),
+            min = parseInt(minTotal % 60);
+        hour = ('0' + hour).slice(-2);
+        min = ('0' + min).slice(-2);
+        arr.push(hour + ':' + min);
         minTotal += minInterval;
     }
     return arr;
 }
-// console.log(timeInterval(120));
+// console.log(timeInterval(5));
+
 // 一般的做法
 function timeStr() {
     var _date = new Date();
-    // '0'+_data.getSeconds().slice(-2);
-    var hour = _date.getHours() < 10 ? "0" + _date.getHours() : _date.getHours();
-    var minute = _date.getMinutes() < 10 ? "0" + _date.getMinutes() : _date.getMinutes();
-    var second = _date.getSeconds() < 10 ? "0" + _date.getSeconds() : _date.getSeconds();
-    //   字符串拼接
-    var dayArr = _date.getFullYear() + '-' + (_date.getMonth() + 1) + '-' + _date.getDate();
-    var timeArr = hour + ':' + minute + ':' + second;
+    var hour = _date.getHours() < 10 ? "0" + _date.getHours() : _date.getHours(),
+        minute = _date.getMinutes() < 10 ? "0" + _date.getMinutes() : _date.getMinutes(),
+        second = _date.getSeconds() < 10 ? "0" + _date.getSeconds() : _date.getSeconds();
+    // 字符串拼接
+    var dayArr = _date.getFullYear() + '-' + (_date.getMonth() + 1) + '-' + _date.getDate(),
+        timeArr = hour + ':' + minute + ':' + second;
     console.log(dayArr, timeArr);
 }
 // 我的做法
 function timeFormat(_num = 0) {
     let _Appoint,_month,_day,_hour,_minute,_second,_date;
     // 指定天数 _num: 1时为昨天，2为前天，以此类推  增加天数则：new Date(new Date().getTime()+(_num*24*60*60*1000));
-    _Appoint = new Date(new Date()-(_num*24*60*60*1000));
+    _Appoint = new Date(new Date() - (_num * 24 * 60 * 60 * 1000));
     _month = ('0'+(_Appoint.getMonth()+1)).slice(-2);
     _day = ('0'+_Appoint.getDate()).slice(-2);
     _hour = ('0'+_Appoint.getHours()).slice(-2);
@@ -240,41 +252,40 @@ function objFunction() {
 }
 // objFunction();
 
-// class处理事件
-function classFunction() {
-    function hasClass(e, c) {
-        return e.className.match(new RegExp('(\\s|^)' + c + '(\\s|$)'));
-    }
-    function addClass(e, c) {
-        if (!hasClass(e, c)) {
-            var _c = e.className.charAt(e.className.length - 1) === ' ' ? c : ' ' + c;
-            e.className += _c;
-        }
-    }
-    function removeClass(e, c) {
-        if (hasClass(e, c)) {
-            var reg = new RegExp('(\\s|^)' + c + '(\\s|$)');
-            e.className = e.className.replace(reg, ' ');
-        }
-    }
-    function toggleClass(e, c) {
-        if (hasClass(e, c)) {
-            removeClass(e, c);
-        } else {
-            addClass(e, c);
-        }
-    }
-    // IE10+
-    // el.classList.contains(className);
-    // el.classList.add(className);
-    // el.classList.remove(className);
-    // el.classList.toggle(className);
-    objP.addEventListener('click', function() {
-        toggleClass(objbox, 'tra');
-        // this.classList.toggle('tra');
-    });
+/**
+ * class处理事件
+ * IE10+
+ * el.classList.contains(className)
+ * el.classList.add(className)
+ * el.classList.remove(className)
+ * el.classList.toggle(className)
+*/
+function hasClass(e, c) {
+    return e.className.match(new RegExp('(\\s|^)' + c + '(\\s|$)'));
 }
-classFunction();
+function addClass(e, c) {
+    if (!hasClass(e, c)) {
+        var _c = e.className.charAt(e.className.length - 1) === ' ' ? c : ' ' + c;
+        e.className += _c;
+    }
+}
+function removeClass(e, c) {
+    if (hasClass(e, c)) {
+        var reg = new RegExp('(\\s|^)' + c + '(\\s|$)');
+        e.className = e.className.replace(reg, ' ');
+    }
+}
+function toggleClass(e, c) {
+    if (hasClass(e, c)) {
+        removeClass(e, c);
+    } else {
+        addClass(e, c);
+    }
+}
+objP.addEventListener('click', function() {
+    toggleClass(objbox, 'tra');
+    // this.classList.toggle('tra');
+});
 
 /*
     永久储存
@@ -285,22 +296,21 @@ classFunction();
     sessionStorage.getItem('')
 */
 
-
-// 数组处理
+/**
+ * 数组处理
+ * arr.join('&')
+ * arr.split(',')
+ * arr.shift(); 移除第一项
+ * arr.pop();  移除最后一项
+ * arr.unshift(); 在第一项添加
+ * arr.reverse(); 反转数组
+ * Math.ceil(25.9) 向上取舍
+ * Math.round(25.9) 四舍五入
+ * Math.floor(25.9) 向下取舍
+*/
 function contrast() {
     // 数组
-    var arr = [23, 4, 4, 78, 3, 5, 1];
-    /*
-        arr.join('&')
-        arr.split(',')
-        arr.shift(); 移除第一项
-        arr.pop();  移除最后一项
-        arr.unshift(); 在第一项添加
-        arr.reverse(); 反转数组
-        Math.ceil(25.9) 向上取舍
-        Math.round(25.9) 四舍五入
-        Math.floor(25.9) 向下取舍
-    */
+    var arr = [23, 4, 4, 78, 3, 5, 1], values = [1, 2, 3, 4, 5];
     // arr.every() & arr.some() 历遍数
     var everyResult = arr.every(function(item, index, array) {
         return (item > 2);
@@ -317,7 +327,6 @@ function contrast() {
         return item * 2;
     });
     console.log(everyResult, someResult, filterResult, mapResult);
-    var values = [1, 2, 3, 4, 5];
     // 数组累加 values.reduceRight() 反向执行
     var sum = values.reduce(function(prev, cur, index, array) {
         return prev + cur;
@@ -417,7 +426,7 @@ boundGetNum(); // 81
 
 
 /**
- *工厂模式 
+ *工厂模式
  *工厂模式下不需要 new 因为他本身就是创建一个新的对象
  */
 function createPerson(name,age,say){
@@ -431,11 +440,11 @@ function createPerson(name,age,say){
     return obj;
 }
 
-/** 
+/**
  * 构造函数
  * 注意构造函数名第一个字母大写
  */
-function Person(name, url) {    
+function Person(name, url) {
     this.name = name;
     this.url = url;
     this.alertUrl = myalert; // 函数定义可以写在外面（工厂模式也一样），不推荐

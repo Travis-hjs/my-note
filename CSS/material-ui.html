@@ -61,7 +61,7 @@
                 <span class="menu-item" onclick="menuSwitch(0)">cards</span>
             </div>
             <div class="f1">
-                <span class="menu-item" onclick="menuSwitch(1)">button</span>
+                <span class="menu-item" onclick="menuSwitch(1)">buttons</span>
             </div>
             <div class="f1">
                 <span class="menu-item" onclick="menuSwitch(2)">progress</span>
@@ -71,28 +71,22 @@
             <ul class="card-list section hide"></ul>
             <ul class="btn-list section">
                 <li>
-                    <span class="button rectangle" ripple="rgba(255,255,255,0.25)" onclick="rippleClick(this)" style="background-color: #2196f3">default</span>
+                    <span class="button rectangle" ripple="rgba(255,255,255,0.25)" onclick="rippleFn(this)" style="background-color: #2196f3">default</span>
                 </li>
                 <li>
-                    <span class="button rectangle" ripple="rgba(255,255,255,0.3)" onclick="rippleClick(this)" style="background-color: orange">warning</span>
+                    <span class="button rectangle" ripple="rgba(255,255,255,0.3)" onclick="rippleFn(this)" style="background-color: orange">warning</span>
                 </li>
                 <li>
-                    <span class="button rectangle" ripple="rgba(255,255,255,0.3)" onclick="rippleClick(this)" style="background-color: rgb(225, 0, 80)">delete</span>
+                    <span class="button rectangle" ripple="rgba(255,255,255,0.3)" onclick="rippleFn(this)" style="background-color: rgb(225, 0, 80)">delete</span>
                 </li>
                 <li>
-                    <span class="button rectangle" ripple onclick="rippleClick(this)" style="color: #333">button-ripple</span>
+                    <span class="button rectangle" ripple onclick="rippleFn(this)" style="color: #333">button-ripple</span>
                 </li>
                 <li>
-                    <span class="button-circular circular" ripple="rgba(255,255,255,0.3)" onclick="rippleClick(this)">circula</span>
+                    <span class="button-circular circular" ripple="rgba(255,255,255,0.3)" onclick="rippleFn(this)">circula</span>
                 </li>
                 <li>
-                    <span class="button long" ripple="rgba(187,221,249, 0.25)" onclick="rippleClick(this)">canvas</span>
-                </li>
-                <li>
-                    <span class="button long ripple" ripple="rgba(255,255,255,0.5)" onclick="rippleClick(this)">CSS+js</span>
-                </li>
-                <li>
-                    <span class="CSS+js long ripple" ripple="rgba(255,255,255,0.5)" onclick="rippleClick(this)">CSS+js</span>
+                    <span class="button long" ripple="rgb(187,221,249)" onclick="rippleFn(this)">canvas</span>
                 </li>
             </ul>
             <ul class="progress-list section hide">
@@ -132,7 +126,7 @@
             /**
             * 水波纹点击(canvas)
             */
-            function rippleClick(el) {
+            function rippleFn(el) {
                 // 先把传入的值拼装成数组
                 const values = el.getAttribute('ripple').replace(/[^0-9]/g, ',').split(',').filter(item => (item));
                 let canvas = document.createElement('canvas'),
