@@ -1,5 +1,5 @@
 /* 主要css */
-.prompts, .prompts p, .prompts h2, .prompts div{ padding: 0px; margin: 0px; -webkit-box-sizing: border-box; box-sizing: border-box; }
+.prompts, .prompts p, .prompts h2, .prompts div{ padding: 0px; margin: 0px; -webkit-box-sizing: border-box !important; box-sizing: border-box !important; }
 .prompts{ width: 100%; height: 100vh; opacity: 0; position: fixed; z-index: 999; top: 0; left: 0; display: -webkit-box; display: -webkit-flex; display: flex; flex-wrap: wrap; -webkit-box-align: center; align-items: center; -webkit-box-pack: center; justify-content: center; -webkit-transition: .24s all; transition: .24s all; }
 .prompts h2{ line-height: .7rem; font-size: .4rem; font-weight: 400; margin-bottom: .2rem; }
 .prompts p{ line-height: .4rem; font-size: .3rem; }
@@ -25,9 +25,9 @@
     40% { -webkit-transform: scale(1); transform: scale(1); }
 }
 /* 加载中 */
-.prompts .loading_box{ min-width: 2.4rem; min-height: 2.4rem; padding-top: .6rem; background-color: rgba(0,0,0,0.7); border-radius: .08rem; }
-.prompts .loading_box div{ display: block; width: .8rem; height: .8rem; box-sizing: border-box; border: solid 3px #fff; border-radius: 50%; border-right-color: rgba(0,0,0,0); margin: auto; -webkit-animation: circular 1.3s ease infinite; animation: circular 1.3s ease infinite;}
-.prompts .loading_box p{ font-size: .3rem; color: #fff; text-align: center; line-height: .72rem; }
+.prompts .loading_box{ min-width: 2.4rem; min-height: 2.4rem; padding-top: .6rem; background-color: rgba(0,0,0,0.7); border-radius: .1rem; }
+.prompts .loading_box div{ display: block; width: .8rem; height: .8rem; box-sizing: border-box; border: solid 3px #fff; border-radius: 50%; border-right-color: rgba(0,0,0,0); margin: 0 auto 4px; -webkit-animation: circular 1.3s ease infinite; animation: circular 1.3s ease infinite;}
+.prompts .loading_box p{ font-size: .3rem; color: #fff; text-align: center; line-height: .5rem; }
 @-webkit-keyframes circular {
     0% { -webkit-transform: rotate(0deg); transform: rotate(0deg); }
     50% { opacity: 0.5; }

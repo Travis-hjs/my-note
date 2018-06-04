@@ -6,11 +6,11 @@
     <meta name="format-detection" content="telephone=no, email=no, date=no, address=no">
     <title>用户交互提示</title>
     <link rel="stylesheet" type="text/css" href="./css/base.css"/>
-    <link rel="stylesheet" href="./css/prompts.css">
+    <link rel="stylesheet" href="./css/dialogs.css">
 	<style>
         /* 触发按钮 */
-        .click_box{ width: 2rem; overflow: hidden; margin: auto; padding-top: 100px; }
-        .click_box span{ display: block; font-size: 0.32rem; width: 2rem; height: .8rem; border-radius: .1rem; cursor: pointer; color: #fff; text-align: center; line-height: .8rem; background-color: #2196f3; margin-bottom: .2rem; -webkit-box-shadow: 0 1px 3px rgba(0,0,0,.12), 0 1px 2px rgba(0,0,0,.24); box-shadow: 0 1px 3px rgba(0,0,0,.12), 0 1px 2px rgba(0,0,0,.24); }
+        .click_box{ width: 2.8rem; overflow: hidden; margin: auto; padding-top: 100px; }
+        .click_box span{ display: block; font-size: 0.32rem; width: 100%; height: .8rem; border-radius: .1rem; cursor: pointer; color: #fff; text-align: center; line-height: .8rem; background-color: #2196f3; margin-bottom: .2rem; -webkit-box-shadow: 0 1px 3px rgba(0,0,0,.12), 0 1px 2px rgba(0,0,0,.24); box-shadow: 0 1px 3px rgba(0,0,0,.12), 0 1px 2px rgba(0,0,0,.24); }
     </style>
 </head>
 <body>
@@ -30,8 +30,8 @@
     /**
      * 原型链 模式
     */
-    let _Msg = function() {}
-    _Msg.prototype = {
+    let Msg = function() {}
+    Msg.prototype = {
         createNode () {
             let _box = document.createElement('div');
             _box.className = 'prompts';
@@ -56,7 +56,7 @@
             for (let i = 0; i < _prompts.length; i++) this.removeThis(_prompts[i]);
         },
         alertMsg (_text = '内容', fn, _title = '提示') {
-            let [_div, _module, _btn] = [this.createNode(), document.createElement('div'), document.createElement('div')];
+            let _div = this.createNode(), _module = document.createElement('div'), _btn = document.createElement('div');
             [_module.className, _btn.className, _btn.textContent] = ['prompt', 'callback_btn', '确认'];
             _module.innerHTML = '<h2>'+_title+'</h2><div class="text_box"><p>'+_text+'</p></div>';
             _module.appendChild(_btn);
@@ -70,7 +70,7 @@
             });
         },
         confirmMsg (_text = '内容', Afn, _title = '提示', Bfn) {
-            let [_div, _module, _Lbtn, _Rbtn] = [this.createNode(), document.createElement('div'),document.createElement('div'),document.createElement('div')];
+            let _div = this.createNode(), _module = document.createElement('div'), _Lbtn = document.createElement('div'), _Rbtn = document.createElement('div');
             [_module.className, _Lbtn.className, _Lbtn.textContent, _Rbtn.className, _Rbtn.textContent] = ['confirm', 'callback_btn','取消','callback_btn callback_right','确认'];
             _module.innerHTML = '<h2>'+_title+'</h2><div class="text_box"><p>'+_text+'</p></div>';
             _module.appendChild(_Lbtn);
@@ -90,13 +90,13 @@
             });
         },
         loadBall () {
-            let [_div, _module] = [this.createNode(), document.createElement('div')];
+            let _div = this.createNode(), _module = document.createElement('div');
             _module.className = 'loding_ball';
             _module.innerHTML = '<div></div><div></div><div></div>';
             this.output(_div, .4, _module);
         },
         loading (_text = 'loading') {
-            let [_div, _module] = [this.createNode(), document.createElement('div')];
+            let _div = this.createNode(), _module = document.createElement('div');
             _module.className = 'loading_box';
             _module.innerHTML = '<div></div><p>'+_text+'</p>';
             this.output(_div, 0, _module);
@@ -115,28 +115,28 @@
             }, _time);
         }
     }
-    let Msg =  new _Msg();
+    let _Msg =  new Msg();
     function testBtn() {
         if (_stop >= 2) return;
-        Msg.loading();
+        _Msg.loading();
         setTimeout(() => {
-            Msg.remove();
-            Msg.alertMsg('这是一个原型链提示框~',function () {
-                Msg.confirmMsg('还要继续吗？', function () {
-                    Msg.toast('接下来是一个加载球的动画，然后就没有了', 1000, function () {
-                        Msg.loadBall();
-                        setTimeout(() => { Msg.remove() }, 1500)
+            _Msg.remove();
+            _Msg.alertMsg('这是一个原型链提示框~',function () {
+                _Msg.confirmMsg('还要继续吗？', function () {
+                    _Msg.toast('接下来是一个加载球的动画，然后就没有了', 1000, function () {
+                        _Msg.loadBall();
+                        setTimeout(() => { _Msg.remove() }, 1500)
                     });
                 },'确认提示', function () {
                     console.log('你取消了~');
                 });
             }, 'hello');
-        },3000)
+        },3000);
     }
     /**
      * ES6 class
      * */
-    class Layer {
+    class Dialogs {
         constructor (str = '用class代替原型链') {
             console.log(str)
         }
@@ -164,7 +164,7 @@
             for (let i = 0; i < _prompts.length; i++) this.removeThis(_prompts[i]);
         }
         alertMsg (_text = '内容', fn, _title = '提示') {
-            let [_div, _module, _btn] = [this.createNode(), document.createElement('div'), document.createElement('div')];
+            let _div = this.createNode(), _module = document.createElement('div'), _btn = document.createElement('div');
             [_module.className, _btn.className, _btn.textContent] = ['prompt', 'callback_btn', '确认'];
             _module.innerHTML = '<h2>'+_title+'</h2><div class="text_box"><p>'+_text+'</p></div>';
             _module.appendChild(_btn);
@@ -178,7 +178,7 @@
             });
         }
         confirmMsg (_text = '内容', Afn, _title = '提示', Bfn) {
-            let [_div, _module, _Lbtn, _Rbtn] = [this.createNode(), document.createElement('div'),document.createElement('div'),document.createElement('div')];
+            let _div = this.createNode(), _module = document.createElement('div'), _Lbtn = document.createElement('div'), _Rbtn = document.createElement('div');
             [_module.className, _Lbtn.className, _Lbtn.textContent, _Rbtn.className, _Rbtn.textContent] = ['confirm', 'callback_btn','取消','callback_btn callback_right','确认'];
             _module.innerHTML = '<h2>'+_title+'</h2><div class="text_box"><p>'+_text+'</p></div>';
             _module.appendChild(_Lbtn);
@@ -198,13 +198,13 @@
             });
         }
         loadBall () {
-            let [_div, _module] = [this.createNode(), document.createElement('div')];
+            let _div = this.createNode(), _module = document.createElement('div');
             _module.className = 'loding_ball';
             _module.innerHTML = '<div></div><div></div><div></div>';
             this.output(_div, .4, _module);
         }
         loading (_text = 'loading') {
-            let [_div, _module] = [this.createNode(), document.createElement('div')];
+            let _div = this.createNode(), _module = document.createElement('div');
             _module.className = 'loading_box';
             _module.innerHTML = '<div></div><p>'+_text+'</p>';
             this.output(_div, 0, _module);
@@ -223,17 +223,17 @@
             }, _time);
         }
     }
-    let _layer = new Layer('随便传点什么')
+    let _Dialogs = new Dialogs('随便传点什么')
     function classBtn() {
         if (_stop >= 2) return;
-        _layer.loading();
+        _Dialogs.loading();
         setTimeout(() => {
-            _layer.remove();
-            _layer.alertMsg('这是一个类提示框~',function () {
-                _layer.confirmMsg('还要继续吗？', function () {
-                    _layer.toast('接下来是一个加载球的动画，然后就没有了', 1000, function () {
-                        _layer.loadBall();
-                        setTimeout(() => { _layer.remove() }, 1500)
+            _Dialogs.remove();
+            _Dialogs.alertMsg('这是一个类提示框~',function () {
+                _Dialogs.confirmMsg('还要继续吗？', function () {
+                    _Dialogs.toast('接下来是一个加载球的动画，然后就没有了', 1000, function () {
+                        _Dialogs.loadBall();
+                        setTimeout(() => { _Dialogs.remove() }, 1500)
                     });
                 },'确认提示', function () {
                     console.log('你取消了~');
@@ -321,7 +321,7 @@
         }
         // 确认框
         function alertMsg() {
-			let [_module, _btn] = [document.createElement('div'), document.createElement('div')];
+            let _module = document.createElement('div'), _btn = document.createElement('div');
 			[_module.className, _btn.className, _btn.textContent] = ['prompt', 'callback_btn', '确认'];
             _module.innerHTML = '<h2>'+_title+'</h2><div class="text_box"><p>'+_content+'</p></div>';
             _module.appendChild(_btn);
@@ -336,7 +336,7 @@
         }
 		// 操作确认框
 		function confirmMsg () {
-			let [_module, _Lbtn, _Rbtn] = [document.createElement('div'),document.createElement('div'),document.createElement('div')];
+            let _module = document.createElement('div'), _Lbtn = document.createElement('div'), _Rbtn = document.createElement('div');
 			[_module.className, _Lbtn.className, _Lbtn.textContent, _Rbtn.className, _Rbtn.textContent] = ['confirm', 'callback_btn','取消','callback_btn callback_right','确认'];
 			_module.innerHTML = '<h2>'+_title+'</h2><div class="text_box"><p>'+_content+'</p></div>';
 			_module.appendChild(_Lbtn);
@@ -431,8 +431,8 @@
 		setTimeout(() => new Prompts({ type: 'remove' }), 3000);
 	}
 	function myLoad() {
-		Prompts({ type: 'load', text: '加载中' });
-		setTimeout(() => Prompts({ type: 'remove' }), 3000);
+		Prompts({ type: 'load', text: '加载中...' });
+		setTimeout(() => Prompts({ type: 'remove' }), 30000);
 	}
 	function myToast() {
 		Prompts({ type: 'toast', text: '这里是底部弹出文字', time: 2500 });

@@ -26,49 +26,39 @@
             .btn-list .long{ width: 80%; height: 44px; color: #fff; border-radius: 4px; background-color: #2196f3; display: inline-block; line-height: 44px; }
             /* menu */
             .header-shadow{ box-shadow: 0px 2px 4px -1px rgba(0, 0, 0, 0.2), 0px 4px 5px 0px rgba(0, 0, 0, 0.14), 0px 1px 10px 0px rgba(0, 0, 0, 0.12); margin-bottom: 10px; }
-            /* cards */
+            /* cards style */
             .card{ box-shadow: 0px 1px 5px 0px rgba(0, 0, 0, 0.2), 0px 2px 2px 0px rgba(0, 0, 0, 0.14), 0px 3px 1px -2px rgba(0, 0, 0, 0.12); }
-            /* btn */
+            /* buttons style */
             .button{ box-shadow: 0px 1px 5px 0px rgba(0, 0, 0, 0.2), 0px 2px 2px 0px rgba(0, 0, 0, 0.14), 0px 3px 1px -2px rgba(0, 0, 0, 0.12); transition: .3s all; }
             .button:active{ box-shadow: 0px 5px 5px -3px rgba(0, 0, 0, 0.2), 0px 8px 10px 1px rgba(0, 0, 0, 0.14), 0px 3px 14px 2px rgba(0, 0, 0, 0.12); }
             .button-circular{ box-shadow: 0px 3px 5px -1px rgba(0, 0, 0, 0.2), 0px 6px 10px 0px rgba(0, 0, 0, 0.14), 0px 1px 18px 0px rgba(0, 0, 0, 0.12); transition: .3s all; }
             .button-circular:active{ box-shadow: 0px 7px 8px -4px rgba(0, 0, 0, 0.2), 0px 12px 17px 2px rgba(0, 0, 0, 0.14), 0px 5px 22px 4px rgba(0, 0, 0, 0.12); }
-            /* flex */
+            /* flex layout*/
             .flex{ display: flex; flex-wrap: wrap; }
 		    .f1{ flex: 1; }
-            /* ripple CSS */
-            /* canvas 方法 */
+            /* ripple canvas 方法 */
             [ripple]{ position: relative; cursor: pointer; overflow: hidden; }
             [ripple] canvas{ position: absolute; top: 0; left: 0; }
-            /* JS+CSS 方法 */
-            [ripple] .ripple_box{ position: absolute; border-radius: 50%; opacity: 0; -webkit-animation-name: ripple-move; animation-name: ripple-move; }
-            @-webkit-keyframes ripple-move {
-                0% { transform: scale(0, 0); opacity: 1; }
-                100% { transform: scale(1, 1); opacity: .1; }
-            }
-            @keyframes ripple-move {
-                0% { transform: scale(0, 0); opacity: 1; }
-                100% { transform: scale(1, 1); opacity: .1; }
-            }
-            /* hide */
+            /* 隐藏 */
             .hide{ display: none; }
-            .mu-circle-ripple .mu-ripple-leave-active .mu-ripple-leave-to{ display: inline; }
         </style>
     </head>
     <body>
         <header class="header-shadow flex">
             <div class="f1">
-                <span class="menu-item" onclick="menuSwitch(0)">cards</span>
+                <span class="menu-item" onclick="navSwitch(0)">cards</span>
             </div>
             <div class="f1">
-                <span class="menu-item" onclick="menuSwitch(1)">buttons</span>
+                <span class="menu-item" onclick="navSwitch(1)">buttons</span>
             </div>
             <div class="f1">
-                <span class="menu-item" onclick="menuSwitch(2)">progress</span>
+                <span class="menu-item" onclick="navSwitch(2)">progress</span>
             </div>
         </header>
         <div class="wrap">
+            <!-- 卡片类 -->
             <ul class="card-list section hide"></ul>
+            <!-- 按钮类 -->
             <ul class="btn-list section">
                 <li>
                     <span class="button rectangle" ripple="rgba(255,255,255,0.25)" onclick="rippleFn(this)" style="background-color: #2196f3">default</span>
@@ -89,6 +79,7 @@
                     <span class="button long" ripple="rgb(187,221,249)" onclick="rippleFn(this)">canvas</span>
                 </li>
             </ul>
+            <!-- 其他 -->
             <ul class="progress-list section hide">
                 <li>
                     <div class="progress"></div>
@@ -111,7 +102,8 @@
             }
             createCrads(10);
             let state = 1;
-            function menuSwitch(_num) {
+            // 导航切换
+            function navSwitch(_num) {
                 if (state === _num) return;
                 state = _num;
                 let _boxs = document.querySelectorAll('.section');
@@ -124,7 +116,7 @@
                 }
             }
             /**
-            * 水波纹点击(canvas)
+            * 水波纹点击(canvas实现)
             */
             function rippleFn(el) {
                 // 先把传入的值拼装成数组
@@ -185,7 +177,6 @@
                 }
                 draw();
             }
-
         </script>
     </body>
 </html>
