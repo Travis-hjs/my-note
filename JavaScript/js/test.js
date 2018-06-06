@@ -1,15 +1,7 @@
-var $ = el => document.querySelector(el);
-var $$ = el => document.querySelectorAll(el);
-/**
- * 判断设备是否为移动端
-*/
-function checkBrowser() {
-    var userAgentInfo = navigator.userAgent,
-        Agents = ['Android', 'iPhone', 'SymbianOS', 'Windows Phone', 'iPad', 'iPod'];
-    return Agents.some(function (item) {
-        return (userAgentInfo.indexOf(item) > 0);
-    });
-}
+// 选择器
+let $ = el => document.querySelector(el);
+let $$ = el => document.querySelectorAll(el);
+
 /*
  * 阻止事件冒泡
  * event.cancelBubble = true;
@@ -20,65 +12,72 @@ function checkBrowser() {
  * 等价于jQuery的 $(document).ready()
  * window.addEventListener('DOMContentLoaded',functionName) // mouseover,mouseout:hover()
 */
-// 字符串替换
-var _str = 'www.https/#/hjihsaih/#/sad.com';
-// 正则替换：i是首个，g是全局
-console.log(_str.replace(/#/i, '?#'));
-// 下面这种替换性能会更好点，但是不够灵活，只能是全局替换
-console.log(_str.split('#').join('?#'));
-var _obj = {
-    name: 'hjs',
-    tall: '178cm',
-    weight: '128kg'
-};
-console.log(Object.keys(_obj));
-console.log(String(Object.keys(_obj)));
-// var _code = 'CEde_128,1214534';
-// console.log(_code.slice(_code.indexOf(',')+1));
-var objbox = $('#wrap'),
-    objP = objbox.querySelector('p'),
-    list = $(".menu");
-for (var i = 1; i <= 5; i++) {
-    var item = document.createElement("LI");
-    item.dataset.index = i;
-    item.appendChild(document.createTextNode("测试li " + i));
-    list.appendChild(item);
-    /**
-     * 不用let的传统写法，添加function完成闭包
-     * 1、添加点击事件
-    */
-    // (function (j) {
-    //   // var j = i;
-    //   item.addEventListener('click',() => {
-    //     console.log("第" + j + "个li");
-    //   });
-    // })(i)
+
+function dataCut() {
+    let _str = 'www.https/#/hjihsaih/#/sad.com',
+        _code = 'CEde_128,1214534',
+        _obj = {
+            name: 'hjs',
+            tall: '178cm',
+            weight: '128kg'
+        };
+    // 正则替换：i是首个，g是全局
+    console.log(_str.replace(/#/i, '?#'));
+    // 下面这种替换性能会更好点，但是不够灵活，只能是全局替换
+    console.log(_str.split('#').join('?#'));
+    console.log(_code.slice(_code.indexOf(',')+1));
+    // 对象属性获取值
+    console.log(Object.keys(_obj));
+    console.log(String(Object.keys(_obj)));
 }
-/**
- * 2、添加点击事件
- * 使用事假代理 (事件委托就是利用事件冒泡，只指定一个事件处理程序，就可以管理某一类型的所有事件)
-*/
-list.addEventListener('click', ev => {
-    console.log(`第 ${ev.target.dataset.index} 个li`);
-});
-// 方法二、全局查找节点
-// var _ul = document.querySelector('#app ul');
-// _ul.addEventListener('click', function (e) {
-//     var _target = e.target;
-//     while(_target !== _ul ){
-//        if(_target.tagName.toLowerCase() == 'li'){
-//            // console.log(_target.dataset.id);
-//            break;
-//        }
-//        _target = _target.parentNode;
-//     }
-// })
-// 方法一、指定某个节点
-// _ul.addEventListener('click', function (e) {
-// 	if (e.target.nodeName.toLowerCase() == 'h5') {
-// 		console.log(e.target.dataset.id);
-// 	}
-// })
+
+function _click() {
+    var objbox = $('#wrap'),
+        objP = objbox.querySelector('p'),
+        list = $(".menu");
+    for (var i = 1; i <= 5; i++) {
+        var item = document.createElement("LI");
+        item.dataset.index = i;
+        item.appendChild(document.createTextNode("测试li " + i));
+        list.appendChild(item);
+        /**
+         * 不用let的传统写法，添加function完成闭包
+         * 1、添加点击事件
+        */
+        // (function (j) {
+        //   // var j = i;
+        //   item.addEventListener('click',() => {
+        //     console.log("第" + j + "个li");
+        //   });
+        // })(i)
+    }
+    /**
+     * 2、添加点击事件
+     * 使用事假代理 (事件委托就是利用事件冒泡，只指定一个事件处理程序，就可以管理某一类型的所有事件)
+    */
+    list.addEventListener('click', ev => {
+        console.log(`第 ${ev.target.dataset.index} 个li`);
+    });
+    // 方法二、全局查找节点
+    // var _ul = document.querySelector('#app ul');
+    // _ul.addEventListener('click', function (e) {
+    //     var _target = e.target;
+    //     while(_target !== _ul ){
+    //        if(_target.tagName.toLowerCase() == 'li'){
+    //            // console.log(_target.dataset.id);
+    //            break;
+    //        }
+    //        _target = _target.parentNode;
+    //     }
+    // })
+    // 方法一、指定某个节点
+    // _ul.addEventListener('click', function (e) {
+    // 	if (e.target.nodeName.toLowerCase() == 'h5') {
+    // 		console.log(e.target.dataset.id);
+    // 	}
+    // })
+}
+_click();
 
 // 判断语句
 function judge() {
@@ -120,9 +119,7 @@ function judge() {
 }
 // judge();
 
-/**
- * 日期生成
-*/
+// 日期生成
 function dayJson() {
     var calendar = [];
     var minYears = new Date().getFullYear();
@@ -282,7 +279,7 @@ function toggleClass(e, c) {
         addClass(e, c);
     }
 }
-objP.addEventListener('click', function() {
+$('#wrap').querySelector('p').addEventListener('click', function() {
     toggleClass(objbox, 'tra');
     // this.classList.toggle('tra');
 });

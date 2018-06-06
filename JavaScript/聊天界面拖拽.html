@@ -4,81 +4,80 @@
 		<meta charset="utf-8">
 		<title>聊天系统</title>
 		<style media="screen">
-		html, body{ color: #333; background: #fff; -webkit-touch-callout:none; -webkit-text-size-adjust:none; -webkit-tap-highlight-color:rgba(0, 0, 0, 0); -webkit-user-select:none; font-family: "Helvetica Neue", Helvetica, sans-serif; font-size: 16px; }
-		li{ list-style: none; }
-		a{ text-decoration: none; color: #333; }
-		span,img{ display: block; }
-		img{ display: block; width: 100%; }
-		html,body,section,header,footer,div,span,nav,img,ul,li,h1,h2,h3,h4,h5,h6,p,b,i,a,input,textarea,*::before{ padding: 0; margin: 0; }
-		h1,h2,h3,h4,h5,h6{ font-weight: 400; }
-		.flex{ display: -webkit-box; display: -webkit-flex;	display: flex; flex-wrap: wrap; }
-		.flex_center{ -webkit-box-pack: center; justify-content: center; -webkit-box-align: center; align-items: center; }
-		.flex_vertical{ -webkit-box-orient: vertical; -webkit-flex-flow: column; flex-flow: column; }
-		.f1{ -webkit-box-flex: 1; flex: 1; }
-		.f2{ -webkit-box-flex: 2; flex: 2; }
-		.f3{ -webkit-box-flex: 3; flex: 3; }
-		html,body{ width: 100%; height: 100%; }
-		#wrap{ width: 100%; height: 100%; overflow: hidden; }
-		/* 聊天框框 */
-		.msg_content{ width: 800px; height: 520px; background-color: #fff; box-shadow: 0 0 40px 0 rgba(0,0,0,0.2); border-radius: 4px; overflow: hidden; position: fixed; z-index: 5; margin: -260px -400px; top: 50%; left: 50%; transition: 0.3s all; opacity: 0; }
-		.max_content{ width: 100%; height: 100%; }
-		/* 左边 */
-		.list_left{ width: 200px; background-color: #D9D9D9; }
-		.list_left ul{ height: 100%; padding: 5px; overflow-y: auto; }
-		.list_left li{ overflow: hidden; padding: 5px; border-radius: 4px; line-height: 40px; margin-bottom: 5px; cursor: pointer; }
-		.list_left li:hover{ background-color: #E2E2E2; }
-		.list_left .li_hover{ background-color: #F3F3F3; }
-		.list_left .li_hover:hover{ background-color: #F3F3F3; }
-		.list_left span{ width: 40px; height: 40px; border-radius: 50%; float: left; margin-right: 10px; }
-		.list_left p{ font-size: 15px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-		/* 右边 */
-		.msg_box{ position: relative; }
-		.msg_box header{ background-color: #eee; padding: 15px; width: 100%; cursor: move; }
-		#set_img{ float: left; width: 50px; height: 50px; border-radius: 50%; overflow: hidden; margin-right: 10px; }
-		#set_name{ line-height: 50px; font-size: 15px; }
-		.option{ width: 18px; height: 18px; position: absolute; top: 10px; right: 10px; }
-		.option .iconfont{ font-size: 16px; color: #000; text-align: center; line-height: 18px; cursor: pointer; }
-		.option i:hover{ color: #1E9FFF; }
-		.content{ height: 280px; border-bottom: solid 1px #eee; overflow-y: auto; }
-		.content ul{ padding: 10px; }
-		.content li{ overflow: hidden; margin-bottom: 15px; }
-		.content .user_img{ width: 40px; height: 40px; border-radius: 50%; }
-		.content li h2{ font-size: 14px; color: #999; line-height: 26px; }
-		.content li p{ font-size: 15px; padding: 5px; border-radius: 4px; }
-		.user_left .user_img{ margin-right: 10px; }
-		.user_left h2{ text-align: left; }
-		.user_left i{ margin-left: 20px; font-style: normal; }
-		.user_left p{ color: #333; background-color: #D9D9D9; }
-		.user_right .user_img{ margin-left: 10px; }
-		.user_right h2{ text-align: right; }
-		.user_right i{ margin-right: 20px; font-style: normal; }
-		.user_right p{ background-color: #5FB878; color: #fff; }
-		/* 输入文本框 */
-		.send_box{ padding: 10px; }
-		.upload{ height: 32px; border-bottom: solid 1px #eee; }
-		.send_box textarea{ display: block; width: 100%; height: 76px; outline: none; border: none; color: #333; font-family: '微软雅黑'; font-size: 15px; resize: none; }
-		.send_box span{ width: 70px; height: 32px; float: right; border-radius: 4px; line-height: 32px; font-size: 14px; text-align: center; color: #fff; background-color: #5FB878; cursor: pointer; margin-left: 15px; }
-		.send_box span:active{ opacity: 0.8; }
-		.send_box .close_btn:hover{ background-color: #f90f35; }
-		/* 右下角联系人入口 */
-		.msg_list{ position: fixed; bottom: 0; right: 0; width: 260px; height: 500px; z-index: 2; border: solid 1px #333; overflow: hidden; transition: 0.3s all; opacity: 0; }
-		.msg_list header{ height: 90px; background-color: #333; padding: 10px; cursor: move; }
-		.msg_list .close{ float: right; color: #fff; font-size: 16px; padding-left: 10px; cursor: pointer; font-style: normal; }
-		#user_name{ font-size: 16px; color: #fff; line-height: 26px; }
-		#user_text{ display: block; width: 100%; font-size: 14px; background-color: transparent; border: none; outline: none; transition: 0.3s all; padding: 5px 0; margin-bottom: 7px; color: #fff; }
-		#user_text::-webkit-input-placeholder{ color: #fff; font-size: 14px; }
-		#user_text:focus{ background-color: #fff; }
-		.list_nav{ width: 100%; height: 40px; }
-		.list_nav span{ text-align: center; line-height: 40px; cursor: pointer; }
-		.list_nav .iconfont{ color: #fff; font-size: 18px; }
-		.contact_list{ padding: 10px; height: 390px; overflow: auto; }
-		.contact_list li{ height: 36px; padding: 10px; cursor: pointer; }
-		.contact_list li:hover{ background-color: rgba(0,0,0,.05); }
-		.contact_list span{ width: 36px; height: 36px; border-radius: 50%; overflow: hidden; margin-right: 10px; float: left;}
-		.contact_list h2{ font-size: 14px; line-height: 24px; overflow: hidden; text-overflow: ellipsis; white-space: normal; }
-		.contact_list p{ font-size: 12px; line-height: 12px; color: #999; overflow: hidden; text-overflow: ellipsis; white-space: normal; }
-		#openList{ position: fixed; bottom: 0; right: 0; background-color: #333; color: #fff; font-size: 24px; cursor: pointer; width: 50px; height: 50px; text-align: center; line-height: 50px; z-index: 10; }
-
+			html, body{ color: #333; background: #fff; -webkit-touch-callout:none; -webkit-text-size-adjust:none; -webkit-tap-highlight-color:rgba(0, 0, 0, 0); -webkit-user-select:none; font-family: "Helvetica Neue", Helvetica, sans-serif; font-size: 16px; }
+			li{ list-style: none; }
+			a{ text-decoration: none; color: #333; }
+			span,img{ display: block; }
+			img{ display: block; width: 100%; }
+			html,body,section,header,footer,div,span,nav,img,ul,li,h1,h2,h3,h4,h5,h6,p,b,i,a,input,textarea,*::before{ padding: 0; margin: 0; }
+			h1,h2,h3,h4,h5,h6{ font-weight: 400; }
+			.flex{ display: -webkit-box; display: -webkit-flex;	display: flex; flex-wrap: wrap; }
+			.flex_center{ -webkit-box-pack: center; justify-content: center; -webkit-box-align: center; align-items: center; }
+			.flex_vertical{ -webkit-box-orient: vertical; -webkit-flex-flow: column; flex-flow: column; }
+			.f1{ -webkit-box-flex: 1; flex: 1; }
+			.f2{ -webkit-box-flex: 2; flex: 2; }
+			.f3{ -webkit-box-flex: 3; flex: 3; }
+			html,body{ width: 100%; height: 100%; }
+			#wrap{ width: 100%; height: 100%; overflow: hidden; }
+			/* 聊天框框 */
+			.msg_content{ width: 800px; height: 520px; background-color: #fff; box-shadow: 0 0 40px 0 rgba(0,0,0,0.2); border-radius: 4px; overflow: hidden; position: fixed; z-index: 5; margin: -260px -400px; top: 50%; left: 50%; transition: 0.3s all; opacity: 0; }
+			.max_content{ width: 100%; height: 100%; }
+			/* 左边 */
+			.list_left{ width: 200px; background-color: #D9D9D9; }
+			.list_left ul{ height: 100%; padding: 5px; overflow-y: auto; }
+			.list_left li{ overflow: hidden; padding: 5px; border-radius: 4px; line-height: 40px; margin-bottom: 5px; cursor: pointer; }
+			.list_left li:hover{ background-color: #E2E2E2; }
+			.list_left .li_hover{ background-color: #F3F3F3; }
+			.list_left .li_hover:hover{ background-color: #F3F3F3; }
+			.list_left span{ width: 40px; height: 40px; border-radius: 50%; float: left; margin-right: 10px; }
+			.list_left p{ font-size: 15px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+			/* 右边 */
+			.msg_box{ position: relative; }
+			.msg_box header{ background-color: #eee; padding: 15px; width: 100%; cursor: move; }
+			#set_img{ float: left; width: 50px; height: 50px; border-radius: 50%; overflow: hidden; margin-right: 10px; }
+			#set_name{ line-height: 50px; font-size: 15px; }
+			.option{ width: 18px; height: 18px; position: absolute; top: 10px; right: 10px; }
+			.option .iconfont{ font-size: 16px; color: #000; text-align: center; line-height: 18px; cursor: pointer; }
+			.option i:hover{ color: #1E9FFF; }
+			.content{ height: 280px; border-bottom: solid 1px #eee; overflow-y: auto; }
+			.content ul{ padding: 10px; }
+			.content li{ overflow: hidden; margin-bottom: 15px; }
+			.content .user_img{ width: 40px; height: 40px; border-radius: 50%; }
+			.content li h2{ font-size: 14px; color: #999; line-height: 26px; }
+			.content li p{ font-size: 15px; padding: 5px; border-radius: 4px; }
+			.user_left .user_img{ margin-right: 10px; }
+			.user_left h2{ text-align: left; }
+			.user_left i{ margin-left: 20px; font-style: normal; }
+			.user_left p{ color: #333; background-color: #D9D9D9; }
+			.user_right .user_img{ margin-left: 10px; }
+			.user_right h2{ text-align: right; }
+			.user_right i{ margin-right: 20px; font-style: normal; }
+			.user_right p{ background-color: #5FB878; color: #fff; }
+			/* 输入文本框 */
+			.send_box{ padding: 10px; }
+			.upload{ height: 32px; border-bottom: solid 1px #eee; }
+			.send_box textarea{ display: block; width: 100%; height: 76px; outline: none; border: none; color: #333; font-family: '微软雅黑'; font-size: 15px; resize: none; }
+			.send_box span{ width: 70px; height: 32px; float: right; border-radius: 4px; line-height: 32px; font-size: 14px; text-align: center; color: #fff; background-color: #5FB878; cursor: pointer; margin-left: 15px; }
+			.send_box span:active{ opacity: 0.8; }
+			.send_box .close_btn:hover{ background-color: #f90f35; }
+			/* 右下角联系人入口 */
+			.msg_list{ position: fixed; bottom: 0; right: 0; width: 260px; height: 500px; z-index: 2; border: solid 1px #333; overflow: hidden; transition: 0.3s all; opacity: 0; }
+			.msg_list header{ height: 90px; background-color: #333; padding: 10px; cursor: move; }
+			.msg_list .close{ float: right; color: #fff; font-size: 16px; padding-left: 10px; cursor: pointer; font-style: normal; }
+			#user_name{ font-size: 16px; color: #fff; line-height: 26px; }
+			#user_text{ display: block; width: 100%; font-size: 14px; background-color: transparent; border: none; outline: none; transition: 0.3s all; padding: 5px 0; margin-bottom: 7px; color: #fff; }
+			#user_text::-webkit-input-placeholder{ color: #fff; font-size: 14px; }
+			#user_text:focus{ background-color: #fff; }
+			.list_nav{ width: 100%; height: 40px; }
+			.list_nav span{ text-align: center; line-height: 40px; cursor: pointer; }
+			.list_nav .iconfont{ color: #fff; font-size: 18px; }
+			.contact_list{ padding: 10px; height: 390px; overflow: auto; }
+			.contact_list li{ height: 36px; padding: 10px; cursor: pointer; }
+			.contact_list li:hover{ background-color: rgba(0,0,0,.05); }
+			.contact_list span{ width: 36px; height: 36px; border-radius: 50%; overflow: hidden; margin-right: 10px; float: left;}
+			.contact_list h2{ font-size: 14px; line-height: 24px; overflow: hidden; text-overflow: ellipsis; white-space: normal; }
+			.contact_list p{ font-size: 12px; line-height: 12px; color: #999; overflow: hidden; text-overflow: ellipsis; white-space: normal; }
+			#openList{ position: fixed; bottom: 0; right: 0; background-color: #333; color: #fff; font-size: 24px; cursor: pointer; width: 50px; height: 50px; text-align: center; line-height: 50px; z-index: 10; }
 		</style>
 	</head>
 	<body>
@@ -166,130 +165,130 @@
 			</div>
 			<span id="openList" class="iconfont icon-icon02" onclick="openContactList(this)"></span>
 		</div>
-	</body>
-	<script type="text/javascript">
-		function chatList() {
-			let [_list, _li] = [document.querySelector('.list_left'), document.querySelectorAll('.list_left li')];
-			_list.addEventListener('click', e => {
-				let _target = e.target;
-				while(_target !== _list ){
-					if(_target.tagName.toLowerCase() == 'li'){
-						_li.forEach((li, index) => {
-							li.className = '';
-						});
-						_target.className = 'li_hover';
-						break;
+		<script type="text/javascript">
+			function chatList() {
+				let [_list, _li] = [document.querySelector('.list_left'), document.querySelectorAll('.list_left li')];
+				_list.addEventListener('click', e => {
+					let _target = e.target;
+					while(_target !== _list ){
+						if(_target.tagName.toLowerCase() == 'li'){
+							_li.forEach((li, index) => {
+								li.className = '';
+							});
+							_target.className = 'li_hover';
+							break;
+						}
+						_target = _target.parentNode;
 					}
-					_target = _target.parentNode;
-				}
-			});
-		}
-		chatList();
-		// 鼠标事件
-		function mouse (box, minbox) {
-			// 主要移动的对象
-			let _box = document.querySelector(box);
-			// 鼠标点击拖动的对象
-			let _header = document.querySelector(minbox);
-			let [_left,_top] = [0,0];
-			let [boxPositionLeft, boxPositionTop] = [_box.getBoundingClientRect().left, _box.getBoundingClientRect().top];
-			let headerPosition = {
-				x:0,
-				_x:0,
-				y:0,
-				_y:0
+				});
 			}
-			// 当鼠标在指定元素按下时
-			_header.addEventListener('mousedown', e => {
-				var _el = e || window.event; //获取移动时的 事件对象。。。
-				// console.log(_left, _top);
-				headerPosition.x = _el.clientX;
-				headerPosition.y = _el.clientY;
-				_left = headerPosition.x - _box.getBoundingClientRect().left;
-				_top = headerPosition.y - _box.getBoundingClientRect().top;
-				document.addEventListener('mousemove', boxMove);
-			});
-			// 当鼠标在任意地方松开时
-			document.addEventListener('mouseup', () => {
-				document.removeEventListener('mousemove', boxMove);
-			});
-			// 指定框框移动
-			function boxMove(ev){
-				headerPosition._x = ev.clientX - _left;
-				headerPosition._y = ev.clientY - _top;
-				_box.style.top = headerPosition._y+'px';
-				_box.style.left = headerPosition._x+'px';
-				_box.style.margin = 0;
-				_box.style.opacity = 1;
-				_box.style.transition = '0s all';
-				// _box.style.cssText = `top: ${headerPosition._y}px; left: ${headerPosition._x}px; margin: 0; transition: 0s all; opacity: 1`;
-				if (_box.getBoundingClientRect().left <= 0) {
-					_box.style.left = '0px';
+			chatList();
+			// 鼠标事件
+			function mouse (box, minbox) {
+				// 主要移动的对象
+				let _box = document.querySelector(box);
+				// 鼠标点击拖动的对象
+				let _header = document.querySelector(minbox);
+				let [_left,_top] = [0,0];
+				let [boxPositionLeft, boxPositionTop] = [_box.getBoundingClientRect().left, _box.getBoundingClientRect().top];
+				let headerPosition = {
+					x:0,
+					_x:0,
+					y:0,
+					_y:0
 				}
-				if (_box.getBoundingClientRect().left >= document.documentElement.clientWidth - _box.offsetWidth) {
-					_box.style.left =  document.documentElement.clientWidth - _box.offsetWidth + 'px';
-				}
-				if (_box.getBoundingClientRect().top <= 0) {
-					_box.style.top = '0px';
-				}
-				if (_box.getBoundingClientRect().top >= document.documentElement.clientHeight - _box.offsetHeight) {
-					_box.style.top =  document.documentElement.clientHeight - _box.offsetHeight + 'px';
+				// 当鼠标在指定元素按下时
+				_header.addEventListener('mousedown', e => {
+					var _el = e || window.event; //获取移动时的 事件对象。。。
+					// console.log(_left, _top);
+					headerPosition.x = _el.clientX;
+					headerPosition.y = _el.clientY;
+					_left = headerPosition.x - _box.getBoundingClientRect().left;
+					_top = headerPosition.y - _box.getBoundingClientRect().top;
+					document.addEventListener('mousemove', boxMove);
+				});
+				// 当鼠标在任意地方松开时
+				document.addEventListener('mouseup', () => {
+					document.removeEventListener('mousemove', boxMove);
+				});
+				// 指定框框移动
+				function boxMove(ev){
+					headerPosition._x = ev.clientX - _left;
+					headerPosition._y = ev.clientY - _top;
+					_box.style.top = headerPosition._y+'px';
+					_box.style.left = headerPosition._x+'px';
+					_box.style.margin = 0;
+					_box.style.opacity = 1;
+					_box.style.transition = '0s all';
+					// _box.style.cssText = `top: ${headerPosition._y}px; left: ${headerPosition._x}px; margin: 0; transition: 0s all; opacity: 1`;
+					if (_box.getBoundingClientRect().left <= 0) {
+						_box.style.left = '0px';
+					}
+					if (_box.getBoundingClientRect().left >= document.documentElement.clientWidth - _box.offsetWidth) {
+						_box.style.left =  document.documentElement.clientWidth - _box.offsetWidth + 'px';
+					}
+					if (_box.getBoundingClientRect().top <= 0) {
+						_box.style.top = '0px';
+					}
+					if (_box.getBoundingClientRect().top >= document.documentElement.clientHeight - _box.offsetHeight) {
+						_box.style.top =  document.documentElement.clientHeight - _box.offsetHeight + 'px';
+					}
 				}
 			}
-		}
-		mouse('.msg_content', '.msg_box header');
-		mouse('.msg_list', '.msg_list header');
-		// 聊天界面出现消失
-		var boxState = false;
-		// 缩小/关闭聊天界面
-		function colseMsg () {
-			boxState = !boxState
-			let _box = document.querySelector('.msg_content');
-			_box.style.transition = '0.3s all';
-			_box.style.transform = 'scale(1.1,1.1)';
-			setTimeout(() => {
-				_box.style.transform = 'scale(0.5,0.5)';
-				_box.style.opacity = 0;
-			},100)
-			setTimeout(() => _box.style.zIndex = '-1', 500);
-		}
-		// 打开界面
-		function openMsg(_li) {
-			var _userimg = _li.getElementsByTagName('img')[0].src;
-			var _username = _li.getElementsByTagName('h2')[0].textContent;
-			console.log(_userimg, _username);
-
-			if (boxState) return ;
-			boxState = !boxState;
-			let _box = document.querySelector('.msg_content');
-			_box.style.transition = '0.3s all';
-			_box.style.zIndex = '10';
-			setTimeout(() => {
-				// _box.style.cssText = 'transform: scale(1.1,1.1); opacity: 1';
+			mouse('.msg_content', '.msg_box header');
+			mouse('.msg_list', '.msg_list header');
+			// 聊天界面出现消失
+			var boxState = false;
+			// 缩小/关闭聊天界面
+			function colseMsg () {
+				boxState = !boxState
+				let _box = document.querySelector('.msg_content');
+				_box.style.transition = '0.3s all';
 				_box.style.transform = 'scale(1.1,1.1)';
-				_box.style.opacity = 1
-			},10);
-			setTimeout(() => _box.style.transform = 'scale(1,1)', 310);
-		}
-		// 关闭联系人列表
-		function contactList() {
-			var _list = document.querySelector('.msg_list');
-			_list.style.transition = '0.3s all';
-			_list.style.transform = 'scale(0.5,0.5)';
-			_list.style.opacity = 0;
-			setTimeout(() => _list.style.zIndex = '-1', 300);
-			document.querySelector('#openList').style.display = 'block';
-		}
-		// 打开联系人
-		function openContactList(obj) {
-			obj.style.display = 'none';
-			var _list = document.querySelector('.msg_list');
-			_list.style.transition = '0.3s all';
-			_list.style.zIndex = '5';
-			setTimeout(() => {
-				_list.style.transform = 'scale(1,1)';
-				_list.style.opacity = 1;
-			},10);
-		}
-	</script>
+				setTimeout(() => {
+					_box.style.transform = 'scale(0.5,0.5)';
+					_box.style.opacity = 0;
+				},100)
+				setTimeout(() => _box.style.zIndex = '-1', 500);
+			}
+			// 打开界面
+			function openMsg(_li) {
+				var _userimg = _li.getElementsByTagName('img')[0].src;
+				var _username = _li.getElementsByTagName('h2')[0].textContent;
+				console.log(_userimg, _username);
+
+				if (boxState) return ;
+				boxState = !boxState;
+				let _box = document.querySelector('.msg_content');
+				_box.style.transition = '0.3s all';
+				_box.style.zIndex = '10';
+				setTimeout(() => {
+					// _box.style.cssText = 'transform: scale(1.1,1.1); opacity: 1';
+					_box.style.transform = 'scale(1.1,1.1)';
+					_box.style.opacity = 1
+				},10);
+				setTimeout(() => _box.style.transform = 'scale(1,1)', 310);
+			}
+			// 关闭联系人列表
+			function contactList() {
+				var _list = document.querySelector('.msg_list');
+				_list.style.transition = '0.3s all';
+				_list.style.transform = 'scale(0.5,0.5)';
+				_list.style.opacity = 0;
+				setTimeout(() => _list.style.zIndex = '-1', 300);
+				document.querySelector('#openList').style.display = 'block';
+			}
+			// 打开联系人
+			function openContactList(obj) {
+				obj.style.display = 'none';
+				var _list = document.querySelector('.msg_list');
+				_list.style.transition = '0.3s all';
+				_list.style.zIndex = '5';
+				setTimeout(() => {
+					_list.style.transform = 'scale(1,1)';
+					_list.style.opacity = 1;
+				},10);
+			}
+		</script>
+	</body>
 </html>

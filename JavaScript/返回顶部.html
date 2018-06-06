@@ -1,143 +1,69 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-	<meta charset="UTF-8">
-	<title>返回顶部</title>
-</head>
-<style>
-	*{ padding: 0px; margin: 0px;}
-	body{ font-family: 微软雅黑}
-	ul,li{ list-style: none; }
-	a{ text-decoration: none; }
+	<head>
+		<meta charset="UTF-8">
+		<title>返回顶部</title>
+	</head>
+	<style>
+		*{ padding: 0px; margin: 0px;}
+		body{ font-family: 微软雅黑}
+		ul,li{ list-style: none; }
+		a{ text-decoration: none; }
+		div{ width: 100%; height: 600px; }
+		.goback{ display: block; visibility: hidden; width: 150px; height: 50px; text-align: center; background: #000; color: #fff; font-size: 16px; line-height: 50px; position: fixed; right: 10px; bottom: 10px; cursor: pointer;}
+	</style>
+	<body>
+		<div style="background: lightgreen"></div>
+		<div style="background: lightblue"></div>
+		<div style="background: orange"></div>
+		<div style="background: lightgreen"></div>
+		<div style="background: lightblue"></div>
+		<div style="background: orange"></div>
+		<span class="goback">点击返回顶部</span>
 
-	div{ width: 100%; height: 600px; }
-	#goback{ display: block; visibility: hidden; width: 150px; height: 50px; text-align: center; background: #000; color: #fff; font-size: 16px; line-height: 50px; position: fixed; right: 10px; bottom: 10px; cursor: pointer;}
-</style>
-<body>
-	<div style="background: lightgreen"></div>
-	<div style="background: lightblue"></div>
-	<div style="background: orange"></div>
-	<div style="background: lightgreen"></div>
-	<div style="background: lightblue"></div>
-	<div style="background: orange"></div>
-	<span id="goback">点击返回顶部</span>
-</body>
+		<script>
+			// 兼容移动端  && IE-10+
+			function goTop(el) {
+				let myAnimation = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame || window.msRequestAnimationFrame,
+					btn = document.querySelector(el),
+					isMove = false,		//	是否在运动 阻止重复点击
+					rootNode = 0;
+				window.addEventListener('scroll', e => {
+					rootNode = document.body.scrollTop === 0 ? document.documentElement : document.body;
+					if (rootNode.scrollTop > (document.body.scrollHeight / 2)) {
+						btn.style.visibility = 'visible';
+					} else {
+						btn.style.visibility = 'hidden';
+					}
+				});
+				/**
+				 * 滚轮, 触摸事件
+				 * Firefox下要用 DOMMouseScroll 代替 mousewheel
+				*/
+				document.body.addEventListener('mousewheel', e => isMove = false);
+				document.body.addEventListener('touchmove', e => isMove = false);
+				function move() {
+					/**
+					 * 缓动: rootNode.scrollTop = rootNode.scrollTop - rootNode.scrollTop * 0.1;
+					 * 线性: rootNode.scrollTop = rootNode.scrollTop - number;
+					*/
+					rootNode.scrollTop = rootNode.scrollTop - 150;
+					if (rootNode.scrollTop > 0 && isMove) {
+						myAnimation(move);
+					}else {
+						isMove = false;
+					}
+				}
+				// 点击事件
+				btn.addEventListener('click', e => {
+					if (isMove) return;
+					isMove = true;
+					move();
+				});
+			}
+			goTop('.goback');
+
+			// scrollTo(x, y)
+		</script>
+	</body>
 </html>
-<script>
-// PC端：
-// function gobackTop(clickEleSelector) {
-//     var clickEle = document.querySelector(clickEleSelector);
-//     var intervalId = null;
-//     var isExecuted = true; // 重复点击
-//     var rootNode = document.body.scrollTop === 0 ? document.documentElement : document.body;
-//     window.addEventListener('scroll', () => {
-//         if (rootNode.scrollTop > (document.body.scrollHeight / 2)) {
-//             clickEle.style.visibility = 'visible';
-//         } else {
-//             clickEle.style.visibility = 'hidden';
-//         }
-//     });
-//     // 滚轮事件
-//     document.body.addEventListener('mousewheel', () => {
-//         clearInterval(intervalId);
-// 		isExecuted = true;
-//     });
-//     // 点击事件
-//     clickEle.addEventListener('click', () => {
-//         if (isExecuted) {
-//             isExecuted = false;
-//             intervalId = setInterval(() => {
-//                 rootNode.scrollTop = rootNode.scrollTop - rootNode.scrollTop * 0.1;
-//                 if (rootNode.scrollTop <= 0) {
-//                     clearInterval(intervalId);
-// 					isExecuted = true;
-//                 }
-//             }, 10);
-//         }
-//     });
-// }
-// gobackTop("goback");
-// 兼容移动端 ie-10以上
-function goTop(clickEleSelector) {
-	var myAnimation = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame || window.msRequestAnimationFrame,
-        clickEle = document.querySelector(clickEleSelector),
-        isExecuted = true, 	//	重复点击
-	    isMove = true,		//	是否在运动
-        rootNode = 0;
-    window.addEventListener('scroll', () => {
-		rootNode = document.body.scrollTop === 0 ? document.documentElement : document.body;
-        if (rootNode.scrollTop > (document.body.scrollHeight / 2)) {
-            clickEle.style.visibility = 'visible';
-        } else {
-            clickEle.style.visibility = 'hidden';
-        }
-    });
-    // 滚轮事件
-    document.body.addEventListener('mousewheel', () => {
-		isExecuted = true;
-		isMove = false
-    });
-	document.body.addEventListener('touchmove', () => {
-		isExecuted = true;
-		isMove = false
-    });
-	function move() {
-		rootNode.scrollTop = rootNode.scrollTop - rootNode.scrollTop * 0.1;
-		if (rootNode.scrollTop > 0 && isMove) {
-			myAnimation(move);
-			isExecuted = false;
-		}else {
-			isExecuted = true;
-			isMove = true
-		}
-	}
-    // 点击事件
-    clickEle.addEventListener('click', () => {
-        if (isExecuted) {
-			isMove = true
-			move();
-        }
-    });
-}
-goTop('#goback');
-
-//滚动条在Y轴上的滚动距离
-// function getScrollTop(){
-// 　　var scrollTop = 0, bodyScrollTop = 0, documentScrollTop = 0;
-// 　　if(document.body){
-// 　　　　bodyScrollTop = document.body.scrollTop;
-// 　　}
-// 　　if(document.documentElement){
-// 　　　　documentScrollTop = document.documentElement.scrollTop;
-// 　　}
-// 　　scrollTop = (bodyScrollTop - documentScrollTop > 0) ? bodyScrollTop : documentScrollTop;
-// 　　return scrollTop;
-// }
-// //文档的总高度
-// function getScrollHeight(){
-// 　　var scrollHeight = 0, bodyScrollHeight = 0, documentScrollHeight = 0;
-// 　　if(document.body){
-// 　　　　bodyScrollHeight = document.body.scrollHeight;
-// 　　}
-// 　　if(document.documentElement){
-// 　　　　documentScrollHeight = document.documentElement.scrollHeight;
-// 　　}
-// 　　scrollHeight = (bodyScrollHeight - documentScrollHeight > 0) ? bodyScrollHeight : documentScrollHeight;
-// 　　return scrollHeight;
-// }
-// //浏览器视口的高度
-// function getWindowHeight(){
-// 　　var windowHeight = 0;
-// 　　if(document.compatMode == "CSS1Compat"){
-// 　　　　windowHeight = document.documentElement.clientHeight;
-// 　　}else{
-// 　　　　windowHeight = document.body.clientHeight;
-// 　　}
-// 　　return windowHeight;
-// }
-// window.onscroll = function(){
-// 　　if(getScrollTop() + getWindowHeight() == getScrollHeight()){
-// 　　　　console.log("you are in the bottom!");
-// 　　}
-// };
-</script>

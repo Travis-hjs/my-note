@@ -27,9 +27,8 @@
     <div class="ball">
         拖我
     </div>
-</body>
-<script>
-    (function (global, factory) {
+    <script>
+        (function (global, factory) {
             if (typeof define === 'function' && (define.amd || define.cmd)) {
                 define(factory);
             } else {
@@ -94,9 +93,9 @@
                 var initBound = ele.getBoundingClientRect();
 
                 if (initBound.left < -0.5 * initBound.width ||
-                    initBound.top < -0.5 * initBound.height ||
-                    initBound.right > winWidth + 0.5 * initBound.width ||
-                    initBound.bottom > winHeight + 0.5 * initBound.height
+                initBound.top < -0.5 * initBound.height ||
+                initBound.right > winWidth + 0.5 * initBound.width ||
+                initBound.bottom > winHeight + 0.5 * initBound.height
                 ) {
                     ele.distanceX = 0;
                     ele.distanceY = 0;
@@ -121,7 +120,7 @@
                     if (ele.distanceY) {
                         data.distanceY = ele.distanceY;
                     }
-
+                    
                     // 元素的位置数据
                     data.bound = ele.getBoundingClientRect();
 
@@ -131,9 +130,9 @@
                 // easeOutBounce算法
                 /*
                 * t: current time（当前时间）；
-                 * b: beginning value（初始值）；
-                 * c: change in value（变化量）；
-                 * d: duration（持续时间）。
+                * b: beginning value（初始值）；
+                * c: change in value（变化量）；
+                * d: duration（持续时间）。
                 **/
                 var easeOutBounce = function (t, b, c, d) {
                     if ((t /= d) < (1 / 2.75)) {
@@ -166,13 +165,13 @@
                     data.nowY = events.pageY;
 
                     var distanceX = data.nowX - data.posX,
-                        distanceY = data.nowY - data.posY;
+                    distanceY = data.nowY - data.posY;
 
                     // 此时元素的位置
                     var absLeft = data.bound.left + distanceX,
-                        absTop = data.bound.top + distanceY,
-                        absRight = absLeft + data.bound.width,
-                        absBottom = absTop + data.bound.height;
+                    absTop = data.bound.top + distanceY,
+                    absRight = absLeft + data.bound.width,
+                    absBottom = absTop + data.bound.height;
 
                     // 边缘检测
                     if (absLeft < 0) {
@@ -215,7 +214,7 @@
 
                     // 移动的水平和垂直距离
                     var distanceX = data.nowX - data.posX,
-                        distanceY = data.nowY - data.posY;
+                    distanceY = data.nowY - data.posY;
 
                     if (Math.abs(distanceX) < 5 && Math.abs(distanceY) < 5) {
                         return;
@@ -338,6 +337,7 @@
 
             return Inertia;
         }));
-    new Inertia(document.querySelector('.ball'));
-</script>
+        new Inertia(document.querySelector('.ball'));
+    </script>
+</body>
 </html>
