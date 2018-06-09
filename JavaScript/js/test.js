@@ -32,9 +32,7 @@ function dataCut() {
 }
 
 function _click() {
-    var objbox = $('#wrap'),
-        objP = objbox.querySelector('p'),
-        list = $(".menu");
+    var list = $(".menu");
     for (var i = 1; i <= 5; i++) {
         var item = document.createElement("LI");
         item.dataset.index = i;
@@ -132,13 +130,13 @@ function dayJson() {
         _year.sub = [];
         for (var j = monthCount; j <= 12; j++) {
             var _month = {};
-            _month.name = j.toString();
+            _month.name = ('0' + j.toString()).slice(-2);
             _month.sub = [];
             _year.sub.push(_month);
             dayCount = new Date(i, j, 0).getDate();
             for (var k = 1; k <= dayCount; k++) {
                 _month.sub.push({
-                    name: k.toString()
+                    name: ('0' + k.toString()).slice(-2)
                 });
             }
         }
@@ -257,30 +255,30 @@ function objFunction() {
  * el.classList.remove(className)
  * el.classList.toggle(className)
 */
-function hasClass(e, c) {
-    return e.className.match(new RegExp('(\\s|^)' + c + '(\\s|$)'));
+function hasClass(el, c) {
+    return el.className.match(new RegExp('(\\s|^)' + c + '(\\s|$)'));
 }
-function addClass(e, c) {
-    if (!hasClass(e, c)) {
-        var _c = e.className.charAt(e.className.length - 1) === ' ' ? c : ' ' + c;
-        e.className += _c;
+function addClass(el, c) {
+    if (!hasClass(el, c)) {
+        var _c = el.className.charAt(el.className.length - 1) === ' ' ? c : ' ' + c;
+        el.className += _c;
     }
 }
-function removeClass(e, c) {
-    if (hasClass(e, c)) {
+function removeClass(el, c) {
+    if (hasClass(el, c)) {
         var reg = new RegExp('(\\s|^)' + c + '(\\s|$)');
-        e.className = e.className.replace(reg, ' ');
+        el.className = el.className.replace(reg, ' ');
     }
 }
-function toggleClass(e, c) {
-    if (hasClass(e, c)) {
-        removeClass(e, c);
+function toggleClass(el, c) {
+    if (hasClass(el, c)) {
+        removeClass(el, c);
     } else {
-        addClass(e, c);
+        addClass(el, c);
     }
 }
 $('#wrap').querySelector('p').addEventListener('click', function() {
-    toggleClass(objbox, 'tra');
+    toggleClass($('#wrap'), 'tra');
     // this.classList.toggle('tra');
 });
 
@@ -340,7 +338,7 @@ function contrast() {
         }
     }
     // 大到小
-    function bas(x, y) {
+    function bts(x, y) {
         if (x > y) {
             return -1;
         } else if (x < y) {
@@ -349,7 +347,7 @@ function contrast() {
             return 0;
         }
     }
-    console.log(arr.sort(bas));
+    console.log(arr.sort(bts) == arr.sort(sab).reverse());
     // 数组对象
     let arrObj = [{
         name: "zlw",

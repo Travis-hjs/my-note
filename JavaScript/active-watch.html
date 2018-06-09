@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>active-JS模拟</title>
+        <style>
+            *{ padding: 0; margin: 0; }
+            html, body{ 
+                -webkit-touch-callout:none;
+                -webkit-text-size-adjust:none;
+                -webkit-tap-highlight-color:rgba(0, 0, 0, 0);
+                -webkit-user-select:none;
+            }
+            li{ list-style: none; }
+            .wrap{ padding: 50px 0; }
+            ul{ width: 100%; text-align: center; }
+            li { display: inline-block; width: 150px; height: 44px; border: solid 1px orange; line-height: 44px; cursor: pointer; }
+        </style>
+    </head>
+    <body>
+        <div class="wrap">
+            <ul>
+                <li>li-1</li>
+                <li>li-2</li>
+                <li>li-3</li>
+                <li>li-4</li>
+            </ul>
+        </div>
+        <script type="text/javascript">
+            /** 
+             * active 事件监听  
+            */
+            function activeWatch(el, downFn, moveFn, outFn) {
+                const isPhone = (() => {
+                    let userAgentInfo = navigator.userAgent,
+                        Agents = ['Android', 'iPhone', 'SymbianOS', 'Windows Phone', 'iPad', 'iPod'];
+                    return Agents.some(item => (userAgentInfo.indexOf(item) > 0));
+                })();
+                // console.log('设备类型是否为手机：' + isPhone);
+                let _end = true,       // 让事件只生效一次
+                    _start = isPhone ? 'touchstart' : 'mousedown',
+                    _move = isPhone ? 'touchmove' : 'mousemove',
+                    _out = isPhone ? 'touchend' : 'mouseup';   
+                // 事件添加
+                el.addEventListener(_start, e => {
+                    _end = false;
+                    console.log(1, '摁下');
+                    if (typeof downFn === 'function') downFn.call(el);
+                });
+                el.addEventListener(_move, e => {
+                    if (_end) return;
+                    _end = true;
+                    console.log(2, '移动');
+                    if (typeof moveFn === 'function') moveFn.call(el);
+                });
+                el.addEventListener(_out, e => {
+                    if (_end) return;
+                    _end = true;
+                    console.log(3, '离开');
+                    if (typeof outFn === 'function') outFn.call(el);
+                });
+            }
+            let _list = document.querySelectorAll('ul li');
+            for (var i = 0; i < _list.length; i++) {
+                _list[i].index = i + 1;
+                activeWatch(_list[i], function () {
+                    console.log(this);
+                }, function () {
+                    console.log(this, `第${this.index}个li`);
+                }, function () {
+                    console.log(this, `第${this.index}个li`);
+                });
+            }
+        </script>
+    </body>
+</html>
