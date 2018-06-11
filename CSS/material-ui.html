@@ -39,6 +39,17 @@
             /* ripple canvas 方法 */
             [ripple]{ position: relative; cursor: pointer; overflow: hidden; }
             [ripple] canvas{ position: absolute; top: 0; left: 0; }
+            [ripple] .rdiv{ position: absolute; border-radius: 50%; -webkit-animation-name: rippleDiv; animation-name: rippleDiv; opacity: 0; }
+            @-webkit-keyframes rippleDiv {
+                0% { -webkit-transform: scale(0,0); transform: scale(0,0); opacity: 1; }
+                50% { opacity: 1; }
+                100% { -webkit-transform: scale(1,1); transform: scale(1,1); opacity: 0; }
+            }
+            @keyframes rippleDiv {
+                0% { -webkit-transform: scale(0,0); transform: scale(0,0); opacity: 1; }
+                50% { opacity: 1; }
+                100% { -webkit-transform: scale(1,1); transform: scale(1,1); opacity: 0; }
+            }
             /* 隐藏 */
             .hide{ display: none; }
         </style>
@@ -76,7 +87,13 @@
                     <span class="button-circular circular" ripple="rgba(255,255,255,0.3)" onclick="rippleFn(this)">circula</span>
                 </li>
                 <li>
-                    <span class="button long" ripple="rgb(187,221,249)" onclick="rippleFn(this)">canvas</span>
+                    <span class="button long" ripple="rgb(187,221,249)" onclick="rippleFn(this)">long botton canvas</span>
+                </li>
+                <li>
+                    <span class="button long" ripple="rgba(187,221,249,0.3)" time="500" onclick="rippleDiv(this)">long botton div</span>
+                </li>
+                <li>
+                    <span class="button rectangle" ripple="rgba(255,255,255,0.3)" onclick="rippleDiv(this)" style="background-color: orange">botton div</span>
                 </li>
             </ul>
             <!-- 其他 -->
@@ -176,6 +193,34 @@
                     }
                 }
                 draw();
+            }
+            /**
+             * 水波纹点击(div实现)
+            */
+            function rippleDiv(el) {
+                let _div = document.createElement('div'),
+                    color = el.getAttribute('ripple') || 'rgba(153,153,153,0.3)',
+                    maxSize = 0,
+                    _divW = 0,
+                    _divH = 0,
+                    _time = el.getAttribute('time') || 300,
+                    ev = window.event || arguments.callee.caller.arguments[0];
+                // console.log(ev.offsetX, ev.offsetY, ev);
+                // 获取半径
+                _divW = Math.max(el.offsetWidth - ev.offsetX, ev.offsetX);
+                _divH = Math.max(el.offsetHeight - ev.offsetY, ev.offsetY);
+                // 获取宽高值
+                maxSize = Math.max(_divW, _divH) * 2;
+                _div.className = 'rdiv';
+                _div.style.width =  _div.style.height = maxSize + 'px';
+                _div.style.margin = -(maxSize / 2) + 'px';
+                _div.style.backgroundColor = color;
+                _div.style.top = ev.offsetY + 'px';
+                _div.style.left = ev.offsetX + 'px';
+                _div.style.animationDuration = _div.style.webkitAnimationDuration = _time / 1000 + 's'; 
+                el.appendChild(_div);
+                // _div.onclick = e => e.stopPropagation();
+                setTimeout(() => el.removeChild(_div), _time);
             }
         </script>
     </body>
