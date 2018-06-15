@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta http-equiv="X-UA-Compatible" content="ie=edge">
+		<title>Ajax</title>
+		<style>
+			*{ padding: 0; margin: 0; }
+			.wrap{ width: 100%; max-width: 680px; margin: 0 auto; box-sizing: border-box; padding: 20px; font-size: 15px; font-family: '微软雅黑'; }
+			.wrap li{ margin-bottom: 30px; list-style: none; }
+			.wrap h2{ font-size: 18px; font-weight: 400; margin-bottom: 15px; }
+			.wrap img{ display: block; width: 100%; }
+		</style>
+	</head>
+	<body>
+		<div class="wrap">
+			
+		</div>
+		<!-- <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script> -->
+		<script>
+			/**
+			 * 转义base64
+			 * let _img = this.baseImg
+			 * _img = _img.split('+').join('%2B').split('&').join('%26')
+			 * 或者
+			 * _img = _img.replace(/\+/g, "%2B").replace(/\&/g, "%26")
+			 * 转大写
+			 * str.toUpperCase()
+			*/
+			class FetchRequest {
+				constructor (params) {
+					this.website = params.website || '';
+					this.timeout = params.timeout || 0;
+				}
+				post(url, sendData, successHandler, errorHandler, timeoutHandler) {
+					let _data = '', running = true;
+					// 解析对象传参
+					for (let key in sendData) {
+						_data += '&' + key + '=' + sendData[key];
+					}
+					_data = _data.slice(1);
+					// 检测请求类型
+					if (window.fetch) {
+						// , { credentials: 'include' } 这个是打开 cookie
+						fetch(this.website + url, {
+							method: 'POST',
+							headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+							body: _data
+						}).then(response => {
+							// 请求状态
+							// console.log(response);
+							// 注意，这里不转换 json 下面会 undefined
+							return response.json();
+						}).then(indexContentData => {
+							if (typeof successHandler === 'function' && running) successHandler(indexContentData);
+							running = false;
+						}).catch(error => {
+							if (typeof errorHandler === 'function' && running) errorHandler(error);
+							running = false;
+						});
+					} else {
+						let xhr = new XMLHttpRequest();
+						xhr.open('POST', this.website + url);
+						// xhr.responseType = 'json';
+						xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+						xhr.onreadystatechange = event => {
+							if (event.target.readyState !== 4) return;
+							if (event.target.status === 200 || event.target.status === 304) {
+								if (typeof successHandler === 'function' && running) successHandler(JSON.parse(event.target.responseText));
+								running = false;
+							} else {
+								if (typeof errorHandler === 'function' && running) errorHandler(event.target.status);
+								running = false;
+							}
+						}
+						// xhr.withCredentials = true;		// 打开cookie
+						xhr.send(_data);
+					}
+					// 超时检测
+					if (this.timeout) {
+						setTimeout(() => {
+							if (typeof timeoutHandler === 'function' && running) timeoutHandler();
+							running = false;
+						}, this.timeout);
+					}
+				}
+				get(url, sendData, successHandler, errorHandler, timeoutHandler) {
+					let _data = '', running = true;
+					// 解析对象传参
+					for (let key in sendData) {
+						_data += '&' + key + '=' + sendData[key];
+					}
+					_data = '?' + _data.slice(1);
+					// 检测请求类型
+					if (window.fetch) {
+						fetch(this.website + url + _data).then(response => {
+							return response.json();
+						}).then(indexContentData => {
+							if (typeof successHandler === 'function' && running) successHandler(indexContentData);
+							running = false;
+						}).catch(error => {
+							if (typeof errorHandler === 'function' && running) errorHandler(error);
+							running = false;
+						})
+					} else {
+						let xhr = new XMLHttpRequest();
+						xhr.open('GET', this.website + url + _data);
+						// xhr.withCredentials = true;
+						xhr.onreadystatechange = event => {
+							if (event.target.readyState !== 4) return;
+							if (event.target.status === 200 || event.target.status === 304) {
+								if (typeof successHandler === 'function' && running) successHandler(JSON.parse(event.target.responseText));
+								running = false;
+							} else {
+								if (typeof errorHandler === 'function' && running) errorHandler(event.target.status);
+								running = false;
+							}
+						}
+						xhr.send();
+					}
+					// 超时检测
+					if (this.timeout) {
+						setTimeout(() => {
+							if (typeof timeoutHandler === 'function' && running) timeoutHandler();
+							running = false;
+						}, this.timeout);
+					}
+				}
+			}
+			let Ajax = new FetchRequest({
+				website: 'http://www.aikhome.com/index.php/apiv/',
+				timeout: 3000
+			});
+			// console.log(Ajax);
+			Ajax.post('member/cmsArticleList', {}, res => {
+				console.log(res);
+				
+			}, err => {
+				console.warn(err);
+				
+			}, () => {
+				console.log('请求超时');
+				
+			})
+
+			function ajaxDemo() {
+				var xhr = new XMLHttpRequest();
+				xhr.open('POST', 'http://longrenhui.ws.6-315.com/index.php/wap/agent/mine.html');
+				// xhr.responseType = 'json';
+				xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+				xhr.send('deviceid=864147010086266');
+				xhr.onreadystatechange = e => {
+					if (e.target.readyState !== 4) return;
+					if (e.target.status === 200 || e.target.status === 304) {
+						console.log(JSON.parse(e.target.responseText));
+					} else {
+						console.log(e.target.status);
+					}
+				}
+			}
+			// ajaxDemo()
+			// $.ajax({
+			// 	type: "GET",
+			// 	url: "http://longrenhui.ws.6-315.com/index.php/wap/agent/mine.html",
+			// 	data: {
+			// 		deviceid: 864147010086266
+			// 	},
+			// 	success (msg) {
+			// 		console.log(msg);
+			// 	}
+			// });
+
+			/**
+			 * 最初的版本(没有做超时判定)
+			*/
+			let AjaxRequest = function (params) {
+				this.website = params.website || '';
+			}
+			AjaxRequest.prototype = {
+				post(url, sendData, successHandler, errorHandler) {
+					let _data = '', startTime = new Date().getTime(), endTime = 0;
+					// 解析对象传参
+					for (let key in sendData) {
+						_data += '&' + key + '=' + sendData[key];
+					}
+					_data = _data.slice(1);
+					// 检测请求类型
+					if (window.fetch) {
+						// , { credentials: 'include' } 这个是打开 cookie
+						fetch(this.website + url, {
+							method: 'POST',
+							headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+							body: _data
+						}).then(response => {
+							// 请求状态
+							// console.log(response);
+							// 注意，这里不转换 json 下面会 undefined
+							return response.json();
+						}).then(indexContentData => {
+							if (typeof successHandler === 'function') successHandler(indexContentData);
+						}).catch(error => {
+							if (typeof errorHandler === 'function') errorHandler(error);
+						});
+					} else {
+						let xhr = new XMLHttpRequest();
+						xhr.open('POST', this.website + url);
+						// xhr.responseType = 'json';
+						xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+						xhr.onreadystatechange = event => {
+							if (event.target.readyState !== 4) return;
+							if (event.target.status === 200 || event.target.status === 304) {
+								if (typeof successHandler === 'function') successHandler(JSON.parse(event.target.responseText));
+							} else {
+								if (typeof errorHandler === 'function') errorHandler(event.target.status);
+							}
+						}
+						// xhr.withCredentials = true;		// 打开cookie
+						xhr.send(_data);
+					}
+				},
+				get(url, sendData, successHandler, errorHandler) {
+					// 解析对象传参
+					let _data = '';
+					for (let key in sendData) {
+						_data += '&' + key + '=' + sendData[key];
+					}
+					_data = '?' + _data.slice(1);
+					// 检测请求类型
+					if (window.fetch) {
+						fetch(this.website + url + _data).then(response => {
+							return response.json();
+						}).then(indexContentData => {
+							if (typeof successHandler === 'function') successHandler(indexContentData);
+						}).catch(error => {
+							if (typeof errorHandler === 'function') errorHandler(error);
+						})
+					} else {
+						let xhr = new XMLHttpRequest();
+						xhr.open('GET', this.website + url + _data);
+						// xhr.withCredentials = true;
+						xhr.onreadystatechange = event => {
+							if (event.target.readyState !== 4) return;
+							if (event.target.status === 200 || event.target.status === 304) {
+								if (typeof successHandler === 'function') successHandler(JSON.parse(event.target.responseText));
+							} else {
+								if (typeof errorHandler === 'function') errorHandler(event.target.status);
+							}
+						}
+						xhr.send();
+					}
+				}
+			}
+			let newAjax = new AjaxRequest({
+				website: 'http://www.aikhome.com/index.php/apiv/'
+			})
+			newAjax.post('member/cmsArticleDetail', { article_id: 208 } ,res => {
+				console.log(res);
+				createList(res.data[0])
+			}, err => {
+				console.log(err);
+				
+			})
+			function createList(data) {
+				let box = document.querySelector('.wrap'),
+					_html = '',
+					text = data.content.split('http://image.aikhome.com/').join('http://www.aikhome.com/');
+				_html = `<img src="http://www.aikhome.com/${data.image}">
+						<h2>${data.title}</h2>
+					<div>${text}</div>`;
+
+				box.insertAdjacentHTML('beforeEnd', _html);
+			}
+		</script>
+	</body>
+</html>

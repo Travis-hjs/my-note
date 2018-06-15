@@ -13,7 +13,7 @@ class ImgZoom {
     getPage(ev, page) {
         return this.support.touch ? ev.changedTouches[0][page] : ev[page];
     }
-    init (_url) {
+    init(_url) {
         this.packImg.innerHTML = ' ';
         this.zoomImg = document.createElement('img');
         this.zoomImg.src = _url;
@@ -23,7 +23,7 @@ class ImgZoom {
             this._touch();
         }
     }
-    _touch () {
+    _touch() {
         this.buffMove = 3;      // 缓冲系数
         this.buffScale = 2;     // 放大系数
         this.finger = false;    // 触摸手指的状态 false：单手指 true：多手指
@@ -38,12 +38,12 @@ class ImgZoom {
         this.mapX = this.zoomImg.width || 0;            // 地图宽度
         this.mapY = this.zoomImg.height || 0;           // 地图高度
         // 添加事件柄
-        this.zoomImg.addEventListener('touchstart',e => this._touchstart(e));
-        this.zoomImg.addEventListener('touchmove',e => this._touchmove(e));
-        this.zoomImg.addEventListener('touchend',e => this._touchend(e));
+        this.zoomImg.addEventListener('touchstart', e => this._touchstart(e));
+        this.zoomImg.addEventListener('touchmove', e => this._touchmove(e));
+        this.zoomImg.addEventListener('touchend', e => this._touchend(e));
     }
     // 更新地图信息
-    _changeData () {
+    _changeData() {
         this.mapX = this.zoomImg.offsetWidth;           //地图宽度
         this.mapY = this.zoomImg.offsetHeight;          //地图高度
         // this.outDistY = (this.mapY - this.wrapY)/2;  //当图片高度超过屏幕的高度时候。图片是垂直居中的，这时移动有个高度做为缓冲带
@@ -51,7 +51,7 @@ class ImgZoom {
         this.height = this.mapY - this.wrapY;           //地图的高度减去可视区域的高度
     }
     // 触摸开始
-    _touchstart (e) {
+    _touchstart(e) {
         e.preventDefault();
         let touchTarget = e.targetTouches.length;   //获得触控点数
         this._changeData();                         //重新初始化图片、可视区域数据，由于放大会产生新的计算
@@ -70,7 +70,7 @@ class ImgZoom {
         console.log('pageY: ' + this.getPage(e, 'pageY'));
     }
     // 触摸中
-    _touchmove (e) {
+    _touchmove(e) {
         e.preventDefault();
         e.stopPropagation();
         console.log('event.changedTouches[0].pageY: ' + e.changedTouches[0].pageY);
@@ -79,7 +79,7 @@ class ImgZoom {
         if (touchTarget >= 2) this._zoom(e);
     }
     // 触摸结束
-    _touchend (e) {
+    _touchend(e) {
         this._changeData(); //重新计算数据
         if (this.finger) {
             this.distX = -this.imgNewX;
@@ -96,7 +96,7 @@ class ImgZoom {
         this.reset();
     }
     // 获取多点触控
-    getTouchDist (e) {
+    getTouchDist(e) {
         let x1 = 0,
             y1 = 0,
             x2 = 0,
@@ -126,7 +126,7 @@ class ImgZoom {
         };
         return result;
     }
-    _move (e) {
+    _move(e) {
         let pageX = this.getPage(e, 'pageX'), //获取移动坐标
             pageY = this.getPage(e, 'pageY');
         // 获得移动距离
@@ -143,7 +143,7 @@ class ImgZoom {
         this.finger = false;
     }
     // 图片缩放
-    _zoom (e) {
+    _zoom(e) {
         let nowFingerDist = this.getTouchDist(e).dist,      // 获得当前长度
             ratio = nowFingerDist / this.startFingerDist,   // 计算缩放比
             imgWidth = Math.round(this.mapX * ratio),       // 计算图片宽度
@@ -163,16 +163,16 @@ class ImgZoom {
         this.finger = true;
     }
     // 移动坐标
-    movePos () {
+    movePos() {
         if (this.height < 0) {
             if (this.zoomImg.offsetWidth == this.imgBaseWidth) {
                 this.moveY = Math.round(this.distY / this.buffMove);
             } else {
-                var moveTop = Math.round((this.zoomImg.offsetHeight - this.imgBaseHeight) / 2);
+                let moveTop = Math.round((this.zoomImg.offsetHeight - this.imgBaseHeight) / 2);
                 this.moveY = -moveTop + Math.round((this.distY + moveTop) / this.buffMove);
             }
         } else {
-            var a = Math.round((this.wrapY - this.imgBaseHeight) / 2),
+            let a = Math.round((this.wrapY - this.imgBaseHeight) / 2),
                 b = this.zoomImg.offsetHeight - this.wrapY + Math.round(this.wrapY - this.imgBaseHeight) / 2;
 
             if (this.distY >= -a) {
@@ -186,7 +186,7 @@ class ImgZoom {
         this.refresh(this.moveX, this.moveY, '0s', 'ease');
     }
     // 重置数据
-    reset () {
+    reset() {
         if (this.height < 0) {
             this.newY = -Math.round(this.zoomImg.offsetHeight - this.imgBaseHeight) / 2;
         } else {
@@ -203,7 +203,7 @@ class ImgZoom {
         this.refresh(this.newX, this.newY, '0.2s', 'ease-in-out');
     }
     // 执行图片移动
-    refresh (x, y, timer, type) {
+    refresh(x, y, timer, type) {
         this.zoomImg.style.webkitTransitionProperty = '-webkit-transform';
         this.zoomImg.style.webkitTransitionDuration = timer;
         this.zoomImg.style.webkitTransitionTimingFunction = type;
@@ -212,9 +212,8 @@ class ImgZoom {
 }
 
 /**
-* 原型链定义
-*/
-
+ * 原型链定义
+ */
 // let ImgZoom = function (_params) {
 //     this.pack = document.querySelector(_params.pack);
 //     this.packImg = document.querySelector(_params.zoomImg);
@@ -230,7 +229,7 @@ class ImgZoom {
 //     getPage(ev, page) {
 //         return this.support.touch ? ev.changedTouches[0][page] : ev[page];
 //     },
-//     init (_url) {
+//     init(_url) {
 //         this.packImg.innerHTML = ' ';
 //         this.zoomImg = document.createElement('img');
 //         this.zoomImg.src = _url;
@@ -240,7 +239,7 @@ class ImgZoom {
 //             this._touch();
 //         }
 //     },
-//     _touch () {
+//     _touch() {
 //         this.buffMove = 3;      // 缓冲系数
 //         this.buffScale = 2;     // 放大系数
 //         this.finger = false;    // 触摸手指的状态 false：单手指 true：多手指
@@ -255,18 +254,18 @@ class ImgZoom {
 //         this.mapX = this.zoomImg.width || 0;            // 地图宽度
 //         this.mapY = this.zoomImg.height || 0;           // 地图高度
 //         // 添加事件柄
-//         this.zoomImg.addEventListener('touchstart',e => this._touchstart(e));
-//         this.zoomImg.addEventListener('touchmove',e => this._touchmove(e));
-//         this.zoomImg.addEventListener('touchend',e => this._touchend(e));
+//         this.zoomImg.addEventListener('touchstart', e => this._touchstart(e));
+//         this.zoomImg.addEventListener('touchmove', e => this._touchmove(e));
+//         this.zoomImg.addEventListener('touchend', e => this._touchend(e));
 //     },
-//     _changeData () {
+//     _changeData() {
 //         this.mapX = this.zoomImg.offsetWidth;           //地图宽度
 //         this.mapY = this.zoomImg.offsetHeight;          //地图高度
 //         // this.outDistY = (this.mapY - this.wrapY)/2;  //当图片高度超过屏幕的高度时候。图片是垂直居中的，这时移动有个高度做为缓冲带
 //         this.width = this.mapX - this.wrapX;            //地图的宽度减去可视区域的宽度
 //         this.height = this.mapY - this.wrapY;           //地图的高度减去可视区域的高度
 //     },
-//     _touchstart (e) {
+//     _touchstart(e) {
 //         e.preventDefault();
 //         let touchTarget = e.targetTouches.length;   //获得触控点数
 //         this._changeData();                         //重新初始化图片、可视区域数据，由于放大会产生新的计算
@@ -282,14 +281,14 @@ class ImgZoom {
 //             this.startFingerY = this.getTouchDist(e).y;
 //         }
 //     },
-//     _touchmove (e) {
+//     _touchmove(e) {
 //         e.preventDefault();
 //         e.stopPropagation();
 //         let touchTarget = e.targetTouches.length;
 //         if (touchTarget === 1 && !this.finger) this._move(e);
 //         if (touchTarget >= 2) this._zoom(e);
 //     },
-//     _touchend (e) {
+//     _touchend(e) {
 //         this._changeData(); //重新计算数据
 //         if (this.finger) {
 //             this.distX = -this.imgNewX;
@@ -305,7 +304,7 @@ class ImgZoom {
 //         }
 //         this.reset();
 //     },
-//     getTouchDist (e) {
+//     getTouchDist(e) {
 //         let x1 = 0,
 //             y1 = 0,
 //             x2 = 0,
@@ -335,7 +334,7 @@ class ImgZoom {
 //         };
 //         return result;
 //     },
-//     _move (e) {
+//     _move(e) {
 //         let pageX = this.getPage(e, 'pageX'), //获取移动坐标
 //             pageY = this.getPage(e, 'pageY');
 //         // 获得移动距离
@@ -351,7 +350,7 @@ class ImgZoom {
 //         this.movePos();
 //         this.finger = false;
 //     },
-//     _zoom (e) {
+//     _zoom(e) {
 //         let nowFingerDist = this.getTouchDist(e).dist,      // 获得当前长度
 //             ratio = nowFingerDist / this.startFingerDist,   // 计算缩放比
 //             imgWidth = Math.round(this.mapX * ratio),       // 计算图片宽度
@@ -370,18 +369,18 @@ class ImgZoom {
 //         }
 //         this.finger = true;
 //     },
-//     movePos () {
+//     movePos() {
 //         if (this.height < 0) {
 //             if (this.zoomImg.offsetWidth == this.imgBaseWidth) {
 //                 this.moveY = Math.round(this.distY / this.buffMove);
 //             } else {
-//                 var moveTop = Math.round((this.zoomImg.offsetHeight - this.imgBaseHeight) / 2);
+//                 let moveTop = Math.round((this.zoomImg.offsetHeight - this.imgBaseHeight) / 2);
 //                 this.moveY = -moveTop + Math.round((this.distY + moveTop) / this.buffMove);
 //             }
 //         } else {
-//             var a = Math.round((this.wrapY - this.imgBaseHeight) / 2),
+//             let a = Math.round((this.wrapY - this.imgBaseHeight) / 2),
 //                 b = this.zoomImg.offsetHeight - this.wrapY + Math.round(this.wrapY - this.imgBaseHeight) / 2;
-//
+
 //             if (this.distY >= -a) {
 //                 this.moveY = Math.round((this.distY + a) / this.buffMove) - a;
 //             } else if (this.distY <= -b) {
@@ -392,7 +391,7 @@ class ImgZoom {
 //         }
 //         this.refresh(this.moveX, this.moveY, '0s', 'ease');
 //     },
-//     reset () {
+//     reset() {
 //         if (this.height < 0) {
 //             this.newY = -Math.round(this.zoomImg.offsetHeight - this.imgBaseHeight) / 2;
 //         } else {
@@ -408,7 +407,7 @@ class ImgZoom {
 //         }
 //         this.refresh(this.newX, this.newY, '0.2s', 'ease-in-out');
 //     },
-//     refresh (x, y, timer, type) {
+//     refresh(x, y, timer, type) {
 //         this.zoomImg.style.webkitTransitionProperty = '-webkit-transform';
 //         this.zoomImg.style.webkitTransitionDuration = timer;
 //         this.zoomImg.style.webkitTransitionTimingFunction = type;

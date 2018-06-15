@@ -1,93 +1,92 @@
 <!DOCTYPE html>
 <html>
+	<head>
+		<meta charset="utf-8">
+		<title>圆环</title>
+	</head>
+	<style media="screen">
+		* { margin: 0; padding: 0; }
+		/* 别人的做法 */
+		.circle_box, .circle, .percent { position: absolute; width: 200px; height: 200px; border-radius: 50%; }
+		.circle_box { top: 50px; left: 50px; background-color: #ccc; }
+		.circle { -webkit-box-sizing: border-box; box-sizing: border-box; border: 20px solid #ccc; clip: rect(0, 200px, 200px, 100px); }
+		.clip-auto { clip: rect(auto, auto, auto, auto); }
+		.percent { -webkit-box-sizing: border-box; box-sizing: border-box; top: -20px; left: -20px; }
+		.left { border: 20px solid gold; clip: rect(0, 100px, 200px, 0); }
+		.right { border: 20px solid gold; clip: rect(0, 200px, 200px, 100px); }
+		.no_wth { width: 0; }
+		.num { position: absolute; -webkit-box-sizing: border-box; box-sizing: border-box; width: 160px; height: 160px; line-height: 160px; text-align: center; font-size: 40px; left: 20px; top: 20px; border-radius: 50%; background-color: #fff; z-index: 1; }
 
-<head>
-	<meta charset="utf-8">
-	<title>圆环</title>
-</head>
-<style media="screen">
-	* { margin: 0; padding: 0; }
-	/* 别人的做法 */
-	.circle_box, .circle, .percent { position: absolute; width: 200px; height: 200px; border-radius: 50%; }
-	.circle_box { top: 50px; left: 50px; background-color: #ccc; }
-	.circle { -webkit-box-sizing: border-box; box-sizing: border-box; border: 20px solid #ccc; clip: rect(0, 200px, 200px, 100px); }
-	.clip-auto { clip: rect(auto, auto, auto, auto); }
-	.percent { -webkit-box-sizing: border-box; box-sizing: border-box; top: -20px; left: -20px; }
-	.left { border: 20px solid gold; clip: rect(0, 100px, 200px, 0); }
-	.right { border: 20px solid gold; clip: rect(0, 200px, 200px, 100px); }
-	.no_wth { width: 0; }
-	.num { position: absolute; -webkit-box-sizing: border-box; box-sizing: border-box; width: 160px; height: 160px; line-height: 160px; text-align: center; font-size: 40px; left: 20px; top: 20px; border-radius: 50%; background-color: #fff; z-index: 1; }
 
+		/* 我的做法 注意，要正方形！ */
+		.wrap_box{ width: 200px; height: 200px; background-color: gold; margin: 100px auto; overflow: hidden; position: relative; border-radius: 50%; }
+		/* 3个圆都居中（因为以中心旋转）边框就是圆环注意好边框加起来等于外面的圆，不然旋转会位置跑偏 */
+		.center_box, .left_box, .right_box{ width: 70px; height: 70px; border-radius: 50%; position: absolute; top: 50%; left: 50%; margin: -100px;}
+		.center_box{ box-shadow: 0 0 15px 0 rgba(0,0,0,0.3); text-align: center; line-height: 70px; z-index: 3; background-color: #fff; margin: -35px; }
+		/* 因为边框是基于正方形，所以要旋转45度 */
+		.left_box{ border: solid 65px rgba(0, 0, 0, 0); border-left-color: rgb(40, 207, 189); border-bottom-color: rgb(40, 207, 189); z-index: 1; transform: rotate(45deg); }
+		.right_box{ border: solid 65px rgba(0, 0, 0, 0); border-right-color: rgb(40, 207, 189); border-bottom-color: rgb(40, 207, 189); z-index: 1; transform: rotate(-45deg); }
+		.cover_box{ background-color: gold; left: 0; top: 0; width: 50%; height: 100%; position: absolute; z-index: 2; }
+		.hide{ display: none; }
+		/* 为了更容易看清轨迹 */
+		/* .wrap_box div{ opacity: .5; } */
+	</style>
+	<body>
+		<div class="circle_box">
+			<div class="circle">
+				<div class="percent left"></div>
+				<div class="percent right no_wth"></div>
+			</div>
+			<div class="num"><span>0</span>%</div>
+		</div>
 
-	/* 我的做法 注意，要正方形！ */
-	.wrap_box{ width: 200px; height: 200px; background-color: gold; margin: 100px auto; overflow: hidden; position: relative; border-radius: 50%; }
-	/* 3个圆都居中（因为以中心旋转）边框就是圆环注意好边框加起来等于外面的圆，不然旋转会位置跑偏 */
-	.center_box, .left_box, .right_box{ width: 70px; height: 70px; border-radius: 50%; position: absolute; top: 50%; left: 50%; margin: -100px;}
-	.center_box{ box-shadow: 0 0 15px 0 rgba(0,0,0,0.3); text-align: center; line-height: 70px; z-index: 3; background-color: #fff; margin: -35px; }
-	/* 因为边框是基于正方形，所以要旋转45度 */
-	.left_box{ border: solid 65px rgba(0, 0, 0, 0); border-left-color: rgb(40, 207, 189); border-bottom-color: rgb(40, 207, 189); z-index: 1; transform: rotate(45deg); }
-	.right_box{ border: solid 65px rgba(0, 0, 0, 0); border-right-color: rgb(40, 207, 189); border-bottom-color: rgb(40, 207, 189); z-index: 1; transform: rotate(-45deg); }
-	.cover_box{ background-color: gold; left: 0; top: 0; width: 50%; height: 100%; position: absolute; z-index: 2; }
-	.hide{ display: none; }
-	/* 为了更容易看清轨迹 */
-	/* .wrap_box div{ opacity: .5; } */
-</style>
+		<div class="wrap_box">
+			<!-- 居于最上层的圆 -->
+			<div class="center_box">10%</div>
+			<!-- 左右两边的圆 主要是左边的旋转，右边的只是消失显示 -->
+			<div class="left_box"></div>
+			<div class="right_box hide"></div>
+			<!-- 这个遮挡作用，初始化遮挡左边的让他旋转，然后旋转到右边的显示就消失自己达到完整圆环 -->
+			<div class="cover_box"></div>
+		</div>
+		
+		<script type="text/javascript">
+			let myAnimation = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame || window.msRequestAnimationFrame;
+			let percent = 0;
+			let $ = selector => document.querySelector(selector);
+			// 别人的方法
+			// setInterval(() => {
+			// 	if (percent > 100) {
+			// 		percent = 0;
+			// 		$('.circle').classList.remove('clip-auto');
+			// 		$('.right').classList.add('no_wth')
+			// 	}else if (percent > 50) {
+			// 		$('.circle').classList.add('clip-auto');
+			// 		$('.right').classList.remove('no_wth')
+			// 	}
+			// 	$('.left').style.transform = 'rotate('+ (18 / 5) * percent +'deg)';
+			// 	$('.num>span').textContent = percent;
+			// 	percent += 1;
+			// },10);
 
-<body>
-	<div class="circle_box">
-	    <div class="circle">
-	        <div class="percent left"></div>
-	        <div class="percent right no_wth"></div>
-	    </div>
-	    <div class="num"><span>0</span>%</div>
-	</div>
-
-	<div class="wrap_box">
-		<!-- 居于最上层的圆 -->
-		<div class="center_box">10%</div>
-		<!-- 左右两边的圆 主要是左边的旋转，右边的只是消失显示 -->
-		<div class="left_box"></div>
-		<div class="right_box hide"></div>
-		<!-- 这个遮挡作用，初始化遮挡左边的让他旋转，然后旋转到右边的显示就消失自己达到完整圆环 -->
-		<div class="cover_box"></div>
-	</div>
-</body>
-<script type="text/javascript">
-	let myAnimation = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame || window.msRequestAnimationFrame;
-	let percent = 0;
-	let $ = selector => document.querySelector(selector);
-    // 别人的方法
-	// setInterval(() => {
-	// 	if (percent > 100) {
-	// 		percent = 0;
-	// 		$('.circle').classList.remove('clip-auto');
-	// 		$('.right').classList.add('no_wth')
-	// 	}else if (percent > 50) {
-	// 		$('.circle').classList.add('clip-auto');
-	// 		$('.right').classList.remove('no_wth')
-	// 	}
-	// 	$('.left').style.transform = 'rotate('+ (18 / 5) * percent +'deg)';
-	// 	$('.num>span').textContent = percent;
-	// 	percent += 1;
-	// },10);
-
-	let _t = 0; //	0到100循环
-    function myWay() {
-		_t += 1;
-		// console.log(_t);
-		$('.center_box').textContent = _t + '%';
-		$('.left_box').style.transform = `rotate(${(3.6 * _t) + 45}deg)`;
-		if (_t > 50) {
-			$('.right_box').classList.remove('hide');
-			$('.cover_box').classList.add('hide')
-		}else {
-			$('.cover_box').classList.remove('hide')
-			$('.right_box').classList.add('hide');
-		}
-		if (_t <= 100) return myAnimation(myWay);
-		_t = 0;
-		myWay()
-    }
-	myWay()
-</script>
+			let _t = 0; //	0到100循环
+			function myWay() {
+				_t += 1;
+				// console.log(_t);
+				$('.center_box').textContent = _t + '%';
+				$('.left_box').style.transform = `rotate(${(3.6 * _t) + 45}deg)`;
+				if (_t > 50) {
+					$('.right_box').classList.remove('hide');
+					$('.cover_box').classList.add('hide')
+				}else {
+					$('.cover_box').classList.remove('hide')
+					$('.right_box').classList.add('hide');
+				}
+				if (_t <= 100) return myAnimation(myWay);
+				_t = 0;
+				myWay()
+			}
+			myWay()
+		</script>
+	</body>
 </html>

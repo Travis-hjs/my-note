@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <title>css动画监听</title>
+        <style>
+            *{ padding: 0; margin: 0; }
+            .wrap{ width: 100%; max-width: 650px; margin: 0 auto; }
+            .box{ width: 300px; height: 250px; background-color: orange; transition: 1s all; animation: show 1s; }
+            .btn{ width: 140px; height: 40px; text-align: center; font-size: 14px; line-height: 40px; }
+            @keyframes show {
+                from { opacity: 0; width: 0px; height: 0px; }
+                to { opacity: 1; width: 300px; height: 250px; }
+            }
+            .hide-move{ width: 0px; height: 0px; opacity: 0; }
+        </style>
+    </head>
+    <body>
+        <div class="wrap">
+            <div class="box"></div>
+            <button class="btn" onclick="switcFn('.box')">click</button>
+        </div>
+
+        <script>
+            let isHide = false;
+            function show(name) {
+                if (!isHide) return;
+                const el = document.querySelector(name);
+                el.classList.remove('hide-move');
+                el.style.display = 'block';
+                el.addEventListener('animationend', e => {
+                    if (!isHide) return;
+                    isHide = false;
+                    console.log('动画结束', isHide);
+                })
+            }
+            function hide(name) {
+                if (isHide) return;
+                const el = document.querySelector(name);
+                el.classList.add('hide-move');
+                // console.log('执行');
+                el.addEventListener('transitionend', e => {
+                    // 这里会执行3次，因为有3个属性都在变化 所以加个判断
+                    if (isHide) return;
+                    isHide = true;
+                    el.style.display = 'none';
+                    console.log('过渡结束', isHide);
+                })
+            }
+            function switcFn(name) {
+                if (isHide) {
+                    show(name)
+                } else {
+                    hide(name)
+                }
+            }
+        </script>
+    </body>
+</html>
