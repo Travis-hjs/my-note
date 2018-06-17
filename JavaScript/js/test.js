@@ -25,7 +25,7 @@ function dataCut() {
     console.log(_str.replace(/#/i, '?#'));
     // 下面这种替换性能会更好点，但是不够灵活，只能是全局替换
     console.log(_str.split('#').join('?#'));
-    console.log(_code.slice(_code.indexOf(',')+1));
+    console.log(_code.slice(_code.indexOf(',') + 1));
     // 对象属性获取值
     console.log(Object.keys(_obj));
     console.log(String(Object.keys(_obj)));
@@ -181,15 +181,15 @@ function timeStr() {
 }
 // 我的做法
 function timeFormat(_num = 0) {
-    let _Appoint,_month,_day,_hour,_minute,_second,_date;
+    let _Appoint, _month, _day, _hour, _minute, _second, _date;
     // 指定天数 _num: 1时为昨天，2为前天，以此类推  增加天数则：new Date(new Date().getTime()+(_num*24*60*60*1000));
     _Appoint = new Date(new Date() - (_num * 24 * 60 * 60 * 1000));
-    _month = ('0'+(_Appoint.getMonth()+1)).slice(-2);
-    _day = ('0'+_Appoint.getDate()).slice(-2);
-    _hour = ('0'+_Appoint.getHours()).slice(-2);
-    _minute = ('0'+_Appoint.getMinutes()).slice(-2);
-    _second = ('0'+_Appoint.getSeconds()).slice(-2);
-    _date = `${ _Appoint.getFullYear() }-${ _month }-${ _day } ${ _hour }:${ _minute }:${ _second }`
+    _month = ('0' + (_Appoint.getMonth() + 1)).slice(-2);
+    _day = ('0' + _Appoint.getDate()).slice(-2);
+    _hour = ('0' + _Appoint.getHours()).slice(-2);
+    _minute = ('0' + _Appoint.getMinutes()).slice(-2);
+    _second = ('0' + _Appoint.getSeconds()).slice(-2);
+    _date = `${_Appoint.getFullYear()}-${_month}-${_day} ${_hour}:${_minute}:${_second}`
     return _date;
 }
 // console.log(`日期：${ timeFormat(2) }`);
@@ -200,7 +200,7 @@ function newFunction() {
         this.name = name;
     }
     Animal.color = "black";
-    Animal.prototype.say = function() { // prototype 向对象添加属性，此时 Animal.say() 不可用
+    Animal.prototype.say = function () { // prototype 向对象添加属性，此时 Animal.say() 不可用
         console.log("I'm " + this.name);
     };
     var cat = new Animal("cat");
@@ -277,7 +277,7 @@ function toggleClass(el, c) {
         addClass(el, c);
     }
 }
-$('#wrap').querySelector('p').addEventListener('click', function() {
+$('#wrap').querySelector('p').addEventListener('click', function () {
     toggleClass($('#wrap'), 'tra');
     // this.classList.toggle('tra');
 });
@@ -307,47 +307,29 @@ function contrast() {
     // 数组
     var arr = [23, 4, 4, 78, 3, 5, 1], values = [1, 2, 3, 4, 5];
     // arr.every() & arr.some() 历遍数
-    var everyResult = arr.every(function(item, index, array) {
+    var everyResult = arr.every(function (item, index, array) {
         return (item > 2);
     });
-    var someResult = arr.some(function(item, index, array) {
+    var someResult = arr.some(function (item, index, array) {
         return (item > 2);
     });
     // arr.filter() 过滤一个数组
-    var filterResult = arr.filter(function(item, index, array) {
+    var filterResult = arr.filter(function (item, index, array) {
         return (item > 2);
     });
     // arr.map() 在原有数组中运行传入函数
-    var mapResult = arr.map(function(item, index, array) {
+    var mapResult = arr.map(function (item, index, array) {
         return item * 2;
     });
     console.log(everyResult, someResult, filterResult, mapResult);
     // 数组累加 values.reduceRight() 反向执行
-    var sum = values.reduce(function(prev, cur, index, array) {
+    var sum = values.reduce(function (prev, cur, index, array) {
         return prev + cur;
     });
     console.log(sum);
     // 小到大
-    function sab(x, y) {
-        if (x < y) {
-            return -1;
-        } else if (x > y) {
-            return 1;
-        } else {
-            return 0;
-        }
-    }
-    // 大到小
-    function bts(x, y) {
-        if (x > y) {
-            return -1;
-        } else if (x < y) {
-            return 1;
-        } else {
-            return 0;
-        }
-    }
-    console.log(arr.sort(bts) == arr.sort(sab).reverse());
+    let stob = (a, b) => a - b;
+    console.log(arr.sort(stob), arr.sort(stob).reverse());
     // 数组对象
     let arrObj = [{
         name: "zlw",
@@ -359,24 +341,18 @@ function contrast() {
         name: "hjs",
         age: '15'
     }];
-    let compare = function(prop) {
-        return function(obj1, obj2) {
-            let val1 = obj1[prop];
-            let val2 = obj2[prop];
+    function compare(key) {
+        return function (obj1, obj2) {
+            var val1 = obj1[key],
+                val2 = obj2[key];
             if (!isNaN(Number(val1)) && !isNaN(Number(val2))) {
                 val1 = Number(val1);
                 val2 = Number(val2);
             }
-            if (val1 < val2) {
-                return -1;
-            } else if (val1 > val2) {
-                return 1;
-            } else {
-                return 0;
-            }
+            return val1 - val2;
         }
     }
-    console.log(arrObj.sort(compare("age")));
+    console.log(arrObj.sort(compare('age')));
     var num = 99;
     console.log(num.toFixed(2), num.toPrecision(3));
     // 思考
@@ -392,8 +368,8 @@ function contrast() {
     function createFunctions() {
         var result = new Array();
         for (var i = 0; i < 10; i++) {
-            result[i] = function(num) {
-                return function() {
+            result[i] = function (num) {
+                return function () {
                     return num;
                 };
             }(i);
@@ -408,7 +384,7 @@ function contrast() {
 this.num = 9;
 var mymodule = {
     num: 81,
-    getNum () {
+    getNum() {
         console.log(this.num)
     }
 };
@@ -424,12 +400,12 @@ boundGetNum(); // 81
  *工厂模式
  *工厂模式下不需要 new 因为他本身就是创建一个新的对象
  */
-function createPerson(name,age,say){
+function createPerson(name, age, say) {
     var obj = new Object();
     obj.name = name;
     obj.age = age;
     obj.say = say;
-    obj.should = function(){
+    obj.should = function () {
         alert(this.say);
     }
     return obj;
