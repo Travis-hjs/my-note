@@ -42,8 +42,9 @@
 					_data = _data.slice(1);
 					// 检测请求类型
 					if (window.fetch) {
-						// , { credentials: 'include' } 这个是打开 cookie
 						fetch(this.website + url, {
+							// credentials: 'include', // 打开 cookie
+                			// mode: 'cors',           // 打开跨域
 							method: 'POST',
 							headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
 							body: _data
@@ -187,8 +188,9 @@
 					_data = _data.slice(1);
 					// 检测请求类型
 					if (window.fetch) {
-						// , { credentials: 'include' } 这个是打开 cookie
 						fetch(this.website + url, {
+							// credentials: 'include', // 打开 cookie
+                			// mode: 'cors',           // 打开跨域
 							method: 'POST',
 							headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
 							body: _data
