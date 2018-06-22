@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <title>switch-btn</title>
+        <style>
+            *{ padding: 0; margin: 0; }
+            .wrap{ width: 100%; max-width: 680px; margin: 0 auto; padding: 30px; box-sizing: border-box; }
+            .wrap div{ margin: 0 auto 20px; }
+            /* 定义按钮动画时间 */
+            .radio_btn, .radio_btn::before, .switch_btn, .switch_btn::before{ -webkit-transition: .25s all; transition: .25s all; }
+            /* 单选按钮 */
+            .radio_btn{ width: 28px; height: 28px; box-sizing: border-box; border: solid 1px #999; border-radius: 100%; position: relative; overflow: hidden; }
+            .radio_btn::before{ position: absolute; content: ''; width: 40%; height: 60%; background-color: transparent; left: 30%; top: 10%; box-sizing: border-box; -webkit-transform: rotate(0deg) scale(0, 0); transform: rotate(0deg) scale(0, 0); }
+            .radio_btn_on{ background-color: rgb(65, 44, 204); border-color: rgb(65, 44, 204); }
+            .radio_btn_on::before{ border: solid 1.2px #fff; border-top: none; border-left: none; -webkit-transform: rotate(45deg) scale(1, 1); transform: rotate(45deg) scale(1, 1); }
+            /* 开关按钮 长宽比 10/6*/
+            .switch_btn{ width: 50px; height: 30px; border-radius: 20px; background-color: #f4f4f4; position: relative; overflow: hidden; }
+            .switch_btn::before{ width: 28px; height: 28px; border-radius: 50%; background-color: #fff; box-shadow: 1px 1px 1px 1px rgba(0, 0, 0, 0.08); position: absolute; content: ''; left: 50%; top: 50%; -webkit-transform: translate(-82%, -50%); transform: translate(-82%, -50%); }
+            .switch_btn_on{ background-color: rgb(65, 44, 204); }
+            .switch_btn_on::before{ -webkit-transform: translate(-17%, -50%); transform: translate(-17%, -50%); }
+            
+            #big-radil{ width: 100px; height: 100px; }
+            #big-switch{ width: 100px; height: 60px; border-radius: 30px; }
+            #big-switch::before{ width: 58px; height: 58px; }
+        </style>
+    </head>
+    <body>
+        <section class="wrap">
+            <div class="radio_btn" onclick="radioFn(this)"></div>
+            <div class="switch_btn" onclick="switchFn(this)"></div>
+            <div class="radio_btn" id="big-radil" onclick="radioFn(this)"></div>
+            <div class="switch_btn" id="big-switch" onclick="switchFn(this)"></div>
+        </section>
+
+        <script>
+            function radioFn(el) {
+                el.classList.toggle('radio_btn_on')
+            }
+            function switchFn(el) {
+                el.classList.toggle('switch_btn_on')
+            }
+        </script>
+    </body>
+</html>
