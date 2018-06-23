@@ -4,7 +4,7 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta http-equiv="X-UA-Compatible" content="ie=edge">
-        <title>new Date() 使用</title>
+        <title>new Date()</title>
         <style>
             *{ padding: 0; margin: 0; }
             .wrap{ width: 100%; max-width: 680px; margin: 0 auto; box-sizing: border-box; padding: 20px; text-align: center; }
@@ -14,6 +14,11 @@
         <div class="wrap"></div>
 
         <script>
+            function createText(text) {
+                const _p = document.createElement('p');
+                _p.textContent = text;
+                document.querySelector('.wrap').appendChild(_p);
+            }
             // 日期生成
             function dayJson() {
                 var calendar = [],
@@ -22,7 +27,7 @@
                     monthCount = 1,
                     dayCount = 1;
                 for (var i = minYears; i <= maxYears; i++) {
-                    var _year = {}; // 这里的定义变量放在外面会导致变量key一直重复
+                    var _year = {};
                     _year.name = i.toString();
                     _year.sub = [];
                     for (var j = monthCount; j <= 12; j++) {
@@ -63,23 +68,18 @@
                 return arr;
             }
             // console.log(timeInterval(5));
-
-            // 一般的做法
-            function timeStr() {
-                var _date = new Date();
-                var hour = _date.getHours() < 10 ? '0' + _date.getHours() : _date.getHours(),
-                    minute = _date.getMinutes() < 10 ? '0' + _date.getMinutes() : _date.getMinutes(),
-                    second = _date.getSeconds() < 10 ? '0' + _date.getSeconds() : _date.getSeconds();
-                // 字符串拼接
-                var dayArr = _date.getFullYear() + '-' + (_date.getMonth() + 1) + '-' + _date.getDate(),
-                    timeArr = hour + ':' + minute + ':' + second;
-                console.log(dayArr, timeArr);
-            }
-            // 我的做法
+            
+            /**
+             * 时间戳生成
+             * 指定天数 _num: 1时为明天，-1为昨天天，以此类推
+            */
             function timeFormat(_num = 0) {
                 let _Appoint, _month, _day, _hour, _minute, _second, _date;
-                // 指定天数 _num: 1时为昨天，2为前天，以此类推  增加天数则：new Date(new Date().getTime()+(_num*24*60*60*1000));
-                _Appoint = new Date(new Date() - (_num * 24 * 60 * 60 * 1000));
+                if (_num > 0) {
+                    _Appoint = new Date(new Date().getTime() + (_num * 24 * 3600 * 1000));
+                } else {
+                    _Appoint = new Date(new Date() - (_num * 24 * 3600 * 1000));
+                }
                 _month = ('0' + (_Appoint.getMonth() + 1)).slice(-2);
                 _day = ('0' + _Appoint.getDate()).slice(-2);
                 _hour = ('0' + _Appoint.getHours()).slice(-2);
@@ -88,7 +88,7 @@
                 _date = `${_Appoint.getFullYear()}-${_month}-${_day} ${_hour}:${_minute}:${_second}`
                 return _date;
             }
-            // console.log(`日期：${ timeFormat(2) }`);
+            createText(`日期：${timeFormat(2)}`);
             
             /**
              * 带天数的倒计时
@@ -107,31 +107,18 @@
                     hour = ('0' + hour).slice(-2);
                     minute = ('0' + minute).slice(-2);
                     second = ('0' + second).slice(-2);
-                    // 
-                    console.log(day + '天:' + hour + '小时：' + minute + '分钟：' + second + '秒');
+                    console.log(`距离明天10点还剩：${day}天：${hour}小时：${minute}分钟：${second}秒`);
                     times--;
                 }, 1000);
-                
-            }
-            let _timeformat = (_num = 0) => {
-                let _Appoint, _month, _day, _hour, _minute, _second, _date;
-                _Appoint = new Date(new Date().getTime() + (_num * 24 * 3600 * 1000));
-                _month = ('0' + (_Appoint.getMonth() + 1)).slice(-2);
-                _day = ('0' + _Appoint.getDate()).slice(-2);
-                _hour = ('0' + _Appoint.getHours()).slice(-2);
-                _minute = ('0' + _Appoint.getMinutes()).slice(-2);
-                _second = ('0' + _Appoint.getSeconds()).slice(-2);
-                _date = `${_Appoint.getFullYear()}/${_month}/${_day} ${_hour}:${_minute}:${_second}`
-                return _date;
             }
             // 获取明天10点的时间戳
-            let times = _timeformat(1).slice(-8);
-            let timef = _timeformat(1).split(times).join('10:00:00');
+            let times = timeFormat(1).slice(-8);
+            let timef = timeFormat(1).split(times).join('10:00:00');
             // 计算秒数
-            let start = new Date(_timeformat()).getTime(),
+            let start = new Date(timeFormat()).getTime(),
                 end = new Date(timef).getTime();
             let num = Math.floor(((end - start) / 1000));
-            console.log(num, timef);
+            createText(`秒数：${num}, 明天时间：${timef}`)
             countDown(num)
         </script>
     </body>
