@@ -4,7 +4,7 @@
 		<meta charset="utf-8">
 		<meta name="viewport" content="maximum-scale=1.0, minimum-scale=1.0, user-scalable=0, initial-scale=1.0, width=device-width"/>
 	    <meta name="format-detection" content="telephone=no, email=no, date=no, address=no">
-		<title>banner插件</title>
+		<title>swiper插件</title>
 		<style media="screen">
 			*{ padding: 0; margin: 0; }
 			html,body{ font-size: 50px; color: #333; background: #fff; -webkit-touch-callout:none; -webkit-text-size-adjust:none; -webkit-tap-highlight-color:rgba(0, 0, 0, 0); -webkit-user-select:none; font-family: "Helvetica Neue", Helvetica, sans-serif; }
@@ -31,7 +31,7 @@
 		<!-- <script type="text/javascript" src="./js/swiper.js"></script> -->
 		<script type="text/javascript">
 			function addSwiper (el) {
-				var _html = `<div class="swiper mybanner">
+				let _html = `<div class="swiper mybanner">
 								<ul class="swiper_list">
 									<li class="swiper_slider">
 										<p>silder-1</p>
@@ -81,13 +81,13 @@
 				});
 			});
 			/*
-			*	默认全部 false
-			*	_pagination: 底部圆点（true & false）
-			*	_loop：是否需要回路（true & false）
-			*	_direction：X/Y方向（true & false）
-			*	_moveTime：过渡时间（毫秒）
-			*	_autoPaly： 自动播放（true & false）
-			*	_interval： 自动播放间隔（秒）
+			 *	默认全部 false
+			 *	_pagination: 底部圆点（true & false）
+			 *	_loop：是否需要回路（true & false）
+			 *	_direction：X/Y方向（true & false）
+			 *	_moveTime：过渡时间（毫秒）
+			 *	_autoPaly： 自动播放（true & false）
+			 *	_interval： 自动播放间隔（秒）
 			*/
 			function Swiper(_params) {
 				let _pagination = false, _loop = false, _direction = false, _autoPaly = false, _interval = 3000, _moveTime = 300;

@@ -18,7 +18,7 @@
 		</div>
 
 		<script type="text/javascript">
-			document.getElementById('file').onchange = e => {
+			document.getElementById('file').onchange = function(e) {
 				var files = e.target.files || e.dataTransfer.files,
 					supportedTypes = ['image/jpg', 'image/jpeg', 'image/png'];
 				if (!files.length || supportedTypes.indexOf(files[0].type) < 0) return alert('文件格式只支持：jpg 和 png');
@@ -29,7 +29,7 @@
 	        // 获取base64
 			function createImage(file) {
 				var reader = new FileReader()
-				reader.onload = e => {
+				reader.onload = function(e) {
 					document.querySelector('.updataImg').src = e.target.result
 					// e.target.result.replace(/\+/g, "%2B").replace(/\&/g, "%26")
 					e.target.result.split('+').join('%2B').split('&').join('%26')

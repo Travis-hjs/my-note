@@ -1,98 +1,98 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-	<meta charset="UTF-8">
-	<title>导航点击平移</title>
-</head>
-<style>
-	*{ padding: 0px; margin: 0px;}
-	body{ background: #525252; font-family: 微软雅黑}
-	ul,li{ list-style: none; }
-	a{ text-decoration: none; }
-	.flex{ display: flex; display: -webkit-flex; display: -moz-flex; }
-	.f1{ flex: 1 }
-	header{ max-width: 600px; width: 90%; margin: 100px auto; }
-	nav{ background: #fff; height: 48px; position: relative;}
-	nav li{ text-align: center; position: relative; z-index: 2; color: #000; line-height: 48px; cursor: pointer; -webkit-transition: 0.5s all; transition: 0.5s all; }
-	.nav_hover{ color: #fff; }
-	.nav_slide{ display: block; background: #31c27c; width: 1px; height: 48px; position: absolute; bottom: 0; left: 0; z-index: 1; -webkit-transition: 0.3s all; transition: 0.3s all; }
-</style>
-<body>
-	<header>
-		<nav class="flex nav">
-			<li class="f1 nav_hover">导航一</li>
-			<li class="f1">导航二</li>
-			<li class="f1">导航三</li>
-			<li class="f1">导航四</li>
-			<span class="nav_slide"></span>
-		</nav>
-	</header>
-	<script>
-		function navSlide(btn, className, slide) {
-			var _li = document.querySelectorAll(btn);
-			var _slide = document.querySelector(slide);
-			var _howFar = _li[0].offsetWidth;
-			_slide.style.width = _howFar + 'px';
-			// 窗口变动时的值
-			var resizeIndex = 0;
-
-			for (var i = 0; i < _li.length; i++) {
-				_li[i].addEventListener('click', () => {
-					document.querySelector('.'+className).classList.remove(className);
-					// 移动的时候改变这个窗口变动值
-					resizeIndex = i;
-					_slide.style.transform = `translateX(${_howFar * i}px)`;
-					_li[i].classList.add(className);
-				})
-			}
-			// for (let i = 0; i < _li.length; i++) {
-			// 	_li[i].addEventListener('click', () => {
-			// 		for (let i = 0; i < _li.length; i++) {
-			// 			_li[i].classList.remove(className);
-			// 		}
-			// 		// 移动的时候改变这个窗口变动值
-			// 		resizeIndex = i;
-			// 		_slide.style.transform = `translateX(${_howFar * i}px)`;
-			// 		_li[i].classList.add(className);
-			// 	})
-			// }
-
-			// 一、用函数来实现闭包
-			// for (var k = 0; k < _li.length; k++) {
-			// 	(function (j) {
-			// 		_li[j].addEventListener('click', () => {
-			// 			for (var i = 0; i < _li.length; i++) {
-			// 				_li[i].classList.remove(className);
-			// 			}
-			// 			_slide.style.transform = `translateX(${_howFar * j}px)`;
-			// 			_li[j].classList.add(className);
-			// 			console.log(j);
-			// 		});
-			// 	})(k)
-			// }
-
-			// 二、用赋值进行闭包变量
-			// for (var k = 0; k < _li.length; k++) {
-			// 	_li[k].index = k;
-			// 	_li[k].addEventListener('click', function() {
-			// 		for (var i = 0; i < _li.length; i++) {
-			// 			_li[i].classList.remove(className);
-			// 		}
-			// 		var j = this.index;
-			// 		_slide.style.transform = `translateX(${_howFar * j}px)`;
-			// 		_li[j].classList.add(className);
-			// 		// console.log(j);
-			// 	});
-			// }
-
-			// 响应式兼容
-			window.addEventListener('resize', () => {
-				_howFar = _li[0].offsetWidth;
+	<head>
+		<meta charset="UTF-8">
+		<title>导航点击平移</title>
+		<style>
+			*{ padding: 0px; margin: 0px;}
+			body{ background: #525252; font-family: 微软雅黑}
+			ul,li{ list-style: none; }
+			a{ text-decoration: none; }
+			.flex{ display: flex; display: -webkit-flex; display: -moz-flex; }
+			.f1{ flex: 1 }
+			header{ max-width: 600px; width: 90%; margin: 100px auto; }
+			nav{ background: #fff; height: 48px; position: relative;}
+			nav li{ text-align: center; position: relative; z-index: 2; color: #000; line-height: 48px; cursor: pointer; -webkit-transition: 0.5s all; transition: 0.5s all; }
+			.nav_hover{ color: #fff; }
+			.nav_slide{ display: block; background: #31c27c; width: 1px; height: 48px; position: absolute; bottom: 0; left: 0; z-index: 1; -webkit-transition: 0.3s all; transition: 0.3s all; }
+		</style>
+	</head>
+	<body>
+		<header>
+			<nav class="flex nav">
+				<li class="f1 nav_hover">导航一</li>
+				<li class="f1">导航二</li>
+				<li class="f1">导航三</li>
+				<li class="f1">导航四</li>
+				<span class="nav_slide"></span>
+			</nav>
+		</header>
+		<script>
+			function navSlide(btn, className, slide) {
+				var _li = document.querySelectorAll(btn);
+				var _slide = document.querySelector(slide);
+				var _howFar = _li[0].offsetWidth;
 				_slide.style.width = _howFar + 'px';
-				_slide.style.transform = `translateX(${_howFar * resizeIndex}px)`;
-			});
-		}
-		navSlide('.nav li', 'nav_hover', '.nav_slide');
-	</script>
-</body>
+				// 窗口变动时的值
+				var resizeIndex = 0;
+
+				for (var i = 0; i < _li.length; i++) {
+					_li[i].addEventListener('click', () => {
+						document.querySelector('.'+className).classList.remove(className);
+						// 移动的时候改变这个窗口变动值
+						resizeIndex = i;
+						_slide.style.transform = `translateX(${_howFar * i}px)`;
+						_li[i].classList.add(className);
+					})
+				}
+				// for (let i = 0; i < _li.length; i++) {
+				// 	_li[i].addEventListener('click', () => {
+				// 		for (let i = 0; i < _li.length; i++) {
+				// 			_li[i].classList.remove(className);
+				// 		}
+				// 		// 移动的时候改变这个窗口变动值
+				// 		resizeIndex = i;
+				// 		_slide.style.transform = `translateX(${_howFar * i}px)`;
+				// 		_li[i].classList.add(className);
+				// 	})
+				// }
+
+				// 一、用函数来实现闭包
+				// for (var k = 0; k < _li.length; k++) {
+				// 	(function (j) {
+				// 		_li[j].addEventListener('click', () => {
+				// 			for (var i = 0; i < _li.length; i++) {
+				// 				_li[i].classList.remove(className);
+				// 			}
+				// 			_slide.style.transform = `translateX(${_howFar * j}px)`;
+				// 			_li[j].classList.add(className);
+				// 			console.log(j);
+				// 		});
+				// 	})(k)
+				// }
+
+				// 二、用赋值进行闭包变量
+				// for (var k = 0; k < _li.length; k++) {
+				// 	_li[k].index = k;
+				// 	_li[k].addEventListener('click', function() {
+				// 		for (var i = 0; i < _li.length; i++) {
+				// 			_li[i].classList.remove(className);
+				// 		}
+				// 		var j = this.index;
+				// 		_slide.style.transform = `translateX(${_howFar * j}px)`;
+				// 		_li[j].classList.add(className);
+				// 		// console.log(j);
+				// 	});
+				// }
+
+				// 响应式兼容
+				window.addEventListener('resize', () => {
+					_howFar = _li[0].offsetWidth;
+					_slide.style.width = _howFar + 'px';
+					_slide.style.transform = `translateX(${_howFar * resizeIndex}px)`;
+				});
+			}
+			navSlide('.nav li', 'nav_hover', '.nav_slide');
+		</script>
+	</body>
 </html>

@@ -1,65 +1,64 @@
 <!DOCTYPE html>
-<html lang="en" dir="ltr">
+<html lang="en">
     <head>
-        <meta charset="utf-8">
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
         <title>ES6</title>
+        <style>
+            *{ padding: 0; margin: 0; }
+            .wrap{ width: 100%; max-width: 680px; margin: 0 auto; box-sizing: border-box; padding: 20px; text-align: center; }
+        </style> 
     </head>
     <body>
-        <ul class="list">
-            <li>1</li>
-            <li>2</li>
-            <li>3</li>
-            <li>2</li>
-            <li>2</li>
-            <li>2</li>
-            <li>2</li>
-        </ul>
-        <script type="text/javascript">
-            // 貌似浏览器还不支持导出导入
-            // var _exportTest = require('./js/export-test.js');
-            // import { exportOne, exportTwo } from './js/export-test.js'
-            // console.log(exportOne, exportTwo);
+        <div class="wrap"></div>
 
-            // let or var
-            var _functions = [];
-            // ES5 可以利用闭包解决这个问题
-            // for (var i = 0; i < 10; i++) {
-            //     _functions.push((function(value) {
-            //         return function() {
-            //             console.log(value)
-            //         }
-            //     }(i)))
-            // }
-            // ES6 直接 let解决
-            for (let i = 0; i < 10; i++) {
-                _functions.push(function() {
-                    console.log(i)
+        <script>
+            function variable() {
+                var _functions = [];
+                // ES5
+                // for (var i = 0; i < 10; i++) {
+                //     _functions.push((function(value) {
+                //         return function() {
+                //             console.log(value)
+                //         }
+                //     }(i)));
+                // }
+                // ES6
+                for (let i = 0; i < 10; i++) {
+                    _functions.push(function() {
+                        console.log(i)
+                    });
+                }
+                _functions.forEach(function (_fn) {
+                    _fn();
                 });
             }
-            _functions.forEach(function(_fn) {
-    	        _fn()
-    	    });
-
-
-            // 1.includes：判断是否包含然后直接返回布尔值
-            let str = 'hahay'
-            console.log(str.includes('y')) // true
-            // 2.repeat: 获取字符串重复n次
-            let _text = 'he'
-            console.log(_text.repeat(3)) // 'hehehe'
-            //如果是小数, Math.floor(num) 来处理
+            // variable();
+            
+            function stringExtend() {
+                let str = 'my name is Huang jing sheng~';
+                /**
+                 * includes() 判断是否包含然后直接返回布尔值
+                 * repeat() 获取字符串重复n次
+                 * 如果是小数, Math.floor(num) 来处理
+                */
+                console.log(str.includes('y'));
+                console.log(str.repeat(3));
+            }
+            // stringExtend();
 
             //  ES5
-            function action(num) {
-                let _num = num || 200;
-                return _num
-            }
+            // function action(num) {
+            //     let _num = num || 200;
+            //     console.log(num)
+            // }
             //  ES6
             function action(num = 200) {
                 console.log(num)
             }
-            action();
-            action(300);
+            // action();
+            // action(300);
 
             //  拓展的对象功能
             // function people(name, age) {
@@ -76,28 +75,25 @@
                 };
             }
 
-
             // 对象浅复制
-            const objA={ name: 'hjs' }
-            const objB={ age: 18 }
+            const objA = { name: 'hjs' }
+            const objB = { age: 18 }
             const obj = Object.assign({}, objA, objB);
-            // console.log(obj);
-
+            // console.log(obj); // {name: "hjs", age: 18}
 
             //  解构赋值
             const personal = {
                 name: '黄景圣',
                 age: 18,
-                info: ['hjs','178cm','64kg']
+                info: ['hjs', '178cm', '64kg']
             }
             // ES5
             // var name = personal.name
             // var age = personal.age
             // ES6e
-            let { name, age } = personal
-            let [Egname, tall, weight] = personal.info
-            // console.log(name, age, Egname, tall, weight)
-
+            let { name, age } = personal;
+            let [Egname, tall, weight] = personal.info;
+            // console.log(name, age, Egname, tall, weight);
 
             // 数组拼接 展开运算符
             const arr1 = [0, 1, 2];
@@ -111,37 +107,34 @@
             // 或者
             // console.log([...arr1,...arr2]);
 
-
             // 同步的方式去写异步代码
-            setTimeout(function() {
-                console.log(1)
-            }, 0);
-            new Promise(function executor(resolve) {
+            setTimeout(() => console.log(1), 0);
+
+            new Promise(function(resolve) {
                 console.log(2);
-                // 这里的意思是，如果不执行 executor 该函数时，下面所有的then()里面的函数都不会执行
-                for( let i = 0 ; i < 10000 ; i++ ) {
-                    i == 9999 && resolve();
-                }
+                // 这里的意思是，如果不执行 resolve 该函数时，下面所有的then()里面的函数都不会执行
+                setTimeout(() => resolve(), 1000);
                 console.log(3);
-            }).then(function() {
+            }).then(function () {
+                // setTimeout(() => variable(), 1000);
                 console.log(4);
             }).then(function () {
                 console.log(6);
+            }).then(function() {
+                console.log('最后一个');
             });
-            console.log(5);
-
             // function timeout(_time) {
-            //     return new Promise(function(resolve,reject){
+            //     return new Promise(function(resolve, reject){
             //         setTimeout(resolve, _time);
             //     })
             // }
             // timeout(3000).then(function(){
             //     console.log('执行');
-                
+
             // })
 
             // 生成器
-            function *createIterator() {
+            function* createIterator() {
                 yield 'one';
                 yield 'two';
                 yield 'three';
@@ -175,14 +168,14 @@
             const setArr = new Set();
             [2, 3, 5, 4, 5, 2, 2].forEach(x => setArr.add(x));
             for (let i of setArr) {
-                console.log(`set: ${ i }`);
+                console.log(`set: ${i}`);
             }
             const typeArr = ['type-1', 'type-2', { type: 'type-3' }];
-            for(let index in typeArr){
-                console.log(`for-in: ${typeArr[index]}, index: ${ index }, obj: ${ typeArr }`);
+            for (let index in typeArr) {
+                console.log(`for-in: ${typeArr[index]}, index: ${index}, obj: ${typeArr}`);
             }
 
-            var _obj = new Proxy({}, {
+            let _obj = new Proxy({}, {
                 get: function (target, key, receiver) {
                     console.log(`getting ${key}!`);
                     return Reflect.get(target, key, receiver);
@@ -192,9 +185,6 @@
                     return Reflect.set(target, key, value, receiver);
                 }
             });
-
-
-
         </script>
     </body>
 </html>

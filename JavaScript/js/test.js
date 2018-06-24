@@ -10,7 +10,7 @@ let $$ = el => document.querySelectorAll(el);
  * addEventListener中的第三个参 数是useCapture,一个bool类型。
  * 当为false时为冒泡获取(由里向外)，true为capture方式(由外向里)
  * 等价于jQuery的 $(document).ready()
- * window.addEventListener('DOMContentLoaded',functionName) // mouseover,mouseout:hover()
+ * window.addEventListener('DOMContentLoaded', functionName) // mouseover, mouseout:hover()
 */
 
 function dataCut() {
@@ -205,13 +205,13 @@ $('#wrap').querySelector('p').addEventListener('click', function () {
     // this.classList.toggle('tra');
 });
 
-/*
-    永久储存
-    localStorage.setItem("key","value");//以“key”为名称存储一个值“value”
-    localStorage.getItem("key");//获取名称为“key”的值
-    周期储存（浏览器关闭之前）
-    sessionStorage.setItem('','')
-    sessionStorage.getItem('')
+/**
+ * 永久储存
+ * localStorage.setItem("key","value"); 以“key”为名称存储一个值“value”
+ * localStorage.getItem("key"); 获取名称为“key”的值
+ * 周期储存（浏览器关闭之前）
+ * sessionStorage.setItem('','')
+ * sessionStorage.getItem('')
 */
 
 /**
@@ -228,7 +228,7 @@ $('#wrap').querySelector('p').addEventListener('click', function () {
 */
 function contrast() {
     // 数组
-    var arr = [23, 4, 4, 78, 3, 5, 1], values = [1, 2, 3, 4, 5];
+    var arr = [23, 4, 4, 78, 3, 5, 1], values = [1, 2, 3, 4, 5], num = 99;
     // arr.every() & arr.some() 历遍数
     var everyResult = arr.every(function (item, index, array) {
         return (item > 2);
@@ -276,30 +276,8 @@ function contrast() {
         }
     }
     console.log(arrObj.sort(compare('age')));
-    var num = 99;
+    // 保留小数位 & 保留数位
     console.log(num.toFixed(2), num.toPrecision(3));
-    // 思考
-    // function createFunctions(){
-    //   var result = new Array();
-    //   for (var i = 0; i < 10; i++){
-    //     result[i] = function(){
-    //       return i;
-    //     };
-    //   }
-    //   return result;
-    // }
-    function createFunctions() {
-        var result = new Array();
-        for (var i = 0; i < 10; i++) {
-            result[i] = function (num) {
-                return function () {
-                    return num;
-                };
-            }(i);
-        }
-        return result;
-    }
-    console.log(createFunctions());
 }
 // contrast();
 
@@ -322,7 +300,7 @@ boundGetNum(); // 81
 /**
  *工厂模式
  *工厂模式下不需要 new 因为他本身就是创建一个新的对象
- */
+*/
 function createPerson(name, age, say) {
     var obj = new Object();
     obj.name = name;
@@ -337,7 +315,7 @@ function createPerson(name, age, say) {
 /**
  * 构造函数
  * 注意构造函数名第一个字母大写
- */
+*/
 function Person(name, url) {
     this.name = name;
     this.url = url;

@@ -39,7 +39,7 @@
     100% { -webkit-transform: rotate(360deg); transform: rotate(360deg); opacity: 1; }
 }
 /* toast */
-.itoast{ display: inline-block; padding: 0 .3rem; min-height: .78rem; line-height: .78rem; font-size: .24rem; color: #fff; background-color: rgba(0,0,0,0.5); border-radius: .08rem; position: fixed; z-index: 999; bottom: 10%; left: 50%; -webkit-transform: translateX(-50%); transform: translateX(-50%); -webkit-animation: toastmove 0.4s ease; animation: toastmove 0.4s ease; -webkit-transition: 0.2s all; transition: 0.2s all; }
+.itoast{ padding: .2rem .3rem; -webkit-box-sizing: border-box !important; box-sizing: border-box !important; min-height: .78rem; line-height: .38rem; font-size: .24rem; color: #fff; background-color: rgba(0,0,0,0.5); border-radius: .08rem; position: fixed; z-index: 999; bottom: 10%; left: 50%; -webkit-transform: translateX(-50%); transform: translateX(-50%); -webkit-animation: toastmove 0.4s ease; animation: toastmove 0.4s ease; -webkit-transition: 0.2s all; transition: 0.2s all; }
 @-webkit-keyframes toastmove {
     0% { opacity: 0; -webkit-transform: translate(-50%, 300%); transform: translate(-50%, 300%); }
     50% { opacity: 1; -webkit-transform: translate(-50%, -100%); transform: translate(-50%, -100%); }
