@@ -27,6 +27,7 @@
 			 * _img = _img.replace(/\+/g, "%2B").replace(/\&/g, "%26")
 			 * 转大写
 			 * str.toUpperCase()
+			 * 注意，服务器端须设置设置response'Access-Control-Allow-Origin' 打开跨域
 			*/
 			class FetchRequest {
 				constructor (params) {
@@ -118,7 +119,7 @@
 								running = false;
 							}
 						}
-						xhr.send();
+						xhr.send(null);
 					}
 					// 超时检测
 					if (this.timeout) {
@@ -249,7 +250,7 @@
 								if (typeof errorHandler === 'function') errorHandler(event.target.status);
 							}
 						}
-						xhr.send();
+						xhr.send(null);
 					}
 				}
 			}

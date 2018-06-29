@@ -20,8 +20,6 @@ input, textarea{ outline: none; background-color: rgba(0, 0, 0, 0); -webkit-user
 input::-webkit-input-placeholder { color: #999; }
 textarea{ resize: none; display: block; }
 textarea::-webkit-input-placeholder { color: #999; }
-[data-active]:active{ background-color: #eee; }
-[data-opacity]:active{ opacity: 0.8; }
 .app{ width: 100%; overflow: hidden; margin: 0 auto; max-width: 680px; }
 .flex{ display: -webkit-box; display: -webkit-flex; display: flex; flex-wrap: wrap }
 /* 垂直平居中 */
@@ -31,7 +29,7 @@ textarea::-webkit-input-placeholder { color: #999; }
 .f1{ -webkit-box-flex: 1; -webkit-flex: 1; flex: 1; }
 .f2{ -webkit-box-flex: 2; -webkit-flex: 2; flex: 2; }
 .f3{ -webkit-box-flex: 3; -webkit-flex: 3; flex: 3; }
-/*  */
+/* 溢出...显示 */
 .ellipsis{ overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 /* .textWrap(@num){ display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: @num; text-overflow: ellipsis; overflow: hidden; } */
 .priceColor{ color: #f53e3e; }
@@ -60,12 +58,6 @@ textarea::-webkit-input-placeholder { color: #999; }
 	from { -webkit-transform: translateX(.5rem); transform: translateX(.5rem); opacity: 0; }
 	to { -webkit-transform: translateX(0rem); transform: translateX(0rem); opacity: 1; }
 }
-/*复选框*/
-.checked_btn{ width: 0.46rem; height: 0.46rem; position: relative; border: solid 1px #ccc; border-radius: 50%; -webkit-transition: 0.2s all; transition: 0.2s all; }
-.checked_btn::before{ position: absolute; content: ''; -webkit-transition: 0.2s all; transition: 0.2s all; }
-.checked_btn::before{ width: 30%; height: 50%; background-color: transparent; left: 35%; top: 13%; -webkit-transform: rotate(45deg) scale(0,0); transform: rotate(45deg) scale(0,0); }
-.check_on{ background-color: #0066ff; border-color: #0066ff; }
-.check_on::before{ -webkit-transform: rotate(45deg) scale(1,1); transform: rotate(45deg) scale(1,1); border: solid 1px #fff; border-top: none; border-left: none; }
 /*定义rem*/
 @media only screen and (min-width: 320px) { html { font-size: 42.6667px !important; } }
 @media only screen and (min-width: 360px) { html { font-size: 48px !important; } }

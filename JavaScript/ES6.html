@@ -14,6 +14,8 @@
         <div class="wrap"></div>
 
         <script>
+            let $ = el => document.querySelector(el);
+            
             function variable() {
                 var _functions = [];
                 // ES5
@@ -107,31 +109,34 @@
             // 或者
             // console.log([...arr1,...arr2]);
 
-            // 同步的方式去写异步代码
-            setTimeout(() => console.log(1), 0);
-
-            new Promise(function(resolve) {
-                console.log(2);
-                // 这里的意思是，如果不执行 resolve 该函数时，下面所有的then()里面的函数都不会执行
-                setTimeout(() => resolve(), 1000);
-                console.log(3);
-            }).then(function () {
-                // setTimeout(() => variable(), 1000);
-                console.log(4);
-            }).then(function () {
-                console.log(6);
-            }).then(function() {
-                console.log('最后一个');
-            });
-            // function timeout(_time) {
-            //     return new Promise(function(resolve, reject){
-            //         setTimeout(resolve, _time);
-            //     })
-            // }
-            // timeout(3000).then(function(){
-            //     console.log('执行');
-
-            // })
+            function promiseFn() {
+                // 同步的方式去写异步代码
+                setTimeout(() => console.log(1), 0);
+    
+                new Promise(function(resolve) {
+                    console.log(2);
+                    // 这里的意思是，如果不执行 resolve 该函数时，下面所有的then()里面的函数都不会执行
+                    setTimeout(() => resolve(), 1000);
+                    console.log(3);
+                }).then(function () {
+                    // setTimeout(() => variable(), 1000);
+                    console.log(4);
+                }).then(function () {
+                    console.log(6);
+                }).then(function() {
+                    console.log('最后一个');
+                });
+                function timeout(_time) {
+                    return new Promise(function(resolve, reject){
+                        setTimeout(resolve, _time);
+                    })
+                }
+                timeout(3000).then(function(){
+                    console.log('执行');
+    
+                })
+            }
+            // promiseFn();
 
             // 生成器
             function* createIterator() {
@@ -165,26 +170,32 @@
 
 
             //  set 和 for..of
-            const setArr = new Set();
-            [2, 3, 5, 4, 5, 2, 2].forEach(x => setArr.add(x));
-            for (let i of setArr) {
-                console.log(`set: ${i}`);
-            }
-            const typeArr = ['type-1', 'type-2', { type: 'type-3' }];
-            for (let index in typeArr) {
-                console.log(`for-in: ${typeArr[index]}, index: ${index}, obj: ${typeArr}`);
-            }
+            function set_of() {
+                const setArr = new Set();
+                [2, 3, 5, 4, 5, 2, 2].forEach(x => setArr.add(x));
+                console.log('set:', typeof(setArr), setArr, Array.from(setArr), [...setArr]);
 
-            let _obj = new Proxy({}, {
-                get: function (target, key, receiver) {
-                    console.log(`getting ${key}!`);
-                    return Reflect.get(target, key, receiver);
-                },
-                set: function (target, key, value, receiver) {
-                    console.log(`setting ${key}!`);
-                    return Reflect.set(target, key, value, receiver);
+                for (let key of setArr.keys()) {
+                    console.log(key);
                 }
-            });
+                 
+                const typeArr = ['type-1', 'type-2', { type: 'type-3' }];
+                for (let index in typeArr) {
+                    console.log(index, 'key', typeArr[index]);
+                }
+    
+                let _obj = new Proxy({}, {
+                    get: function (target, key, receiver) {
+                        console.log(`getting ${key}!`);
+                        return Reflect.get(target, key, receiver);
+                    },
+                    set: function (target, key, value, receiver) {
+                        console.log(`setting ${key}!`);
+                        return Reflect.set(target, key, value, receiver);
+                    }
+                });
+            }
+            // set_of()
         </script>
     </body>
 </html>

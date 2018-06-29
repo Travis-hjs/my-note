@@ -11,6 +11,8 @@ let $$ = el => document.querySelectorAll(el);
  * 当为false时为冒泡获取(由里向外)，true为capture方式(由外向里)
  * 等价于jQuery的 $(document).ready()
  * window.addEventListener('DOMContentLoaded', functionName) // mouseover, mouseout:hover()
+ * encodeURIComponent() 对字符串进行编码(数字和英文不变)
+ * decodeURIComponent() 对应的解码
 */
 
 function dataCut() {
@@ -227,6 +229,10 @@ $('#wrap').querySelector('p').addEventListener('click', function () {
  * Math.floor(25.9) 向下取舍
 */
 function contrast() {
+    /** 
+     * parseInt(300 * Math.random()) + 1
+     * 1~300 随机一个数
+    */
     // 数组
     var arr = [23, 4, 4, 78, 3, 5, 1], values = [1, 2, 3, 4, 5], num = 99;
     // arr.every() & arr.some() 历遍数

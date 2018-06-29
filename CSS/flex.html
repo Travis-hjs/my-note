@@ -8,15 +8,26 @@
 	<style>
 		*{ padding: 0px; margin: 0px; }
 		ul,li{ list-style: none; }
-		.wrap{ width: 800px; height: 600px; border: dashed 1px #333; margin: auto; display: flex; align-items: center; }
-		.list{ display: flex; width: 90%; margin: auto; }
-		.list li{ flex: 1; display: flex; align-items: center; justify-content: center; height: 44px; color: #333; background: gold; margin-left: 10px; }
+		.wrap{ width: 800px; height: 600px; border: dashed 1px #333; margin: auto; }
+		.list{ width: 90%; margin: auto; }
+		.list li{ height: 44px; color: #333; background: gold; margin-left: 10px; }
 		.list li:nth-child(1){ margin-left: 0px; }
-		.app{ width: 100%; max-width: 650px; margin: 0 auto; height: 100vh;}
-		.app header, .app footer{ width: 100%; height: 44px; background-color: blueviolet; }
-		.app section{ width: 100%; background-color: gold; height: calc(100% - 88px); }
+		
+		/* app经典布局方法一 */
+		.app{ width: 100%; max-width: 650px; margin: 0 auto; height: 100vh; }
+		.app header, .app footer{ width: 100%; height: 44px; background-color: #333; }
+		.app section{ width: 100%; background-color: #f2f2f2; height: calc(100% - 88px); }
+
+		/* app经典布局方法二 */
+		.app-page{ width: 100%; max-width: 650px; margin: 0 auto; height: 100vh; flex-direction: column; -webkit-flex-direction: column; }
+		.app-page header, .app-page footer{ width: 100%; height: 44px; background-color: #333; }
+		.app-page section{ width: 100%; background-color: #f2f2f2; display: table-cell; vertical-align: middle; }
+
+		/* flex-class */
 		.flex{ display: flex; flex-wrap: wrap; }
 		.f1{ flex: 1; }
+		.f2{ flex: 2; }
+		.f3{ flex: 3; }
 		/* 垂直居中 */
 		.vertical{ align-items: center; }
 		/* 水平居中 */
@@ -26,21 +37,29 @@
 	</style>
 </head>
 <body>
-	<!-- <div class="wrap">
-		<h2>align-items: center (垂直居中)</h2>
-		<h2>justify-content: center (水平居中)</h2>
-		<ul class="list">
-			<li>flex-1</li>
-			<li>flex-2</li>
-			<li>flex-3</li>
-			<li>flex-4</li>
+	<!-- <div class="wrap flex vertical">
+		<ul class="list flex">
+			<li class="f1 flex vertical center">flex-1</li>
+			<li class="f1 flex vertical center">flex-2</li>
+			<li class="f1 flex vertical center">flex-3</li>
+			<li class="f1 flex vertical center">flex-4</li>
 		</ul>
 	</div> -->
+
+	<!-- app经典布局一 -->
 	<div class="app">
 		<header></header>
 		<section></section>
 		<footer></footer>
 	</div>
+
+	<!-- app经典布局二 -->
+	<!-- <div class="app-page flex">
+		<header></header>
+		<section class="f1"></section>
+		<footer></footer>
+	</div> -->
+
 	<script type="text/javascript">
 		
 	</script>
