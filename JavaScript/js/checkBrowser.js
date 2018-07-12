@@ -1,5 +1,4 @@
-function checkVersion() {
-    var msg = 'You are not using Internet Explorer.';
+function checkIE() {
     var ver = (function () {
         var rv = -1;
         if (navigator.appName == 'Microsoft Internet Explorer') {
@@ -11,17 +10,15 @@ function checkVersion() {
         return rv;
     })();
     if (ver > -1) {
-        if (ver > 9.0) {
-            msg = '通过';
-        }else{
+        if (ver < 9.0) {
             window.location.href = 'http://modesign.cc/outdatedbrowser/';
+        } else {
+            console.log('当前IE浏览版本为：', ver);
         }
     }
-    // console.log(msg, ver);
-    // alert(ver);
 }
 
-function checkBrowser() {
+function checkMobile() {
     var userAgentInfo = navigator.userAgent,
         Agents = ['Android', 'iPhone', 'SymbianOS', 'Windows Phone', 'iPad', 'iPod'];
     return Agents.some(function (item) {

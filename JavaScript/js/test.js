@@ -13,6 +13,8 @@ let $$ = el => document.querySelectorAll(el);
  * window.addEventListener('DOMContentLoaded', functionName) // mouseover, mouseout:hover()
  * encodeURIComponent() 对字符串进行编码(数字和英文不变)
  * decodeURIComponent() 对应的解码
+ * str.replace(/\d+/g, '') => 过滤数字
+ * str.replace(/[a-zA-Z]/g, '') => 过滤英文
 */
 
 function dataCut() {
@@ -23,7 +25,7 @@ function dataCut() {
             tall: '178cm',
             weight: '128kg'
         };
-    // 正则替换：i是首个，g是全局
+    // 正则替换：i是首个，g是全局 
     console.log(_str.replace(/#/i, '?#'));
     // 下面这种替换性能会更好点，但是不够灵活，只能是全局替换
     console.log(_str.split('#').join('?#'));

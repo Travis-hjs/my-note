@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="maximum-scale=1.0, minimum-scale=1.0, user-scalable=0, initial-scale=1.0, width=device-width"/>
+        <meta name="format-detection" content="telephone=no, email=no, date=no, address=no">
+        <title>元素随手势拖拽</title>
+        <style>
+            *{ padding: 0px; margin: 0px; }
+            li{ list-style: none; }
+            a{ text-decoration: none; }
+            .wrap{ width: 100%; max-width: 680px; height: 100vh; margin: 0 auto; font-size: 15px; }
+            .ball{ width: 60px; height: 60px; border-radius: 50%; background-color: cornflowerblue; position: fixed; z-index: 10; top: 0; left: 0; transform: translate3d(30px, 100px, 0px) }
+        </style>
+    </head>
+    <body>
+        <div class="wrap">
+            <div class="ball"></div>
+        </div>
+
+        <script>
+            /**
+             * el => 要拖动的元素
+             * wrap => 拖动元素的外部容器 默认为 body
+            */
+            function dragElement(el, wrap) {
+                let ball = document.querySelector(el),
+                    box = wrap ? document.querySelector(wrap) : document.body;
+                let _w = ball.clientWidth,
+                    _h = ball.clientHeight,
+                    box_w = box.clientWidth,
+                    box_h = box.clientHeight,
+                    _x = 0,
+                    _y = 0;
+                // 元素定位
+                function position(x, y) {
+                    // 判断 X 轴
+                    if (x <= 0) {
+                        x = 0;
+                    }else if (x >= box_w - _w) {
+                        x = box_w - _w;
+                    }
+                    // 判断 Y 轴
+                    if (y <= 0) {
+                        y = 0;
+                    } else if (y >= box_h - _h) {
+                        y = box_h - _h;
+                    }
+                    ball.style.WebkitTransform = ball.style.transform = `translate3d(${x}px, ${y}px, 0px)`;
+                }
+                // 事件监听
+                ball.addEventListener('touchmove', e => {
+                    e.preventDefault();
+                    _x = e.touches[0].pageX - _w / 2;
+                    _y = e.touches[0].pageY - _h / 2;
+                    position(_x, _y);
+                });
+            }
+            dragElement('.ball', '.wrap');
+
+            
+        </script>
+    </body>
+</html>

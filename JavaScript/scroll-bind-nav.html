@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="maximum-scale=1.0, minimum-scale=1.0, user-scalable=0, initial-scale=1.0, width=device-width"/>
+        <meta name="format-detection" content="telephone=no, email=no, date=no, address=no">
+        <title>简单的滚动监听导航</title>
+        <style>
+            *{ padding: 0px; margin: 0px; }
+            li{ list-style: none; }
+            a{ text-decoration: none; }
+            .wrap{ width: 100%; max-width: 680px; margin: 0 auto; font-size: 15px; }
+            /* 导航 */
+            .menu-box{ width: 100%; overflow: auto; position: fixed; top: 0px; left: 0px; z-index: 5; background-color: #ccc; }
+            .menu-box .menu{ width: 1500px; overflow: hidden; }
+            .menu-box .menu li{ float: left; background-color: #fff; }
+            .menu-box .menu li a{ width: 150px; height: 40px; text-align: center; line-height: 40px; font-size: 15px; color: #ccc; display: block }
+            .menu-box .menu li .li-active{ color: orange; }
+            /* 内容 */
+            .content{ width: 100%; }
+            .content ul{ width: 100%; overflow: hidden; }
+            .content ul li{ text-align: center; line-height: 300px; height: 300px; }
+        </style>
+    </head>
+    <body>
+        <div class="wrap">
+            <div class="menu-box">
+                <nav class="menu"></nav>
+            </div>
+            <section class="content">
+                <ul></ul>
+            </section>
+        </div>
+
+        <script>
+            // 生成对应的导航和内容
+            let nav_li = '', content_li = '', colors = ['#9c27b0','#ff5252','#2979ff','#009688','#4caf50','#cddc39','#ffc107','#ff5722','#607d8b','#81c784'];
+            for (let i = 0; i < 10; i++) {
+                nav_li += `<li><a href="#content-${i + 1}" data-index="${i}" onclick="navSwitch(this)">nav-${i + 1}</a></li>`;
+                content_li += `<li id="content-${i + 1}" style="background-color: ${colors[i]}">content-${i + 1}</li>`
+            }
+            document.querySelector('.menu').innerHTML = nav_li;
+            document.querySelector('.content ul').innerHTML = content_li;
+            document.querySelector('.menu li a').classList.add('li-active');
+            /**
+             * clicked：防止点击和滚动事件重复了
+             * isBottom：防止到达底部多次执行（废弃）
+             * timer：定时器
+            */
+            let clicked = false, isBottom = false, timer = null;
+            // 导航事件
+            function navSwitch(el) {
+                clicked = true;
+                let key = Number(el.dataset.index);
+                let list = document.querySelectorAll('.menu li a');
+                for (let i = 0; i < list.length; i++) {
+                    list[i].classList.remove('li-active');
+                }
+                list[key].classList.add('li-active');
+                if (timer) clearTimeout(timer);
+                timer = setTimeout(() => clicked = false, 100);
+            }
+            // 每个版块的滚动监听
+            function sectionOn() {
+                if (clicked) return;
+                let li = document.querySelectorAll('.menu li a'),
+                    contents = document.querySelectorAll('.content li'),
+                    nav = document.querySelector('.menu-box'),
+                    li_width = document.querySelector('.menu li').clientWidth;
+                for (let i = 0; i < contents.length; i++) {
+                    let _top = parseInt(contents[i].getBoundingClientRect().top);
+                    if (_top < 2 || _top < -2) {
+                        navSwitch(li[i]);
+                        nav.scrollLeft = i * li_width;
+                    }
+                }
+            }
+            // 滚动事件
+            window.addEventListener('scroll', e => {
+                let _scrollTop = document.documentElement.scrollTop === 0 ? document.body.scrollTop : document.documentElement.scrollTop;
+                let _scrollHeight = document.documentElement.scrollTop === 0 ? document.body.scrollHeight : document.documentElement.scrollHeight;
+                sectionOn();
+                // 判断是否到达底部
+                if (_scrollHeight - _scrollTop - 5 <= window.innerHeight) {
+                    console.log('到达底部');
+                    let last = document.querySelectorAll('.menu li a')[document.querySelectorAll('.menu li a').length - 1];
+                    navSwitch(last);
+                    // 当最后一个元素高过屏幕时以下判断可以不要
+                    let nav_box = document.querySelector('.menu-box'), nav = document.querySelector('.menu');
+                    if (nav_box.scrollLeft !== nav.clientWidth - nav_box.clientWidth) {
+                        nav_box.scrollLeft = nav.clientWidth - nav_box.clientWidth;
+                        // console.log('执行', nav_box.scrollLeft);
+                    }
+                }
+            });
+        </script>
+    </body>
+</html>
