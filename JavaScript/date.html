@@ -71,22 +71,22 @@
             
             /**
              * 时间戳生成
-             * 指定天数 _num: 1时为明天，-1为昨天天，以此类推
+             * 指定天数 num: 1时为明天，-1为昨天天，以此类推
             */
-            function timeFormat(_num = 0) {
-                let _Appoint, _month, _day, _hour, _minute, _second, _date;
-                if (_num > 0) {
-                    _Appoint = new Date(new Date().getTime() + (_num * 24 * 3600 * 1000));
+            function timeFormat(num = 0) {
+                let _Appoint, month, day, hour, minute, second, date;
+                if (num > 0) {
+                    _Appoint = new Date(new Date().getTime() + (num * 24 * 3600 * 1000));
                 } else {
-                    _Appoint = new Date(new Date() - (_num * 24 * 3600 * 1000));
+                    _Appoint = new Date(new Date() - (num * 24 * 3600 * 1000));
                 }
-                _month = ('0' + (_Appoint.getMonth() + 1)).slice(-2);
-                _day = ('0' + _Appoint.getDate()).slice(-2);
-                _hour = ('0' + _Appoint.getHours()).slice(-2);
-                _minute = ('0' + _Appoint.getMinutes()).slice(-2);
-                _second = ('0' + _Appoint.getSeconds()).slice(-2);
-                _date = `${_Appoint.getFullYear()}-${_month}-${_day} ${_hour}:${_minute}:${_second}`
-                return _date;
+                month = ('0' + (_Appoint.getMonth() + 1)).slice(-2);
+                day = ('0' + _Appoint.getDate()).slice(-2);
+                hour = ('0' + _Appoint.getHours()).slice(-2);
+                minute = ('0' + _Appoint.getMinutes()).slice(-2);
+                second = ('0' + _Appoint.getSeconds()).slice(-2);
+                date = `${_Appoint.getFullYear()}-${month}-${day} ${hour}:${minute}:${second}`
+                return date;
             }
             createText(`日期：${timeFormat(2)}`);
             
@@ -119,7 +119,34 @@
                 end = new Date(timef).getTime();
             let num = Math.floor(((end - start) / 1000));
             createText(`秒数：${num}, 明天时间：${timef}`)
-            countDown(num)
+            // countDown(num);
+
+            /**
+             * 将秒数换成时分秒格式
+             * return 时 分 秒
+            */
+            function secondFormat(value) {
+                let second = parseInt(value),
+                    minute = 0,
+                    hour = 0;
+                // 如果秒数大于60，将秒数转换成整数
+                if (second > 60) {
+                    // 获取分钟，除以60取整数，得到整数分钟
+                    minute = parseInt(second / 60);
+                    // 获取秒数，秒数取佘，得到整数秒数
+                    second = parseInt(second % 60);
+                    // 如果分钟大于60，将分钟转换成小时
+                    if (minute > 60) {
+                        // 获取小时，获取分钟除以60，得到整数小时
+                        hour = parseInt(minute / 60);
+                        // 获取小时后取佘的分，获取分钟除以60取佘的分
+                        minute = parseInt(minute % 60);
+                    }
+                }
+                return { hour, minute, second };
+            }
+            // console.log(secondFormat(3600*5));  
+
         </script>
     </body>
 </html>
