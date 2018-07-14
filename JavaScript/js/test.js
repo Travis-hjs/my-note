@@ -33,6 +33,13 @@ function dataCut() {
     // 对象属性获取值
     console.log(Object.keys(_obj));
     console.log(String(Object.keys(_obj)));
+    /** 
+     * ES5 
+     * Object.keys(obj)
+     * ES6
+     * Object.values(obj);
+     * Object.entries(obj);
+    */
 }
 
 function _click() {
