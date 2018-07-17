@@ -31,25 +31,25 @@
 				<li></li>
 			</ul>
 		</div>
-		<!-- 下拉头部状态盒子模板 -->
+		<!-- 下拉头部状态节点模板 -->
 		<script type="text/template">
-				<div class="refresh_title">
-					<!-- icon -->
-					<div class="icon_refresh"></div>
-					<!-- 旋转的圈圈 -->
-					<div class="preloader hide">
-						<span class="preloader-inner">
-							<span class="preloader-inner-gap"></span>
-							<span class="preloader-inner-left">
-								<span class="preloader-inner-half-circle"></span>
-							</span>
-							<span class="preloader-inner-right">
-								<span class="preloader-inner-half-circle"></span>
-							</span>
+			<div class="refresh_title">
+				<!-- icon -->
+				<div class="icon_refresh"></div>
+				<!-- 旋转的圈圈 -->
+				<div class="preloader hide">
+					<span class="preloader-inner">
+						<span class="preloader-inner-gap"></span>
+						<span class="preloader-inner-left">
+							<span class="preloader-inner-half-circle"></span>
 						</span>
-					</div>
+						<span class="preloader-inner-right">
+							<span class="preloader-inner-half-circle"></span>
+						</span>
+					</span>
 				</div>
-			</script>
+			</div>
+		</script>
 		<script type="text/javascript">
 			var _html = ''
 			for (let i = 0; i < 20; i++) {
@@ -65,79 +65,79 @@
 			class DropDownRefresh {
 				constructor(el) {
 					if (!el) return console.warn('没有可下拉的元素');
-					this._page = document.querySelector(el);
-					this._layer = document.createElement('div');
-					this._layer.style.cssText = 'position: fixed;top: 0;left: 0;width: 100%;height: 100%;background-color: rgba(0,0,0,0);z-index: 100;';
+					this.page = document.querySelector(el);
+					this.layer = document.createElement('div');
+					this.layer.style.cssText = 'position: fixed;top: 0;left: 0;width: 100%;height: 100%;background-color: rgba(0,0,0,0);z-index: 100;';
 					// 下拉刷新的提示元素
-					this._pagetitle = document.createElement('div');
-					this._pagetitle.className = 'refresh_title';
-					this._pagetitle.innerHTML = '<div class="icon_refresh"></div><div class="preloader hide"><span class="preloader-inner"><span class="preloader-inner-gap"></span><span class="preloader-inner-left"><span class="preloader-inner-half-circle"></span></span><span class="preloader-inner-right"><span class="preloader-inner-half-circle"></span></span></span></div>';
+					this.pagetitle = document.createElement('div');
+					this.pagetitle.className = 'refresh_title';
+					this.pagetitle.innerHTML = '<div class="icon_refresh"></div><div class="preloader hide"><span class="preloader-inner"><span class="preloader-inner-gap"></span><span class="preloader-inner-left"><span class="preloader-inner-half-circle"></span></span><span class="preloader-inner-right"><span class="preloader-inner-half-circle"></span></span></span></div>';
 				}
 				// 设置动画
-				getAnimation(_time) {
-					this._page.style.WebkitTransition = this._page.style.transition = `${_time}s all`;
-					this._pagetitle.style.WebkitTransition = this._pagetitle.style.transition = `${_time}s all`;
+				getAnimation(time) {
+					this.page.style.WebkitTransition = this.page.style.transition = `${time}s all`;
+					this.pagetitle.style.WebkitTransition = this.pagetitle.style.transition = `${time}s all`;
 				}
 				// 滑动样式
-				setStyle(_num) {
-					this._page.style.WebkitTransform = this._page.style.transform = `translate3d(0px, ${_num}px, 0px)`;
-					this._pagetitle.style.WebkitTransform = this._pagetitle.style.transform = `translate3d(0px, ${_num}px, 0px)`;
+				setStyle(num) {
+					this.page.style.WebkitTransform = this.page.style.transform = `translate3d(0px, ${num}px, 0px)`;
+					this.pagetitle.style.WebkitTransform = this.pagetitle.style.transform = `translate3d(0px, ${num}px, 0px)`;
 				}
 				// 开始刷新
-				start(_max = 100, fn, numFn) {
+				start(max = 100, callback, rangeCallback) {
 					let rootNode = 0,
-						_icon = this._pagetitle.querySelector('.icon_refresh'),
-						_loading = this._pagetitle.querySelector('.preloader'),
-						_sd = 0,	// 开始距离
-						_ed = 0,	// 结束距离
-						_range = 0;	// 最后移动的距离
+						icon = this.pagetitle.querySelector('.icon_refresh'),
+						loading = this.pagetitle.querySelector('.preloader'),
+						sd = 0,	// 开始距离
+						ed = 0,	// 结束距离
+						range = 0;	// 最后移动的距离
 					// 开始执行就添加提示头部
-					this._page.parentNode.insertBefore(this._pagetitle, this._page);
-					this._pagetitle.style.height = _max + 'px';
-					this._pagetitle.style.top = -_max + 'px';
+					this.page.parentNode.insertBefore(this.pagetitle, this.page);
+					this.pagetitle.style.height = max + 'px';
+					this.pagetitle.style.top = -max + 'px';
 					// 触摸开始
-					this._page.addEventListener('touchstart', ev => {
-						_sd = ev.touches[0].pageY;
+					this.page.addEventListener('touchstart', ev => {
+						sd = ev.touches[0].pageY;
 						this.getAnimation(0);
 					});
 					// 触摸移动
-					this._page.addEventListener('touchmove', ev => {
+					this.page.addEventListener('touchmove', ev => {
 						rootNode = document.documentElement.scrollTop === 0 ? document.body.scrollTop : document.documentElement.scrollTop;
 						// 没到达顶部就停止
 						if (rootNode != 0) return;
-						_ed = ev.touches[0].pageY;
-						_range = Math.floor(_ed - _sd);
+						ed = ev.touches[0].pageY;
+						range = Math.floor(ed - sd);
 						// 判断如果是下滑才执行
-						if (_range > 0) {
+						if (range > 0) {
 							// 阻止浏览自带的下拉效果
 							ev.preventDefault();
 							// 最主要的物理回弹公式计算距离
-							_range = _range - (_range * 0.5);
+							range = range - (range * 0.5);
 							// 下拉时icon旋转
-							_icon.style.WebkitTransform = _icon.style.transform = `rotate(${180 * (_range / _max)}deg)`;
-							if (_range > _max) {
-								_icon.classList.add('hide');
-								_loading.classList.remove('hide');
+							icon.style.WebkitTransform = icon.style.transform = `rotate(${180 * (range / max)}deg)`;
+							if (range > max) {
+								icon.classList.add('hide');
+								loading.classList.remove('hide');
 							} else {
-								_icon.classList.remove('hide');
-								_loading.classList.add('hide');
+								icon.classList.remove('hide');
+								loading.classList.add('hide');
 							}
-							this.setStyle(_range);
+							this.setStyle(range);
 							// 回调距离函数 如果有需要
-							if (typeof numFn === 'function') numFn(_range);
+							if (typeof rangeCallback === 'function') rangeCallback(range);
 						}
 					});
 					// 触摸结束
-					this._page.addEventListener('touchend', ev => {
+					this.page.addEventListener('touchend', ev => {
 						this.getAnimation(0.3);
-						// console.log(`移动的距离：${_range}, 最大距离：${_max}`);
-						if (_range > _max && _range > 1 && rootNode == 0) {
-							this.setStyle(_max);
-							document.body.appendChild(this._layer);
+						// console.log(`移动的距离：${range}, 最大距离：${max}`);
+						if (range > max && range > 1 && rootNode == 0) {
+							this.setStyle(max);
+							document.body.appendChild(this.layer);
 							// 阻止往上滑动
-							this._layer.ontouchmove = e => e.preventDefault();
+							this.layer.ontouchmove = e => e.preventDefault();
 							// 回调成功下拉到最大距离并松开函数
-							if (typeof fn === 'function') fn.call(this);
+							if (typeof callback === 'function') callback.call(this);
 						} else {
 							this.setStyle(0);
 						}
@@ -145,7 +145,7 @@
 				}
 				// 下拉结束
 				end() {
-					document.body.removeChild(this._layer);
+					this.layer.parentNode.removeChild(this.layer);
 					this.getAnimation(0.3);
 					this.setStyle(0);
 				}
@@ -158,79 +158,79 @@
 					Ddr.end();
 				}, 2000);
 			}, function (num) {
-				// console.log(`下拉的值：${ num }`);
+				console.log('下拉的距离：', num);
 			});
 
 			/**
-			 * 原型链定义
+			 * ES5 原型链定义
 			*/
 			var Refresh = function (el) {
 				if (!el) return console.log('没有可下拉的元素');
-				this._page = document.querySelector(el);
-				this._layer = document.createElement('div');
-				this._layer.style.cssText = 'position: fixed;top: 0;left: 0;width: 100%;height: 100%;background-color: rgba(0,0,0,0);z-index: 100;';
+				this.page = document.querySelector(el);
+				this.layer = document.createElement('div');
+				this.layer.style.cssText = 'position: fixed;top: 0;left: 0;width: 100%;height: 100%;background-color: rgba(0,0,0,0);z-index: 100;';
 				// 下拉刷新的提示元素
-				this._pagetitle = document.createElement('div');
-				this._pagetitle.className = 'refresh_title';
-				this._pagetitle.innerHTML = '<div class="icon_refresh"></div><div class="preloader hide"><span class="preloader-inner"><span class="preloader-inner-gap"></span><span class="preloader-inner-left"><span class="preloader-inner-half-circle"></span></span><span class="preloader-inner-right"><span class="preloader-inner-half-circle"></span></span></span></div>';
+				this.pagetitle = document.createElement('div');
+				this.pagetitle.className = 'refresh_title';
+				this.pagetitle.innerHTML = '<div class="icon_refresh"></div><div class="preloader hide"><span class="preloader-inner"><span class="preloader-inner-gap"></span><span class="preloader-inner-left"><span class="preloader-inner-half-circle"></span></span><span class="preloader-inner-right"><span class="preloader-inner-half-circle"></span></span></span></div>';
 			}
 			Refresh.prototype = {
 				// 设置动画
-				getAnimation: function (_time) {
-					this._page.style.WebkitTransition = this._page.style.transition = _time + 's all';
-					this._pagetitle.style.WebkitTransition = this._pagetitle.style.transition = _time + 's all';
+				getAnimation: function (time) {
+					this.page.style.WebkitTransition = this.page.style.transition = time + 's all';
+					this.pagetitle.style.WebkitTransition = this.pagetitle.style.transition = time + 's all';
 				},
 				// 滑动样式
-				setStyle: function (_num) {
-					this._page.style.WebkitTransform = this._page.style.transform = 'translate3d(0px, ' + _num + 'px, 0px)';
-					this._pagetitle.style.WebkitTransform = this._pagetitle.style.transform = 'translate3d(0px, ' + _num + 'px, 0px)';
+				setStyle: function (num) {
+					this.page.style.WebkitTransform = this.page.style.transform = 'translate3d(0px, ' + num + 'px, 0px)';
+					this.pagetitle.style.WebkitTransform = this.pagetitle.style.transform = 'translate3d(0px, ' + num + 'px, 0px)';
 				},
 				// 开始刷新
-				start: function (max, fn, numFn) {
+				start: function (max, callback, rangeCallback) {
 					var rootNode = 0,
-						_icon = this._pagetitle.querySelector('.icon_refresh'),
-						_loading = this._pagetitle.querySelector('.preloader'),
-						_sd = 0,
-						_ed = 0,
-						_range = 0,
-						_max = max || 100,
+						icon = this.pagetitle.querySelector('.icon_refresh'),
+						loading = this.pagetitle.querySelector('.preloader'),
+						sd = 0,
+						ed = 0,
+						range = 0,
+						max = max || 100,
 						_self = this;
-					this._page.parentNode.insertBefore(this._pagetitle, this._page);
-					this._pagetitle.style.height = _max + 'px';
-					this._pagetitle.style.top = -_max + 'px';
-					this._page.addEventListener('touchstart', function (ev) {
-						_sd = ev.touches[0].pageY;
+					this.page.parentNode.insertBefore(this.pagetitle, this.page);
+					this.pagetitle.style.height = max + 'px';
+					this.pagetitle.style.top = -max + 'px';
+					this.page.addEventListener('touchstart', function (ev) {
+						sd = ev.touches[0].pageY;
 						_self.getAnimation(0);
 					});
-					this._page.addEventListener('touchmove', function (ev) {
+					this.page.addEventListener('touchmove', function (ev) {
 						rootNode = document.documentElement.scrollTop === 0 ? document.body.scrollTop : document.documentElement.scrollTop;
 						if (rootNode != 0) return;
-						_ed = ev.touches[0].pageY;
-						_range = Math.floor(_ed - _sd);
-						if (_range > 0) {
+						ed = ev.touches[0].pageY;
+						range = Math.floor(ed - sd);
+						if (range > 0) {
 							ev.preventDefault();
-							_range = _range - (_range * 0.5);
-							_icon.style.WebkitTransform = _icon.style.transform = 'rotate(' + 180 * (_range / _max) + 'deg)';
-							if (_range > _max) {
-								_icon.classList.add('hide');
-								_loading.classList.remove('hide');
+							range = range - (range * 0.5);
+							icon.style.WebkitTransform = icon.style.transform = 'rotate(' + 180 * (range / max) + 'deg)';
+							if (range > max) {
+								icon.classList.add('hide');
+								loading.classList.remove('hide');
 							} else {
-								_icon.classList.remove('hide');
-								_loading.classList.add('hide');
+								icon.classList.remove('hide');
+								loading.classList.add('hide');
 							}
-							_self.setStyle(_range);
-							if (typeof numFn === 'function') numFn(_range);
+							_self.setStyle(range);
+							if (typeof rangeCallback === 'function') rangeCallback(range);
 						}
 					});
-					this._page.addEventListener('touchend', function (ev) {
+					this.page.addEventListener('touchend', function (ev) {
 						_self.getAnimation(0.3);
-						if (_range > _max && _range > 1 && rootNode == 0) {
-							_self.setStyle(_max);
-							document.body.appendChild(_self._layer);
-							_self._layer.ontouchmove = function (e) {
+						if (range > max && range > 1 && rootNode == 0) {
+							_self.setStyle(max);
+							document.body.appendChild(_self.layer);
+							_self.layer.ontouchmove = function (e) {
 								e.preventDefault();
 							}
-							if (typeof fn === 'function') fn.call(_self);
+							if (typeof callback === 'function') callback.call(_self);
 						} else {
 							_self.setStyle(0);
 						}
@@ -238,7 +238,7 @@
 				},
 				// 下拉结束
 				end: function () {
-					document.body.removeChild(this._layer);
+					this.layer.parentNode.removeChild(this.layer);
 					this.getAnimation(0.3);
 					this.setStyle(0);
 				}
