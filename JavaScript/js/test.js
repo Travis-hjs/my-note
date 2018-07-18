@@ -313,20 +313,55 @@ boundGetNum(); // 81
 
 
 /**
- *工厂模式
- *工厂模式下不需要 new 因为他本身就是创建一个新的对象
+ * 工厂模式
+ * 工厂模式下不需要 new 因为他本身就是创建一个新的对象
 */
-function createPerson(name, age, say) {
-    var obj = new Object();
-    obj.name = name;
-    obj.age = age;
-    obj.say = say;
-    obj.should = function () {
-        alert(this.say);
+function dom(name) {
+    var obj = new Object(),
+        type = '';
+    function watchElement() {
+        if (typeof (name) == 'single') {
+            obj.el = name;
+            type = 'single';
+        } else {
+            obj.el = document.querySelectorAll(name);
+            type = 'array';
+        }
+    }
+    watchElement();
+    obj.forEach = function(array, callback) {
+        for (var i = 0; i < array.length; i++) {
+            array[i].index = i;
+            callback(array[i], i);
+        }
+    }
+    obj.on = function (method, callback) {
+        if (type == 'array') {
+            obj.forEach(obj.el, function (item, index) {
+                item.addEventListener(method, callback);
+            });
+        } else {
+            obj.el.addEventListener(method, callback);
+        }
+        return obj;
+    }
+    obj.html = function (str) {
+        if (type == 'array') {
+            obj.forEach(obj.el, function (item, index) {
+                item.textContent = str;
+            });
+        } else {
+            obj.el.textContent = str;
+        } 
+        return obj;
     }
     return obj;
 }
-
+// jQuery 的链式实现
+// dom('.menu li').html('工厂模式更改').on('click', function () {
+//     console.log('索引', this.index);
+//     dom(this).html(`li-${this.index+1}`);
+// });
 /**
  * 构造函数
  * 注意构造函数名第一个字母大写
@@ -339,7 +374,7 @@ function Person(name, url) {
     //     alert(this.url);
     // };
 }
-function myalert(params) {
+function myalert() {
     alert(this.url);
 }
 // new Person('hjs','www.com').alertUrl() // 调用
