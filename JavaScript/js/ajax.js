@@ -29,9 +29,9 @@ class FetchRequest {
             }).then(response => {
                 // 请求状态 => 注意，这里不转换 json 下面会 undefined
                 return response.json();
-            }).then(indexContentData => {
+            }).then(successData => {
                 if (timer === null) return;
-                if (typeof successHandler === 'function') successHandler(indexContentData);
+                if (typeof successHandler === 'function') successHandler(successData);
                 clearTimeout(timer);
                 timer = null;
             }).catch(error => {
@@ -81,9 +81,9 @@ class FetchRequest {
         if (window.fetch) {
             fetch(this.website + url + _data).then(response => {
                 return response.json();
-            }).then(indexContentData => {
+            }).then(successData => {
                 if (timer === null) return;
-                if (typeof successHandler === 'function') successHandler(indexContentData);
+                if (typeof successHandler === 'function') successHandler(successData);
                 clearTimeout(timer);
                 timer = null;
             }).catch(error => {
@@ -128,26 +128,28 @@ let Ajax = new FetchRequest({
     timeout: 5000
 });
 // console.log(Ajax);
-Ajax.post('/api/app/parking', {
-    appkey: 'e2fb20ea3f3df33310788a4247834c93',
-    token: '2a11d6d67a8b8196afbcefbac3e0a573',
-    page: '1',
-    limit: '7',
-    longitude: '113.30764968',
-    latitude: '23.1200491',
-    sort: 'distance',
-    order: 'asc',
-    keyword: ''
-}, res => {
-    console.log(res);
 
-}, err => {
-    console.warn(err);
+function getDataTimer() {
+    Ajax.post('/api/app/parking', {
+        appkey: 'e2fb20ea3f3df33310788a4247834c93',
+        token: '2a11d6d67a8b8196afbcefbac3e0a573',
+        page: '1',
+        limit: '7',
+        longitude: '113.30764968',
+        latitude: '23.1200491',
+        sort: 'distance',
+        order: 'asc',
+        keyword: ''
+    }, res => {
+        console.log('timerout', res);
 
-}, () => {
-    console.log('请求超时');
+    }, err => {
+        console.warn('timerout', err);
 
-});
+    }, () => {
+        console.log('请求超时');
+    });
+}
 
 function ajaxTest() {
     var xhr = new XMLHttpRequest();
@@ -165,23 +167,110 @@ function ajaxTest() {
         }
     }
 }
-// ajaxTest();
 
 // $.ajax({
 //     type: "post",
-//     url: "http://che.qihao.lzei.com/api/app/parking",
+//     url: "http://xxxxxxxx",
 //     data: {
-//         appkey: 'e2fb20ea3f3df33310788a4247834c93',
-//         token: '2a11d6d67a8b8196afbcefbac3e0a573',
-//         page: '1',
-//         limit: '7',
-//         longitude: '113.30764968',
-//         latitude: '23.1200491',
-//         sort: 'distance',
-//         order: 'asc',
-//         keyword: ''
+//         key: ''
 //     },
 //     success (msg) {
 //         console.log(msg);
 //     }
 // });
+
+/**
+ * ES5 原型链模式，没有超时检测（最初的做法）
+ * @param {*} params website 域名
+ */
+var HttpRequest = function (params) {
+    this.website = params.website || '';
+}
+HttpRequest.prototype = {
+    post: function (url, sendData, successHandler, errorHandler) {
+        var _data = '';
+        for (var key in sendData) _data += '&' + key + '=' + sendData[key];
+        _data = _data.slice(1);
+        if (window.fetch) {
+            fetch(this.website + url, {
+                // credentials: 'include', 
+                // mode: 'cors',           
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: _data
+            }).then(function (response) {
+                return response.json();
+            }).then(function (successData) {
+                if (typeof successHandler === 'function') successHandler(successData);
+            }).catch(function (error) {
+                if (typeof errorHandler === 'function') errorHandler(error);
+            });
+        } else {
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST', this.website + url);
+            // xhr.responseType = 'json';
+            xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState !== 4) return;
+                if (xhr.status === 200 || xhr.status === 304) {
+                    if (typeof successHandler === 'function') successHandler(JSON.parse(xhr.responseText));
+                } else {
+                    if (typeof errorHandler === 'function') errorHandler(xhr);
+                }
+            }
+            // xhr.withCredentials = true;		
+            xhr.send(_data);
+        }
+    },
+    get: function (url, sendData, successHandler, errorHandler) {
+        var _data = '';
+        // 解析对象传参
+        for (var key in sendData) _data += '&' + key + '=' + sendData[key];
+        _data = '?' + _data.slice(1);
+        // 检测请求类型
+        if (window.fetch) {
+            fetch(this.website + url + _data).then(function (response) {
+                return response.json();
+            }).then(function (successData) {
+                if (typeof successHandler === 'function') successHandler(successData);
+            }).catch(function (error) {
+                if (typeof errorHandler === 'function') errorHandler(error);
+            })
+        } else {
+            var xhr = new XMLHttpRequest();
+            xhr.open('GET', this.website + url + _data);
+            // xhr.withCredentials = true;
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState !== 4) return;
+                if (xhr.status === 200 || xhr.status == 304) {
+                    if (typeof successHandler === 'function') successHandler(JSON.parse(xhr.responseText));
+                } else {
+                    if (typeof errorHandler === 'function') errorHandler(xhr);
+                }
+            }
+            xhr.send(null);
+        }
+    }
+}
+let Http = new HttpRequest({
+    website: 'http://che.qihao.lzei.com'
+});
+
+function getData() {
+    Http.post('/api/app/parking', {
+        appkey: 'e2fb20ea3f3df33310788a4247834c93',
+        token: '2a11d6d67a8b8196afbcefbac3e0a573',
+        page: '1',
+        limit: '7',
+        longitude: '113.30764968',
+        latitude: '23.1200491',
+        sort: 'distance',
+        order: 'asc',
+        keyword: ''
+    }, res => {
+        console.log(res);
+    }, err => {
+        console.warn(err);
+    })
+}
+

@@ -7,15 +7,19 @@
 		<title>Ajax</title>
 		<style>
 			*{ padding: 0; margin: 0; }
-			.wrap{ width: 100%; max-width: 680px; margin: 0 auto; box-sizing: border-box; padding: 20px; font-size: 15px; font-family: '微软雅黑'; }
+			.wrap{ width: 100%; max-width: 680px; margin: 0 auto; text-align: center; box-sizing: border-box; padding: 20px; font-size: 15px; font-family: '微软雅黑'; }
 			.wrap li{ margin-bottom: 30px; list-style: none; }
 			.wrap h2{ font-size: 18px; font-weight: 400; margin-bottom: 15px; }
 			.wrap img{ display: block; width: 100%; }
-			.wrap button{ width: 140px; }
+			.wrap button{ width: 140px; padding: 10px 0; cursor: pointer; }
 		</style>
 	</head>
 	<body>
-		<div class="wrap"></div>
+		<div class="wrap">
+            <button onclick="getData()">获取数据</button>
+            <button onclick="getDataTimer()">获取数据（超时检测）</button>
+            <button onclick="ajaxTest()">获取数据（xhr）</button>
+        </div>
 
 		<!-- <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script> -->
 		<script src="./js/ajax.js"></script>
