@@ -1,12 +1,12 @@
 /**
  * swiper
  * 默认全部 false
- * @param {*} pagination 是否需要底部圆点
- * @param {*} loop 是否需要回路
- * @param {*} direction 方向 true = X & Y = false
- * @param {*} moveTime 过渡时间（毫秒）默认 300
- * @param {*} autoPaly 是否需要自动播放
- * @param {*} interval 自动播放间隔（毫秒）默认 3000
+ * @param {boolean} pagination 是否需要底部圆点
+ * @param {boolean} loop 是否需要回路
+ * @param {boolean} direction 方向 true = X & Y = false
+ * @param {number} moveTime 过渡时间（毫秒）默认 300
+ * @param {boolean} autoPaly 是否需要自动播放
+ * @param {number} interval 自动播放间隔（毫秒）默认 3000
  */
 function swiper(params) {
     let _pagination = false, _loop = false, _direction = false, _autoPaly = false, _interval = 3000, _moveTime = 300;

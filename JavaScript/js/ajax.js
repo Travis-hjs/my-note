@@ -4,9 +4,8 @@
  * 转义base64: 
  * _img = _img.split('+').join('%2B').split('&').join('%26')
  * let _img = this.baseImg
- * @param {*} website 域名
- * @param {*} timeout 超时 0 或不给则不超时
- * @param {*} timer 定时器
+ * @param {string} website 域名
+ * @param {number} timeout 超时 0 或不给则不超时
  */
 class FetchRequest {
     constructor(params) {
