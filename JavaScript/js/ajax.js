@@ -273,3 +273,28 @@ function getData() {
     })
 }
 
+function WebSocketRequest() {
+    console.log(window.WebSocket);
+    if (window.WebSocket != undefined) {
+        let ws = new WebSocket('ws://localhost:10010');
+        let sendData = {
+            key: 'value'
+        }
+        ws.onopen = () => {
+            console.log('Opened!');
+            ws.send(sendData);
+        };
+        ws.onclose = () => {
+            console.log('over!!!');
+        };
+        ws.onmessage = e => {
+            console.log(e.data);
+        };
+        ws.onerror = err => {
+            console.log('Error: ' + err);
+        }
+    }
+}
+
+
+
