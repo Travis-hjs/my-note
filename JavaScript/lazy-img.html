@@ -3,7 +3,7 @@
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
-	<title>图片预加载</title>
+	<title>图片懒加载</title>
 	<style media="screen">
         *{ padding: 0; margin: 0; }
         li{ list-style: none;}
@@ -16,147 +16,68 @@
 </head>
 <body>
 	<div id="wrap">
-		<h2>简单的图片预加载</h2>
+		<h2>简单的图片懒加载</h2>
 		<ul class="photos">
-			<li><img class="lazy" src="img/loading.gif" data-lazy="http://img.bizhi.sogou.com/images/2012/03/04/87770.jpg" alt=""></li>
-			<li><img class="lazy" src="img/loading.gif" data-lazy="http://img.bizhi.sogou.com/images/2013/12/06/436991.jpg" alt=""></li>
-			<li><img class="lazy" src="img/loading.gif" data-lazy="http://img.bizhi.sogou.com/images/2015/06/26/1214905.jpg" alt=""></li>
-			<li><img class="lazy" src="img/loading.gif" data-lazy="http://img.bizhi.sogou.com/images/2013/11/05/397860.jpg" alt=""></li>
-			<li><img class="lazy" src="img/loading.gif" data-lazy="http://img.bizhi.sogou.com/images/2014/02/18/523326.jpg" alt=""></li>
-			<li><img class="lazy" src="img/loading.gif" data-lazy="http://img0.imgtn.bdimg.com/it/u=252425940,257883462&fm=27&gp=0.jpg" alt=""></li>
-			<li><img class="lazy" src="img/loading.gif" data-lazy="https://img3.duitang.com/uploads/item/201505/10/20150510002613_MmRsY.jpeg" alt=""></li>
-			<li><img class="lazy" src="img/loading.gif" data-lazy="http://img01.sogoucdn.com/app/a/100540002/412727.jpg" alt=""></li>
-			<li><img class="lazy" src="img/loading.gif" data-lazy="http://imgstore.cdn.sogou.com/app/a/100540002/435825.jpg" alt=""></li>
-			<li><img class="lazy" src="img/loading.gif" data-lazy="http://attachments.gfan.com/forum/attachments2/201304/24/134256oe4lamvbxm7bb2hq.jpg" alt=""></li>
-			<li><img class="lazy" src="img/loading.gif" data-lazy="http://pic1.win4000.com/wallpaper/4/5489069c8aa80.jpg" alt=""></li>
-			<li><img class="lazy" src="img/loading.gif" data-lazy="http://www.auicss.com/demo/image/1.jpg" alt=""></li>
+			<li><img class="lazy" src="img/loading.gif" lazy="http://skt.webgz.cn/photos/phimg.jpg" alt=""></li>
+			<li><img class="lazy" src="img/loading.gif" lazy="http://img.bizhi.sogou.com/images/2013/12/06/436991.jpg" alt=""></li>
+			<li><img class="lazy" src="img/loading.gif" lazy="http://img.bizhi.sogou.com/images/2015/06/26/1214905.jpg" alt=""></li>
+			<li><img class="lazy" src="img/loading.gif" lazy="http://img.bizhi.sogou.com/images/2013/11/05/397860.jpg" alt=""></li>
+			<li><img class="lazy" src="img/loading.gif" lazy="http://img.bizhi.sogou.com/images/2014/02/18/523326.jpg" alt=""></li>
+			<li><img class="lazy" src="img/loading.gif" lazy="http://img0.imgtn.bdimg.com/it/u=252425940,257883462&fm=27&gp=0.jpg" alt=""></li>
+			<li><img class="lazy" src="img/loading.gif" lazy="https://img3.duitang.com/uploads/item/201505/10/20150510002613_MmRsY.jpeg" alt=""></li>
+			<li><img class="lazy" src="img/loading.gif" lazy="http://img01.sogoucdn.com/app/a/100540002/412727.jpg" alt=""></li>
+			<li><img class="lazy" src="img/loading.gif" lazy="http://imgstore.cdn.sogou.com/app/a/100540002/435825.jpg" alt=""></li>
+			<li><img class="lazy" src="img/loading.gif" lazy="http://attachments.gfan.com/forum/attachments2/201304/24/134256oe4lamvbxm7bb2hq.jpg" alt=""></li>
+			<li><img class="lazy" src="img/loading.gif" lazy="http://pic1.win4000.com/wallpaper/4/5489069c8aa80.jpg" alt=""></li>
+			<li><img class="lazy" src="img/loading.gif" lazy="http://www.auicss.com/demo/image/1.jpg" alt=""></li>
 		</ul>
 	</div>
 	<script type="text/javascript">
-		window.imgLazyLoad = (function(window, document, undefined) {
-			var store = [],offset, throttle, poll;
-			function _inView (el) {
-				var coords = el.getBoundingClientRect();
-				return ((coords.top >= 0 && coords.left >= 0 && coords.top) <= (window.innerHeight || document.documentElement.clientHeight) + parseInt(offset));
-			};
-			function _pollImages () {
-				// console.log(store);
-				for (var i = store.length; i--;) {
-					var self = store[i];
-					if (_inView(self)) {
-						self.src = self.getAttribute('data-lazy');
-						store.splice(i, 1);
-					}
-				}
-				// 这里可以做判断，当数组为空的时候清除scroll事件
-			};
-			function _throttle () {
-				clearTimeout(poll);
-				poll = setTimeout(_pollImages, throttle);
-			};
-			function init (obj) {
-				var nodes = document.querySelectorAll('[data-lazy]');
-				var opts = obj || {};
-				offset = opts.offset || 0;
-				throttle = opts.throttle || 150;
-				for (var i = 0; i < nodes.length; i++) {
-					store.push(nodes[i]);
-				}
-				// 一开始先执行一次
-				_throttle();
-				if (document.addEventListener) {
-					window.addEventListener('scroll', _throttle, false);
-				} else {
-					window.attachEvent('onscroll', _throttle);
-				}
-			};
-			return {
-				init: init
-				// render: _throttle	//	这个目前不知道有什么用
-			};
-		})(window, document);
-		// imgLazyLoad.init({
-		// 	offset: 0, //离可视区域多少像素的图片可以被加载
-		// 	throttle: 0, //图片延时多少毫秒加载
-		// });
-
-		function LazyImg (_obj) {
-			var _store = [];	//	元素的集合
-			var _offset = 0;	// 	离可视区域多少像素的图片可以被加载
-			var _delay = 0;		//	图片延时多少毫秒加载
-			var _poll = null;	//	延迟器id
-			var nodes = document.querySelectorAll('[data-lazy]');
-			_offset = _obj.offset || 0;
-			_delay = _obj.delay || 150;
-			for (var i = 0; i < nodes.length; i++) {
-				_store.push(nodes[i]);
-			}
-			//	计算每个元素scroll值
-			function _inView (el) {
-				var coords = el.getBoundingClientRect();
-				return ((coords.top >= 0 && coords.left >= 0 && coords.top) <= (window.innerHeight || document.documentElement.clientHeight) + parseInt(_offset));
-			}
-			//	替换图片路径
-			function _pollImages () {
-				for (var i = _store.length; i--;) {
-					var self = _store[i];
-					if (_inView(self)) {
-						self.src = self.getAttribute('data-lazy');
-						_store.splice(i, 1);
-					}
-				}
-				// 全部加载完后清除滚动事件
-				if (_store.length === 0) window.removeEventListener('scroll', _throttle);
-			}
-			// 滚动延迟
-			function _throttle() {
-				if (_poll) clearTimeout(_poll);
-				_poll = setTimeout(_pollImages, _delay);
-			}
-			// 先启动一次
-			_throttle();
-			window.addEventListener('scroll', _throttle);
-		}
-		// new LazyImg({
-		// 	offset: 0,	//离可视区域多少像素的图片可以被加载
-		// 	delay: 0	//图片延时多少毫秒加载
-		// });
-		//	最终版本：
-		function Lazyload (params, fn) {
-			var errorImage = params.errorImage || false;	//	加载失败时显示的图片
-			var lazyAttr = params.attr || 'data-lazy';		//  自定义加载的属性
-			var loadImgNodes = [];							//	元素的集合
+		/**
+		 * lazyLoad 图片懒加载
+		 * obj.errorImage: 加载失败时显示的图片路径
+		 * obj.attr: 自定义加载的属性
+		 * obj.toBottom: 距离底部像素加载
+ 		 * callback 全部加载完回调
+		*/
+		function lazyLoad (obj, callback) {
+			var err = obj.errorImage || null;	
+			var attr = obj.lazyAttr || 'lazy';
+			var offset = obj.toBottom || 0;						
 			function loadImage(el) {
 				var img = new Image();
-				img.src = el.getAttribute(lazyAttr);
-				el.src = el.getAttribute(lazyAttr);
-				el.removeAttribute(lazyAttr);
+				img.src = el.getAttribute(attr);
+				el.src = el.getAttribute(attr);
+				el.removeAttribute(attr);
 				// 图片加载失败
 				img.onerror = function() {
-					el.src = errorImage || el.getAttribute('src');
-					el.removeAttribute(lazyAttr);
+					el.src = err || el.getAttribute('src');
+					el.removeAttribute(attr);
 				};
 			}
 			function judgeImages() {
-				loadImgNodes = document.querySelectorAll('['+lazyAttr+']');
-				if (loadImgNodes.length) {
-					for(var i = 0;  i < loadImgNodes.length; i++){
-						if (loadImgNodes[i].getBoundingClientRect().top <= (window.innerHeight || document.documentElement.clientHeight)) {
-							loadImage(loadImgNodes[i]);
+				var images = document.querySelectorAll('['+ attr +']');
+				if (images.length) {
+					for(var i = 0;  i < images.length; i++){
+						if (images[i].getBoundingClientRect().top <= (window.innerHeight || document.documentElement.clientHeight) - parseInt(offset)) {
+							loadImage(images[i]);
 						}
 					}
 				}else {
 					window.removeEventListener('scroll', judgeImages);
-					if (typeof fn === 'function') fn.call(this);
+					if (typeof callback === 'function') callback.call(this);
 				}
 			}
 			judgeImages();
 			window.addEventListener('scroll', judgeImages);
 		}
-		new Lazyload({
+		lazyLoad({
 			errorImage: './img/big-1.jpg',
-			lazyAttr: 'data-lazy'
-		}, () => console.log('全部加载完成'));
+			lazyAttr: 'lazy',
+			toBottom: 100
+		}, function () { 
+			console.log('全部加载完成');
+		});
 
 	</script>
 </body>
