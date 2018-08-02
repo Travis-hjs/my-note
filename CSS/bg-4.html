@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>背景视觉差</title>
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+        }
+
+        .content,
+        .wrapper:before {
+            box-sizing: border-box;
+            display: block;
+            font-size: 4em;
+            padding: 1em;
+            width: 6em;
+            height: 3em;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            -webkit-transform: translate3d(-50%, -50%, 0);
+            transform: translate3d(-50%, -50%, 0);
+        }
+
+        .content {
+            font-weight: bold;
+            text-align: center;
+            z-index: 1000;
+            background: #fff;
+            color: #000;
+            mix-blend-mode: lighten;
+        }
+
+        section {
+            background-repeat: no-repeat;
+            background-size: cover;
+            isolation: isolate;
+            position: relative;
+            height: 100vh;
+            padding: 1em;
+        }
+
+        .wrapper {
+            clip: rect(auto auto auto auto);
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+        }
+
+        .wrapper:before {
+            content: " ";
+            padding: 2em 3.5em;
+            mix-blend-mode: darken;
+        }
+
+        .one {
+            background-image: url(https://source.unsplash.com/1920x1080?nature);
+        }
+
+        .one .wrapper:before {
+            background: red;
+        }
+
+        .two {
+            background-image: url(https://source.unsplash.com/1920x1080?landscape);
+        }
+
+        .two .wrapper:before {
+            background: #faaa54;
+            mix-blend-mode: difference;
+        }
+
+        .three {
+            background-image: url(https://source.unsplash.com/1920x1080?portrait);
+        }
+
+        .three .wrapper:before {
+            background: #6c320a;
+            mix-blend-mode: screen;
+        }
+
+        .four {
+            background-image: url(https://source.unsplash.com/1920x1080?stars);
+        }
+
+        .four .wrapper:before {
+            background: #e4135d;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="content">BLEND</div>
+
+    <section class="one">
+        <div class="wrapper"></div>
+    </section>
+
+    <section class="two">
+        <div class="wrapper"></div>
+    </section>
+
+    <section class="three">
+        <div class="wrapper"></div>
+    </section>
+
+    <section class="four">
+        <div class="wrapper"></div>
+    </section>
+</body>
+
+</html>

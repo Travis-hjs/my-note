@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>斜切</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        @-webkit-keyframes colorSwapper {
+            0% {
+                background-color: #955fad;
+                background-image: -webkit-linear-gradient(#955fad, #da5b45);
+                background-image: linear-gradient(#955fad, #da5b45);
+            }
+            50% {
+                background-color: #da5b45;
+                background-image: -webkit-linear-gradient(#da5b45, #955fad);
+                background-image: linear-gradient(#da5b45, #955fad);
+            }
+            100% {
+                background-color: #955fad;
+                background-image: -webkit-linear-gradient(#955fad, #da5b45);
+                background-image: linear-gradient(#955fad, #da5b45);
+            }
+        }
+
+        @-moz-keyframes colorSwapper {
+            0% {
+                background-color: #955fad;
+                background-image: -webkit-linear-gradient(#955fad, #da5b45);
+                background-image: linear-gradient(#955fad, #da5b45);
+            }
+            50% {
+                background-color: #da5b45;
+                background-image: -webkit-linear-gradient(#da5b45, #955fad);
+                background-image: linear-gradient(#da5b45, #955fad);
+            }
+            100% {
+                background-color: #955fad;
+                background-image: -webkit-linear-gradient(#955fad, #da5b45);
+                background-image: linear-gradient(#955fad, #da5b45);
+            }
+        }
+
+        @keyframes colorSwapper {
+            0% {
+                background-color: #955fad;
+                background-image: -webkit-linear-gradient(#955fad, #da5b45);
+                background-image: linear-gradient(#955fad, #da5b45);
+            }
+            50% {
+                background-color: #da5b45;
+                background-image: -webkit-linear-gradient(#da5b45, #955fad);
+                background-image: linear-gradient(#da5b45, #955fad);
+            }
+            100% {
+                background-color: #955fad;
+                background-image: -webkit-linear-gradient(#955fad, #da5b45);
+                background-image: linear-gradient(#955fad, #da5b45);
+            }
+        }
+
+        @-webkit-keyframes solidColor {
+            0% {
+                background-color: #955fad;
+            }
+            50% {
+                background-color: #da5b45;
+            }
+            100% {
+                background-color: #955fad;
+            }
+        }
+
+        @-moz-keyframes solidColor {
+            0% {
+                background-color: #955fad;
+            }
+            50% {
+                background-color: #da5b45;
+            }
+            100% {
+                background-color: #955fad;
+            }
+        }
+
+        @keyframes solidColor {
+            0% {
+                background-color: #955fad;
+            }
+            50% {
+                background-color: #da5b45;
+            }
+            100% {
+                background-color: #955fad;
+            }
+        }
+
+        html,
+        body {
+            height: 100%;
+        }
+
+        body {
+            background: #222;
+            color: #FFF;
+        }
+
+        .skewed-bg {
+            background: #00B285;
+            padding: 200px 0;
+            -webkit-transform: skew(0deg, -10deg);
+            -moz-transform: skew(0deg, -10deg);
+            -ms-transform: skew(0deg, -10deg);
+            -o-transform: skew(0deg, -10deg);
+            transform: skew(0deg, -10deg);
+            margin-top: -200px;
+        }
+
+        .skewed-bg .content {
+            -webkit-transform: skew(0deg, 10deg);
+            -moz-transform: skew(0deg, 10deg);
+            -ms-transform: skew(0deg, 10deg);
+            -o-transform: skew(0deg, 10deg);
+            transform: skew(0deg, 10deg);
+            text-align: center;
+        }
+
+        .skewed-bg .content .title {
+            padding-top: 100px;
+            font-weight: normal;
+        }
+
+        .skewed-bg .content .text {
+            width: 60%;
+            margin: 25px auto;
+            color: #ccfff2;
+        }
+
+        .footer {
+            padding-top: 300px;
+        }
+
+        .footer .credits {
+            text-align: center;
+            color: #666;
+        }
+
+        .footer .credits .link {
+            color: #00B285;
+            text-decoration: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="skewed-bg">
+        <div class="content">
+            <h1 class="title">Skewed background with CSS</h1>
+            <p class="text">This is a quick example to show how to get skewed backgrounds with plain HTML & CSS.</p>
+        </div>
+    </div>
+    <footer class="footer"></footer>
+</body>
+
+</html>
