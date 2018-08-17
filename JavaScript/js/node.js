@@ -15,6 +15,7 @@ let $$ = el => document.querySelectorAll(el);
  * decodeURIComponent() 对应的解码
  * str.replace(/\d+/g, '') => 过滤数字
  * str.replace(/[a-zA-Z]/g, '') => 过滤英文
+ * string.includes()字符串监测
 */
 
 function dataCut() {
