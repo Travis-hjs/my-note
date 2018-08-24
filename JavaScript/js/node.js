@@ -330,7 +330,7 @@ function dom(name) {
         }
     }
     watchElement();
-    obj.forEach = function(array, callback) {
+    obj.forEach = function (array, callback) {
         for (var i = 0; i < array.length; i++) {
             array[i].index = i;
             callback(array[i], i);
@@ -353,7 +353,7 @@ function dom(name) {
             });
         } else {
             obj.el.textContent = str;
-        } 
+        }
         return obj;
     }
     return obj;
@@ -379,3 +379,17 @@ function myalert() {
     alert(this.url);
 }
 // new Person('hjs','www.com').alertUrl() // 调用
+
+/** 
+ * 获取两点距离
+ * lat为纬度, lng为经度, 不要弄错
+*/
+function getDistance(lng1, lat1, lng2, lat2) {
+    let toRad = d => d * Math.PI / 180;
+    let radLat1 = toRad(lat1);
+    let radLat2 = toRad(lat2);
+    let deltaLat = radLat1 - radLat2;
+    let deltaLng = toRad(lng1) - toRad(lng2);
+    let dis = 2 * Math.asin(Math.sqrt(Math.pow(Math.sin(deltaLat / 2), 2) + Math.cos(radLat1) * Math.cos(radLat2) * Math.pow(Math.sin(deltaLng / 2), 2)));
+    return dis * 6378137;
+}

@@ -89,6 +89,11 @@
                 return date;
             }
             createText(`日期：${timeFormat(2)}`);
+
+            // 获取两个时间段的秒数
+            function getSecond(newTime, oldTime) {
+                return (new Date(newTime) - new Date(oldTime)) / 1000;
+            }
             
             /**
              * 带天数的倒计时
