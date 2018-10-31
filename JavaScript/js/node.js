@@ -294,6 +294,79 @@ function contrast() {
     console.log(arrObj.sort(compare('age')));
     // 保留小数位 & 保留数位
     console.log(num.toFixed(2), num.toPrecision(3));
+
+    /**
+     * 排列数组
+     * @param {Array} list 要排列的数组 
+     * @param {string} key 指定的 key 值作为排列规则
+     */
+    function sortList(list, key) {
+        // 从小到大
+        function compare(key) {
+            return function (obj1, obj2) {
+                var val1 = obj1[key],
+                    val2 = obj2[key];
+                if (!isNaN(Number(val1)) && !isNaN(Number(val2))) {
+                    val1 = Number(val1);
+                    val2 = Number(val2);
+                }
+                return val1 - val2;
+            }
+        }
+        // 排序
+        list.sort(compare(key)).reverse();
+        // 返回数据
+        return list;
+    }
+
+    /**
+     * 过滤掉特殊符号
+     * @param {string} str 
+     */
+    function filterStr(str) {
+        let pattern = new RegExp("[`~!@#$^&*()=|{}':;',\\[\\].<>/?~！@#￥……&*（）——|{}【】‘；：”“'。，、？%+_]");
+        let newStr = '';
+        for (let i = 0; i < str.length; i++) {
+            newStr += str.substr(i, 1).replace(pattern, '');
+        }
+        return newStr;
+    }
+
+    // 从一个数组中随机几个数
+    function getRandomList(arr, count) {
+        let shuffled = arr.slice(0),
+            i = arr.length,
+            min = i - count,
+            temp,
+            index;
+        while (i-- > min) {
+            index = Math.floor((i + 1) * Math.random());
+            temp = shuffled[index];
+            shuffled[index] = shuffled[i];
+            shuffled[i] = temp;
+        }
+        return shuffled.slice(min);
+    }
+
+    // 从两个数组中过滤掉相同的元素
+    function filterIdentical(list1, list2) {
+        let newList = [];
+        let arr1 = [];
+        let arr2 = [];
+        if (list1.length >= list2.length) {
+            arr1 = list1;
+            arr2 = list2;
+        } else {
+            arr1 = list2;
+            arr2 = list1;
+        }
+        for (let i = 0; i < arr1.length; i++) {
+            if (!arr2.some(item => item == arr1[i])) {
+                newList.push(arr1[i]);
+            }
+        }
+        return newList;
+    }
 }
 // contrast();
 
