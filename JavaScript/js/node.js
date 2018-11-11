@@ -15,7 +15,16 @@ let $$ = el => document.querySelectorAll(el);
  * decodeURIComponent() 对应的解码
  * str.replace(/\d+/g, '') => 过滤数字
  * str.replace(/[a-zA-Z]/g, '') => 过滤英文
- * string.includes()字符串监测
+ * string.includes()字符串监测 ES6
+*/
+
+/**
+ * 永久储存
+ * localStorage.setItem("key","value"); 以“key”为名称存储一个值“value”
+ * localStorage.getItem("key"); 获取名称为“key”的值
+ * 周期储存（浏览器关闭之前）
+ * sessionStorage.setItem('','')
+ * sessionStorage.getItem('')
 */
 
 function dataCut() {
@@ -88,46 +97,6 @@ function _click() {
     // })
 }
 _click();
-
-// 判断语句
-function judge() {
-    let j = 0,
-        jArr = [],
-        num1 = 7,
-        num2 = 8;
-    //  三元表达式 ?
-    var max = (num1 > num2) ? num1 : num2;
-    console.log(max);
-    // while 循环判断
-    while (j <= 5) {
-        jArr.push(j);
-        j++;
-    }
-    console.log(jArr);
-    // switch
-    let day = new Date().getDay();
-    switch (day) {
-        case 1:
-            x = "Today it's Monday";
-            break;
-        case 2:
-            x = "Today it's Tuesday";
-            break;
-        case 3:
-            x = "Today it's Wednesday";
-            break;
-        case 4:
-            x = "Today it's Thursday";
-            break;
-        case 5:
-            x = "Today it's Friday";
-            break;
-        default: // 如果不是以上情况，则会输出默认的消息：
-            x = "Today it's Weenkend!";
-    }
-    console.log(x);
-}
-// judge();
 
 // new 理解
 function newFunction() {
@@ -217,86 +186,6 @@ $('#wrap').querySelector('p').addEventListener('click', function () {
     // this.classList.toggle('tra');
 });
 
-/**
- * 永久储存
- * localStorage.setItem("key","value"); 以“key”为名称存储一个值“value”
- * localStorage.getItem("key"); 获取名称为“key”的值
- * 周期储存（浏览器关闭之前）
- * sessionStorage.setItem('','')
- * sessionStorage.getItem('')
-*/
-
-/**
- * 数组处理
- * arr.join('&')
- * arr.split(',')
- * arr.shift(); 移除第一项
- * arr.pop();  移除最后一项
- * arr.unshift(); 在第一项添加
- * arr.reverse(); 反转数组
- * Math.ceil(25.9) 向上取舍
- * Math.round(25.9) 四舍五入
- * Math.floor(25.9) 向下取舍
-*/
-function contrast() {
-    /** 
-     * parseInt(300 * Math.random()) + 1
-     * 1~300 随机一个数
-    */
-    // 数组
-    var arr = [23, 4, 4, 78, 3, 5, 1], values = [1, 2, 3, 4, 5], num = 99;
-    // arr.every() & arr.some() 历遍数
-    var everyResult = arr.every(function (item, index, array) {
-        return (item > 2);
-    });
-    var someResult = arr.some(function (item, index, array) {
-        return (item > 2);
-    });
-    // arr.filter() 过滤一个数组
-    var filterResult = arr.filter(function (item, index, array) {
-        return (item > 2);
-    });
-    // arr.map() 在原有数组中运行传入函数
-    var mapResult = arr.map(function (item, index, array) {
-        return item * 2;
-    });
-    console.log(everyResult, someResult, filterResult, mapResult);
-    // 数组累加 values.reduceRight() 反向执行
-    var sum = values.reduce(function (prev, cur, index, array) {
-        return prev + cur;
-    });
-    console.log(sum);
-    // 小到大
-    let stob = (a, b) => a - b;
-    console.log(arr.sort(stob), arr.sort(stob).reverse());
-    // 数组对象
-    let arrObj = [{
-        name: "zlw",
-        age: '24'
-    }, {
-        name: "wlz",
-        age: '50'
-    }, {
-        name: "hjs",
-        age: '15'
-    }];
-    function compare(key) {
-        return function (obj1, obj2) {
-            var val1 = obj1[key],
-                val2 = obj2[key];
-            if (!isNaN(Number(val1)) && !isNaN(Number(val2))) {
-                val1 = Number(val1);
-                val2 = Number(val2);
-            }
-            return val1 - val2;
-        }
-    }
-    console.log(arrObj.sort(compare('age')));
-    // 保留小数位 & 保留数位
-    console.log(num.toFixed(2), num.toPrecision(3));
-}
-// contrast();
-
 // bind()
 this.num = 9;
 var mymodule = {
@@ -311,7 +200,6 @@ getNum(); // 9, 因为在这个例子中，"this"指向全局对象
 // 创建一个'this'绑定到mymodule的函数
 var boundGetNum = getNum.bind(mymodule);
 boundGetNum(); // 81
-
 
 /**
  * 工厂模式
@@ -380,16 +268,216 @@ function myalert() {
 }
 // new Person('hjs','www.com').alertUrl() // 调用
 
-/** 
- * 获取两点距离
- * lat为纬度, lng为经度, 不要弄错
-*/
-function getDistance(lng1, lat1, lng2, lat2) {
-    let toRad = d => d * Math.PI / 180;
-    let radLat1 = toRad(lat1);
-    let radLat2 = toRad(lat2);
-    let deltaLat = radLat1 - radLat2;
-    let deltaLng = toRad(lng1) - toRad(lng2);
-    let dis = 2 * Math.asin(Math.sqrt(Math.pow(Math.sin(deltaLat / 2), 2) + Math.cos(radLat1) * Math.cos(radLat2) * Math.pow(Math.sin(deltaLng / 2), 2)));
-    return dis * 6378137;
+// 数组类型
+class _array {
+    constructor() { 
+        // 数组处理
+        array.join('&');
+        array.split(',');   // 把字符串分割成数组
+        array.slice(i, num);// 索引截取数组
+        array.shift();      // 移除第一项
+        array.pop();        // 移除最后一项
+        array.unshift();    // 在第一项添加
+        array.reverse();    // 反转数组
+        Math.ceil(25.9);    // 向上取舍
+        Math.round(25.9);   // 四舍五入
+        Math.floor(25.9);   // 向下取舍
+        // 1~300 随机一个数
+        parseInt(300 * Math.random()) + 1;
+        // 把数字，小数点 格式化为指定的长度
+        number.toPrecision(3);
+        // 保留小数位
+        number.toFixed(2);
+        // 历遍数组结果
+        var everyResult = arr.every(function (item, index, array) {
+            return (item > 2);
+        });
+        var someResult = arr.some(function (item, index, array) {
+            return (item > 2);
+        });
+        // 过滤一个数组
+        var filterResult = arr.filter(function (item, index, array) {
+            return (item > 2);
+        });
+        // 在原有数组中运行传入函数
+        var mapResult = arr.map(function (item, index, array) {
+            return item * 2;
+        });
+        // 数组累加 values.reduceRight() 反向执行
+        var sum = values.reduce(function (prev, cur, index, array) {
+            return prev + cur;
+        });
+        // 数组排序从小到大
+        let stob = (a, b) => a - b;
+        array.sort(stob);
+        // 数组对象排序从小到大
+        function compare(key) {
+            return function (obj1, obj2) {
+                let val1 = obj1[key],
+                    val2 = obj2[key];
+                if (!isNaN(Number(val1)) && !isNaN(Number(val2))) {
+                    val1 = Number(val1);
+                    val2 = Number(val2);
+                }
+                return val1 - val2;
+            }
+        }
+        array.sort(compare('key'));
+    }
+    /**
+     * 随机打乱数组
+     * @param {array} array
+     */
+    randomArray(array) {
+        let tmp, current, length = array.length;
+        if (length) while (--length) {
+            current = Math.floor(Math.random() * (length + 1));
+            tmp = array[current];
+            array[current] = array[length];
+            array[length] = tmp;
+        }
+        return array;
+    }
+    /**
+     * 获取两点距离
+     * @param {*} lng 经度
+     * @param {*} lat 纬度
+     */
+    getDistance(lng1, lat1, lng2, lat2) {
+        let toRad = d => d * Math.PI / 180;
+        let radLat1 = toRad(lat1);
+        let radLat2 = toRad(lat2);
+        let deltaLat = radLat1 - radLat2;
+        let deltaLng = toRad(lng1) - toRad(lng2);
+        let dis = 2 * Math.asin(Math.sqrt(Math.pow(Math.sin(deltaLat / 2), 2) + Math.cos(radLat1) * Math.cos(radLat2) * Math.pow(Math.sin(deltaLng / 2), 2)));
+        return dis * 6378137;
+    }
+}
+
+// 时间日期类型
+class _date {
+    constructor() { }
+    // 日期列表生成
+    dayJson() {
+        var calendar = [],
+            minYears = new Date().getFullYear(),
+            maxYears = new Date().getFullYear() + 10,
+            monthCount = 1,
+            dayCount = 1;
+        for (var i = minYears; i <= maxYears; i++) {
+            var _year = {};
+            _year.name = i.toString();
+            _year.sub = [];
+            for (var j = monthCount; j <= 12; j++) {
+                var _month = {};
+                _month.name = ('0' + j.toString()).slice(-2);
+                _month.sub = [];
+                _year.sub.push(_month);
+                dayCount = new Date(i, j, 0).getDate();
+                for (var k = 1; k <= dayCount; k++) {
+                    _month.sub.push({
+                        name: ('0' + k.toString()).slice(-2)
+                    });
+                }
+            }
+            calendar.push(_year);
+        }
+        // 这里是限制不能选小于之前的日期
+        calendar[0].sub.splice(0, new Date().getMonth());
+        calendar[0].sub[0].sub.splice(0, new Date().getDate());
+        return calendar;
+    }
+    /**
+     * 时间生成器
+     * @param {number} minInterval 时间间隔(分钟)
+     */
+    timeInterval(minInterval) {
+        var arr = [],
+            minTotal = 0;
+        while (minTotal < 1440) {
+            var hour = parseInt(minTotal / 60),
+                min = parseInt(minTotal % 60);
+            hour = ('0' + hour).slice(-2);
+            min = ('0' + min).slice(-2);
+            arr.push(hour + ':' + min);
+            minTotal += minInterval;
+        }
+        return arr;
+    }
+    /**
+     * 时间戳生成
+     * @param {number} num 1时为明天，-1为昨天天，以此类推
+     */
+    timeFormat(num = 0) {
+        let _Appoint, month, day, hour, minute, second, date;
+        if (num > 0) {
+            _Appoint = new Date(new Date().getTime() + (num * 24 * 3600 * 1000));
+        } else {
+            _Appoint = new Date(new Date() - (num * 24 * 3600 * 1000));
+        }
+        month = ('0' + (_Appoint.getMonth() + 1)).slice(-2);
+        day = ('0' + _Appoint.getDate()).slice(-2);
+        hour = ('0' + _Appoint.getHours()).slice(-2);
+        minute = ('0' + _Appoint.getMinutes()).slice(-2);
+        second = ('0' + _Appoint.getSeconds()).slice(-2);
+        date = `${_Appoint.getFullYear()}-${month}-${day} ${hour}:${minute}:${second}`
+        return date;
+    }
+    // 获取两个时间段的秒数
+    getSecond(newTime, oldTime) {
+        return (new Date(newTime) - new Date(oldTime)) / 1000;
+    }
+    /**
+     * 带天数的倒计时
+     * @param {number} times 秒数
+     */
+    countDown(times) {
+        let timer = setInterval(() => {
+            if (times <= 0) return clearInterval(timer);
+            let day = 0, hour = 0, minute = 0, second = 0;
+            day = Math.floor(times / (3600 * 24));
+            hour = Math.floor(times / 3600) - (day * 24);
+            minute = Math.floor(times / 60) - (day * 24 * 60) - (hour * 60);
+            second = Math.floor(times) - (day * 24 * 3600) - (hour * 3600) - (minute * 60);
+            // 格式化
+            day = ('0' + day).slice(-2);
+            hour = ('0' + hour).slice(-2);
+            minute = ('0' + minute).slice(-2);
+            second = ('0' + second).slice(-2);
+            console.log(`${day}天：${hour}小时：${minute}分钟：${second}秒`);
+            times--;
+        }, 1000);
+    }
+    /**
+     * 将秒数换成时分秒格式
+     * @param {number} value 
+     */
+    secondFormat(value) {
+        let second = parseInt(value),
+            minute = 0,
+            hour = 0;
+        // 如果秒数大于60，将秒数转换成整数
+        if (second > 60) {
+            // 获取分钟，除以60取整数，得到整数分钟
+            minute = parseInt(second / 60);
+            // 获取秒数，秒数取佘，得到整数秒数
+            second = parseInt(second % 60);
+            // 如果分钟大于60，将分钟转换成小时
+            if (minute > 60) {
+                // 获取小时，获取分钟除以60，得到整数小时
+                hour = parseInt(minute / 60);
+                // 获取小时后取佘的分，获取分钟除以60取佘的分
+                minute = parseInt(minute % 60);
+            }
+        }
+        return { hour, minute, second };
+    }
+    /**
+     * 获取两个日期之间的天数
+     * @param {Date} nowdate 现在时间
+     * @param {Date} olddate 之前时间
+     */
+    getDaysDiffBetweenDates(nowdate, olddate) {
+        return Math.floor((nowdate - olddate) / 86400000);
+    }
 }
