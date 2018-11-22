@@ -269,7 +269,7 @@ function myalert() {
 // new Person('hjs','www.com').alertUrl() // 调用
 
 // 数组类型
-class _array {
+class _Array {
     constructor() { 
         // 数组处理
         array.join('&');
@@ -310,7 +310,10 @@ class _array {
         // 数组排序从小到大
         let stob = (a, b) => a - b;
         array.sort(stob);
-        // 数组对象排序从小到大
+        /**
+         * 数组对象排序从小到大
+         * @param {string} key 对象key值
+         */
         function compare(key) {
             return function (obj1, obj2) {
                 let val1 = obj1[key],
@@ -323,18 +326,29 @@ class _array {
             }
         }
         array.sort(compare('key'));
+
+        /** 多个key值排列判断 */
+        function demo(a, b) {
+            if (Number(a.level) === Number(b.level)) {
+                return Number(a.levelscore) - Number(b.levelscore);
+            } else {
+                return Number(a.level) - Number(b.level);
+            }
+        }
     }
     /**
      * 随机打乱数组
      * @param {array} array
      */
-    randomArray(array) {
+    shuffleArray(array) {
         let tmp, current, length = array.length;
-        if (length) while (--length) {
-            current = Math.floor(Math.random() * (length + 1));
-            tmp = array[current];
-            array[current] = array[length];
-            array[length] = tmp;
+        if (length) {
+            while (--length) {
+                current = Math.floor(Math.random() * (length + 1));
+                tmp = array[current];
+                array[current] = array[length];
+                array[length] = tmp;
+            }
         }
         return array;
     }
@@ -355,9 +369,9 @@ class _array {
 }
 
 // 时间日期类型
-class _date {
+class _Date {
     constructor() { }
-    // 日期列表生成
+    /** 日期列表生成 */
     dayJson() {
         var calendar = [],
             minYears = new Date().getFullYear(),
@@ -423,7 +437,7 @@ class _date {
         date = `${_Appoint.getFullYear()}-${month}-${day} ${hour}:${minute}:${second}`
         return date;
     }
-    // 获取两个时间段的秒数
+    /** 获取两个时间段的秒数 */
     getSecond(newTime, oldTime) {
         return (new Date(newTime) - new Date(oldTime)) / 1000;
     }
