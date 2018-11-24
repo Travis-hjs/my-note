@@ -270,7 +270,7 @@ function myalert() {
 
 // 数组类型
 class _Array {
-    constructor() { 
+    constructor() {
         // 数组处理
         array.join('&');
         array.split(',');   // 把字符串分割成数组
@@ -335,6 +335,14 @@ class _Array {
                 return Number(a.level) - Number(b.level);
             }
         }
+    }
+    /**
+     * 范围随机数
+     * @param {number} min 最小数
+     * @param {number} max 最大数
+     */
+    ranInt(min, max) {
+        return parseInt(Math.random() * (max - min + 1)) + min;
     }
     /**
      * 随机打乱数组
