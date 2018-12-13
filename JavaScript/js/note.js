@@ -268,87 +268,89 @@ function myalert() {
 }
 // new Person('hjs','www.com').alertUrl() // 调用
 
-// 数组类型
-class _Array {
-    constructor() {
-        // 数组处理
-        array.join('&');
-        array.split(',');   // 把字符串分割成数组
-        array.slice(i, num);// 索引截取数组
-        array.shift();      // 移除第一项
-        array.pop();        // 移除最后一项
-        array.unshift();    // 在第一项添加
-        array.reverse();    // 反转数组
-        Math.ceil(25.9);    // 向上取舍
-        Math.round(25.9);   // 四舍五入
-        Math.floor(25.9);   // 向下取舍
-        // 1~300 随机一个数
-        parseInt(300 * Math.random()) + 1;
-        // 把数字，小数点 格式化为指定的长度
-        number.toPrecision(3);
-        // 保留小数位
-        number.toFixed(2);
-        // 历遍数组结果
-        var everyResult = arr.every(function (item, index, array) {
-            return (item > 2);
-        });
-        var someResult = arr.some(function (item, index, array) {
-            return (item > 2);
-        });
-        // 过滤一个数组
-        var filterResult = arr.filter(function (item, index, array) {
-            return (item > 2);
-        });
-        // 在原有数组中运行传入函数
-        var mapResult = arr.map(function (item, index, array) {
-            return item * 2;
-        });
-        // 数组累加 values.reduceRight() 反向执行
-        var sum = values.reduce(function (prev, cur, index, array) {
-            return prev + cur;
-        });
-        // 数组排序从小到大
-        let stob = (a, b) => a - b;
-        array.sort(stob);
-        /**
-         * 数组对象排序从小到大
-         * @param {string} key 对象key值
-         */
-        function compare(key) {
-            return function (obj1, obj2) {
-                let val1 = obj1[key],
-                    val2 = obj2[key];
-                if (!isNaN(Number(val1)) && !isNaN(Number(val2))) {
-                    val1 = Number(val1);
-                    val2 = Number(val2);
-                }
-                return val1 - val2;
-            }
-        }
-        array.sort(compare('key'));
+/** 数组类型 */
+function ArrayModule() {
+    // 数组处理
+    array.join('&');
+    array.split(',');   // 把字符串分割成数组
+    array.slice(i, num);// 索引截取数组
+    array.shift();      // 移除第一项
+    array.pop();        // 移除最后一项
+    array.unshift();    // 在第一项添加
+    array.reverse();    // 反转数组
+    Math.ceil(25.9);    // 向上取舍
+    Math.round(25.9);   // 四舍五入
+    Math.floor(25.9);   // 向下取舍
+    // 1~300 随机一个数
+    parseInt(300 * Math.random()) + 1;
+    // 把数字，小数点 格式化为指定的长度
+    number.toPrecision(3);
+    // 保留小数位
+    number.toFixed(2);
+    // 历遍数组结果
+    var everyResult = array.every(function (item, index, array) {
+        return (item > 2);
+    });
+    var someResult = array.some(function (item, index, array) {
+        return (item > 2);
+    });
+    // 过滤一个数组
+    var filterResult = array.filter(function (item, index, array) {
+        return (item > 2);
+    });
+    // 在原有数组中运行传入函数
+    var mapResult = array.map(function (item, index, array) {
+        return item * 2;
+    });
+    // 数组累加 values.reduceRight() 反向执行
+    var sum = values.reduce(function (prev, cur, index, array) {
+        return prev + cur;
+    });
+    
+    // 数组排序从小到大
+    let stob = (a, b) => a - b;
+    array.sort(stob);
 
-        /** 多个key值排列判断 */
-        function demo(a, b) {
-            if (Number(a.level) === Number(b.level)) {
-                return Number(a.levelscore) - Number(b.levelscore);
-            } else {
-                return Number(a.level) - Number(b.level);
+    /**
+     * 数组对象排序从小到大
+     * @param {string} key 对象key值
+     */
+    function compare(key) {
+        return function (obj1, obj2) {
+            let val1 = obj1[key],
+                val2 = obj2[key];
+            if (!isNaN(Number(val1)) && !isNaN(Number(val2))) {
+                val1 = Number(val1);
+                val2 = Number(val2);
             }
+            return val1 - val2;
         }
     }
+    array.sort(compare('key'));
+
+    /** 多个key值排列判断 */
+    function demo(a, b) {
+        if (Number(a.level) === Number(b.level)) {
+            return Number(a.levelscore) - Number(b.levelscore);
+        } else {
+            return Number(a.level) - Number(b.level);
+        }
+    }
+
     /**
      * 范围随机数
      * @param {number} min 最小数
      * @param {number} max 最大数
      */
-    ranInt(min, max) {
+    function ranInt(min, max) {
         return parseInt(Math.random() * (max - min + 1)) + min;
     }
+
     /**
      * 随机打乱数组
      * @param {array} array
      */
-    shuffleArray(array) {
+    function shuffleArray(array) {
         let tmp, current, length = array.length;
         if (length) {
             while (--length) {
@@ -360,12 +362,43 @@ class _Array {
         }
         return array;
     }
+
+    /**
+     * 将制定位置的元素置顶
+     * @param {Array} array 改数组
+     * @param {Number} index 元素索引
+     */
+    function zIndexToTop(array, index) {
+        if (index != 0) {
+            let item = array[index];
+            array.splice(index, 1);
+            array.unshift(item);
+        } else {
+            console.log('已经处于置顶');
+        }
+    }
+
+    /**
+     * 将制定位置的元素置底
+     * @param {Array} array 改数组
+     * @param {Number} index 元素索引
+     */
+    function zIndexToBottom(array, index) {
+        if (index != array.length - 1) {
+            let item = array[index];
+            array.splice(index, 1);
+            array.push(item);
+        } else {
+            console.log('已经处于置底');
+        }
+    }
+
     /**
      * 获取两点距离
      * @param {*} lng 经度
      * @param {*} lat 纬度
      */
-    getDistance(lng1, lat1, lng2, lat2) {
+    function getDistance(lng1, lat1, lng2, lat2) {
         let toRad = d => d * Math.PI / 180;
         let radLat1 = toRad(lat1);
         let radLat2 = toRad(lat2);
@@ -374,10 +407,18 @@ class _Array {
         let dis = 2 * Math.asin(Math.sqrt(Math.pow(Math.sin(deltaLat / 2), 2) + Math.cos(radLat1) * Math.cos(radLat2) * Math.pow(Math.sin(deltaLng / 2), 2)));
         return dis * 6378137;
     }
+
+    return {
+        ranInt,
+        shuffleArray,
+        zIndexToTop,
+        zIndexToBottom,
+        getDistance
+    }
 }
 
 // 时间日期类型
-class _Date {
+class DateModule {
     constructor() { }
     /** 日期列表生成 */
     dayJson() {
