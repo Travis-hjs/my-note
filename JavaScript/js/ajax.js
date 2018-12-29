@@ -295,6 +295,105 @@ function WebSocketRequest() {
         }
     }
 }
+/**
+ * XMLHttpRequest 请求 
+ * @param {object} param {}
+ * @param {string} param.url 请求路径
+ * @param {string} param.method GET 或者 POST
+ * @param {Function} param.success 成功回调 
+ * @param {Function} param.fail 失败回调 
+ */
+function ajax(param) {
+    if (typeof param !== 'object') return console.warn('ajax 缺少请求传参');
+    if (!param.method) return console.warn('ajax 缺少请求类型 GET 或者 POST');
+    if (!param.url) return console.warn('ajax 缺少请求 url');
+    var XHR = new XMLHttpRequest();
 
+    // 配置参数
+    var method = '',
+        url = '',
+        data = null,
+        overtime = param.overtime ? param.overtime : null;
+    method = param.method.toUpperCase();
+    url = param.url;
 
+    // 传参处理
+    if (method === 'POST') {
+        data = param.data ? param.data : {};
+    } else if (method === 'GET' && typeof param.data === 'object') {
+        // 解析对象传参
+        var send_data = '';
+        for (var key in param.data) send_data += '&' + key + '=' + param.data[key];
+        send_data = '?' + send_data.slice(1);
+        url += send_data;
+    }
 
+    XHR.onreadystatechange = function () {
+        if (XHR.readyState !== 4) return;
+        if (XHR.status === 200 || XHR.status === 304) {
+            if (typeof param.success === 'function') param.success(JSON.parse(XHR.responseText));
+        } else {
+            if (typeof param.fail === 'function') param.fail(XHR);
+        }
+    }
+
+    // XHR.responseType = 'json';
+    // 是否Access-Control应使用cookie或授权标头等凭据进行跨站点请求。
+    // XHR.withCredentials = true;	
+    XHR.open(method, url, true);
+    XHR.setRequestHeader('Content-Type', 'application/json');// application/x-www-form-urlencoded
+    XHR.send(data);
+
+    // 超时检测
+    if (overtime) {
+        setTimeout(function () {
+            XHR.abort();
+            if (typeof param.timeout === 'function') param.timeout(XHR);
+        }, overtime);
+    }
+
+    return XHR;
+}
+
+var BASEURL = 'http://che.qihao.lzei.com';
+
+ajax({
+    url: BASEURL + '/api/app/parking',
+    method: 'post',
+    data: {
+        appkey: 'e2fb20ea3f3df33310788a4247834c93',
+        token: '2a11d6d67a8b8196afbcefbac3e0a573',
+        page: '1',
+        limit: '7',
+        longitude: '113.30764968',
+        latitude: '23.1200491',
+        sort: 'distance',
+        order: 'asc',
+        keyword: ''
+    },
+    overtime: 5000,
+    success: function (res) {
+        console.log('请求成功', res);
+    },
+    fail: function (err) {
+        console.log('请求失败', err);
+    },
+    timeout: function () {
+        console.log('请求超时');
+    }
+});
+// ajax({
+//     url:'http://www.runoob.com/try/ajax/ajax_info.txt',
+//     method: 'get',
+//     success: function (res) {
+//         console.log('请求成功', res);
+//     },
+//     fail: function (err) {
+//         console.log('请求失败', err);
+//     }
+// });
+// Http.get('http://www.runoob.com/try/ajax/ajax_info.txt', {}, res => {
+//     console.log(res);
+// }, err => {
+//     console.warn(err);
+// });

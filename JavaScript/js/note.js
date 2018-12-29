@@ -363,6 +363,13 @@ function ArrayModule() {
         return array;
     }
 
+    /** 随机打乱数组 */
+    function randomsort(a, b) {
+        return Math.random() > 0.5 ? -1 : 1;
+        //用 Math.random()函数生成 0~1 之间的随机数与 0.5 比较，返回 -1 或 1
+    }
+    // arr.sort(randomsort);
+
     /**
      * 将制定位置的元素置顶
      * @param {Array} array 改数组
