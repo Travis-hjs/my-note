@@ -281,16 +281,17 @@ function ArrayModule() {
     Math.ceil(25.9);    // 向上取舍
     Math.round(25.9);   // 四舍五入
     Math.floor(25.9);   // 向下取舍
-    // 1~300 随机一个数
-    parseInt(300 * Math.random()) + 1;
+    // 1~100 随机一个数
+    parseInt(100 * Math.random()) + 1;
     // 把数字，小数点 格式化为指定的长度
     number.toPrecision(3);
     // 保留小数位
     number.toFixed(2);
-    // 历遍数组结果
+    // 历遍数组结果 所有成立才返回 true
     var everyResult = array.every(function (item, index, array) {
         return (item > 2);
     });
+    // 历遍数组结果 有一个成立返回 true
     var someResult = array.some(function (item, index, array) {
         return (item > 2);
     });
@@ -339,8 +340,8 @@ function ArrayModule() {
 
     /**
      * 范围随机数
-     * @param {number} min 最小数
-     * @param {number} max 最大数
+     * @param {Number} min 最小数
+     * @param {Number} max 最大数
      */
     function ranInt(min, max) {
         return parseInt(Math.random() * (max - min + 1)) + min;
@@ -348,30 +349,16 @@ function ArrayModule() {
 
     /**
      * 随机打乱数组
-     * @param {array} array
+     * @param {Array} array
      */
     function shuffleArray(array) {
-        let tmp, current, length = array.length;
-        if (length) {
-            while (--length) {
-                current = Math.floor(Math.random() * (length + 1));
-                tmp = array[current];
-                array[current] = array[length];
-                array[length] = tmp;
-            }
-        }
-        return array;
+        // 用 Math.random()函数生成 0~1 之间的随机数与 0.5 比较，返回 -1 或 1
+        let randomsort = (a, b) => Math.random() > 0.5 ? -1 : 1;
+        return array.sort(randomsort);
     }
-
-    /** 随机打乱数组 */
-    function randomsort(a, b) {
-        return Math.random() > 0.5 ? -1 : 1;
-        //用 Math.random()函数生成 0~1 之间的随机数与 0.5 比较，返回 -1 或 1
-    }
-    // arr.sort(randomsort);
 
     /**
-     * 将制定位置的元素置顶
+     * 将指定位置的元素置顶
      * @param {Array} array 改数组
      * @param {Number} index 元素索引
      */
@@ -386,7 +373,7 @@ function ArrayModule() {
     }
 
     /**
-     * 将制定位置的元素置底
+     * 将指定位置的元素置底
      * @param {Array} array 改数组
      * @param {Number} index 元素索引
      */
@@ -402,8 +389,8 @@ function ArrayModule() {
 
     /**
      * 获取两点距离
-     * @param {*} lng 经度
-     * @param {*} lat 纬度
+     * @param {Number} lng 经度
+     * @param {Number} lat 纬度
      */
     function getDistance(lng1, lat1, lng2, lat2) {
         let toRad = d => d * Math.PI / 180;
