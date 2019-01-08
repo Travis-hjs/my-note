@@ -11,11 +11,6 @@ let $$ = el => document.querySelectorAll(el);
  * 当为false时为冒泡获取(由里向外)，true为capture方式(由外向里)
  * 等价于jQuery的 $(document).ready()
  * window.addEventListener('DOMContentLoaded', functionName) // mouseover, mouseout:hover()
- * encodeURIComponent() 对字符串进行编码(数字和英文不变)
- * decodeURIComponent() 对应的解码
- * str.replace(/\d+/g, '') => 过滤数字
- * str.replace(/[a-zA-Z]/g, '') => 过滤英文
- * string.includes()字符串监测 ES6
 */
 
 /**
@@ -26,31 +21,6 @@ let $$ = el => document.querySelectorAll(el);
  * sessionStorage.setItem('','')
  * sessionStorage.getItem('')
 */
-
-function dataCut() {
-    let _str = 'www.https/#/hjihsaih/#/sad.com',
-        _code = 'CEde_128,1214534',
-        _obj = {
-            name: 'hjs',
-            tall: '178cm',
-            weight: '128kg'
-        };
-    // 正则替换：i是首个，g是全局 
-    console.log(_str.replace(/#/i, '?#'));
-    // 下面这种替换性能会更好点，但是不够灵活，只能是全局替换
-    console.log(_str.split('#').join('?#'));
-    console.log(_code.slice(_code.indexOf(',') + 1));
-    // 对象属性获取值
-    console.log(Object.keys(_obj));
-    console.log(String(Object.keys(_obj)));
-    /** 
-     * ES5 
-     * Object.keys(obj)
-     * ES6
-     * Object.values(obj);
-     * Object.entries(obj);
-    */
-}
 
 function _click() {
     var list = $(".menu");
@@ -268,15 +238,56 @@ function myalert() {
 }
 // new Person('hjs','www.com').alertUrl() // 调用
 
+/** 字符串类型 */
+function stringModule() {
+    let string = 'www.https/#/hjihsaih/#/sad.com';
+    let code = 'CEde_128,1214534';
+    let value = 456;
+    // 将任意值转换成字符串
+    String(value);
+    // 关键字以外转字符串 toString(num) 可带参数转进制，限定 number.toString(num);
+    value.toString();
+    // 对字符串进行编码(数字和英文不变)
+    encodeURIComponent();      
+    // 对应的解码     
+    decodeURIComponent();           
+    // 过滤数字
+    let filterNum = string.replace(/\d+/g, '');   
+    // 过滤英文
+    let filterEnglish = string.replace(/[a-zA-Z]/g, '');   
+    /**
+     * 检测字符串是否存在指定字符串
+     * ES6 && ES5
+     * array 同样适用
+     */
+    string.includes('name');    // return false true              
+    string.search('name');      // return -1 or index
+    // 正则替换：i是首个，g是全局 
+    let regular = string.replace(/#/i, '?#');
+    // 下面这种替换性能会更好点，但是不够灵活，只能是全局替换
+    let replace = string.split('#').join('?#');
+    // 截取从","之后的字符串
+    let _code = code.slice(code.indexOf(',') + 1);
+    
+    /** 
+     * ES5 
+     * Object.keys(obj)
+     * ES6
+     * Object.values(obj);
+     * Object.entries(obj);
+    */
+}
+
 /** 数组类型 */
 function ArrayModule() {
     // 数组处理
     array.join('&');
     array.split(',');   // 把字符串分割成数组
     array.slice(i, num);// 索引截取数组
-    array.shift();      // 移除第一项
-    array.pop();        // 移除最后一项
+    array.shift();      // 移除第一项 并返回第一项
     array.unshift();    // 在第一项添加
+    array.pop();        // 移除最后一项 并返回最后一项
+    array.push();       // 在第一项添加
     array.reverse();    // 反转数组
     Math.ceil(25.9);    // 向上取舍
     Math.round(25.9);   // 四舍五入
