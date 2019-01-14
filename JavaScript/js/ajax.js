@@ -297,25 +297,31 @@ function WebSocketRequest() {
 }
 /**
  * XMLHttpRequest 请求 
+ * learn: https://developer.mozilla.org/zh-CN/docs/Web/API/XMLHttpRequest/Using_XMLHttpRequest
  * @param {object} param {}
  * @param {string} param.url 请求路径
  * @param {string} param.method GET 或者 POST
  * @param {Function} param.success 成功回调 
  * @param {Function} param.fail 失败回调 
+ * @param {Function} param.progress 进度回调  
  */
 function ajax(param) {
     if (typeof param !== 'object') return console.warn('ajax 缺少请求传参');
     if (!param.method) return console.warn('ajax 缺少请求类型 GET 或者 POST');
     if (!param.url) return console.warn('ajax 缺少请求 url');
+    
+    /** XMLHttpRequest */
     var XHR = new XMLHttpRequest();
-
-    // 配置参数
-    var method = '',
-        url = '',
-        data = null,
-        overtime = param.overtime ? param.overtime : null;
-    method = param.method.toUpperCase();
-    url = param.url;
+    /** 请求方法 */
+    var method = param.method.toUpperCase();
+    /** 请求链接 */
+    var url = param.url;
+    /** 请求数据 */
+    var data = null;
+    /** 超时检测 */
+    var overtime = param.overtime ? param.overtime : null;
+    /** 计时器 */
+    var timer = null;
 
     // 传参处理
     if (method === 'POST') {
@@ -332,10 +338,17 @@ function ajax(param) {
         if (XHR.readyState !== 4) return;
         if (XHR.status === 200 || XHR.status === 304) {
             if (typeof param.success === 'function') param.success(JSON.parse(XHR.responseText));
+            if (timer != null) clearTimeout(timer);
         } else {
             if (typeof param.fail === 'function') param.fail(XHR);
+            if (timer != null) clearTimeout(timer);
         }
     }
+
+    if (param.progress) {
+        XHR.addEventListener('progress', param.progress, false);
+    }
+    
 
     // XHR.responseType = 'json';
     // 是否Access-Control应使用cookie或授权标头等凭据进行跨站点请求。
@@ -346,7 +359,7 @@ function ajax(param) {
 
     // 超时检测
     if (overtime) {
-        setTimeout(function () {
+        timer = setTimeout(function () {
             XHR.abort();
             if (typeof param.timeout === 'function') param.timeout(XHR);
         }, overtime);
@@ -380,6 +393,13 @@ ajax({
     },
     timeout: function () {
         console.log('请求超时');
+    },
+    progress: function (e) {
+        if (e.lengthComputable) {
+            var percentComplete = e.loaded / e.total
+            console.log('请求进度', percentComplete, e.loaded ,e.total);
+        }
+        console.log(e);
     }
 });
 // ajax({
