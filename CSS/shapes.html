@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>css3-shapes</title>
+    <link rel="stylesheet" href="./shapes.css">
+</head>
+<body>
+    <div class="traingle"></div>
+    <div class="notching"></div>
+    <div class="trapezoid"></div>
+    <div class="pentagon"></div>
+    <div class="pentagon6"></div>
+    <div class="octagon"></div>
+    <div class="star"></div>
+    <div class="sixstar"></div>
+    <div class="eightstar"></div>
+    <div class="twelvestar"></div>
+    <div class="ellipse"></div>
+    <div class="polygon-animate"></div>
+    <hgroup class="triangle2rect">
+        <div class="a"></div>
+        <div class="b"></div>
+        <div class="c"></div>
+        <div class="d"></div>
+    </hgroup>
+    <div class="n-box"></div>
+    <script>
+        setInterval(function() {
+            const length = 2000;
+
+            let el = document.querySelector('.n-box');
+            let coordinate = '';
+
+            for (let i = 0; i < length; i++) {
+                coordinate +=
+                    parseInt(Math.random() * 10000) / 100 +
+                    '% ' +
+                    parseInt(Math.random() * 10000) / 100 +
+                    '%, ';
+            }
+
+            coordinate = 'polygon(' + coordinate.slice(0, -2) + ')';
+
+            el.style.clipPath = coordinate;
+            el.style.backgroundColor =
+                "#" + (~~(Math.random() * (1 << 24))).toString(16);
+        }, 500);
+    </script>
+</body>
+</html>
