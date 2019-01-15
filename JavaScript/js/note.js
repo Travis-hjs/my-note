@@ -488,13 +488,19 @@ class DateModule {
         hour = ('0' + _Appoint.getHours()).slice(-2);
         minute = ('0' + _Appoint.getMinutes()).slice(-2);
         second = ('0' + _Appoint.getSeconds()).slice(-2);
-        date = `${_Appoint.getFullYear()}-${month}-${day} ${hour}:${minute}:${second}`
+        date = `${_Appoint.getFullYear()}/${month}/${day} ${hour}:${minute}:${second}`
         return date;
     }
-    /** 获取两个时间段的秒数 */
-    getSecond(newTime, oldTime) {
-        return (new Date(newTime) - new Date(oldTime)) / 1000;
+
+    /**
+     * 获取两个时间段的秒数
+     * @param {Date} now 对比的时间
+     * @param {Date} before 之前的时间
+     */
+    getSecond(now, before) {
+        return (new Date(now) - new Date(before)) / 1000;
     }
+
     /**
      * 带天数的倒计时
      * @param {number} times 秒数
@@ -516,6 +522,7 @@ class DateModule {
             times--;
         }, 1000);
     }
+
     /**
      * 将秒数换成时分秒格式
      * @param {number} value 
@@ -540,12 +547,13 @@ class DateModule {
         }
         return { hour, minute, second };
     }
+
     /**
      * 获取两个日期之间的天数
-     * @param {Date} nowdate 现在时间
-     * @param {Date} olddate 之前时间
+     * @param {Date} now 现在时间
+     * @param {Date} before 之前时间
      */
-    getDaysDiffBetweenDates(nowdate, olddate) {
-        return Math.floor((nowdate - olddate) / 86400000);
+    getDays(now, before) {
+        return Math.floor((now - before) / 86400000);
     }
 }
