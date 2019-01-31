@@ -1,157 +1,213 @@
 /**
  * swiper
  * 默认全部 false
- * @param {boolean} pagination 是否需要底部圆点
- * @param {boolean} loop 是否需要回路
- * @param {boolean} direction 方向 true = X & Y = false
  * @param {number} moveTime 过渡时间（毫秒）默认 300
- * @param {boolean} autoPaly 是否需要自动播放
  * @param {number} interval 自动播放间隔（毫秒）默认 3000
+ * @param {boolean} loop 是否需要回路
+ * @param {boolean} vertical 是否垂直
+ * @param {boolean} autoPaly 是否需要自动播放
+ * @param {boolean} pagination 是否需要底部圆点
  */
 function swiper(params) {
-    let _pagination = false, _loop = false, _direction = false, _autoPaly = false, _interval = 3000, _moveTime = 300;
+    /** 是否需要底部圆点 */
+    let pagination = false; 
+    /** 是否需要回路 */
+    let loop = false;
+    /** 方向 true = X & Y = false */
+    let direction = false; 
+    /** 是否需要自动播放 */
+    let autoPaly = false; 
+    /** 自动播放间隔（毫秒）默认 3000 */
+    let interval = 3000; 
+    /** 过渡时间（毫秒）默认 300 */
+    let moveTime = 300;
     // 触摸事件
-    function _touch(_div, _w, _h) {
-        let _ul = _div.querySelector('.swiper_list');
-        let _li = _ul.querySelectorAll('.swiper_slider');
-        let _btn = _div.querySelectorAll('.swiper_btn');
-        // 触摸开始时间，触摸结束时间，开始的距离，结束的距离，结束距离状态，移动的距离，圆点位置，自动播放定计算数值，loop定时器计算值
-        let sTime = 0, eTime = 0, sd = 0, ed = 0, eState = 0, md = 0, index = 0, count = 0, loopNum = 0,
-            // 选择方向距离
-            _distance = _direction ? _h : _w,
-            // 定义 requestAnimationFrame
-            myAnimation = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame || window.msRequestAnimationFrame;
-        // 设置动画
-        function hasAnimation() {
-            _ul.style.transition = _ul.style.WebkitTransition = `${_moveTime / 1000}s all`;
+    /**
+     * 
+     * @param {node} div 
+     * @param {Number} width 滚动容器的宽度
+     * @param {Number} height 滚动容器的高度
+     */
+    function touch(div, width, height) {
+        /** item 列表 */
+        let list = div.querySelector('.swiper_list');
+        /** swiper item */
+        let item = list.querySelectorAll('.swiper_slider');
+        /** 底部圆点 */
+        let btn = div.querySelectorAll('.swiper_btn');
+        /** 触摸开始时间 */
+        let start_time = 0; 
+        /** 触摸结束时间 */
+        let end_time = 0;
+        /** 开始的距离 */
+        let start_distance = 0;
+        /** 结束的距离 */ 
+        let end_distance = 0;
+        /** 结束距离状态 */
+        let end_state = 0;
+        /** 移动的距离 */
+        let move_distance = 0;
+        /** 圆点位置 当前 item 索引 */
+        let index = 0;
+        /** 自动播放定计算数值 */
+        let count = 0;
+        /** loop定时器计算值 */
+        let loop_num = 0;
+        /** 距离 */
+        let distance = direction ? height : width;
+        /** 定义 requestAnimationFrame */
+        let myAnimation = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame || window.msRequestAnimationFrame;
+        
+        /** 设置动画 */
+        function openAnimation() {
+            list.style.transition = list.style.WebkitTransition = `${moveTime / 1000}s all`;
         }
-        // 关闭动画
-        function noAnimation() {
-            _ul.style.transition = _ul.style.WebkitTransition = '0s all';
+        
+        /** 关闭动画 */
+        function stopAnimation() {
+            list.style.transition = list.style.WebkitTransition = '0s all';
         }
-        // 属性样式
+        
+        /**
+         * 属性样式滑动
+         * @param {Number} num 移动的距离
+         */
         function slideStyle(num) {
-            if (_direction) {
-                _ul.style.transform = _ul.style.WebkitTransform = `translate3d(0px, ${num}px, 0px)`;
+            if (direction) {
+                list.style.transform = list.style.WebkitTransform = `translate3d(0px, ${num}px, 0px)`;
             } else {
-                _ul.style.transform = _ul.style.WebkitTransform = `translate3d(${num}px, 0px, 0px)`;
+                list.style.transform = list.style.WebkitTransform = `translate3d(${num}px, 0px, 0px)`;
             }
         }
-        // 判断最大拖动距离
+
+        /** 判断最大拖动距离 */
         function touchRange() {
             let num = 0;
+            
             // 默认这个公式
-            num = md + (ed - sd);
+            num = move_distance + (end_distance - start_distance);
+
             // 判断最大正负值
-            if ((ed - sd) >= _distance) {
-                num = md + _distance;
-            } else if ((ed - sd) <= -_distance) {
-                num = md - _distance;
+            if ((end_distance - start_distance) >= distance) {
+                num = move_distance + distance;
+            } else if ((end_distance - start_distance) <= -distance) {
+                num = move_distance - distance;
             }
-            // md : 移动的距离 ed : 结束的距离 sd 开始的距离
+            
             // 没有loop的时候惯性拖拽
-            if (!_loop) {
-                if ((ed - sd) > 0 && index === 0) {
+            if (!loop) {
+                if ((end_distance - start_distance) > 0 && index === 0) {
                     // console.log('到达最初');
-                    num = md + ((ed - sd) - ((ed - sd) * 0.6));
-                } else if ((ed - sd) < 0 && index === _li.length - 1) {
+                    num = move_distance + ((end_distance - start_distance) - ((end_distance - start_distance) * 0.6));
+                } else if ((end_distance - start_distance) < 0 && index === item.length - 1) {
                     // console.log('到达最后');
-                    num = md + ((ed - sd) - ((ed - sd) * 0.6));
+                    num = move_distance + ((end_distance - start_distance) - ((end_distance - start_distance) * 0.6));
                 }
             }
             return num;
         }
-        // 判断触摸处理函数 _d是距离X/Y
+        
+        /**
+         * 判断触摸处理函数 
+         * @param {Number} _d 距离 X or Y
+         */
         function judgeTouch(_d) {
             //	这里我设置了200毫秒的有效拖拽间隔
-            if ((eTime - sTime) < 200) return true;
+            if ((end_time - start_time) < 200) return true;
             // 这里判断方向（正值和负值）
             if (_d < 0) {
-                if ((ed - sd) < (_d / 2)) return true;
+                if ((end_distance - start_distance) < (_d / 2)) return true;
                 return false;
             } else {
-                if ((ed - sd) > (_d / 2)) return true;
+                if ((end_distance - start_distance) > (_d / 2)) return true;
                 return false;
             }
         }
-        // 返回原来位置
-        function returnLocation() {
-            hasAnimation();
-            slideStyle(md);
+ 
+        /** 返回原来位置 */
+        function backLocation() {
+            openAnimation();
+            slideStyle(move_distance);
         }
-        // 移动
+        
+        /**
+         * 移动
+         * @param {Number} _d 
+         */
         function slideMove(_d) {
-            hasAnimation();
+            openAnimation();
             slideStyle(_d);
-            loopNum = 0;
+            loop_num = 0;
             // 判断loop时回到第一张或最后一张
-            if (_loop && index < 0) {
+            if (loop && index < 0) {
                 // 我这里是想让滑块过渡完之后再重置位置所以加的延迟 (之前用setTimeout，快速滑动有问题，然后换成 requestAnimationFrame解决了这类问题)
                 function loopMoveMin() {
-                    loopNum += 1;
-                    if (loopNum < _moveTime / 1000 * 60) return myAnimation(loopMoveMin);
-                    noAnimation();
-                    slideStyle(_distance * -(_li.length - 3));
+                    loop_num += 1;
+                    if (loop_num < moveTime / 1000 * 60) return myAnimation(loopMoveMin);
+                    stopAnimation();
+                    slideStyle(distance * -(item.length - 3));
                     // 重置一下位置
-                    md = _distance * -(_li.length - 3);
+                    move_distance = distance * -(item.length - 3);
                 }
                 loopMoveMin();
-                index = _li.length - 3;
-            } else if (_loop && index > _li.length - 3) {
+                index = item.length - 3;
+            } else if (loop && index > item.length - 3) {
                 function loopMoveMax() {
-                    loopNum += 1;
-                    if (loopNum < _moveTime / 1000 * 60) return myAnimation(loopMoveMax);
-                    noAnimation();
+                    loop_num += 1;
+                    if (loop_num < moveTime / 1000 * 60) return myAnimation(loopMoveMax);
+                    stopAnimation();
                     slideStyle(0);
-                    md = 0;
+                    move_distance = 0;
                 }
                 loopMoveMax();
                 index = 0;
             }
             // console.log(`第${ index+1 }张`);	// 这里可以做滑动结束回调
-            if (_pagination) {
-                _div.querySelector('.swiper_btn_active').className = 'swiper_btn';
-                _btn[index].classList.add('swiper_btn_active');
+            if (pagination) {
+                div.querySelector('.swiper_btn_active').className = 'swiper_btn';
+                btn[index].classList.add('swiper_btn_active');
             }
         }
-        // 判断移动
+
+        /** 判断移动 */ 
         function judgeMove() {
             // 判断是否需要执行过渡
-            if (ed < sd) {
+            if (end_distance < start_distance) {
                 // 往上滑动 or 向左滑动
-                if (judgeTouch(-_distance)) {
+                if (judgeTouch(-distance)) {
                     // 判断有loop的时候不需要执行下面的事件
-                    if (!_loop && md === (-(_li.length - 1) * _distance)) return returnLocation();
+                    if (!loop && move_distance === (-(item.length - 1) * distance)) return backLocation();
                     index += 1;
-                    slideMove(md - _distance);
-                    md -= _distance;
-                } else returnLocation();
+                    slideMove(move_distance - distance);
+                    move_distance -= distance;
+                } else backLocation();
             } else {
                 // 往下滑动 or 向右滑动
-                if (judgeTouch(_distance)) {
-                    if (!_loop && md === 0) return returnLocation();
+                if (judgeTouch(distance)) {
+                    if (!loop && move_distance === 0) return backLocation();
                     index -= 1;
-                    slideMove(md + _distance);
-                    md += _distance;
-                } else returnLocation();
+                    slideMove(move_distance + distance);
+                    move_distance += distance;
+                } else backLocation();
             }
         }
-        // 自动播放移动
+        
+        /** 自动播放移动 */
         function autoMove() {
             // 这里判断是否有回路loop的自动播放
-            if (_loop) {
+            if (loop) {
                 index += 1;
-                slideMove(md - _distance);
-                md -= _distance;
+                slideMove(move_distance - distance);
+                move_distance -= distance;
             } else {
-                if (index >= _li.length - 1) {
+                if (index >= item.length - 1) {
                     index = 0;
                     slideMove(0);
-                    md = 0;
+                    move_distance = 0;
                 } else {
                     index += 1;
-                    slideMove(md - _distance);
-                    md -= _distance;
+                    slideMove(move_distance - distance);
+                    move_distance -= distance;
                 }
             }
         }
@@ -159,103 +215,123 @@ function swiper(params) {
         function startAuto() {
             count += 1;
             //	这里帧数是1秒60次
-            if (count < _interval / 1000 * 60) return myAnimation(startAuto);
+            if (count < interval / 1000 * 60) return myAnimation(startAuto);
             count = 0;
             autoMove();
             startAuto();
         }
         // 判断是否需要开启自动播放
-        if (_autoPaly && _li.length - 1) startAuto();
+        if (autoPaly && item.length - 1) startAuto();
         // 开始触摸
-        _ul.addEventListener('touchstart', ev => {
-            // loopNum = _moveTime/1000*60;
-            [sTime, count, loopNum] = [new Date().getTime(), 0, _moveTime / 1000 * 60];
-            noAnimation();
-            sd = _direction ? ev.touches[0].pageY : ev.touches[0].pageX;
+        list.addEventListener('touchstart', ev => {
+            // loop_num = moveTime/1000*60;
+            [start_time, count, loop_num] = [new Date().getTime(), 0, moveTime / 1000 * 60];
+            stopAnimation();
+            start_distance = direction ? ev.touches[0].pageY : ev.touches[0].pageX;
         });
         // 触摸移动
-        _ul.addEventListener('touchmove', ev => {
+        list.addEventListener('touchmove', ev => {
             ev.preventDefault();
             count = 0;
-            ed = _direction ? ev.touches[0].pageY : ev.touches[0].pageX;
+            end_distance = direction ? ev.touches[0].pageY : ev.touches[0].pageX;
             slideStyle(touchRange());
         });
         // 触摸离开
-        _ul.addEventListener('touchend', () => {
-            eTime = new Date().getTime();
+        list.addEventListener('touchend', () => {
+            end_time = new Date().getTime();
             // 判断是否点击
-            if (eState !== ed) {
+            if (end_state !== end_distance) {
                 judgeMove();
             } else {
                 // console.log('执行');
-                returnLocation();
+                backLocation();
             }
             // console.log(`index: ${index}`);	//  这里可以做触摸之后位置回调
             // 更新位置 && 重新打开自动播放要放到最后
-            [eState, count] = [ed, 0];
+            [end_state, count] = [end_distance, 0];
         });
     }
-    // 动态布局
-    function layout(_div, _w, _h) {
-        let _ul = _div.querySelector('.swiper_list'), _li = _div.querySelectorAll('.swiper_slider');
-        if (_direction) {
-            for (let i = 0; i < _li.length; i++) {
-                _li[i].style.height = `${_h}px`;
+    
+    /**
+     * 动态布局
+     * @param {node} div 
+     * @param {Number} width 滚动容器的宽度
+     * @param {Number} height 滚动容器的高度
+     */
+    function layout(div, width, height) {
+        let ul = div.querySelector('.swiper_list'), li = div.querySelectorAll('.swiper_slider');
+        if (direction) {
+            for (let i = 0; i < li.length; i++) {
+                li[i].style.height = `${height}px`;
             }
         } else {
-            _ul.style.width = `${_w * _li.length}px`;
-            for (let i = 0; i < _li.length; i++) {
-                _li[i].style.width = `${_w}px`;
+            ul.style.width = `${width * li.length}px`;
+            for (let i = 0; i < li.length; i++) {
+                li[i].style.width = `${width}px`;
             }
         }
-        _touch(_div, _w, _h);
+        touch(div, width, height);
     }
-    // 如果要回路的话前后增加元素
-    function outputLoop(_div, _w, _h) {
-        let _ul = _div.querySelector('.swiper_list');
-        let _li = _ul.querySelectorAll('.swiper_slider');
-        let _first = _li[0].cloneNode(true),
-            _last = _li[_li.length - 1].cloneNode(true);
-        _ul.insertBefore(_last, _li[0]);
-        _ul.appendChild(_first);
-        if (_direction) {
-            _ul.style.top = `${-_h}px`;
+    
+    /**
+     * 如果要回路的话前后增加元素
+     * @param {node} div 
+     * @param {Number} width 滚动容器的宽度
+     * @param {Number} height 滚动容器的高度
+     */
+    function outputLoop(div, width, height) {
+        let ul = div.querySelector('.swiper_list');
+        let li = ul.querySelectorAll('.swiper_slider');
+        let first = li[0].cloneNode(true),
+            last = li[li.length - 1].cloneNode(true);
+        ul.insertBefore(last, li[0]);
+        ul.appendChild(first);
+        if (direction) {
+            ul.style.top = `${-height}px`;
         } else {
-            _ul.style.left = `${-_w}px`;
+            ul.style.left = `${-width}px`;
         }
-        layout(_div, _w, _h);
+        layout(div, width, height);
     }
-    // 输出底部圆点
-    function outputPagination(_div) {
-        let _btnList = _div.querySelector('.swiper_pagination'),
-            _liNum = _div.querySelectorAll('.swiper_slider').length,
-            _html = '';
-        for (let i = 0; i < _liNum; i++) {
-            _html += '<div class="swiper_btn"></div>';
+
+    /**
+     * 输出底部圆点
+     * @param {node} div 
+     */
+    function outputPagination(div) {
+        let btnList = div.querySelector('.swiper_pagination'),
+            liNum = div.querySelectorAll('.swiper_slider').length,
+            html = '';
+        for (let i = 0; i < liNum; i++) {
+            html += '<div class="swiper_btn"></div>';
         }
-        _btnList.innerHTML = _html;
-        _btnList.querySelector('.swiper_btn').classList.add('swiper_btn_active');
+        btnList.innerHTML = html;
+        btnList.querySelector('.swiper_btn').classList.add('swiper_btn_active');
     }
-    // 动态布局初始化
-    function format(_el) {
-        let _swiper = document.querySelector(_el);
-        let _moveWidth = _swiper.offsetWidth, _moveHeight = _swiper.offsetHeight;
-        if (_pagination) outputPagination(_swiper);
-        if (_loop) {
-            outputLoop(_swiper, _moveWidth, _moveHeight);
+    
+    /**
+     * 动态布局初始化
+     * @param {node} el 
+     */
+    function format(el) {
+        let _swiper = document.querySelector(el);
+        let moveWidth = _swiper.offsetWidth, moveHeight = _swiper.offsetHeight;
+        if (pagination) outputPagination(_swiper);
+        if (loop) {
+            outputLoop(_swiper, moveWidth, moveHeight);
         } else {
-            layout(_swiper, _moveWidth, _moveHeight);
+            layout(_swiper, moveWidth, moveHeight);
         }
     }
     // 配置传参
     function init() {
         if (!params.el) return console.warn('没有可执行的元素！');
-        _pagination = params.pagination || false;
-        _direction = params.direction || false;
-        _autoPaly = params.autoPaly || false;
-        _loop = params.loop || false;
-        _moveTime = params.moveTime || 300;
-        _interval = params.interval || 3000;
+        pagination = params.pagination || false;
+        direction = params.vertical || false;
+        autoPaly = params.autoPaly || false;
+        loop = params.loop || false;
+        moveTime = params.moveTime || 300;
+        interval = params.interval || 3000;
         format(params.el);
     }
     init();
