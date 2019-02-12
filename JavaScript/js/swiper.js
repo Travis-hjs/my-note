@@ -1,12 +1,12 @@
 /**
  * swiper
  * 默认全部 false
- * @param {number} moveTime 过渡时间（毫秒）默认 300
- * @param {number} interval 自动播放间隔（毫秒）默认 3000
- * @param {boolean} loop 是否需要回路
- * @param {boolean} vertical 是否垂直
- * @param {boolean} autoPaly 是否需要自动播放
- * @param {boolean} pagination 是否需要底部圆点
+ * @param {number} params.moveTime 过渡时间（毫秒）默认 300
+ * @param {number} params.interval 自动播放间隔（毫秒）默认 3000
+ * @param {boolean} params.loop 是否需要回路
+ * @param {boolean} params.vertical 是否垂直
+ * @param {boolean} params.autoPaly 是否需要自动播放
+ * @param {boolean} params.pagination 是否需要底部圆点
  */
 function swiper(params) {
     /** 是否需要底部圆点 */
@@ -21,9 +21,8 @@ function swiper(params) {
     let interval = 3000; 
     /** 过渡时间（毫秒）默认 300 */
     let moveTime = 300;
-    // 触摸事件
     /**
-     * 
+     * 触摸事件
      * @param {node} div 
      * @param {Number} width 滚动容器的宽度
      * @param {Number} height 滚动容器的高度
@@ -59,7 +58,7 @@ function swiper(params) {
         let myAnimation = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame || window.msRequestAnimationFrame;
         
         /** 设置动画 */
-        function openAnimation() {
+        function startAnimation() {
             list.style.transition = list.style.WebkitTransition = `${moveTime / 1000}s all`;
         }
         
@@ -109,7 +108,7 @@ function swiper(params) {
         
         /**
          * 判断触摸处理函数 
-         * @param {Number} _d 距离 X or Y
+         * @param {Number} _d 移动的距离
          */
         function judgeTouch(_d) {
             //	这里我设置了200毫秒的有效拖拽间隔
@@ -126,16 +125,16 @@ function swiper(params) {
  
         /** 返回原来位置 */
         function backLocation() {
-            openAnimation();
+            startAnimation();
             slideStyle(move_distance);
         }
         
         /**
          * 移动
-         * @param {Number} _d 
+         * @param {Number} _d 移动的距离
          */
         function slideMove(_d) {
-            openAnimation();
+            startAnimation();
             slideStyle(_d);
             loop_num = 0;
             // 判断loop时回到第一张或最后一张
