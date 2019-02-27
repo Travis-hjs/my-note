@@ -184,4 +184,57 @@ function set_of() {
 }
 // set_of()
 
+/** 类 */
+function classModule() {
+    /** 类 Price */
+    class Price {
+        /** 金币 */
+        money = 0;
 
+        constructor() {
+            this.gold = 100;
+        }
+
+        /** 打印类名 */
+        static logName() {
+            return 'name: Price'
+        }
+
+        get gold() {
+            return this.money;
+        }
+        
+        set gold(value) {
+            this.money = value;
+        }
+
+        /**
+         * 计算平方根
+         * @param {Number} a Math.pow(a, b) 
+         * @param {Number} b Math.pow(a, b) 
+         */
+        compute(a, b) {
+            return Math.pow(a, b); 
+        }
+    }
+
+    /** 类 DataGM 继承 Price */
+    class DataGM extends Price {
+        constructor() { 
+            // 注意这里的构造函数定义会覆盖 继承 Price 的 constructor();
+            // 所以要执行继承者的 constructor();
+            super();
+            // 静态方法是在构造后无法使用的，所以这里是 undefined
+            console.log(super.logName);
+        }
+    }
+    
+    console.log('静态方法：', DataGM.logName());
+
+    /** 实例模块 */
+    const Modules = new DataGM();
+
+    console.log('金币：', Modules.gold, '平方根', Modules.compute(6, 5));
+
+}
+classModule();
