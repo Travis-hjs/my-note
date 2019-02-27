@@ -237,6 +237,23 @@ function classBtn() {
     }, 3000);
 }
 
+/** 对话框 */
+class Dialog {
+    /** 整体容器 */
+    box = null;
+
+    constructor() {
+        this.init();
+    }
+
+    /** 初始化 */
+    init() {
+        this.box = document.createElement('div');
+        this.box.className = 'prompts';
+    }
+
+}
+
 /**
  * 普通函数模式
  * @param {*} params
