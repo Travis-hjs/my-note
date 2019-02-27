@@ -2,6 +2,16 @@
 let $ = el => document.querySelector(el);
 let $$ = el => document.querySelectorAll(el);
 
+/**
+ * 设置样式
+ * @param {Element} el 设置样式的元素
+ * @param {Object} style 样式 Example: {display: 'block', width: '100px'}
+ */
+function setStyle(el, style) {
+    for (var key in style) {
+        el.style[key] = style[key];
+    }
+}
 /*
  * 阻止事件冒泡
  * event.cancelBubble = true;
