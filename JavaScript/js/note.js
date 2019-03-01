@@ -303,7 +303,7 @@ function ArrayModule() {
     Math.round(25.9);   // 四舍五入
     Math.floor(25.9);   // 向下取舍
     // 1~100 随机一个数
-    parseInt(100 * Math.random()) + 1;
+    Math.floor(100 * Math.random()) + 1;
     // 把数字，小数点 格式化为指定的长度
     number.toPrecision(3);
     // 保留小数位
@@ -365,7 +365,7 @@ function ArrayModule() {
      * @param {Number} max 最大数
      */
     function ranInt(min, max) {
-        return parseInt(Math.random() * (max - min + 1)) + min;
+        return Math.floor(Math.random() * (max - min + 1)) + min;
     }
 
     /**
@@ -473,8 +473,8 @@ class DateModule {
         var arr = [],
             minTotal = 0;
         while (minTotal < 1440) {
-            var hour = parseInt(minTotal / 60),
-                min = parseInt(minTotal % 60);
+            var hour = Math.floor(minTotal / 60),
+                min = Math.floor(minTotal % 60);
             hour = ('0' + hour).slice(-2);
             min = ('0' + min).slice(-2);
             arr.push(hour + ':' + min);
@@ -538,21 +538,21 @@ class DateModule {
      * @param {number} value 
      */
     secondFormat(value) {
-        let second = parseInt(value),
+        let second = Math.floor(value),
             minute = 0,
             hour = 0;
         // 如果秒数大于60，将秒数转换成整数
         if (second > 60) {
             // 获取分钟，除以60取整数，得到整数分钟
-            minute = parseInt(second / 60);
+            minute = Math.floor(second / 60);
             // 获取秒数，秒数取佘，得到整数秒数
-            second = parseInt(second % 60);
+            second = Math.floor(second % 60);
             // 如果分钟大于60，将分钟转换成小时
             if (minute > 60) {
                 // 获取小时，获取分钟除以60，得到整数小时
-                hour = parseInt(minute / 60);
+                hour = Math.floor(minute / 60);
                 // 获取小时后取佘的分，获取分钟除以60取佘的分
-                minute = parseInt(minute % 60);
+                minute = Math.floor(minute % 60);
             }
         }
         return { hour, minute, second };
