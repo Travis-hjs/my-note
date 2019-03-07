@@ -1,41 +1,407 @@
-// 选择器
-let $ = el => document.querySelector(el);
-let $$ = el => document.querySelectorAll(el);
+// 阻止事件冒泡
+// event.cancelBubble = true;
+// event.stopPropagation(); //  阻止事件向上传播
+// event.preventDefault();  //  取消事件的默认动作。submit类型标签有效
+// addEventListener中的第三个参 数是useCapture,一个bool类型。
+// 当为false时为冒泡获取(由里向外)，true为capture方式(由外向里)
+// 等价于jQuery的 $(document).ready()
+// window.addEventListener('DOMContentLoaded', functionName) // mouseover, mouseout:hover()
 
-/**
- * 设置样式
- * @param {Element} el 设置样式的元素
- * @param {Object} style 样式 Example: {display: 'block', width: '100px'}
- */
-function setStyle(el, style) {
-    for (var key in style) {
-        el.style[key] = style[key];
+// 永久储存
+// localStorage.setItem("key","value"); 以“key”为名称存储一个值“value”
+// localStorage.getItem("key"); 获取名称为“key”的值
+// 周期储存（浏览器关闭之前）
+// sessionStorage.setItem('','')
+// sessionStorage.getItem('')
+
+/** 浏览器模块 */
+class WindowModule {
+    constructor() {
+        
+    }
+    /**
+     * 本地储存数据
+     * @param {string} key 对应的 key 值
+     * @param {object} data 对应的数据
+     */
+    saveData(key, data) {
+        window.localStorage.setItem(key, JSON.stringify(data));
+    }
+    /**
+     * 获取本地数据
+     * @param {string} key 对应的 key 值
+     */
+    fetchData(key) {
+        let data = window.localStorage.getItem(key) ? JSON.parse(window.localStorage.getItem(key)) : null;
+        return data;
+    }
+    /** 清除本地数据 */
+    removeData() {
+        window.localStorage.clear();
+    }
+    /** 长震动 */
+    vibrateLong() {
+        if ('vibrate' in window.navigator) {
+            window.navigator.vibrate(400);
+        } else if (window['wx'] && wx.vibrateLong) {
+            wx.vibrateLong();
+        }
+    }
+    /** 短震动 */
+    vibrateShort() {
+        if ('vibrate' in window.navigator) {
+            window.navigator.vibrate(15);
+        } else if (window['wx'] && wx.vibrateShort) {
+            wx.vibrateShort();
+        }
     }
 }
-/*
- * 阻止事件冒泡
- * event.cancelBubble = true;
- * event.stopPropagation(); //  阻止事件向上传播
- * event.preventDefault();  //  取消事件的默认动作。submit类型标签有效
- * addEventListener中的第三个参 数是useCapture,一个bool类型。
- * 当为false时为冒泡获取(由里向外)，true为capture方式(由外向里)
- * 等价于jQuery的 $(document).ready()
- * window.addEventListener('DOMContentLoaded', functionName) // mouseover, mouseout:hover()
-*/
 
-/**
- * 永久储存
- * localStorage.setItem("key","value"); 以“key”为名称存储一个值“value”
- * localStorage.getItem("key"); 获取名称为“key”的值
- * 周期储存（浏览器关闭之前）
- * sessionStorage.setItem('','')
- * sessionStorage.getItem('')
-*/
+/** 数组类处理模块 */
+class ArrayModule extends WindowModule{
+    constructor() {
+        super();
+    }
 
-function _click() {
-    var list = $(".menu");
+    /**
+     * 过滤掉特殊符号
+     * @param {string} string 
+     */
+    filterStr(string) {
+        let pattern = new RegExp("[`~!@#$^&*()=|{}':;',\\[\\].<>/?~！@#￥……&*（）——|{}【】‘；：”“'。，、？%+_]");
+        let newStr = '';
+        for (let i = 0; i < string.length; i++) {
+            newStr += string.substr(i, 1).replace(pattern, '');
+        }
+        return newStr;
+    }
+
+    /**
+     * 带单位的数值转换
+     * @param {number} value 数字
+     */
+    renderSize(value = 0) {
+        if (value == 0) return 0;
+        let units = ['', 'k', 'm', 'b', 't', 'e','ae', 'be', 'ce', 'de', 'ee', 'fe', 'ge', 'he', 'ie'];
+        let index = 0,
+            srcsize = parseFloat(value);
+        index = Math.floor(Math.log(srcsize) / Math.log(1000));
+        let size = srcsize / Math.pow(1000, index);
+        if (index === 0) return size.toFixed(0);
+        return size.toFixed(1) + units[index];
+    }
+
+    /**
+     * 范围随机数
+     * @param {number} min 最小数
+     * @param {number} max 最大数
+     */
+    ranInt(min, max) {
+        return parseInt(Math.random() * (max - min + 1)) + min;
+    }
+
+    /**
+     * 随机打乱数组
+     * @param {array} array
+     */
+    shuffleArray(array) {
+        let random = (a, b) => Math.random() > 0.5 ? -1 : 1;
+        return array.sort(random);
+    }
+
+    /**
+     * 将指定位置的元素置顶
+     * @param {array} array 改数组
+     * @param {number} index 元素索引
+     */
+    zIndexToTop(array, index) {
+        if (index != 0) {
+            let item = array[index];
+            array.splice(index, 1);
+            array.unshift(item);
+        } else {
+            console.log('已经处于置顶');
+        }
+    }
+
+    /**
+     * 将指定位置的元素置底
+     * @param {array} array 改数组
+     * @param {number} index 元素索引
+     */
+    zIndexToBottom(array, index) {
+        if (index != array.length - 1) {
+            let item = array[index];
+            array.splice(index, 1);
+            array.push(item);
+        } else {
+            console.log('已经处于置底');
+        }
+    }
+
+    /**
+     * 获取两点距离
+     * @param {number} lng 经度
+     * @param {number} lat 纬度
+     */
+    getDistance(lng1, lat1, lng2, lat2) {
+        let toRad = d => d * Math.PI / 180;
+        let radLat1 = toRad(lat1);
+        let radLat2 = toRad(lat2);
+        let deltaLat = radLat1 - radLat2;
+        let deltaLng = toRad(lng1) - toRad(lng2);
+        let dis = 2 * Math.asin(Math.sqrt(Math.pow(Math.sin(deltaLat / 2), 2) + Math.cos(radLat1) * Math.cos(radLat2) * Math.pow(Math.sin(deltaLng / 2), 2)));
+        return dis * 6378137;
+    }
+}
+
+/** 时间日期类型日期模块 */
+class DateModule extends ArrayModule {
+    constructor() { 
+        super();
+    }
+    /** 日期列表生成 */
+    dayJson() {
+        var calendar = [],
+            minYears = new Date().getFullYear(),
+            maxYears = new Date().getFullYear() + 10,
+            monthCount = 1,
+            dayCount = 1;
+        for (var i = minYears; i <= maxYears; i++) {
+            var _year = {};
+            _year.name = i.toString();
+            _year.sub = [];
+            for (var j = monthCount; j <= 12; j++) {
+                var _month = {};
+                _month.name = ('0' + j.toString()).slice(-2);
+                _month.sub = [];
+                _year.sub.push(_month);
+                dayCount = new Date(i, j, 0).getDate();
+                for (var k = 1; k <= dayCount; k++) {
+                    _month.sub.push({
+                        name: ('0' + k.toString()).slice(-2)
+                    });
+                }
+            }
+            calendar.push(_year);
+        }
+        // 这里是限制不能选小于之前的日期
+        calendar[0].sub.splice(0, new Date().getMonth());
+        calendar[0].sub[0].sub.splice(0, new Date().getDate());
+        return calendar;
+    }
+    /**
+     * 时间生成器
+     * @param {number} minInterval 时间间隔(分钟)
+     */
+    timeInterval(minInterval) {
+        var arr = [],
+            minTotal = 0;
+        while (minTotal < 1440) {
+            var hour = Math.floor(minTotal / 60),
+                min = Math.floor(minTotal % 60);
+            hour = ('0' + hour).slice(-2);
+            min = ('0' + min).slice(-2);
+            arr.push(hour + ':' + min);
+            minTotal += minInterval;
+        }
+        return arr;
+    }
+    /**
+     * 时间戳生成 '2020/12/12 12:12:12'
+     * @param {number} num 1时为明天，-1为昨天天，以此类推
+     */
+    timeFormat(num = 0) {
+        let appoint, month, day, hour, minute, second, date;
+        if (num > 0) {
+            appoint = new Date(new Date().getTime() + (num * 24 * 3600 * 1000));
+        } else {
+            appoint = new Date(new Date() - (num * 24 * 3600 * 1000));
+        }
+        month = ('0' + (appoint.getMonth() + 1)).slice(-2);
+        day = ('0' + appoint.getDate()).slice(-2);
+        hour = ('0' + appoint.getHours()).slice(-2);
+        minute = ('0' + appoint.getMinutes()).slice(-2);
+        second = ('0' + appoint.getSeconds()).slice(-2);
+        date = `${appoint.getFullYear()}/${month}/${day} ${hour}:${minute}:${second}`
+        return date;
+    }
+
+    /**
+     * 获取两个时间段的秒数
+     * @param {Date} now 对比的时间
+     * @param {Date} before 之前的时间
+     */
+    getSecond(now, before) {
+        return (new Date(now) - new Date(before)) / 1000;
+    }
+
+    /**
+     * 带天数的倒计时
+     * @param {number} times 秒数
+     */
+    countDown(times) {
+        let timer = setInterval(() => {
+            if (times <= 0) return clearInterval(timer);
+            let day = 0, hour = 0, minute = 0, second = 0;
+            day = Math.floor(times / (3600 * 24));
+            hour = Math.floor(times / 3600) - (day * 24);
+            minute = Math.floor(times / 60) - (day * 24 * 60) - (hour * 60);
+            second = Math.floor(times) - (day * 24 * 3600) - (hour * 3600) - (minute * 60);
+            // 格式化
+            day = ('0' + day).slice(-2);
+            hour = ('0' + hour).slice(-2);
+            minute = ('0' + minute).slice(-2);
+            second = ('0' + second).slice(-2);
+            console.log(`${day}天：${hour}小时：${minute}分钟：${second}秒`);
+            times --;
+        }, 1000);
+    }
+
+    /**
+     * 将秒数换成时分秒格式
+     * @param {number} value 
+     */
+    secondFormat(value) {
+        let second = Math.floor(value),
+            minute = 0,
+            hour = 0;
+        // 如果秒数大于60，将秒数转换成整数
+        if (second > 60) {
+            // 获取分钟，除以60取整数，得到整数分钟
+            minute = Math.floor(second / 60);
+            // 获取秒数，秒数取佘，得到整数秒数
+            second = Math.floor(second % 60);
+            // 如果分钟大于60，将分钟转换成小时
+            if (minute > 60) {
+                // 获取小时，获取分钟除以60，得到整数小时
+                hour = Math.floor(minute / 60);
+                // 获取小时后取佘的分，获取分钟除以60取佘的分
+                minute = Math.floor(minute % 60);
+            }
+        }
+        return { hour, minute, second };
+    }
+
+    /**
+     * 获取两个日期之间的天数
+     * @param {Date} now 现在时间
+     * @param {Date} before 之前时间
+     */
+    getDays(now, before) {
+        return Math.floor((now - before) / 86400000);
+    }
+}
+
+/** dom 模块 */
+class DomModule extends DateModule {
+    constructor() { 
+        super();
+    }
+    /**
+     * 单个元素查找
+     * @param {string} name class | id | label <div> <p>
+     */
+    find(name) {
+        return document.querySelector(name);
+    }
+    /**
+     * 多个元素查找 返回 array[...dom]
+     * @param {string} name class | id | label <div> <p>
+     */
+    findAll(name) {
+        var nodes = document.querySelector(name);
+        if (Array.from) {
+            nodes = Array.from(nodes);
+        } else {
+            nodes = [].slice.call(nodes);
+        }
+        return nodes;
+    }
+    /**
+     * 设置样式
+     * @param {element} el 设置样式的元素
+     * @param {Object} style 样式 Example: {display: 'block', width: '100px'}
+     */
+    setStyle(el, styles) {
+        for (var key in styles) {
+            el.styles[key] = styles[key];
+        }
+    }
+    /**
+     * 检测元素是否存在指定 calss
+     * @param {element} el 当前元素
+     * @param {string} className class name
+     */
+    hasClass(el, className) {
+        if (el.classList) {
+            return el.classList.contains(className);
+        } else {
+            return el.className.match(new RegExp('(\\s|^)' + className + '(\\s|$)'));
+        }    
+    }
+    /**
+     * 给元素添加 calss
+     * @param {element} el 当前元素
+     * @param {string} className class name
+     */
+    addClass(el, className) {
+        if (el.classList) {
+            el.classList.add(className);
+        } else {
+            if (!this.hasClass(el, className)) {
+                var name = el.className.charAt(el.className.length - 1) === ' ' ? className : ' ' + className;
+                el.className += name;
+            }
+        }
+    }
+    /**
+     * 给元素移除指定 calss
+     * @param {element} el 当前元素
+     * @param {string} className class name
+     */
+    removeClass(el, className) {
+        if (el.classList) {
+            el.classList.remove(className);
+        } else {
+            if (this.hasClass(el, className)) {
+                var reg = new RegExp('(\\s|^)' + c + '(\\s|$)');
+                el.className = el.className.replace(reg, ' ');
+            }
+        }
+    }
+    /**
+     * 切换 calss name
+     * @param {element} el 当前元素
+     * @param {string} className class name
+     */
+    toggleClass(el, className) {
+        if (el.classList) {
+            el.classList.toggle(className);
+        } else {
+            if (this.hasClass(el, className)) {
+                this.removeClass(el, className);
+            } else {
+                this.addClass(el, className);
+            }
+        }
+    }
+
+}
+
+/** 工具模块 */
+const utils = new DomModule();
+
+utils.find('#wrap p').addEventListener('click', function () {
+    utils.toggleClass(utils.find('#wrap'), 'tra');
+    let now = utils.timeFormat();
+    console.log(now);
+});
+
+function clickTest() {
+    var list = utils.find(".menu");
     for (var i = 1; i <= 5; i++) {
-        var item = document.createElement("LI");
+        var item = document.createElement("li");
         item.dataset.index = i;
         item.appendChild(document.createTextNode("测试li " + i));
         list.appendChild(item);
@@ -76,7 +442,7 @@ function _click() {
     // 	}
     // })
 }
-_click();
+clickTest();
 
 // new 理解
 function newFunction() {
@@ -130,41 +496,6 @@ function objFunction() {
     // console.log(cat.name,dog);
 }
 // objFunction();
-
-/**
- * class处理事件
- * IE10+
- * el.classList.contains(className)
- * el.classList.add(className)
- * el.classList.remove(className)
- * el.classList.toggle(className)
-*/
-function hasClass(el, c) {
-    return el.className.match(new RegExp('(\\s|^)' + c + '(\\s|$)'));
-}
-function addClass(el, c) {
-    if (!hasClass(el, c)) {
-        var _c = el.className.charAt(el.className.length - 1) === ' ' ? c : ' ' + c;
-        el.className += _c;
-    }
-}
-function removeClass(el, c) {
-    if (hasClass(el, c)) {
-        var reg = new RegExp('(\\s|^)' + c + '(\\s|$)');
-        el.className = el.className.replace(reg, ' ');
-    }
-}
-function toggleClass(el, c) {
-    if (hasClass(el, c)) {
-        removeClass(el, c);
-    } else {
-        addClass(el, c);
-    }
-}
-$('#wrap').querySelector('p').addEventListener('click', function () {
-    toggleClass($('#wrap'), 'tra');
-    // this.classList.toggle('tra');
-});
 
 // bind()
 this.num = 9;
@@ -258,13 +589,13 @@ function stringModule() {
     // 关键字以外转字符串 toString(num) 可带参数转进制，限定 number.toString(num);
     value.toString();
     // 对字符串进行编码(数字和英文不变)
-    encodeURIComponent();      
+    encodeURIComponent();
     // 对应的解码     
-    decodeURIComponent();           
+    decodeURIComponent();
     // 过滤数字
-    let filterNum = string.replace(/\d+/g, '');   
+    let filterNum = string.replace(/\d+/g, '');
     // 过滤英文
-    let filterEnglish = string.replace(/[a-zA-Z]/g, '');   
+    let filterEnglish = string.replace(/[a-zA-Z]/g, '');
     /**
      * 检测字符串是否存在指定字符串
      * ES6 && ES5
@@ -278,7 +609,7 @@ function stringModule() {
     let replace = string.split('#').join('?#');
     // 截取从","之后的字符串
     let _code = code.slice(code.indexOf(',') + 1);
-    
+
     /** 
      * ES5 
      * Object.keys(obj)
@@ -289,7 +620,7 @@ function stringModule() {
 }
 
 /** 数组类型 */
-function ArrayModule() {
+function arrayModule() {
     // 数组处理
     array.join('&');
     array.split(',');   // 把字符串分割成数组
@@ -328,7 +659,7 @@ function ArrayModule() {
     var sum = values.reduce(function (prev, cur, index, array) {
         return prev + cur;
     });
-    
+
     // 数组排序从小到大
     let stob = (a, b) => a - b;
     array.sort(stob);
@@ -357,213 +688,5 @@ function ArrayModule() {
         } else {
             return Number(a.level) - Number(b.level);
         }
-    }
-
-    /**
-     * 范围随机数
-     * @param {Number} min 最小数
-     * @param {Number} max 最大数
-     */
-    function ranInt(min, max) {
-        return Math.floor(Math.random() * (max - min + 1)) + min;
-    }
-
-    /**
-     * 随机打乱数组
-     * @param {Array} array
-     */
-    function shuffleArray(array) {
-        // 用 Math.random()函数生成 0~1 之间的随机数与 0.5 比较，返回 -1 或 1
-        let randomsort = (a, b) => Math.random() > 0.5 ? -1 : 1;
-        return array.sort(randomsort);
-    }
-
-    /**
-     * 将指定位置的元素置顶
-     * @param {Array} array 改数组
-     * @param {Number} index 元素索引
-     */
-    function zIndexToTop(array, index) {
-        if (index != 0) {
-            let item = array[index];
-            array.splice(index, 1);
-            array.unshift(item);
-        } else {
-            console.log('已经处于置顶');
-        }
-    }
-
-    /**
-     * 将指定位置的元素置底
-     * @param {Array} array 改数组
-     * @param {Number} index 元素索引
-     */
-    function zIndexToBottom(array, index) {
-        if (index != array.length - 1) {
-            let item = array[index];
-            array.splice(index, 1);
-            array.push(item);
-        } else {
-            console.log('已经处于置底');
-        }
-    }
-
-    /**
-     * 获取两点距离
-     * @param {Number} lng 经度
-     * @param {Number} lat 纬度
-     */
-    function getDistance(lng1, lat1, lng2, lat2) {
-        let toRad = d => d * Math.PI / 180;
-        let radLat1 = toRad(lat1);
-        let radLat2 = toRad(lat2);
-        let deltaLat = radLat1 - radLat2;
-        let deltaLng = toRad(lng1) - toRad(lng2);
-        let dis = 2 * Math.asin(Math.sqrt(Math.pow(Math.sin(deltaLat / 2), 2) + Math.cos(radLat1) * Math.cos(radLat2) * Math.pow(Math.sin(deltaLng / 2), 2)));
-        return dis * 6378137;
-    }
-
-    return {
-        ranInt,
-        shuffleArray,
-        zIndexToTop,
-        zIndexToBottom,
-        getDistance
-    }
-}
-
-// 时间日期类型
-class DateModule {
-    constructor() { }
-    /** 日期列表生成 */
-    dayJson() {
-        var calendar = [],
-            minYears = new Date().getFullYear(),
-            maxYears = new Date().getFullYear() + 10,
-            monthCount = 1,
-            dayCount = 1;
-        for (var i = minYears; i <= maxYears; i++) {
-            var _year = {};
-            _year.name = i.toString();
-            _year.sub = [];
-            for (var j = monthCount; j <= 12; j++) {
-                var _month = {};
-                _month.name = ('0' + j.toString()).slice(-2);
-                _month.sub = [];
-                _year.sub.push(_month);
-                dayCount = new Date(i, j, 0).getDate();
-                for (var k = 1; k <= dayCount; k++) {
-                    _month.sub.push({
-                        name: ('0' + k.toString()).slice(-2)
-                    });
-                }
-            }
-            calendar.push(_year);
-        }
-        // 这里是限制不能选小于之前的日期
-        calendar[0].sub.splice(0, new Date().getMonth());
-        calendar[0].sub[0].sub.splice(0, new Date().getDate());
-        return calendar;
-    }
-    /**
-     * 时间生成器
-     * @param {number} minInterval 时间间隔(分钟)
-     */
-    timeInterval(minInterval) {
-        var arr = [],
-            minTotal = 0;
-        while (minTotal < 1440) {
-            var hour = Math.floor(minTotal / 60),
-                min = Math.floor(minTotal % 60);
-            hour = ('0' + hour).slice(-2);
-            min = ('0' + min).slice(-2);
-            arr.push(hour + ':' + min);
-            minTotal += minInterval;
-        }
-        return arr;
-    }
-    /**
-     * 时间戳生成
-     * @param {number} num 1时为明天，-1为昨天天，以此类推
-     */
-    timeFormat(num = 0) {
-        let _Appoint, month, day, hour, minute, second, date;
-        if (num > 0) {
-            _Appoint = new Date(new Date().getTime() + (num * 24 * 3600 * 1000));
-        } else {
-            _Appoint = new Date(new Date() - (num * 24 * 3600 * 1000));
-        }
-        month = ('0' + (_Appoint.getMonth() + 1)).slice(-2);
-        day = ('0' + _Appoint.getDate()).slice(-2);
-        hour = ('0' + _Appoint.getHours()).slice(-2);
-        minute = ('0' + _Appoint.getMinutes()).slice(-2);
-        second = ('0' + _Appoint.getSeconds()).slice(-2);
-        date = `${_Appoint.getFullYear()}/${month}/${day} ${hour}:${minute}:${second}`
-        return date;
-    }
-
-    /**
-     * 获取两个时间段的秒数
-     * @param {Date} now 对比的时间
-     * @param {Date} before 之前的时间
-     */
-    getSecond(now, before) {
-        return (new Date(now) - new Date(before)) / 1000;
-    }
-
-    /**
-     * 带天数的倒计时
-     * @param {number} times 秒数
-     */
-    countDown(times) {
-        let timer = setInterval(() => {
-            if (times <= 0) return clearInterval(timer);
-            let day = 0, hour = 0, minute = 0, second = 0;
-            day = Math.floor(times / (3600 * 24));
-            hour = Math.floor(times / 3600) - (day * 24);
-            minute = Math.floor(times / 60) - (day * 24 * 60) - (hour * 60);
-            second = Math.floor(times) - (day * 24 * 3600) - (hour * 3600) - (minute * 60);
-            // 格式化
-            day = ('0' + day).slice(-2);
-            hour = ('0' + hour).slice(-2);
-            minute = ('0' + minute).slice(-2);
-            second = ('0' + second).slice(-2);
-            console.log(`${day}天：${hour}小时：${minute}分钟：${second}秒`);
-            times--;
-        }, 1000);
-    }
-
-    /**
-     * 将秒数换成时分秒格式
-     * @param {number} value 
-     */
-    secondFormat(value) {
-        let second = Math.floor(value),
-            minute = 0,
-            hour = 0;
-        // 如果秒数大于60，将秒数转换成整数
-        if (second > 60) {
-            // 获取分钟，除以60取整数，得到整数分钟
-            minute = Math.floor(second / 60);
-            // 获取秒数，秒数取佘，得到整数秒数
-            second = Math.floor(second % 60);
-            // 如果分钟大于60，将分钟转换成小时
-            if (minute > 60) {
-                // 获取小时，获取分钟除以60，得到整数小时
-                hour = Math.floor(minute / 60);
-                // 获取小时后取佘的分，获取分钟除以60取佘的分
-                minute = Math.floor(minute % 60);
-            }
-        }
-        return { hour, minute, second };
-    }
-
-    /**
-     * 获取两个日期之间的天数
-     * @param {Date} now 现在时间
-     * @param {Date} before 之前时间
-     */
-    getDays(now, before) {
-        return Math.floor((now - before) / 86400000);
     }
 }

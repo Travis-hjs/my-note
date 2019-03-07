@@ -178,123 +178,7 @@ function ajaxTest() {
 //     }
 // });
 
-/**
- * ES5 原型链模式，没有超时检测（最初的做法）
- * @param {*} params website 域名
- */
-var HttpRequest = function (params) {
-    this.website = params.website || '';
-}
-HttpRequest.prototype = {
-    post: function (url, sendData, successHandler, errorHandler) {
-        var _data = '';
-        for (var key in sendData) _data += '&' + key + '=' + sendData[key];
-        _data = _data.slice(1);
-        if (window.fetch) {
-            fetch(this.website + url, {
-                // credentials: 'include', 
-                // mode: 'cors',           
-                method: 'POST',
-                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                body: _data
-            }).then(function (response) {
-                return response.json();
-            }).then(function (successData) {
-                if (typeof successHandler === 'function') successHandler(successData);
-            }).catch(function (error) {
-                if (typeof errorHandler === 'function') errorHandler(error);
-            });
-        } else {
-            var xhr = new XMLHttpRequest();
-            xhr.open('POST', this.website + url);
-            // xhr.responseType = 'json';
-            xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-            xhr.onreadystatechange = function () {
-                if (xhr.readyState !== 4) return;
-                if (xhr.status === 200 || xhr.status === 304) {
-                    if (typeof successHandler === 'function') successHandler(JSON.parse(xhr.responseText));
-                } else {
-                    if (typeof errorHandler === 'function') errorHandler(xhr);
-                }
-            }
-            // xhr.withCredentials = true;		
-            xhr.send(_data);
-        }
-    },
-    get: function (url, sendData, successHandler, errorHandler) {
-        var _data = '';
-        // 解析对象传参
-        for (var key in sendData) _data += '&' + key + '=' + sendData[key];
-        _data = '?' + _data.slice(1);
-        // 检测请求类型
-        if (window.fetch) {
-            fetch(this.website + url + _data).then(function (response) {
-                return response.json();
-            }).then(function (successData) {
-                if (typeof successHandler === 'function') successHandler(successData);
-            }).catch(function (error) {
-                if (typeof errorHandler === 'function') errorHandler(error);
-            })
-        } else {
-            var xhr = new XMLHttpRequest();
-            xhr.open('GET', this.website + url + _data);
-            // xhr.withCredentials = true;
-            xhr.onreadystatechange = function () {
-                if (xhr.readyState !== 4) return;
-                if (xhr.status === 200 || xhr.status == 304) {
-                    if (typeof successHandler === 'function') successHandler(JSON.parse(xhr.responseText));
-                } else {
-                    if (typeof errorHandler === 'function') errorHandler(xhr);
-                }
-            }
-            xhr.send(null);
-        }
-    }
-}
-let Http = new HttpRequest({
-    website: 'http://che.qihao.lzei.com'
-});
 
-function getData() {
-    Http.post('/api/app/parking', {
-        appkey: 'e2fb20ea3f3df33310788a4247834c93',
-        token: '2a11d6d67a8b8196afbcefbac3e0a573',
-        page: '1',
-        limit: '7',
-        longitude: '113.30764968',
-        latitude: '23.1200491',
-        sort: 'distance',
-        order: 'asc',
-        keyword: ''
-    }, res => {
-        console.log(res);
-    }, err => {
-        console.warn(err);
-    })
-}
-
-function WebSocketRequest() {
-    console.log(window.WebSocket);
-    if (window.WebSocket != undefined) {
-        let ws = new WebSocket('ws://localhost:10010');
-        let sendData = {
-            key: 'value'
-        }
-        ws.onopen = () => {
-            console.log('Opened!');
-            ws.send(sendData);
-        };
-        ws.onclose = () => {
-            console.log('over!!!');
-        };
-        ws.onmessage = e => {
-            console.log(e.data);
-        };
-        ws.onerror = err => {
-            console.log('Error: ' + err);
-        }
-    }
-}
 /**
  * XMLHttpRequest 请求 
  * learn: https://developer.mozilla.org/zh-CN/docs/Web/API/XMLHttpRequest/Using_XMLHttpRequest
@@ -349,7 +233,6 @@ function ajax(param) {
         XHR.addEventListener('progress', param.progress, false);
     }
     
-
     // XHR.responseType = 'json';
     // 是否Access-Control应使用cookie或授权标头等凭据进行跨站点请求。
     // XHR.withCredentials = true;	
@@ -417,3 +300,10 @@ ajax({
 // }, err => {
 //     console.warn(err);
 // });
+
+/** 网络请求 */
+export default class AjaxModule {
+    constructor() {
+        
+    }
+}
