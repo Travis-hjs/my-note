@@ -97,7 +97,7 @@ class ArrayModule extends WindowModule{
      * @param {number} max 最大数
      */
     ranInt(min, max) {
-        return parseInt(Math.random() * (max - min + 1)) + min;
+        return Math.floor(Math.random() * (max - min + 1)) + min;
     }
 
     /**
@@ -159,31 +159,35 @@ class ArrayModule extends WindowModule{
 class DateModule extends ArrayModule {
     constructor() { 
         super();
+        // new Date().toLocaleDateString(); => 2020/12/12
+        // new Date().toLocaleTimeString(); => 上/下午12:12:12
+        // new Date().toLocaleString();     => 2020/12/12 上/下午12:12:12          
     }
     /** 日期列表生成 */
     dayJson() {
         var calendar = [],
             minYears = new Date().getFullYear(),
             maxYears = new Date().getFullYear() + 10,
-            monthCount = 1,
             dayCount = 1;
         for (var i = minYears; i <= maxYears; i++) {
-            var _year = {};
-            _year.name = i.toString();
-            _year.sub = [];
-            for (var j = monthCount; j <= 12; j++) {
-                var _month = {};
-                _month.name = ('0' + j.toString()).slice(-2);
-                _month.sub = [];
-                _year.sub.push(_month);
+            /** 年 */
+            var year = {};
+            year.name = i.toString();
+            year.sub = [];
+            for (var j = 1; j <= 12; j++) {
+                /** 月 */
+                var month = {};
+                month.name = ('0' + j.toString()).slice(-2);
+                month.sub = [];
+                year.sub.push(month);
                 dayCount = new Date(i, j, 0).getDate();
                 for (var k = 1; k <= dayCount; k++) {
-                    _month.sub.push({
+                    month.sub.push({
                         name: ('0' + k.toString()).slice(-2)
                     });
                 }
             }
-            calendar.push(_year);
+            calendar.push(year);
         }
         // 这里是限制不能选小于之前的日期
         calendar[0].sub.splice(0, new Date().getMonth());
@@ -212,19 +216,15 @@ class DateModule extends ArrayModule {
      * @param {number} num 1时为明天，-1为昨天天，以此类推
      */
     timeFormat(num = 0) {
-        let appoint, month, day, hour, minute, second, date;
-        if (num > 0) {
-            appoint = new Date(new Date().getTime() + (num * 24 * 3600 * 1000));
-        } else {
-            appoint = new Date(new Date() - (num * 24 * 3600 * 1000));
-        }
-        month = ('0' + (appoint.getMonth() + 1)).slice(-2);
-        day = ('0' + appoint.getDate()).slice(-2);
-        hour = ('0' + appoint.getHours()).slice(-2);
-        minute = ('0' + appoint.getMinutes()).slice(-2);
-        second = ('0' + appoint.getSeconds()).slice(-2);
-        date = `${appoint.getFullYear()}/${month}/${day} ${hour}:${minute}:${second}`
-        return date;
+        let date, month, day, hour, minute, second, time;
+        date = new Date(new Date().getTime() + (num * 24 * 3600 * 1000));
+        month = ('0' + (date.getMonth() + 1)).slice(-2);
+        day = ('0' + date.getDate()).slice(-2);
+        hour = ('0' + date.getHours()).slice(-2);
+        minute = ('0' + date.getMinutes()).slice(-2);
+        second = ('0' + date.getSeconds()).slice(-2);
+        time = `${date.getFullYear()}/${month}/${day} ${hour}:${minute}:${second}`
+        return time;
     }
 
     /**
@@ -233,7 +233,7 @@ class DateModule extends ArrayModule {
      * @param {Date} before 之前的时间
      */
     getSecond(now, before) {
-        return (new Date(now) - new Date(before)) / 1000;
+        return (new Date(now).getTime() - new Date(before).getTime()) / 1000;
     }
 
     /**
@@ -289,7 +289,7 @@ class DateModule extends ArrayModule {
      * @param {Date} before 之前时间
      */
     getDays(now, before) {
-        return Math.floor((now - before) / 86400000);
+        return Math.floor((now.getTime() - before.getTime()) / 86400000);
     }
 }
 
@@ -397,6 +397,9 @@ utils.find('#wrap p').addEventListener('click', function () {
     let now = utils.timeFormat();
     console.log(now);
 });
+
+console.log('日期列表', utils.dayJson());
+
 
 function clickTest() {
     var list = utils.find(".menu");
