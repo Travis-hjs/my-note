@@ -186,55 +186,78 @@ function set_of() {
 
 /** 类 */
 function classModule() {
+    /** 构造函数: 动物 */
+    function Animal() {
+
+    }
+
+    Animal.prototype = {
+        /** 动物列表 */
+        animals: function () {
+            return ['长颈鹿', '袋鼠', '斑马'];
+        }
+    }
+
+    /** 类: 植物 */
+    class Plant extends Animal {
+        /** 植物列表 */
+        plants() {
+            return ['玫瑰', '山茶花', '血色红阳'];
+        }
+    }
+
     /** 类 Price */
-    class Price {
+    class Price extends Plant {
         /** 金币 */
         money = 0;
-
-        constructor() {
-            this.gold = 100;
-        }
 
         /** 打印类名 */
         static logName() {
             return 'name: Price'
         }
 
+        // 这里的 get 和 set 必须要以一个值作为返回和修改 => money
+        /** 金钱 */
         get gold() {
             return this.money;
         }
-        
+
         set gold(value) {
             this.money = value;
         }
-
-        /**
-         * 计算平方根
-         * @param {Number} a Math.pow(a, b) 
-         * @param {Number} b Math.pow(a, b) 
-         */
-        compute(a, b) {
-            return Math.pow(a, b); 
-        }
     }
 
-    /** 类 DataGM 继承 Price */
-    class DataGM extends Price {
-        constructor() { 
+    /** 整合所有 */
+    class MergeModule extends Price {
+        constructor() {
             // 注意这里的构造函数定义会覆盖 继承 Price 的 constructor();
             // 所以要执行继承者的 constructor();
             super();
             // 静态方法是在构造后无法使用的，所以这里是 undefined
             console.log(super.logName);
         }
+        /** 基础值 */
+        base = 10;
+        /** 倍数 */
+        value = 5;
+        /** 分数 */
+        score = 0;
+        /** 计算结果 */
+        result() {
+            function compute() {
+                this.score = (this.base + this.value) * 2;
+            }
+            // 先绑定再执行
+            compute.bind(this)();
+            return this.score;
+        }
     }
     
-    console.log('静态方法：', DataGM.logName());
+    /** 实例化整合的模块 */
+    let cc = new MergeModule();
 
-    /** 实例模块 */
-    const Modules = new DataGM();
+    console.log(cc.animals(), cc.plants(), cc.result());
 
-    console.log('金币：', Modules.gold, '平方根', Modules.compute(6, 5));
-
+    console.log('静态方法：', MergeModule.logName());
 }
 classModule();
