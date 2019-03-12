@@ -68,6 +68,8 @@ class ArrayModule extends WindowModule{
      * @param {string} string 
      */
     filterStr(string) {
+        // 将字符串过滤剩下数字 要保留其他字符 则 replace(/[^\d.!?]/g, '')
+        // string.replace(/[^\d]/g, ''); 
         let pattern = new RegExp("[`~!@#$^&*()=|{}':;',\\[\\].<>/?~！@#￥……&*（）——|{}【】‘；：”“'。，、？%+_]");
         let newStr = '';
         for (let i = 0; i < string.length; i++) {
@@ -107,6 +109,25 @@ class ArrayModule extends WindowModule{
     shuffleArray(array) {
         let random = (a, b) => Math.random() > 0.5 ? -1 : 1;
         return array.sort(random);
+    }
+
+    /**
+     * 数组中随机取几个元素
+     * @param {array} arr 数组
+     * @param {number} count 元素个数
+     */
+    getRandomArrayElements(array, count) {
+        /** 数组长度 */
+        let length = array.length;
+        /** 最小长度 */
+        let min = length - count, temp, range;
+        while (length-- > min) {
+            range = Math.floor((length + 1) * Math.random());
+            temp = array[range];
+            array[range] = array[length];
+            array[length] = temp;
+        }
+        return array.slice(min);
     }
 
     /**
