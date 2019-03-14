@@ -82,15 +82,20 @@ class ArrayModule extends WindowModule{
      * 带单位的数值转换
      * @param {number} value 数字
      */
-    renderSize(value = 0) {
+    unitsNumber(value) {
+        // 取整
+        value = Math.floor(value);
         if (value == 0) return 0;
-        let units = ['', 'k', 'm', 'b', 't', 'e','ae', 'be', 'ce', 'de', 'ee', 'fe', 'ge', 'he', 'ie'];
-        let index = 0,
-            srcsize = parseFloat(value);
-        index = Math.floor(Math.log(srcsize) / Math.log(1000));
-        let size = srcsize / Math.pow(1000, index);
-        if (index === 0) return size.toFixed(0);
-        return size.toFixed(1) + units[index];
+        /** 单位 */
+        let units = ['', 'k', 'm', 'b', 'f', 'e', 'ae', 'be', 'ce', 'de', 'ee', 'fe', 'ge', 'he', 'ie'];
+        /** 索引 */
+        let index = Math.floor(Math.log(value) / Math.log(1000));
+        /** 结果 */
+        let result = (value / Math.pow(1000, index)).toString();
+        if (index === 0) return result;
+        // 不进行四舍五入 取小数点后一位
+        result = result.substring(0, result.lastIndexOf('.') + 2);
+        return result + units[index];
     }
 
     /**
@@ -648,7 +653,7 @@ function arrayModule() {
     // 数组处理
     array.join('&');
     array.split(',');   // 把字符串分割成数组
-    array.slice(i, num);// 索引截取数组
+    array.slice(index, num); // 索引截取数组 从 index 开始往往后截取 num 不填则 index 之后的都截取掉
     array.shift();      // 移除第一项 并返回第一项
     array.unshift();    // 在第一项添加
     array.pop();        // 移除最后一项 并返回最后一项
