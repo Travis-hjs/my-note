@@ -324,6 +324,8 @@ class DateModule extends ArrayModule {
 class DomModule extends DateModule {
     constructor() { 
         super();
+        // 获取元素的矩阵坐标
+        // el.getBoundingClientRect();
     }
     /**
      * 单个元素查找
@@ -337,7 +339,7 @@ class DomModule extends DateModule {
      * @param {string} name class | id | label <div> <p>
      */
     findAll(name) {
-        var nodes = document.querySelector(name);
+        let nodes = document.querySelector(name);
         if (Array.from) {
             nodes = Array.from(nodes);
         } else {
@@ -351,7 +353,7 @@ class DomModule extends DateModule {
      * @param {Object} style 样式 Example: {display: 'block', width: '100px'}
      */
     setStyle(el, styles) {
-        for (var key in styles) {
+        for (let key in styles) {
             el.styles[key] = styles[key];
         }
     }
@@ -377,7 +379,7 @@ class DomModule extends DateModule {
             el.classList.add(className);
         } else {
             if (!this.hasClass(el, className)) {
-                var name = el.className.charAt(el.className.length - 1) === ' ' ? className : ' ' + className;
+                let name = el.className.charAt(el.className.length - 1) === ' ' ? className : ' ' + className;
                 el.className += name;
             }
         }
@@ -392,7 +394,7 @@ class DomModule extends DateModule {
             el.classList.remove(className);
         } else {
             if (this.hasClass(el, className)) {
-                var reg = new RegExp('(\\s|^)' + c + '(\\s|$)');
+                let reg = new RegExp('(\\s|^)' + c + '(\\s|$)');
                 el.className = el.className.replace(reg, ' ');
             }
         }
@@ -413,91 +415,106 @@ class DomModule extends DateModule {
             }
         }
     }
-
 }
 
 /** 工具模块 */
 const utils = new DomModule();
+/** 列表容器 */
+let wrap = utils.find('#wrap');
+/** p标签 */
+let label = utils.find('#wrap p');
 
-utils.find('#wrap p').addEventListener('click', function () {
-    utils.toggleClass(utils.find('#wrap'), 'tra');
+label.addEventListener('click', () => {
+    utils.toggleClass(wrap, 'tra');
     let now = utils.timeFormat();
     console.log(now);
 });
 
-console.log('日期列表', utils.dayJson());
+// console.log('日期列表', utils.dayJson());
 
-
+/** 点击测试 */
 function clickTest() {
-    var list = utils.find(".menu");
-    for (var i = 1; i <= 5; i++) {
-        var item = document.createElement("li");
+    /** 总数 */
+    const total = 5; 
+    /** 菜单列表容器 */
+    let list = utils.find('.menu');
+
+    // 1、传统写法 添加点击事件 不用 let 添加function完成闭包
+    // for (var i = 0; i < total; i++) {
+    //     var item = document.createElement('li');
+    //     item.appendChild(document.createTextNode('测试li-' + i));
+    //     list.appendChild(item);
+          
+    //     (function (j) {
+    //       // var j = i;
+    //       item.addEventListener('click', function() {
+    //         console.log('第' + j + '个li');
+    //       });
+    //     })(i);
+    // }
+
+    // 2、使用事假代理 添加点击事件 (事件委托就是利用事件冒泡，只指定一个事件处理程序，就可以管理某一类型的所有事件)
+    for (var i = 0; i < total; i++) {
+        var item = document.createElement('li');
+        item.textContent = '测试li-' + i;
         item.dataset.index = i;
-        item.appendChild(document.createTextNode("测试li " + i));
         list.appendChild(item);
-        /**
-         * 不用let的传统写法，添加function完成闭包
-         * 1、添加点击事件
-        */
-        // (function (j) {
-        //   // var j = i;
-        //   item.addEventListener('click',() => {
-        //     console.log("第" + j + "个li");
-        //   });
-        // })(i)
     }
-    /**
-     * 2、添加点击事件
-     * 使用事假代理 (事件委托就是利用事件冒泡，只指定一个事件处理程序，就可以管理某一类型的所有事件)
-    */
-    list.addEventListener('click', ev => {
-        console.log(`第 ${ev.target.dataset.index} 个li`);
+    // 在最外层容器做事件添加
+    list.addEventListener('click', function() {
+        // console.log(this);
+        console.log(`第 ${event.target.dataset.index} 个li`);
     });
-    // 方法二、全局查找节点
-    // var _ul = document.querySelector('#app ul');
-    // _ul.addEventListener('click', function (e) {
-    //     var _target = e.target;
-    //     while(_target !== _ul ){
-    //        if(_target.tagName.toLowerCase() == 'li'){
-    //            // console.log(_target.dataset.id);
+
+    // 事件代理高级：
+    // // 方法二、全局查找节点
+    // var ul = utils.find('#app ul');
+    // ul.addEventListener('click', function (e) {
+    //     var target = e.target;
+    //     while(target !== ul ){
+    //        if(target.tagName.toLowerCase() == 'li'){
+    //            // console.log(target.dataset.id);
     //            break;
     //        }
-    //        _target = _target.parentNode;
+    //        target = target.parentNode;
     //     }
-    // })
-    // 方法一、指定某个节点
-    // _ul.addEventListener('click', function (e) {
+    // });
+
+    // // 方法一、指定某个节点
+    // ul.addEventListener('click', function (e) {
     // 	if (e.target.nodeName.toLowerCase() == 'h5') {
     // 		console.log(e.target.dataset.id);
     // 	}
-    // })
+    // });
 }
 clickTest();
 
-// new 理解
-function newFunction() {
+/** new 构造函数理解 */
+function newFun() {
+    /** 构造函数 Animal */
     function Animal(name) {
         this.name = name;
     }
-    Animal.color = "black";
-    Animal.prototype.say = function () { // prototype 向对象添加属性，此时 Animal.say() 不可用
-        console.log("I'm " + this.name);
+    // 静态属性
+    Animal.color = 'black'; 
+    // 构造函数定义的对象只有在 new 之后才能调用
+    Animal.prototype.say = function () {
+        console.log("I'm " + this.name);    // I'm cat
+        console.log(this.color);            // undefined
     };
-    var cat = new Animal("cat");
+    var cat = new Animal('cat');
     console.log(
         cat.name, // cat
         cat.color // undefined
     );
-    cat.say(); // I'm cat
+    cat.say(); 
 
     console.log(
         Animal.name, // Animal
         Animal.color // back
     );
-    Animal.say(); // Animal.say is not a function
-    //上面的意思是：把 Animal 的作用赋值给了 cat ，
 }
-// newFunction();
+// newFun();
 
 // 对象
 function objFunction() {
@@ -527,44 +544,48 @@ function objFunction() {
 }
 // objFunction();
 
-// bind()
-this.num = 9;
-var mymodule = {
-    num: 81,
-    getNum() {
-        console.log(this.num)
+/** bind() 使用 */
+function bindFun() {
+    window.number = 9;
+    /** Module 对象 */
+    const Module = {
+        number: 72,
+        getNumber() {
+            console.log(this.number);
+        }
     }
-};
-mymodule.getNum(); // 81
-var getNum = mymodule.getNum;
-getNum(); // 9, 因为在这个例子中，"this"指向全局对象
-// 创建一个'this'绑定到mymodule的函数
-var boundGetNum = getNum.bind(mymodule);
-boundGetNum(); // 81
+    Module.getNumber(); // 72
+
+    /** 将 Module 的方法赋值给 number */
+    let number = Module.getNumber;
+    number(); // 9 因为在这个例子中，"this"指向全局对象 window
+
+    /** 将 Module 的方法赋值给 number 并且绑定自身 */
+    let bound = Module.getNumber.bind(Module); // number.bind(Module); 这样也可以
+    bound();
+}
+bindFun();
 
 /**
  * 工厂模式
  * 工厂模式下不需要 new 因为他本身就是创建一个新的对象
-*/
-function dom(name) {
-    var obj = new Object(),
-        type = '';
-    function watchElement() {
-        if (typeof (name) == 'single') {
-            obj.el = name;
-            type = 'single';
-        } else {
-            obj.el = document.querySelectorAll(name);
-            type = 'array';
-        }
-    }
-    watchElement();
-    obj.forEach = function (array, callback) {
+ * @param {string} name class | id | label <div> <p>
+ */
+function $(name) {
+    /** 当前对象 */
+    var obj = new Object();
+    /** 元素类型 */
+    var type = typeof name == 'string' ? 'array' : 'single';
+    // 元素定义
+    obj.el = typeof name == 'string' ? document.querySelectorAll(name) : name;
+    // 遍历 
+    obj.forEach = function(array, callback) {
         for (var i = 0; i < array.length; i++) {
             array[i].index = i;
-            callback(array[i], i);
+            if (typeof callback === 'function') callback(array[i], i);
         }
     }
+    // 添加事件
     obj.on = function (method, callback) {
         if (type == 'array') {
             obj.forEach(obj.el, function (item, index) {
@@ -575,39 +596,24 @@ function dom(name) {
         }
         return obj;
     }
+    // 修改内容
     obj.html = function (str) {
         if (type == 'array') {
             obj.forEach(obj.el, function (item, index) {
-                item.textContent = str;
+                item.innerHTML = str;
             });
         } else {
-            obj.el.textContent = str;
+            obj.el.innerHTML = str;
         }
         return obj;
     }
     return obj;
 }
 // jQuery 的链式实现
-// dom('.menu li').html('工厂模式更改').on('click', function () {
+// $('.menu li').html('工厂模式更改').on('click', function () {
 //     console.log('索引', this.index);
-//     dom(this).html(`li-${this.index+1}`);
+//     $(this).html(`li-${this.index+1}`);
 // });
-/**
- * 构造函数
- * 注意构造函数名第一个字母大写
-*/
-function Person(name, url) {
-    this.name = name;
-    this.url = url;
-    this.alertUrl = myalert; // 函数定义可以写在外面（工厂模式也一样），不推荐
-    // this.alertUrl = function () {
-    //     alert(this.url);
-    // };
-}
-function myalert() {
-    alert(this.url);
-}
-// new Person('hjs','www.com').alertUrl() // 调用
 
 /** 字符串类型 */
 function stringModule() {

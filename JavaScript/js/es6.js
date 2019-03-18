@@ -1,10 +1,10 @@
 let $ = el => document.querySelector(el);
 
 function variable() {
-    var _functions = [];
+    var functions = [];
     // ES5
     // for (var i = 0; i < 10; i++) {
-    //     _functions.push((function(value) {
+    //     functions.push((function(value) {
     //         return function() {
     //             console.log(value)
     //         }
@@ -12,12 +12,12 @@ function variable() {
     // }
     // ES6
     for (let i = 0; i < 10; i++) {
-        _functions.push(function () {
+        functions.push(function () {
             console.log(i)
         });
     }
-    _functions.forEach(function (_fn) {
-        _fn();
+    functions.forEach(function (fun) {
+        fun();
     });
 }
 // variable();
