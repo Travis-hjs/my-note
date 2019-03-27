@@ -324,8 +324,6 @@ class DateModule extends ArrayModule {
 class DomModule extends DateModule {
     constructor() { 
         super();
-        // 获取元素的矩阵坐标
-        // el.getBoundingClientRect();
     }
     /**
      * 单个元素查找
@@ -349,8 +347,8 @@ class DomModule extends DateModule {
     }
     /**
      * 设置样式
-     * @param {element} el 设置样式的元素
-     * @param {Object} style 样式 Example: {display: 'block', width: '100px'}
+     * @param {Element} el 设置样式的元素
+     * @param {object} style 样式 Example: {display: 'block', width: '100px'}
      */
     setStyle(el, styles) {
         for (let key in styles) {
@@ -359,7 +357,7 @@ class DomModule extends DateModule {
     }
     /**
      * 检测元素是否存在指定 calss
-     * @param {element} el 当前元素
+     * @param {Element} el 当前元素
      * @param {string} className class name
      */
     hasClass(el, className) {
@@ -371,7 +369,7 @@ class DomModule extends DateModule {
     }
     /**
      * 给元素添加 calss
-     * @param {element} el 当前元素
+     * @param {Element} el 当前元素
      * @param {string} className class name
      */
     addClass(el, className) {
@@ -386,7 +384,7 @@ class DomModule extends DateModule {
     }
     /**
      * 给元素移除指定 calss
-     * @param {element} el 当前元素
+     * @param {Element} el 当前元素
      * @param {string} className class name
      */
     removeClass(el, className) {
@@ -401,7 +399,7 @@ class DomModule extends DateModule {
     }
     /**
      * 切换 calss name
-     * @param {element} el 当前元素
+     * @param {Element} el 当前元素
      * @param {string} className class name
      */
     toggleClass(el, className) {
@@ -414,6 +412,13 @@ class DomModule extends DateModule {
                 this.addClass(el, className);
             }
         }
+    }
+    /**
+     * 获取元素的的矩阵坐标
+     * @param {Element} el 当前元素
+     */
+    getRect(el) {
+        return el.getBoundingClientRect();
     }
 }
 
@@ -573,7 +578,7 @@ bindFun();
  */
 function $(name) {
     /** 当前对象 */
-    var obj = new Object();
+    var obj = new Objeco();
     /** 元素类型 */
     var type = typeof name == 'string' ? 'array' : 'single';
     // 元素定义
@@ -648,10 +653,10 @@ function stringModule() {
 
     /** 
      * ES5 
-     * Object.keys(obj)
+     * Objeco.keys(obj)
      * ES6
-     * Object.values(obj);
-     * Object.entries(obj);
+     * Objeco.values(obj);
+     * Objeco.entries(obj);
     */
 }
 
