@@ -168,8 +168,10 @@ class ArrayModule extends WindowModule{
 
     /**
      * 获取两点距离
-     * @param {number} lng 经度
-     * @param {number} lat 纬度
+     * @param {number} lng1 经度
+     * @param {number} lat1 纬度
+     * @param {number} lng2 经度
+     * @param {number} lat2 纬度
      */
     getDistance(lng1, lat1, lng2, lat2) {
         let toRad = d => d * Math.PI / 180;
@@ -256,8 +258,8 @@ class DateModule extends ArrayModule {
 
     /**
      * 获取两个时间段的秒数
-     * @param {Date} now 对比的时间
-     * @param {Date} before 之前的时间
+     * @param {string} now 对比的时间
+     * @param {string} before 之前的时间
      */
     getSecond(now, before) {
         return (new Date(now).getTime() - new Date(before).getTime()) / 1000;
@@ -265,23 +267,23 @@ class DateModule extends ArrayModule {
 
     /**
      * 带天数的倒计时
-     * @param {number} times 秒数
+     * @param {number} value 秒数
      */
-    countDown(times) {
+    countDown(value) {
         let timer = setInterval(() => {
-            if (times <= 0) return clearInterval(timer);
+            if (value <= 0) return clearInterval(timer);
             let day = 0, hour = 0, minute = 0, second = 0;
-            day = Math.floor(times / (3600 * 24));
-            hour = Math.floor(times / 3600) - (day * 24);
-            minute = Math.floor(times / 60) - (day * 24 * 60) - (hour * 60);
-            second = Math.floor(times) - (day * 24 * 3600) - (hour * 3600) - (minute * 60);
+            day = Math.floor(value / (3600 * 24));
+            hour = Math.floor(value / 3600) - (day * 24);
+            minute = Math.floor(value / 60) - (day * 24 * 60) - (hour * 60);
+            second = Math.floor(value) - (day * 24 * 3600) - (hour * 3600) - (minute * 60);
             // 格式化
             day = ('0' + day).slice(-2);
             hour = ('0' + hour).slice(-2);
             minute = ('0' + minute).slice(-2);
             second = ('0' + second).slice(-2);
             console.log(`${day}天：${hour}小时：${minute}分钟：${second}秒`);
-            times --;
+            value --;
         }, 1000);
     }
 
