@@ -422,6 +422,22 @@ class DomModule extends DateModule {
     getRect(el) {
         return el.getBoundingClientRect();
     }
+
+    /**
+     * 动画帧更新
+     * @param {Function} fn 动画帧函数
+     */
+    update(fn = null) {
+        if (typeof fn !== 'function') return console.log('缺少动画函数');
+        /** 动画帧 */
+        const AnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame || window.msRequestAnimationFrame;
+        /** 动画开始 */
+        function move() {
+            fn();
+            AnimationFrame(move);
+        }
+        move();
+    }
 }
 
 /** 工具模块 */
