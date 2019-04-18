@@ -206,7 +206,7 @@ function ajax(param) {
     /** 请求数据 */
     var data = null;
     /** 超时检测 */
-    var overtime = param.overtime ? param.overtime : 0;
+    var overtime = typeof param.overtime === 'number' ? param.overtime : 0;
 
     // 传参处理
     switch (method) {
@@ -305,6 +305,7 @@ ajax({
 //         console.log('请求失败', err);
 //     }
 // });
+
 // Http.get('http://www.runoob.com/try/ajax/ajax_info.txt', {}, res => {
 //     console.log(res);
 // }, err => {
