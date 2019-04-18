@@ -181,13 +181,16 @@ function ajaxTest() {
 
 /**
  * XMLHttpRequest 请求 
- * learn: https://developer.mozilla.org/zh-CN/docs/Web/API/XMLHttpRequest/Using_XMLHttpRequest
+ * learn: https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest
  * @param {object} param {}
  * @param {string} param.url 请求路径
  * @param {string} param.method GET 或者 POST
+ * @param {object} param.data 传参对象
  * @param {Function} param.success 成功回调 
  * @param {Function} param.fail 失败回调 
- * @param {Function} param.progress 进度回调  
+ * @param {number} param.overtime 超时检测毫秒数
+ * @param {Function} param.timeout 超时回调
+ * @param {Function} param.progress 进度回调 貌似没什么用 
  */
 function ajax(param) {
     if (typeof param !== 'object') return console.warn('ajax 缺少请求传参');
@@ -203,32 +206,34 @@ function ajax(param) {
     /** 请求数据 */
     var data = null;
     /** 超时检测 */
-    var overtime = param.overtime ? param.overtime : null;
-    /** 计时器 */
-    var timer = null;
+    var overtime = param.overtime ? param.overtime : 0;
 
     // 传参处理
-    if (method === 'POST') {
-        data = param.data ? param.data : {};
-    } else if (method === 'GET' && typeof param.data === 'object') {
-        // 解析对象传参
-        var send_data = '';
-        for (var key in param.data) send_data += '&' + key + '=' + param.data[key];
-        send_data = '?' + send_data.slice(1);
-        url += send_data;
+    switch (method) {
+        case 'POST':
+            data = param.data ? param.data : {};
+            break;
+    
+        case 'GET':
+            // 解析对象传参
+            var send_data = '';
+            for (var key in param.data) send_data += '&' + key + '=' + param.data[key];
+            send_data = '?' + send_data.slice(1);
+            url += send_data;
+            break;
     }
 
+    // 监听请求变化
     XHR.onreadystatechange = function () {
         if (XHR.readyState !== 4) return;
         if (XHR.status === 200 || XHR.status === 304) {
             if (typeof param.success === 'function') param.success(JSON.parse(XHR.responseText));
-            if (timer != null) clearTimeout(timer);
         } else {
             if (typeof param.fail === 'function') param.fail(XHR);
-            if (timer != null) clearTimeout(timer);
         }
     }
 
+    // 判断请求进度
     if (param.progress) {
         XHR.addEventListener('progress', param.progress, false);
     }
@@ -238,15 +243,18 @@ function ajax(param) {
     // XHR.withCredentials = true;	
     XHR.open(method, url, true);
     XHR.setRequestHeader('Content-Type', 'application/json');// application/x-www-form-urlencoded
-    XHR.send(data);
 
-    // 超时检测
-    if (overtime) {
-        timer = setTimeout(function () {
+    // 在IE中，超时属性只能在调用 open() 方法之后且在调用 send() 方法之前设置。
+    if (overtime > 0) {
+        XHR.timeout = overtime;
+        XHR.ontimeout = function () {
+            console.warn('ajax 请求超时 !!!');
             XHR.abort();
             if (typeof param.timeout === 'function') param.timeout(XHR);
-        }, overtime);
+        } 
     }
+
+    XHR.send(data);
 
     return XHR;
 }
@@ -270,6 +278,7 @@ ajax({
     overtime: 5000,
     success: function (res) {
         console.log('请求成功', res);
+        console.error('asf');
     },
     fail: function (err) {
         console.log('请求失败', err);
@@ -285,6 +294,7 @@ ajax({
         console.log(e);
     }
 });
+
 // ajax({
 //     url:'http://www.runoob.com/try/ajax/ajax_info.txt',
 //     method: 'get',
@@ -301,9 +311,9 @@ ajax({
 //     console.warn(err);
 // });
 
-/** 网络请求 */
-export default class AjaxModule {
-    constructor() {
+// /** 网络请求 */
+// export default class AjaxModule {
+//     constructor() {
         
-    }
-}
+//     }
+// }
