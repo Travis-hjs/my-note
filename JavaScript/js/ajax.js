@@ -193,9 +193,9 @@ function ajaxTest() {
  * @param {Function} param.progress 进度回调 貌似没什么用 
  */
 function ajax(param) {
-    if (typeof param !== 'object') return console.warn('ajax 缺少请求传参');
-    if (!param.method) return console.warn('ajax 缺少请求类型 GET 或者 POST');
-    if (!param.url) return console.warn('ajax 缺少请求 url');
+    if (typeof param !== 'object') return console.error('ajax 缺少请求传参');
+    if (!param.method) return console.error('ajax 缺少请求类型 GET 或者 POST');
+    if (!param.url) return console.error('ajax 缺少请求 url');
     
     /** XMLHttpRequest */
     var XHR = new XMLHttpRequest();
@@ -278,7 +278,6 @@ ajax({
     overtime: 5000,
     success: function (res) {
         console.log('请求成功', res);
-        console.error('asf');
     },
     fail: function (err) {
         console.log('请求失败', err);
