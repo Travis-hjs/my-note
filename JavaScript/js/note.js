@@ -749,3 +749,24 @@ function arrayModule() {
         }
     }
 }
+
+function disc() {
+    /** 概率索引 */
+    let index = 0;
+    /** 抽奖概率范围 */
+    let range = parseInt(100 * Math.random()) + 1;
+    /** 概率列表 */
+    let list = [1, 5, 54, 20, 10, 10];
+    /** 单个概率 */
+    let rate = 0;
+    // console.log('随机数', range);
+    for (let i = 0; i < list.length; i++) {
+        const number = list[i];
+        rate += number;
+        if (range <= rate) {
+            index = i;
+            break;
+        }
+    }
+    console.log('概率索引', index);
+}
