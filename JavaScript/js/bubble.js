@@ -16,7 +16,7 @@ function start() {
     let colorList = ['orange', 'purple', '#0ae004', '#00c9d0',];
 
     /** 气泡数量 */
-    let bubble_numer = 30;
+    let bubble_total = 30;
 
     // 设置 canvas 尺寸
     canvas.width = 500;
@@ -107,10 +107,8 @@ function start() {
         updateList.push(move);
     }
 
-    for (let i = 0; i < bubble_numer; i++) {
+    for (let i = 0; i < bubble_total; i++) {
         createBubble();
-        console.log(2.2 * Math.random() + 0.8);
-        
     }
 
     utils.update(function () {
