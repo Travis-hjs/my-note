@@ -239,15 +239,13 @@ function classBtn() {
 
 /** 对话框 */
 class Dialog {
-    /** 整体容器 */
-    box = null;
-
     constructor() {
         this.init();
     }
 
     /** 初始化 */
     init() {
+        /** 整体容器 */
         this.box = document.createElement('div');
         this.box.className = 'prompts';
     }

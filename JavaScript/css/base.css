@@ -36,8 +36,8 @@ textarea::-webkit-input-placeholder { color: #999; }
 .f1{ -webkit-box-flex: 1; -webkit-flex: 1; flex: 1; }
 .f2{ -webkit-box-flex: 2; -webkit-flex: 2; flex: 2; }
 .f3{ -webkit-box-flex: 3; -webkit-flex: 3; flex: 3; }
-.vertical{ -webkit-box-align: center; -ms-flex-align: center; align-items: center; }
-.center{ -webkit-box-pack: center; -ms-flex-pack: center; justify-content: center; }
+.flex_vertical{ -webkit-box-align: center; -ms-flex-align: center; align-items: center; }
+.flex_center{ -webkit-box-pack: center; -ms-flex-pack: center; justify-content: center; }
 /* 溢出...显示 */
 .ellipsis{ overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .ellipsis-2{ display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 3; text-overflow: ellipsis; overflow: hidden; }

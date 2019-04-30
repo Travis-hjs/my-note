@@ -27,41 +27,30 @@
 
     </div>
     <script type="text/javascript">
-        // function Router() {
-        //   this.routes = {};
-        //   this.currentUrl = '';
-        // }
-        // Router.prototype.route = function(path, callback) {
-        //   this.routes[path] = callback || function(){};
-        // };
-        // Router.prototype.refresh = function() {
-        //   this.currentUrl = location.hash.slice(1) || '/';
-        //   this.routes[this.currentUrl]();
-        // };
-        // Router.prototype.init = function() {
-        //   window.addEventListener('load', this.refresh.bind(this), false);
-        //   window.addEventListener('hashchange', this.refresh.bind(this), false);
-        // }
-        // window.Router = new Router();
-        // window.Router.init();
-        
-        // 对象写法
-        var Router = {
-            routes: {},
-            currentUrl: '',
+        function Router() {
+          this.routes = {};
+          this.currentUrl = '';
+        }
+        Router.prototype = {
             route: function(path, callback) {
                 this.routes[path] = callback || function() {};
             },
             refresh: function() {
                 this.currentUrl = location.hash.slice(1) || '/';
-                this.routes[this.currentUrl]();
+                // console.log(this.routes);
+                // console.log(this.currentUrl);
+                var fun = this.routes[this.currentUrl];
+                if (typeof fun === 'function') {
+                    fun();
+                }
             },
             init: function() {
                 window.addEventListener('load', this.refresh.bind(this), false);
                 window.addEventListener('hashchange', this.refresh.bind(this), false);
             }
         }
-        Router.init();
+        var route = new Router();
+        route.init();
 
         function addHtml(title, text) {
             var content = document.querySelector('.wrap');
@@ -72,13 +61,13 @@
                         <li>'+text+'</li>\
                     </ul><strong>'+(new Date()).toString()+'</strong>';
         }
-        Router.route('/a', function() {
+        route.route('/a', function() {
             addHtml('首页', '首页内容');
         });
-        Router.route('/b', function() {
+        route.route('/b', function() {
             addHtml('子页面', '第二个页面内容');
         });
-        Router.route('/c', function() {
+        route.route('/c', function() {
             addHtml('最后的页面', '嘿嘿');
         });
     </script>
