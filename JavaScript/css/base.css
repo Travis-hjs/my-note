@@ -15,13 +15,15 @@ html, body{
 }
 li{ list-style: none; }
 a{ text-decoration: none; color: #333; }
-span,img{ display: block; }
+span, img{ display: block; }
 img{ display: block; width: 100%; }
-h1,h2,h3,h4,h5,h6,b,i{ font-weight: 400; font-style: normal }
-input, textarea{ outline: none; background-color: transparent; -webkit-user-select: auto; border: none; }
+h1,h2,h3,h4,h5,h6,b,i{ font-weight: normal; font-style: normal }
+button, input, textarea{ outline: none; border: none; background-color: transparent; -webkit-user-select: auto; }
 input::-webkit-input-placeholder { color: #999; }
+button::after, input::after{ border: none; }
 textarea{ resize: none; display: block; }
 textarea::-webkit-input-placeholder { color: #999; }
+
 /*定义rem*/
 @media only screen and (min-width: 320px) { html { font-size: 42.6667px !important; } }
 @media only screen and (min-width: 360px) { html { font-size: 48px !important; } }
@@ -29,18 +31,23 @@ textarea::-webkit-input-placeholder { color: #999; }
 @media only screen and (min-width: 400px) { html { font-size: 53.33333333px !important; } }
 @media only screen and (min-width: 414px) { html { font-size: 55.2px !important; } }
 @media only screen and (min-width: 480px) { html { font-size: 64px !important; } }
+
 /* 页面结构处理 */
 .page{ width: 100%; overflow: hidden; margin: 0 auto; max-width: 680px; }
+
 /* flex布局 vertical：垂直平居中 center：水平居中*/
 .flex{ display: -webkit-box; display: -webkit-flex; display: flex; flex-wrap: wrap }
 .f1{ -webkit-box-flex: 1; -webkit-flex: 1; flex: 1; }
 .f2{ -webkit-box-flex: 2; -webkit-flex: 2; flex: 2; }
 .f3{ -webkit-box-flex: 3; -webkit-flex: 3; flex: 3; }
+/* 垂直居中 */
 .flex_vertical{ -webkit-box-align: center; -ms-flex-align: center; align-items: center; }
+/* 水平居中 */
 .flex_center{ -webkit-box-pack: center; -ms-flex-pack: center; justify-content: center; }
 /* 溢出...显示 */
 .ellipsis{ overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .ellipsis-2{ display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 3; text-overflow: ellipsis; overflow: hidden; }
 .ellipsis-3{ display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 3; text-overflow: ellipsis; overflow: hidden; }
+
 /* 渐变背景 */
 .bg{ background: -webkit-linear-gradient(to bottom, #5b99f5, #2a78ed); background: linear-gradient(to bottom, #5b99f5, #2a78ed); }

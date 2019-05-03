@@ -39,6 +39,15 @@ class WindowModule {
             wx.vibrateShort();
         }
     }
+    
+    /** 检查是否移动端 */
+    checkMobile() {
+        var userAgentInfo = navigator.userAgent,
+            Agents = ['Android', 'iPhone', 'SymbianOS', 'Windows Phone', 'iPad', 'iPod'];
+        return Agents.some(function (item) {
+            return (userAgentInfo.indexOf(item) > 0);
+        });
+    }
 }
 
 /** 数组类处理模块 */
@@ -331,7 +340,7 @@ class DomModule extends DateModule {
      * @param {string} name class | id | label <div> <p>
      */
     findAll(name) {
-        let nodes = document.querySelector(name);
+        let nodes = document.querySelectorAll(name);
         if (Array.from) {
             nodes = Array.from(nodes);
         } else {
