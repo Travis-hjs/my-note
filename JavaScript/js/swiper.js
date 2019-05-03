@@ -1,6 +1,7 @@
 /**
  * swiper
  * 默认全部 false
+ * @param {Element} params.el 组件节点
  * @param {number} params.moveTime 过渡时间（毫秒）默认 300
  * @param {number} params.interval 自动播放间隔（毫秒）默认 3000
  * @param {boolean} params.loop 是否需要回路
