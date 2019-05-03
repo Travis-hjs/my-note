@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="maximum-scale=1.0, minimum-scale=1.0, user-scalable=0, initial-scale=1.0, width=device-width"/>
+	<meta name="format-detection" content="telephone=no, email=no, date=no, address=no">
+    <title>点击水波纹</title>
+    <link rel="stylesheet" href="./css/base.css">
+    <style>
+        .page{ min-height: 100vh; }
+        .button{ display: block; width: 150px; height: 40px; color: #fff; text-align: center; line-height: 40px; font-size: 15px; font-weight:bold; border-radius: 6px; margin-bottom: 10px; position: relative; overflow: hidden; }
+        .button .ripple{ position: absolute; background:rgba(0, 0, 0, .15); border-radius: 100%; transform: scale(0); pointer-events: none; }
+        .button .show { animation: ripple .5s ease-out; }
+        @keyframes ripple {to {transform: scale(2); opacity: 0; } }
+
+        .button:nth-child(1) { background:#4285f4; }
+        .button:nth-child(2) { background:#00bad2; }
+        .button:nth-child(3) { background:#ff8a80; }
+        .button:nth-child(4) { background:#ffae00; }
+        .button:nth-child(5) { background:#aec156; }
+        .button:nth-child(6) { background:#a060a8; }
+        .button:nth-child(7) { background:#a78660; }
+        .button:nth-child(8) { background:#5da065; }
+        .button:nth-child(9) { background:#5e6b9a; }
+        .button:nth-child(10) { background:#9a5e5e; }
+        .button:nth-child(11) { background:#666666; }
+        
+    </style>
+</head>
+<body>
+    <div class="page flex flex_vertical flex_center">
+        <div class="button-list"></div>
+    </div>
+
+    <script src="./js/utils.js"></script>
+    <script src="./js/ripple.js"></script>
+</body>
+</html>
