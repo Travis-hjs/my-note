@@ -30,22 +30,22 @@ label.addEventListener('click', () => {
 /** 点击测试 */
 function clickTest() {
     /** 总数 */
-    const total = 5; 
+    const total = 5;
     /** 菜单列表容器 */
     let list = utils.find('.menu');
 
-    // 1、传统写法 添加点击事件 不用 let 添加function完成闭包
+    // // 1、传统写法 添加function完成闭包 用 let 定义的变量可以不用闭包 
     // for (var i = 0; i < total; i++) {
     //     var item = document.createElement('li');
-    //     item.appendChild(document.createTextNode('测试li-' + i));
-    //     list.appendChild(item);
-          
-    //     (function (j) {
-    //       // var j = i;
-    //       item.addEventListener('click', function() {
-    //         console.log('第' + j + '个li');
-    //       });
+    //     item.textContent = '测试li-' + i;
+        
+    //     (function (index) {
+    //         item.addEventListener('click', function () {
+    //             console.log('第' + index + '个li');
+    //         });
     //     })(i);
+
+    //     list.appendChild(item);
     // }
 
     // 2、使用事假代理 添加点击事件 (事件委托就是利用事件冒泡，只指定一个事件处理程序，就可以管理某一类型的所有事件)
@@ -56,7 +56,7 @@ function clickTest() {
         list.appendChild(item);
     }
     // 在最外层容器做事件添加
-    list.addEventListener('click', function() {
+    list.addEventListener('click', function () {
         // console.log(this);
         console.log(`第 ${event.target.dataset.index} 个li`);
     });
@@ -91,7 +91,7 @@ function newFun() {
         this.name = name;
     }
     // 静态属性
-    Animal.color = 'black'; 
+    Animal.color = 'black';
     // 构造函数定义的对象只有在 new 之后才能调用
     Animal.prototype.say = function () {
         console.log("I'm " + this.name);    // I'm cat
@@ -102,7 +102,7 @@ function newFun() {
         cat.name, // cat
         cat.color // undefined
     );
-    cat.say(); 
+    cat.say();
 
     console.log(
         Animal.name, // Animal
@@ -111,33 +111,6 @@ function newFun() {
 }
 // newFun();
 
-// 对象
-function objFunction() {
-    // 1
-    var Boy = {
-        name: 'Hansen',
-        color: 'lightgreen'
-    };
-    // 2
-    var Boy = (name, color) => {
-        return {
-            name: name,
-            color: color
-        }
-    }
-    var cat = Boy('小米', '黄色');
-    var dog = Boy('华为', '蓝色')
-    console.log(cat, dog);
-    // 3
-    function Boy(name, color) { // 这里不能用箭头函数
-        this.name = name;
-        this.color = color;
-    }
-    // var cat = new Boy('小米','黄色');
-    // var dog = new Boy('华为','蓝色');
-    // console.log(cat.name,dog);
-}
-// objFunction();
 
 /** bind() 使用 */
 function bindFun() {
@@ -159,7 +132,7 @@ function bindFun() {
     let bound = Module.getNumber.bind(Module); // number.bind(Module); 这样也可以
     bound();
 }
-bindFun();
+// bindFun();
 
 /**
  * 工厂模式
@@ -168,13 +141,13 @@ bindFun();
  */
 function $(name) {
     /** 当前对象 */
-    var obj = new Objeco();
+    var obj = new Object();
     /** 元素类型 */
     var type = typeof name == 'string' ? 'array' : 'single';
     // 元素定义
     obj.el = typeof name == 'string' ? document.querySelectorAll(name) : name;
     // 遍历 
-    obj.forEach = function(array, callback) {
+    obj.forEach = function (array, callback) {
         for (var i = 0; i < array.length; i++) {
             array[i].index = i;
             if (typeof callback === 'function') callback(array[i], i);
