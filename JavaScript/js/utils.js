@@ -1,7 +1,7 @@
 /** 浏览器模块 */
 class WindowModule {
     constructor() {
-        
+
     }
     /**
      * 本地储存数据
@@ -39,7 +39,7 @@ class WindowModule {
             wx.vibrateShort();
         }
     }
-    
+
     /** 检查是否移动端 */
     checkMobile() {
         var userAgentInfo = navigator.userAgent,
@@ -48,10 +48,35 @@ class WindowModule {
             return (userAgentInfo.indexOf(item) > 0);
         });
     }
+
+    /**
+     * 在浏览器上打开新的窗口 PC端用到
+     * @param {string} url 打开的地址
+     * @param {title} title 标题
+     * @param {number} w 窗口宽度
+     * @param {number} h 窗口高度
+     */
+    openWindow(url, title, w, h) {
+        // Fixes dual-screen position                            Most browsers       Firefox
+        const dualScreenLeft = window.screenLeft !== undefined ? window.screenLeft : screen.left
+        const dualScreenTop = window.screenTop !== undefined ? window.screenTop : screen.top
+
+        const width = window.innerWidth ? window.innerWidth : document.documentElement.clientWidth ? document.documentElement.clientWidth : screen.width
+        const height = window.innerHeight ? window.innerHeight : document.documentElement.clientHeight ? document.documentElement.clientHeight : screen.height
+
+        const left = ((width / 2) - (w / 2)) + dualScreenLeft
+        const top = ((height / 2) - (h / 2)) + dualScreenTop
+        const newWindow = window.open(url, title, 'toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=no, resizable=yes, copyhistory=no, width=' + w + ', height=' + h + ', top=' + top + ', left=' + left)
+
+        // Puts focus on the newWindow
+        if (newWindow.focus) {
+            newWindow.focus()
+        }
+    }
 }
 
 /** 数组类处理模块 */
-class ArrayModule extends WindowModule{
+class ArrayModule extends WindowModule {
     constructor() {
         super();
     }
@@ -69,6 +94,23 @@ class ArrayModule extends WindowModule{
             newStr += string.substr(i, 1).replace(pattern, '');
         }
         return newStr;
+    }
+
+    /**
+     * 数字带逗号分隔
+     * 10000 => "10,000"
+     * @param {number} num
+     */
+    toThousandFilter(num) {
+        return (+num || 0).toString().replace(/^-?\d+/g, m => m.replace(/(?=(?!\b)(\d{3})+$)/g, ','))
+    }
+
+    /**
+     * 首字母大写
+     * @param {string} string 
+     */
+    firstToUpperCase(string) {
+        return string.charAt(0).toUpperCase() + string.slice(1);
     }
 
     /**
@@ -179,7 +221,7 @@ class ArrayModule extends WindowModule{
 
 /** 时间日期类型日期模块 */
 class DateModule extends ArrayModule {
-    constructor() { 
+    constructor() {
         super();
         // new Date().toLocaleDateString(); => 2020/12/12
         // new Date().toLocaleTimeString(); => 上/下午12:12:12
@@ -256,7 +298,7 @@ class DateModule extends ArrayModule {
     getDayString(date) {
         return '周' + '日一二三四五六'.charAt(new Date(date).getDay());
     }
-    
+
     /**
      * 获取两个时间段的秒数
      * @param {string} now 对比的时间
@@ -284,7 +326,7 @@ class DateModule extends ArrayModule {
             minute = ('0' + minute).slice(-2);
             second = ('0' + second).slice(-2);
             console.log(`${day}天：${hour}小时：${minute}分钟：${second}秒`);
-            value --;
+            value--;
         }, 1000);
     }
 
@@ -325,7 +367,7 @@ class DateModule extends ArrayModule {
 
 /** dom 模块 */
 class DomModule extends DateModule {
-    constructor() { 
+    constructor() {
         super();
     }
     /**
@@ -368,7 +410,7 @@ class DomModule extends DateModule {
             return el.classList.contains(className);
         } else {
             return el.className.match(new RegExp('(\\s|^)' + className + '(\\s|$)'));
-        }    
+        }
     }
     /**
      * 给元素添加 calss
