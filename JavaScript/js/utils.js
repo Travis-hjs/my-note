@@ -22,6 +22,7 @@ class WindowModule {
     /** 清除本地数据 */
     removeData() {
         window.localStorage.clear();
+        // localStorage.removeItem('key');　// 删除键值对
     }
     /** 长震动 */
     vibrateLong() {
@@ -81,6 +82,27 @@ class ArrayModule extends WindowModule {
         super();
     }
 
+    /**
+     * 过滤剩下数字 及小数点
+     * @param {string} string 字符串
+     */
+    filterNumber(string) {
+        /** 最终返回值 */
+        let value = string.trim();
+        // 去空格
+        if (value.length == 0) return '';
+        // 正则过滤剩下数字和小数点
+        value = value.replace(/[^0-9.]+/g, '');
+        /** 分割小数点数组 */
+        let array = value.split('.');
+        // 判断是否有小数点
+        if (array.length > 1) {
+            value = array[0] + '.' + array[1];
+        }
+        // 最后转数字
+        value = Number(value);
+        return isNaN(value) ? 0 : value;
+    }
     /**
      * 过滤掉特殊符号
      * @param {string} string 
