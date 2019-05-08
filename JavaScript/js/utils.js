@@ -86,7 +86,7 @@ class ArrayModule extends WindowModule {
      * 过滤剩下数字 及小数点
      * @param {string} string 字符串
      */
-    filterNumber(string) {
+    onlyNumber(string) {
         /** 最终返回值 */
         let value = string.trim();
         // 去空格
@@ -107,7 +107,7 @@ class ArrayModule extends WindowModule {
      * 过滤掉特殊符号
      * @param {string} string 
      */
-    filterStr(string) {
+    filterSpecial(string) {
         // 将字符串过滤剩下数字 要保留其他字符 则 replace(/[^\d.!?]/g, '')
         // string.replace(/[^\d]/g, ''); 
         let pattern = new RegExp("[`~!@#$^&*()=|{}':;',\\[\\].<>/?~！@#￥……&*（）——|{}【】‘；：”“'。，、？%+_]");
