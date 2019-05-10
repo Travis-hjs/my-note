@@ -4,132 +4,63 @@
  * 转义base64: 
  * _img = _img.split('+').join('%2B').split('&').join('%26')
  * let _img = this.baseImg
- * @param {string} website 域名
- * @param {number} timeout 超时 0 或不给则不超时
  */
 class FetchRequest {
-    constructor(params) {
-        this.website = params.website || '';
-        this.timeout = params.timeout || 0;
+    /**
+     * POST 请求
+     * @param {string} url 请求地址 
+     * @param {object} data 请求数据
+     * @param {Function} success 请求成功 
+     * @param {Function} fail 请求失败
+     */
+    post(url, data, success, fail) {
+        fetch(url, {
+            // credentials: 'include', // 打开 cookie
+            // mode: 'cors',           // 打开跨域
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: JSON.stringify(data) // 若后台没设置接收 JSON 则不行 需要跟 GET 一样的解析对象传参
+        }).then(response => {
+            // 请求状态 => 注意，这里不转换 json 下面会 undefined
+            return response.json();
+        }).then(res => {
+            if (typeof success === 'function') success(res);
+        }).catch(error => {
+            if (typeof fail === 'function') fail(error);
+        });
     }
-    post(url, sendData, successHandler, errorHandler, timeoutHandler) {
-        let _data = '', timer = null;
+
+    /**
+     * GET请求
+     * @param {string} url 请求地址 
+     * @param {object} data 请求数据
+     * @param {Function} success 请求成功 
+     * @param {Function} fail 请求失败
+     */
+    get(url, data, success, fail) {
+        /** 请求参数 */
+        let params = '';
         // 解析对象传参
-        for (let key in sendData) _data += '&' + key + '=' + sendData[key];
-        _data = _data.slice(1);
-        // 检测请求类型
-        if (window.fetch) {
-            fetch(this.website + url, {
-                // credentials: 'include', // 打开 cookie
-                // mode: 'cors',           // 打开跨域
-                method: 'POST',
-                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                body: _data // JSON.stringify(sendData) 若后台没设置接收JSON则不行
-            }).then(response => {
-                // 请求状态 => 注意，这里不转换 json 下面会 undefined
-                return response.json();
-            }).then(successData => {
-                if (timer === null) return;
-                if (typeof successHandler === 'function') successHandler(successData);
-                clearTimeout(timer);
-                timer = null;
-            }).catch(error => {
-                if (timer === null) return;
-                if (typeof errorHandler === 'function') errorHandler(error);
-                clearTimeout(timer);
-                timer = null;
-            });
-        } else {
-            var xhr = new XMLHttpRequest();
-            xhr.open('POST', this.website + url);
-            // xhr.responseType = 'json';
-            xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-            xhr.onreadystatechange = function () {
-                if (xhr.readyState !== 4) return;
-                if (xhr.status === 200 || xhr.status === 304) {
-                    if (timer === null) return;
-                    if (typeof successHandler === 'function') successHandler(JSON.parse(xhr.responseText));
-                    clearTimeout(timer);
-                    timer = null;
-                } else {
-                    if (timer === null) return;
-                    if (typeof errorHandler === 'function') errorHandler(xhr);
-                    clearTimeout(timer);
-                    timer = null;
-                }
-            }
-            // xhr.withCredentials = true;		// 打开cookie
-            xhr.send(_data);
-        }
-        // 超时检测
-        if (this.timeout) {
-            timer = setTimeout(() => {
-                if (typeof timeoutHandler === 'function') timeoutHandler();
-                timer = null;
-            }, this.timeout);
-        } else {
-            timer = 1;
-        }
-    }
-    get(url, sendData, successHandler, errorHandler, timeoutHandler) {
-        let _data = '', timer = null;
-        // 解析对象传参
-        for (let key in sendData) _data += '&' + key + '=' + sendData[key];
-        _data = '?' + _data.slice(1);
-        // 检测请求类型
-        if (window.fetch) {
-            fetch(this.website + url + _data).then(response => {
-                return response.json();
-            }).then(successData => {
-                if (timer === null) return;
-                if (typeof successHandler === 'function') successHandler(successData);
-                clearTimeout(timer);
-                timer = null;
-            }).catch(error => {
-                if (timer === null) return;
-                if (typeof errorHandler === 'function') errorHandler(error);
-                clearTimeout(timer);
-                timer = null;
-            })
-        } else {
-            var xhr = new XMLHttpRequest();
-            xhr.open('GET', this.website + url + _data);
-            // xhr.withCredentials = true;
-            xhr.onreadystatechange = function () {
-                if (xhr.readyState !== 4) return;
-                if (xhr.status === 200 || xhr.status == 304) {
-                    if (timer === null) return;
-                    if (typeof successHandler === 'function') successHandler(JSON.parse(xhr.responseText));
-                    clearTimeout(timer);
-                    timer = null;
-                } else {
-                    if (timer === null) return;
-                    if (typeof errorHandler === 'function') errorHandler(xhr);
-                    clearTimeout(timer);
-                    timer = null;
-                }
-            }
-            xhr.send(null);
-        }
-        // 超时检测
-        if (this.timeout) {
-            timer = setTimeout(() => {
-                if (typeof timeoutHandler === 'function') timeoutHandler();
-                timer = null;
-            }, this.timeout);
-        } else {
-            timer = 1
-        }
+        for (let key in data) params += '&' + key + '=' + data[key];
+        params = '?' + params.slice(1);
+        fetch(url + params).then(response => {
+            return response.json();
+        }).then(res => {
+            if (typeof success === 'function') success(res);
+        }).catch(error => {
+            if (typeof fail === 'function') fail(error);
+        });
     }
 }
-let Ajax = new FetchRequest({
-    website: 'http://che.qihao.lzei.com',
-    timeout: 5000
-});
-// console.log(Ajax);
 
-function getDataTimer() {
-    Ajax.post('/api/app/parking', {
+/** 请求域名 */
+const BASEURL = 'http://che.qihao.lzei.com';
+
+/** fetch 请求 */
+const Fetch = new FetchRequest();
+
+function fetchData() {
+    Fetch.post(BASEURL + '/api/app/parking', {
         appkey: 'e2fb20ea3f3df33310788a4247834c93',
         token: '2a11d6d67a8b8196afbcefbac3e0a573',
         page: '1',
@@ -140,13 +71,11 @@ function getDataTimer() {
         order: 'asc',
         keyword: ''
     }, res => {
-        console.log('timerout', res);
+        console.log('Fetch success', res);
 
     }, err => {
-        console.warn('timerout', err);
+        console.warn('Fetch fail', err);
 
-    }, () => {
-        console.log('请求超时');
     });
 }
 
@@ -211,7 +140,7 @@ function ajax(param) {
     // 传参处理
     switch (method) {
         case 'POST':
-            data = param.data ? param.data : {};
+            data = param.data ? JSON.stringify(param.data) : {};
             break;
     
         case 'GET':
@@ -224,6 +153,7 @@ function ajax(param) {
     }
 
     // 监听请求变化
+    // XHR.status learn: http://tool.oschina.net/commons?type=5
     XHR.onreadystatechange = function () {
         if (XHR.readyState !== 4) return;
         if (XHR.status === 200 || XHR.status === 304) {
@@ -256,10 +186,8 @@ function ajax(param) {
 
     XHR.send(data);
 
-    return XHR;
+    // return XHR;
 }
-
-var BASEURL = 'http://che.qihao.lzei.com';
 
 ajax({
     url: BASEURL + '/api/app/parking',
@@ -293,27 +221,3 @@ ajax({
         console.log(e);
     }
 });
-
-// ajax({
-//     url:'http://www.runoob.com/try/ajax/ajax_info.txt',
-//     method: 'get',
-//     success: function (res) {
-//         console.log('请求成功', res);
-//     },
-//     fail: function (err) {
-//         console.log('请求失败', err);
-//     }
-// });
-
-// Http.get('http://www.runoob.com/try/ajax/ajax_info.txt', {}, res => {
-//     console.log(res);
-// }, err => {
-//     console.warn(err);
-// });
-
-// /** 网络请求 */
-// export default class AjaxModule {
-//     constructor() {
-        
-//     }
-// }
