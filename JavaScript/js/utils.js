@@ -415,11 +415,11 @@ class DomModule extends DateModule {
     /**
      * 设置样式
      * @param {Element} el 设置样式的元素
-     * @param {object} style 样式 Example: {display: 'block', width: '100px'}
+     * @param {object} styles 样式 Example: {display: 'block', width: '100px'}
      */
     setStyle(el, styles) {
         for (let key in styles) {
-            el.styles[key] = styles[key];
+            el.style[key] = styles[key];
         }
     }
     /**
