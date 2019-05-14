@@ -1,7 +1,7 @@
 /**
- * swiper
- * 默认全部 false
- * @param {Element} params.el 组件节点
+ * swiper 轮播组件
+ * @param {object} params 默认全部 false
+ * @param {string} params.el 组件节点 class|id|<label>
  * @param {number} params.moveTime 过渡时间（毫秒）默认 300
  * @param {number} params.interval 自动播放间隔（毫秒）默认 3000
  * @param {boolean} params.loop 是否需要回路
@@ -22,19 +22,23 @@ function swiper(params) {
     let interval = 3000; 
     /** 过渡时间（毫秒）默认 300 */
     let moveTime = 300;
+
+    /** css class 命名列表 */
+    let classNames = ['.swiper_list', '.swiper_item', '.swiper_dot', '.swiper_dot_active', '.swiper_pagination'];
+
     /**
      * 触摸事件
-     * @param {node} div 
-     * @param {Number} width 滚动容器的宽度
-     * @param {Number} height 滚动容器的高度
+     * @param {Element} div 组件最外层节点 
+     * @param {number} width 滚动容器的宽度
+     * @param {number} height 滚动容器的高度
      */
     function touch(div, width, height) {
         /** item 列表 */
-        let list = div.querySelector('.swiper_list');
-        /** swiper item */
-        let item = list.querySelectorAll('.swiper_slider');
+        let list = div.querySelector(classNames[0]);
+        /** swiper */
+        let items = list.querySelectorAll(classNames[1]);
         /** 底部圆点 */
-        let btn = div.querySelectorAll('.swiper_btn');
+        let dots = div.querySelectorAll(classNames[2]);
         /** 触摸开始时间 */
         let start_time = 0; 
         /** 触摸结束时间 */
@@ -70,46 +74,51 @@ function swiper(params) {
         
         /**
          * 属性样式滑动
-         * @param {Number} num 移动的距离
+         * @param {number} num 移动的距离
          */
         function slideStyle(num) {
+            let x = 0, y = 0;
             if (direction) {
-                list.style.transform = list.style.WebkitTransform = `translate3d(0px, ${num}px, 0px)`;
+                y = num;
             } else {
-                list.style.transform = list.style.WebkitTransform = `translate3d(${num}px, 0px, 0px)`;
+                x = num;
             }
+            list.style.transform = list.style.WebkitTransform = `translate3d(${x}px, ${y}px, 0px)`;
+            // if (direction) {
+            //     list.style.transform = list.style.WebkitTransform = `translate3d(0px, ${num}px, 0px)`;
+            // } else {
+            //     list.style.transform = list.style.WebkitTransform = `translate3d(${num}px, 0px, 0px)`;
+            // }
         }
 
         /** 判断最大拖动距离 */
         function touchRange() {
-            let num = 0;
-            
+            /** 拖动距离 */
+            let _d = 0;
             // 默认这个公式
-            num = move_distance + (end_distance - start_distance);
-
+            _d = move_distance + (end_distance - start_distance);
             // 判断最大正负值
             if ((end_distance - start_distance) >= distance) {
-                num = move_distance + distance;
+                _d = move_distance + distance;
             } else if ((end_distance - start_distance) <= -distance) {
-                num = move_distance - distance;
+                _d = move_distance - distance;
             }
-            
             // 没有loop的时候惯性拖拽
             if (!loop) {
                 if ((end_distance - start_distance) > 0 && index === 0) {
                     // console.log('到达最初');
-                    num = move_distance + ((end_distance - start_distance) - ((end_distance - start_distance) * 0.6));
-                } else if ((end_distance - start_distance) < 0 && index === item.length - 1) {
+                    _d = move_distance + ((end_distance - start_distance) - ((end_distance - start_distance) * 0.6));
+                } else if ((end_distance - start_distance) < 0 && index === items.length - 1) {
                     // console.log('到达最后');
-                    num = move_distance + ((end_distance - start_distance) - ((end_distance - start_distance) * 0.6));
+                    _d = move_distance + ((end_distance - start_distance) - ((end_distance - start_distance) * 0.6));
                 }
             }
-            return num;
+            return _d;
         }
         
         /**
          * 判断触摸处理函数 
-         * @param {Number} _d 移动的距离
+         * @param {number} _d 移动的距离
          */
         function judgeTouch(_d) {
             //	这里我设置了200毫秒的有效拖拽间隔
@@ -131,8 +140,8 @@ function swiper(params) {
         }
         
         /**
-         * 移动
-         * @param {Number} _d 移动的距离
+         * 滑动
+         * @param {number} _d 滑动的距离
          */
         function slideMove(_d) {
             startAnimation();
@@ -145,13 +154,13 @@ function swiper(params) {
                     loop_num += 1;
                     if (loop_num < moveTime / 1000 * 60) return myAnimation(loopMoveMin);
                     stopAnimation();
-                    slideStyle(distance * -(item.length - 3));
+                    slideStyle(distance * -(items.length - 3));
                     // 重置一下位置
-                    move_distance = distance * -(item.length - 3);
+                    move_distance = distance * -(items.length - 3);
                 }
                 loopMoveMin();
-                index = item.length - 3;
-            } else if (loop && index > item.length - 3) {
+                index = items.length - 3;
+            } else if (loop && index > items.length - 3) {
                 function loopMoveMax() {
                     loop_num += 1;
                     if (loop_num < moveTime / 1000 * 60) return myAnimation(loopMoveMax);
@@ -164,8 +173,8 @@ function swiper(params) {
             }
             // console.log(`第${ index+1 }张`);	// 这里可以做滑动结束回调
             if (pagination) {
-                div.querySelector('.swiper_btn_active').className = 'swiper_btn';
-                btn[index].classList.add('swiper_btn_active');
+                div.querySelector(classNames[3]).className = classNames[2].slice(1);
+                dots[index].classList.add(classNames[3].slice(1));
             }
         }
 
@@ -176,7 +185,7 @@ function swiper(params) {
                 // 往上滑动 or 向左滑动
                 if (judgeTouch(-distance)) {
                     // 判断有loop的时候不需要执行下面的事件
-                    if (!loop && move_distance === (-(item.length - 1) * distance)) return backLocation();
+                    if (!loop && move_distance === (-(items.length - 1) * distance)) return backLocation();
                     index += 1;
                     slideMove(move_distance - distance);
                     move_distance -= distance;
@@ -200,7 +209,7 @@ function swiper(params) {
                 slideMove(move_distance - distance);
                 move_distance -= distance;
             } else {
-                if (index >= item.length - 1) {
+                if (index >= items.length - 1) {
                     index = 0;
                     slideMove(0);
                     move_distance = 0;
@@ -211,7 +220,8 @@ function swiper(params) {
                 }
             }
         }
-        // 自动播放
+
+        /** 开始自动播放 */
         function startAuto() {
             count += 1;
             //	这里帧数是1秒60次
@@ -220,8 +230,10 @@ function swiper(params) {
             autoMove();
             startAuto();
         }
+
         // 判断是否需要开启自动播放
-        if (autoPaly && item.length - 1) startAuto();
+        if (autoPaly && items.length - 1) startAuto();
+
         // 开始触摸
         list.addEventListener('touchstart', ev => {
             // loop_num = moveTime/1000*60;
@@ -229,6 +241,7 @@ function swiper(params) {
             stopAnimation();
             start_distance = direction ? ev.touches[0].pageY : ev.touches[0].pageX;
         });
+
         // 触摸移动
         list.addEventListener('touchmove', ev => {
             ev.preventDefault();
@@ -236,6 +249,7 @@ function swiper(params) {
             end_distance = direction ? ev.touches[0].pageY : ev.touches[0].pageX;
             slideStyle(touchRange());
         });
+
         // 触摸离开
         list.addEventListener('touchend', () => {
             end_time = new Date().getTime();
@@ -254,20 +268,21 @@ function swiper(params) {
     
     /**
      * 动态布局
-     * @param {node} div 
-     * @param {Number} width 滚动容器的宽度
-     * @param {Number} height 滚动容器的高度
+     * @param {Element} div 组件最外层节点 
+     * @param {number} width 滚动容器的宽度
+     * @param {number} height 滚动容器的高度
      */
     function layout(div, width, height) {
-        let ul = div.querySelector('.swiper_list'), li = div.querySelectorAll('.swiper_slider');
+        let list = div.querySelector(classNames[0]), 
+            items = div.querySelectorAll(classNames[1]);
         if (direction) {
-            for (let i = 0; i < li.length; i++) {
-                li[i].style.height = `${height}px`;
+            for (let i = 0; i < items.length; i++) {
+                items[i].style.height = `${height}px`;
             }
         } else {
-            ul.style.width = `${width * li.length}px`;
-            for (let i = 0; i < li.length; i++) {
-                li[i].style.width = `${width}px`;
+            list.style.width = `${width * items.length}px`;
+            for (let i = 0; i < items.length; i++) {
+                items[i].style.width = `${width}px`;
             }
         }
         touch(div, width, height);
@@ -275,56 +290,60 @@ function swiper(params) {
     
     /**
      * 如果要回路的话前后增加元素
-     * @param {node} div 
-     * @param {Number} width 滚动容器的宽度
-     * @param {Number} height 滚动容器的高度
+     * @param {Element} div 组件最外层节点 
+     * @param {number} width 滚动容器的宽度
+     * @param {number} height 滚动容器的高度
      */
     function outputLoop(div, width, height) {
-        let ul = div.querySelector('.swiper_list');
-        let li = ul.querySelectorAll('.swiper_slider');
-        let first = li[0].cloneNode(true),
-            last = li[li.length - 1].cloneNode(true);
-        ul.insertBefore(last, li[0]);
-        ul.appendChild(first);
+        let list = div.querySelector(classNames[0]);
+        let items = list.querySelectorAll(classNames[1]);
+        let first = items[0].cloneNode(true),
+            last = items[items.length - 1].cloneNode(true);
+        list.insertBefore(last, items[0]);
+        list.appendChild(first);
         if (direction) {
-            ul.style.top = `${-height}px`;
+            list.style.top = `${-height}px`;
         } else {
-            ul.style.left = `${-width}px`;
+            list.style.left = `${-width}px`;
         }
         layout(div, width, height);
     }
 
     /**
      * 输出底部圆点
-     * @param {node} div 
+     * @param {Element} div 组件最外层节点 
      */
     function outputPagination(div) {
-        let btnList = div.querySelector('.swiper_pagination'),
-            liNum = div.querySelectorAll('.swiper_slider').length,
+        let btnList = div.querySelector(classNames[4]),
+            liNum = div.querySelectorAll(classNames[1]).length,
             html = '';
         for (let i = 0; i < liNum; i++) {
-            html += '<div class="swiper_btn"></div>';
+            html += `<div class="${classNames[2].slice(1)}"></div>`;
         }
         btnList.innerHTML = html;
-        btnList.querySelector('.swiper_btn').classList.add('swiper_btn_active');
+        btnList.querySelector(classNames[2]).classList.add(classNames[3].slice(1));
     }
     
     /**
-     * 动态布局初始化
-     * @param {node} el 
+     * 动态布局初始化 
+     * @param {string} el 组件节点 class|id|<label> 
      */
     function format(el) {
-        let _swiper = document.querySelector(el);
-        let moveWidth = _swiper.offsetWidth, moveHeight = _swiper.offsetHeight;
-        if (pagination) outputPagination(_swiper);
+        /** 组件最外层节点 */
+        let node = document.querySelector(el);
+        let moveWidth = node.offsetWidth, 
+            moveHeight = node.offsetHeight;
+        if (pagination) outputPagination(node);
         if (loop) {
-            outputLoop(_swiper, moveWidth, moveHeight);
+            outputLoop(node, moveWidth, moveHeight);
         } else {
-            layout(_swiper, moveWidth, moveHeight);
+            layout(node, moveWidth, moveHeight);
         }
     }
-    // 配置传参
+    
+    /** 初始化参数 */
     function init() {
+        if (typeof params !== 'object') return console.warn('传参有误');
         if (!params.el) return console.warn('没有可执行的元素！');
         pagination = params.pagination || false;
         direction = params.vertical || false;

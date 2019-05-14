@@ -10,42 +10,57 @@
 			html,body{ color: #333; background: #fff; -webkit-touch-callout: none; -webkit-text-size-adjust: none; -webkit-tap-highlight-color:rgba(0, 0, 0, 0); -webkit-user-select:none; font-family: "Helvetica Neue", Helvetica, sans-serif; }
 			li{ list-style: none; }
 			span,img{ display: block; }
-			/*定义rem*/
-			@media only screen and (min-width: 400px) { html { font-size: 53.33333333px !important; } }
-			@media only screen and (min-width: 414px) { html { font-size: 55.2px !important; } }
-			@media only screen and (min-width: 480px) { html { font-size: 64px !important; } }
-			.wrap{ width: 100%; max-width: 600px; margin: auto; }
+			.page{ width: 100%; max-width: 600px; margin: auto; }
 			/* overflow: hidden; */
-			.swiper{ width: 100%; height: 4rem; position: relative; background-color: #eee; overflow: hidden; }
+			.swiper{ width: 100%; height: 200px; position: relative; background-color: #eee; overflow: hidden; }
 			.swiper .swiper_list{ overflow: hidden; position: relative; width: 100%; -webkit-transition: 0s all; transition: 0s all; }
-			.swiper .swiper_slider{ float: left; width: 100%; height: 4rem; background-color: #333; text-align: center; line-height: 4rem; color: #fff; }
+			.swiper .swiper_item{ float: left; width: 100%; height: 200px; text-align: center; line-height: 200px; color: #fff; }
 			.swiper img{ width: 100%; }
-			.swiper .swiper_pagination{ position: absolute; width: 100%; height: 10px; bottom: 48px; left: 0; text-align: center; }
-			.swiper .swiper_btn{ display: inline-block; margin-left: 8px; width: 8px; height: 8px; background-color: rgba(0,0,0,0.5); border-radius: 50%; }
-			.swiper .swiper_btn_active{ background-color: #fff; }
+			.swiper .swiper_pagination{ position: absolute; width: 100%; height: 10px; bottom: 14px; left: 0; text-align: center; }
+			.swiper .swiper_dot{ display: inline-block; margin-left: 8px; width: 8px; height: 8px; background-color: rgba(0,0,0,0.5); border-radius: 50%; }
+            .swiper .swiper_dot_active{ background-color: #fff; }
+
+            .add-btn{ text-align: center; padding: 4px 10px; margin: 0 auto; display: block; font-size: 16px; }
 		</style>
 	</head>
 	<body>
-		<section class="wrap"></section>
-		<p onclick="addSwiper(this)" style="text-align: center">add a swiper</p>
+        <div class="page">
+            
+        </div>
+        <button onclick="addSwiper(this)" class="add-btn">add a swiper</button>
+
+        <script type="text/template">
+            <div class="swiper">
+                <div class="swiper_list">
+                    <div class="swiper_item"></div>
+                    <div class="swiper_item"></div>
+                    <div class="swiper_item"></div>
+                </div>
+            </div>
+        </script>
 		<script type="text/javascript" src="./js/swiper.js"></script>
-		<script type="text/javascript">
+        <script type="text/javascript">
+            /** 页面容器节点 */
+            let page = document.querySelector('.page');
+            /** 颜色列表 */
+            let colors = ['#2196f3', '#9c27b0', '#e91e63', '#f44336'];
+
 			function addSwiper (el) {
 				let _html = `<div class="swiper mybanner">
-								<ul class="swiper_list">
-									<li class="swiper_slider">
+								<div class="swiper_list">
+									<div class="swiper_item" style="background-color: #333">
 										<p>silder-1</p>
-									</li>
-									<li class="swiper_slider">
+									</div>
+									<div class="swiper_item" style="background-color: #333">
 										<p>silder-2</p>
-									</li>
-									<li class="swiper_slider">
+									</div>
+									<div class="swiper_item" style="background-color: #333">
 										<p>silder-3</p>
-									</li>
-								</ul>
+									</div>
+								</div>
 								<div class="swiper_pagination"></div>
 							</div>`;
-				document.querySelector('.wrap').insertAdjacentHTML('beforeEnd',_html);
+				page.insertAdjacentHTML('beforeEnd',_html);
 				swiper({
 					el: '.mybanner',
 					pagination: true,
@@ -54,33 +69,34 @@
 					vertical: true
 				})
 				el.parentNode.removeChild(el)
-			}
+            }
+            
 			// 动态生成html
-			function createList(_num, isBtn, fn) {
-				let [_swiper, _ul, _li, _btn] = [document.createElement('div'), document.createElement('ul'), '', document.createElement('div')];
-				_swiper.className = 'swiper';
-				_swiper.style.marginBottom = '.4rem';
-				_ul.className = 'swiper_list';
-				_btn.className = 'swiper_pagination';
-				for (let i = 0; i < _num; i++) _li += `<li class="swiper_slider"><p>silder-${i+1}</p></li>`;
-				_ul.innerHTML = _li;
-				_swiper.appendChild(_ul);
-				if (isBtn) _swiper.appendChild(_btn);
-				document.querySelector('.wrap').appendChild(_swiper);
-				if (typeof fn === 'function') fn.call(this);
+			function createList(needDot) {
+				let [node, list, item, dot] = [document.createElement('div'), document.createElement('ul'), '', document.createElement('div')];
+				node.className = 'swiper';
+				node.style.marginBottom = '10px';
+				list.className = 'swiper_list';
+				dot.className = 'swiper_pagination';
+				for (let i = 0; i < colors.length; i++) {
+                    item += `<li class="swiper_item" style="background-color: ${colors[i]}"><p>silder-${i+1}</p></li>`;
+                }
+				list.innerHTML = item;
+				node.appendChild(list);
+				if (needDot) node.appendChild(dot);
+                page.appendChild(node);
+                
 			}
-			createList(5, true, () => {
-				swiper({
-					el: '.swiper',
-					pagination: true,
-					autoPaly: true,
-					interval: 3000,
-					// loop: true,
-					// moveTime: 400,
-					// vertical: true
-				});
-			});
-			
+			createList(true);
+			swiper({
+                el: '.swiper',
+                pagination: true,
+                autoPaly: true,
+                interval: 3000,
+                // loop: true,
+                // moveTime: 400,
+                // vertical: true
+            });
 		</script>
 	</body>
 </html>
