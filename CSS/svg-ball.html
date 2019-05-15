@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>svg+css3 球体动画</title>
+    <style>
+        body {
+            background: white;
+            width: 100vw;
+            max-height: 100vh;
+            padding: 0;
+            margin: 0;
+            overflow: hidden;
+            box-sizing: border-box;
+        }
+
+        body *,
+        body *:after,
+        body *:before {
+            box-sizing: inherit;
+            position: relative;
+        }
+
+        #app {
+            width: 100vw;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            -webkit-filter: url(#goo);
+            filter: url(#goo);
+            -webkit-transform: scale(0.8);
+            transform: scale(0.8);
+        }
+
+        .loader {
+            width: 50vmin;
+            height: 1vmin;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            -webkit-filter: url(#goo);
+            filter: url(#goo);
+            -webkit-transform: scale(0.5);
+            transform: scale(0.5);
+            -webkit-animation: rotate 1.5s linear 0s infinite;
+            animation: rotate 1.5s linear 0s infinite;
+        }
+
+        @-webkit-keyframes rotate {
+            0% {
+                -webkit-transform: scale(0.5) rotate(0deg);
+                transform: scale(0.5) rotate(0deg);
+            }
+
+            100% {
+                -webkit-transform: scale(0.5) rotate(360deg);
+                transform: scale(0.5) rotate(360deg);
+            }
+        }
+
+        @keyframes rotate {
+            0% {
+                -webkit-transform: scale(0.5) rotate(0deg);
+                transform: scale(0.5) rotate(0deg);
+            }
+
+            100% {
+                -webkit-transform: scale(0.5) rotate(360deg);
+                transform: scale(0.5) rotate(360deg);
+            }
+        }
+
+        .circle {
+            width: 40%;
+            background: white;
+            padding-top: 40%;
+            height: 0;
+            border-radius: 51%;
+            -webkit-transform: translateX(calc(var(--dir) * -20%)) scale(0.7);
+            transform: translateX(calc(var(--dir) * -20%)) scale(0.7);
+            -webkit-animation: circles 1.5s cubic-bezier(0.5, 0, 0.5, 1) infinite alternate;
+            animation: circles 1.5s cubic-bezier(0.5, 0, 0.5, 1) infinite alternate;
+        }
+
+        @-webkit-keyframes circles {
+            to {
+                -webkit-transform: translateX(calc(var(--dir) * 75%));
+                transform: translateX(calc(var(--dir) * 75%));
+                background: var(--blend);
+            }
+        }
+
+        @keyframes circles {
+            to {
+                -webkit-transform: translateX(calc(var(--dir) * 75%));
+                transform: translateX(calc(var(--dir) * 75%));
+                background: var(--blend);
+            }
+        }
+
+        .-a {
+            --dir: 1;
+            background: var(--color-a);
+        }
+
+        .-b {
+            --dir: -1;
+            background: var(--color-b);
+        }
+    </style>
+</head>
+
+<body>
+    <main id="app">
+        <div class="loader" style="--blend:purple; --color-a:red; --color-b:blue">
+            <div class="circle -a"></div>
+            <div class="circle -b"></div>
+        </div>
+        <div class="loader" style="--blend:green; --color-a:blue; --color-b:yellow">
+            <div class="circle -a"></div>
+            <div class="circle -b"></div>
+        </div>
+        <div class="loader" style="--blend:orange; --color-a:yellow; --color-b:red">
+            <div class="circle -a"></div>
+            <div class="circle -b"></div>
+        </div>
+    </main>
+    <svg viewBox="0 0 100 100">
+        <filter id="goo">
+            <feGaussianBlur in="SourceGraphic" stdDeviation="20" result="blur" />
+            <feColorMatrix in="blur" mode="matrix" result="goo"
+                values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 60 -13" />
+            <feComposite in="SourceGraphic" in2="goo" />
+        </filter>
+    </svg>
+</body>
+
+</html>
