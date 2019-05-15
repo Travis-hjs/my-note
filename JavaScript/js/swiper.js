@@ -84,11 +84,6 @@ function swiper(params) {
                 x = num;
             }
             list.style.transform = list.style.WebkitTransform = `translate3d(${x}px, ${y}px, 0px)`;
-            // if (direction) {
-            //     list.style.transform = list.style.WebkitTransform = `translate3d(0px, ${num}px, 0px)`;
-            // } else {
-            //     list.style.transform = list.style.WebkitTransform = `translate3d(${num}px, 0px, 0px)`;
-            // }
         }
 
         /** 判断最大拖动距离 */
