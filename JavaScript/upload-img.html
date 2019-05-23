@@ -17,7 +17,7 @@
 			<label for="file" class="click">+</label>
 			<input type="file" id="file" name="picture" onchange="upLoad(this)" />
 			<img src="" class="updataImg">
-
+            <!-- 进度条 -->
 			<input type="number" class="number-input" oninput="inputText(this)">
 			<progress class="progress" value="0" max="100"></progress>
 		</div>
@@ -25,27 +25,48 @@
 		<script type="text/javascript">
 
 			function upLoad(source) {
-				let file = source.files[0];
-				if (!/image\/\w+/.test(file.type)) return alert('文件格式只支持：jpg 和 png');
-				getBase64(file);
-				// let url = getObjectURL(file);
-				// console.log('二进制路径', url);
+                /** 上传文件 */
+                let file = source.files[0];
+                /** 上传类型数组 */
+                let typeStr = ['image/jpg', 'image/png', 'image/jpeg', 'image/gif'];
+                // 判断文件类型
+                if (typeStr.indexOf(file.type) < 0) return alert('文件格式只支持：jpg 和 png');
+                /** 判断大小 */
+                if (file.size > 2097152) return alert('上传的文件不能大于2M');
+
+                // let formData = new FormData();
+                // formData.append('img', file);
+                // console.log(formData, file);
+                
+				getBase64(file, res => {
+                    document.querySelector('.updataImg').src = res;
+                });
+
+				let url = getObjectURL(file);
+				console.log('二进制路径', url);
 			}
 
-			// 获取 base64
-			function getBase64(_file) {
+            /** 
+             * 获取 base64
+             * @param {object} _file 文件
+             * @param {Function} callback 回调
+            */
+			function getBase64(_file, callback) {
 				let reader = new FileReader();
-				reader.onload = () => {
-					// reader.result.replace(/\+/g, "%2B").replace(/\&/g, "%26");
-					// reader.result.split('+').join('%2B').split('&').join('%26');
-					// console.log(JSON.stringify(reader.result));
-					console.log(reader.result);
-					document.querySelector('.updataImg').src = reader.result;
+				reader.onload = function() {
+                    /** base64 路径 */
+                    let src = reader.result;
+                    // 转义base64: 
+                    // src = src.split('+').join('%2B').split('&').join('%26');
+                    if (typeof callback === 'function') callback(src);
 				}
 				reader.readAsDataURL(_file);
 			}
 
-			// 获取二进制路径（需要打开服务器调试）
+            /**
+             * 获取二进制路径（需要打开服务器调试）
+             * @param {object} _file 文件
+            */
 			function getObjectURL(_file) {
 				let url = null;
 				if (window.createObjectURL) {
