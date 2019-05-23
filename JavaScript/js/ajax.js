@@ -1,9 +1,6 @@
 /**
  * fetch request
  * 打开跨域，服务器端须设置设置 response'Access-Control-Allow-Origin'
- * 转义base64: 
- * _img = _img.split('+').join('%2B').split('&').join('%26')
- * let _img = this.baseImg
  */
 class FetchRequest {
     /**
