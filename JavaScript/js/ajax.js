@@ -205,10 +205,17 @@ ajax({
         console.log('请求成功', res);
     },
     fail: function (err) {
-        console.log('请求失败', err);
+        let error = { message: '接口报错，请看 network ' };
+        if (err.response.charAt(0) == '{') {
+            error = JSON.parse(err.response);
+        }
+        console.log('请求失败', error);
     },
     timeout: function () {
-        console.log('请求超时');
+        var error = {
+            message: '请求超时'
+        }
+        console.log(error.message);
     },
     progress: function (e) {
         if (e.lengthComputable) {
