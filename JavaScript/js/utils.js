@@ -280,6 +280,7 @@ class DateModule extends ArrayModule {
         calendar[0].sub[0].sub.splice(0, new Date().getDate());
         return calendar;
     }
+    
     /**
      * 时间生成器
      * @param {number} minInterval 时间间隔(分钟)
@@ -297,6 +298,7 @@ class DateModule extends ArrayModule {
         }
         return arr;
     }
+
     /**
      * 时间戳生成 '2020/12/12 12:12:12'
      * @param {number} num 1时为明天，-1为昨天天，以此类推
@@ -392,6 +394,7 @@ class DomModule extends DateModule {
     constructor() {
         super();
     }
+
     /**
      * 单个元素查找
      * @param {string} name class | id | label <div> <p>
@@ -399,6 +402,7 @@ class DomModule extends DateModule {
     find(name) {
         return document.querySelector(name);
     }
+
     /**
      * 多个元素查找 返回 array[...dom]
      * @param {string} name class | id | label <div> <p>
@@ -412,6 +416,7 @@ class DomModule extends DateModule {
         }
         return nodes;
     }
+
     /**
      * 设置样式
      * @param {Element} el 设置样式的元素
@@ -422,6 +427,7 @@ class DomModule extends DateModule {
             el.style[key] = styles[key];
         }
     }
+
     /**
      * 检测元素是否存在指定 calss
      * @param {Element} el 当前元素
@@ -434,6 +440,7 @@ class DomModule extends DateModule {
             return el.className.match(new RegExp('(\\s|^)' + className + '(\\s|$)'));
         }
     }
+
     /**
      * 给元素添加 calss
      * @param {Element} el 当前元素
@@ -449,6 +456,7 @@ class DomModule extends DateModule {
             }
         }
     }
+
     /**
      * 给元素移除指定 calss
      * @param {Element} el 当前元素
@@ -464,6 +472,7 @@ class DomModule extends DateModule {
             }
         }
     }
+
     /**
      * 切换 calss name
      * @param {Element} el 当前元素
@@ -480,6 +489,7 @@ class DomModule extends DateModule {
             }
         }
     }
+
     /**
      * 获取元素的的矩阵坐标
      * @param {Element} el 当前元素
@@ -502,6 +512,20 @@ class DomModule extends DateModule {
             AnimationFrame(move);
         }
         move();
+    }
+
+    /**
+     * 复制内容
+     * @param {string} value 内容 
+     */
+    copyText(value) {
+        let input = document.createElement("input");
+        input.value = value;
+        document.body.appendChild(input);
+        input.select(); // 选择对象;
+        // 执行浏览器复制命令
+        document.execCommand("Copy"); 
+        input.remove();
     }
 }
 
