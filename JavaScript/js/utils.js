@@ -467,7 +467,7 @@ class DomModule extends DateModule {
             el.classList.remove(className);
         } else {
             if (this.hasClass(el, className)) {
-                let reg = new RegExp('(\\s|^)' + c + '(\\s|$)');
+                let reg = new RegExp('(\\s|^)' + className + '(\\s|$)');
                 el.className = el.className.replace(reg, ' ');
             }
         }
