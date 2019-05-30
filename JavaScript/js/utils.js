@@ -393,6 +393,22 @@ class DateModule extends ArrayModule {
 class DomModule extends DateModule {
     constructor() {
         super();
+        // // rem 适应
+        // (function() {
+        //     var html = document.documentElement; // 注意这里不能 使用 document.body
+        //     /** 整体页面 */
+        //     var page = document.querySelector('.page');
+        //     /** 比例值 */
+        //     var value = 375 / 50;
+        //     /** 视口宽度 */
+        //     var width = page.getBoundingClientRect().width;
+        //     html.style.fontSize = width / value + 'px';
+        //     // 窗口变动时更新适配
+        //     window.addEventListener('resize', function() {
+        //         width = page.getBoundingClientRect().width;
+        //         html.style.fontSize = width / value + 'px';
+        //     });
+        // })();
     }
 
     /**
