@@ -176,7 +176,7 @@ class ArrayModule extends WindowModule {
 
     /**
      * 数组中随机取几个元素
-     * @param {array} arr 数组
+     * @param {array} array 数组
      * @param {number} count 元素个数
      */
     getRandomArrayElements(array, count) {
@@ -393,22 +393,6 @@ class DateModule extends ArrayModule {
 class DomModule extends DateModule {
     constructor() {
         super();
-        // // rem 适应
-        // (function() {
-        //     var html = document.documentElement; // 注意这里不能 使用 document.body
-        //     /** 整体页面 */
-        //     var page = document.querySelector('.page');
-        //     /** 比例值 */
-        //     var value = 375 / 50;
-        //     /** 视口宽度 */
-        //     var width = page.getBoundingClientRect().width;
-        //     html.style.fontSize = width / value + 'px';
-        //     // 窗口变动时更新适配
-        //     window.addEventListener('resize', function() {
-        //         width = page.getBoundingClientRect().width;
-        //         html.style.fontSize = width / value + 'px';
-        //     });
-        // })();
     }
 
     /**
@@ -542,6 +526,24 @@ class DomModule extends DateModule {
         // 执行浏览器复制命令
         document.execCommand("Copy"); 
         input.remove();
+    }
+
+    /**
+     * rem 适应
+     * @param {HTMLElement} el 指定元素适配
+     */
+    remSetting(el) {
+        const html = document.documentElement; // 注意这里不能 使用 document.body
+        /** 比例值 */
+        let value = 375 / 50;
+        /** 视口宽度 */
+        let width = el.getBoundingClientRect().width;
+        html.style.fontSize = width / value + 'px';
+        // 窗口变动时更新适配
+        window.addEventListener('resize', function() {
+            width = el.getBoundingClientRect().width;
+            html.style.fontSize = width / value + 'px';
+        });
     }
 }
 
