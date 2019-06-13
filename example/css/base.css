@@ -1,0 +1,45 @@
+*{ padding: 0; margin: 0; }
+html, body{
+	background-color: #fff;
+	color: #333;
+	/* 禁用系统长按菜单 */
+	-webkit-touch-callout: none;
+	/* 禁用字体大小自动调整 */
+	-webkit-text-size-adjust: none !important;
+    text-size-adjust: none !important;
+	/* 去掉点击高亮 */
+	-webkit-tap-highlight-color:rgba(0, 0, 0, 0);
+	/* 禁止选择内容 */
+	-webkit-user-select: none;
+	font-family: "Helvetica Neue", Helvetica, sans-serif;
+}
+div{ box-sizing: border-box; }
+li{ list-style: none; box-sizing: border-box; }
+a{ text-decoration: none; color: #333; background-color: transparent; }
+img{ display: block; width: 100%; }
+h1,h2,h3,h4,h5,h6,i,b,i{ font-weight: 400; font-style: normal; }
+input, textarea{ outline: none; background-color: rgba(0, 0, 0, 0); -webkit-user-select: auto; border: none; box-sizing: border-box; font-family: "Helvetica Neue", Helvetica, sans-serif; }
+input::-webkit-input-placeholder { color: #999; }
+textarea { resize: none; display: block; }
+textarea::-webkit-input-placeholder { color: #999; }
+
+/* flex布局 vertical：垂直平居中 center：水平居中*/
+.flex{ display: -webkit-box; display: -webkit-flex; display: flex; flex-wrap: wrap }
+.f1{ -webkit-box-flex: 1; -webkit-flex: 1; flex: 1; }
+.f2{ -webkit-box-flex: 2; -webkit-flex: 2; flex: 2; }
+.f3{ -webkit-box-flex: 3; -webkit-flex: 3; flex: 3; }
+/* 垂直居中 */
+.flex_vertical{ -webkit-box-align: center; -ms-flex-align: center; align-items: center; }
+/* 水平居中 */
+.flex_center{ -webkit-box-pack: center; -ms-flex-pack: center; justify-content: center; }
+/* 水平居右 */
+.flex_right{ flex-direction: row; justify-content: flex-end; }
+/* 卡片阴影 */
+.card{ box-shadow: 0px 1px 5px 0px rgba(0, 0, 0, 0.2), 0px 2px 2px 0px rgba(0, 0, 0, 0.14), 0px 3px 1px -2px rgba(0, 0, 0, 0.12); }
+/* 文本超出... */
+.ellipsis{ overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.ellipsis_2{ overflow: hidden; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; text-overflow: ellipsis; }
+.ellipsis_3{ overflow: hidden; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 3; text-overflow: ellipsis; }
+/* 按钮 */
+.bluebtn{ min-width: 140px; height: 40px; padding: 0 10px; font-size: 15px; border: solid 1px #409eff; cursor: pointer; background-color: #409eff; color: #fff; text-align: center; line-height: 40px; border-radius: 5px; }
+.linebtn{ min-width: 140px; height: 40px; padding: 0 10px; font-size: 15px; border: solid 1px #dcdfe6; cursor: pointer; background-color: #fff; color: #606266; text-align: center; line-height: 40px; border-radius: 5px; }
