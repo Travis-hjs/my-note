@@ -32,7 +32,7 @@
                 // 判断文件类型
                 if (typeStr.indexOf(file.type) < 0) return alert('文件格式只支持：jpg 和 png');
                 /** 判断大小 */
-                if (file.size > 2097152) return alert('上传的文件不能大于2M');
+                if (file.size > 2 * 1024 * 1024) return alert('上传的文件不能大于2M');
 
                 // let formData = new FormData();
                 // formData.append('img', file);
