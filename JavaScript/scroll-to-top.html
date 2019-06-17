@@ -61,9 +61,15 @@
 					move();
 				});
 			}
-			goTop('.goback');
-
-			// scrollTo(x, y)
+            goTop('.goback');
+            
+            function toTop() {
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                });
+            }
+            
 		</script>
 	</body>
 </html>
