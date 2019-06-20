@@ -39,6 +39,7 @@
                 // console.log(formData, file);
                 
 				getBase64(file, res => {
+                    console.log('base64 >> ', res);
                     document.querySelector('.updataImg').src = res;
                 });
 
@@ -48,10 +49,10 @@
 
             /** 
              * 获取 base64
-             * @param {object} _file 文件
+             * @param {File} file 文件
              * @param {Function} callback 回调
             */
-			function getBase64(_file, callback) {
+			function getBase64(file, callback) {
 				let reader = new FileReader();
 				reader.onload = function() {
                     /** base64 路径 */
@@ -60,21 +61,21 @@
                     // src = src.split('+').join('%2B').split('&').join('%26');
                     if (typeof callback === 'function') callback(src);
 				}
-				reader.readAsDataURL(_file);
+				reader.readAsDataURL(file);
 			}
 
             /**
              * 获取二进制路径（需要打开服务器调试）
-             * @param {object} _file 文件
+             * @param {File} file 文件
             */
-			function getObjectURL(_file) {
+			function getObjectURL(file) {
 				let url = null;
 				if (window.createObjectURL) {
-					url = window.createObjectURL(_file);
+					url = window.createObjectURL(file);
 				} else if (window.URL) {
-					url = window.URL.createObjectURL(_file);
+					url = window.URL.createObjectURL(file);
 				} else if (window.webkitURL) {
-					url = window.webkitURL.createObjectURL(_file);
+					url = window.webkitURL.createObjectURL(file);
 				}
 				return url;
 			}
