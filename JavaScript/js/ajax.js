@@ -20,17 +20,17 @@ function fetchRequest(type, url, data, success, fail) {
         // credentials: 'include', // 打开 cookie
         // mode: 'cors',           // 打开跨域
         method: type,
-        headers: { 
-            'Content-Type': 'application/x-www-form-urlencoded', 
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
         },
         body: null
     };
     switch (type) {
         case 'POST':
             // 若后台没设置接收 JSON 则不行 需要跟 GET 一样的解析对象传参
-            options.body = JSON.stringify(data); 
+            options.body = JSON.stringify(data);
             break;
-    
+
         case 'GET':
             /** 参数拼接字符串 */
             let str = '';
@@ -76,6 +76,7 @@ function fetchData() {
  * @param {string} param.url 请求路径
  * @param {string} param.method GET 或者 POST
  * @param {object} param.data 传参对象
+ * @param {FromData} param.file 上传图片 FromData
  * @param {Function} param.success 成功回调 
  * @param {Function} param.fail 失败回调 
  * @param {number} param.overtime 超时检测毫秒数
@@ -86,7 +87,8 @@ function ajax(param) {
     if (typeof param !== 'object') return console.error('ajax 缺少请求传参');
     if (!param.method) return console.error('ajax 缺少请求类型 GET 或者 POST');
     if (!param.url) return console.error('ajax 缺少请求 url');
-    
+    if (typeof param.data !== 'object') return console.error('请求参数类型必须为 object');
+
     /** XMLHttpRequest */
     var XHR = new XMLHttpRequest();
     /** 请求方法 */
@@ -101,9 +103,9 @@ function ajax(param) {
     // 传参处理
     switch (method) {
         case 'POST':
-            data = param.data ? JSON.stringify(param.data) : {};
+            data = JSON.stringify(param.data);
             break;
-    
+
         case 'GET':
             // 解析对象传参
             var send_data = '';
@@ -128,12 +130,22 @@ function ajax(param) {
     if (param.progress) {
         XHR.addEventListener('progress', param.progress, false);
     }
-    
+
     // XHR.responseType = 'json';
     // 是否Access-Control应使用cookie或授权标头等凭据进行跨站点请求。
     // XHR.withCredentials = true;	
     XHR.open(method, url, true);
-    XHR.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded'); // application/json
+
+    // 判断是否上传文件通常用于上传图片
+    if (param.file) {
+        data = param.file;
+    } else {
+        // Content-Type:
+        // application/json
+        // application/x-www-form-urlencoded
+        XHR.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+    }
+    
 
     // 在IE中，超时属性只能在调用 open() 方法之后且在调用 send() 方法之前设置。
     if (overtime > 0) {
@@ -142,7 +154,7 @@ function ajax(param) {
             console.warn('ajax 请求超时 !!!');
             XHR.abort();
             if (typeof param.timeout === 'function') param.timeout(XHR);
-        } 
+        }
     }
 
     XHR.send(data);
@@ -185,7 +197,7 @@ function ajaxRequest() {
         progress: function (e) {
             if (e.lengthComputable) {
                 var percentComplete = e.loaded / e.total
-                console.log('请求进度', percentComplete, e.loaded ,e.total);
+                console.log('请求进度', percentComplete, e.loaded, e.total);
             }
             console.log(e);
         }
