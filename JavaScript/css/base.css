@@ -9,8 +9,6 @@ html, body{
 	-webkit-text-size-adjust: none !important;
 	/* 去掉点击高亮 */
 	-webkit-tap-highlight-color: transparent;
-	/* 禁止选择内容 */
-	-webkit-user-select: none;
 	font-family: "Helvetica Neue", Helvetica, sans-serif;
 }
 li{ list-style: none; }
@@ -25,12 +23,12 @@ textarea{ resize: none; display: block; }
 textarea::-webkit-input-placeholder { color: #999; }
 
 /*定义rem*/
-@media only screen and (min-width: 320px) { html { font-size: 42.6667px !important; } }
+/* @media only screen and (min-width: 320px) { html { font-size: 42.6667px !important; } }
 @media only screen and (min-width: 360px) { html { font-size: 48px !important; } }
-@media only screen and (min-width: 375px) { html { font-size: 50px !important; } 
+@media only screen and (min-width: 375px) { html { font-size: 50px !important; } }
 @media only screen and (min-width: 400px) { html { font-size: 53.33333333px !important; } }
 @media only screen and (min-width: 414px) { html { font-size: 55.2px !important; } }
-@media only screen and (min-width: 480px) { html { font-size: 64px !important; } }
+@media only screen and (min-width: 480px) { html { font-size: 64px !important; } } */
 
 /* 页面结构处理 */
 .page{ width: 100%; overflow: hidden; margin: 0 auto; max-width: 680px; }
@@ -44,10 +42,37 @@ textarea::-webkit-input-placeholder { color: #999; }
 .flex_vertical{ -webkit-box-align: center; -ms-flex-align: center; align-items: center; }
 /* 水平居中 */
 .flex_center{ -webkit-box-pack: center; -ms-flex-pack: center; justify-content: center; }
+
 /* 溢出...显示 */
 .ellipsis{ overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .ellipsis-2{ display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 3; text-overflow: ellipsis; overflow: hidden; }
 .ellipsis-3{ display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 3; text-overflow: ellipsis; overflow: hidden; }
 
-/* 渐变背景 */
-.bg{ background: -webkit-linear-gradient(to bottom, #5b99f5, #2a78ed); background: linear-gradient(to bottom, #5b99f5, #2a78ed); }
+/* 卡片 */
+.card{ 
+    box-shadow: 0px 1px 5px 0px rgba(0, 0, 0, 0.2), 0px 2px 2px 0px rgba(0, 0, 0, 0.14), 0px 3px 1px -2px rgba(0, 0, 0, 0.12); 
+    border-radius: 2px; 
+    background-color: #fff;
+    overflow: hidden;
+}
+
+/* 按钮 */
+.button {
+    display: inline-block;
+    overflow: hidden;
+    outline: none;
+    border: none;
+    text-align: center;
+    border-radius: 2px;
+    min-width: 88px;
+    height: 36px;
+    line-height: 36px;
+    padding: 0 16px; 
+    font-size: 14px;
+    cursor: pointer;
+    -webkit-user-select: none;
+    color: #fff;
+    transition: .2s all;
+    box-shadow: 0 3px 1px -2px rgba(0,0,0,.2), 0 2px 2px 0 rgba(0,0,0,.14), 0 1px 5px 0 rgba(0,0,0,.12);
+}
+.button:active{ box-shadow: 0 5px 5px -3px rgba(0,0,0,.2), 0 8px 10px 1px rgba(0,0,0,.14), 0 3px 14px 2px rgba(0,0,0,.12); }
