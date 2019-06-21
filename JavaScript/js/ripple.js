@@ -34,10 +34,13 @@ function rippleClick(el) {
     draw();
 }
 
-/** 点击水波纹 */
-function ripple() {
+/**
+ * 点击水波纹
+ * @param {Event} e 
+ */
+function ripple(e) {
     /** 点击事件 */
-    let event = window.event || arguments.callee.caller.arguments[0];
+    let event = e || window.event || arguments.callee.caller.arguments[0];
     /** 点击目标 */
     let target = event.target;
     /** 水波纹动画节点 */
@@ -67,24 +70,34 @@ function ripple() {
     ripple.classList.add('show');
 }
 
+/** 是否移动端 */
+let isMobile = utils.checkMobile();
+
+/** 添加事件类型 */
+let eventType = isMobile ? 'touchstart' : 'mousedown';
+
 /** 创建按钮 */
 function createButton() {
     /** 按钮列表 */
     let listNode = utils.find('.button-list');
-    /** 是否移动端 */
-    let isMobile = utils.checkMobile();
-
+    
     for (let i = 0; i < 11; i++) {
         const button = document.createElement('button');
         button.className = 'button';
+        button.setAttribute('ripple', 'true');
         button.textContent = 'BUTTON-' + (i + 1);
         listNode.appendChild(button);
 
-        if (isMobile) {
-            button.addEventListener('touchstart', ripple);
-        } else {
-            button.addEventListener('mousedown', ripple);
-        }
+        // 第一种：给各个 button 添加事件
+        // button.addEventListener(eventType, ripple);
     }
 }
+
 createButton();
+
+// 第二种做法，事件代理 推荐
+document.body.addEventListener(eventType, e => {
+    if (e.target.getAttribute('ripple') === 'true') {
+        ripple(e);
+    }
+})
