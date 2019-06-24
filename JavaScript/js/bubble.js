@@ -158,9 +158,11 @@ class Main {
         this.canvas.height = this.size.height;
         
         for (let i = 0; i < this.bubble_total; i++) {
-            /** 节点 */
-            const node = new NodeModule(this.canvas, this.context);
-            this.nodeList.push(node);
+            setTimeout(() => {
+                /** 节点 */
+                const node = new NodeModule(this.canvas, this.context);
+                this.nodeList.push(node);
+            }, i * 300);
         }
         
         utils.update(() => {
