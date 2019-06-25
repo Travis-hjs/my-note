@@ -3,6 +3,7 @@
 class NodeModule {
     /**
      * 节点组件
+     * @author hjs
      * @param {HTMLCanvasElement} canvas 父容器 canvas
      * @param {CanvasRenderingContext2D} context 上下文
      */
@@ -11,6 +12,20 @@ class NodeModule {
         this.context = context;
         this.init();
     }
+
+    /**
+     * canvas容器
+     * @private 
+     * @type {HTMLCanvasElement}
+     */
+    canvas = null;
+
+    /**
+     * 上下文
+     * @private 
+     * @type {CanvasRenderingContext2D}
+     */
+    context = null;
 
     /** 节点半径 */
     radius = 50;
@@ -124,25 +139,56 @@ class NodeModule {
 class Main {
     /**
      * 主函数
+     * @author hjs
      * @param {HTMLElement} el canvas 输出节点
      * @param {number} total 气泡总数
      */
     constructor(el, total) {
         if (!el) return console.warn('没有指定输出容器节点');
-        /** canvas容器 */
+        if (typeof total === 'number') this.bubble_total = total;
         this.canvas = document.createElement('canvas');
-        /** 上下文 */
         this.context = this.canvas.getContext('2d');
-        /** 最外层容器尺寸 */
         this.size = el.getBoundingClientRect();
-        /** 气泡数量 */
-        this.bubble_total = total || 30;
-        // 输出 canvas 并初始化
+        // 初始化 canvas 尺寸
+        this.canvas.width = this.size.width;
+        this.canvas.height = this.size.height;
+        // 输出 canvas
         el.appendChild(this.canvas);
-        this.init();
+        this.start();
     }
 
-    /** 节点列表 */
+    /**
+     * canvas容器
+     * @private 
+     * @type {HTMLCanvasElement}
+     */
+    canvas = null;
+
+    /**
+     * 上下文
+     * @private 
+     * @type {CanvasRenderingContext2D}
+     */
+    context = null;
+
+    /**
+     * 最外层容器尺寸
+     * @private
+     * @type {ClientRect | DOMRect}
+     */
+    size = null;
+
+    /**
+     * 气泡总数
+     * @private
+     */
+    bubble_total = 30;
+
+    /**
+     * 节点列表
+     * @private
+     * @type {Array<NodeModule>}
+     */
     nodeList = [];
 
     /** 清空绘画 */
@@ -151,12 +197,8 @@ class Main {
         // console.log('清空 canvas 所有绘画');
     }
 
-    /** 初始化 */
-    init() {
-        // 初始化 canvas 尺寸
-        this.canvas.width = this.size.width;
-        this.canvas.height = this.size.height;
-        
+    /** 开始 */
+    start() {
         for (let i = 0; i < this.bubble_total; i++) {
             setTimeout(() => {
                 /** 节点 */
