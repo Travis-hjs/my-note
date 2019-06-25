@@ -39,14 +39,29 @@ function rippleClick(el) {
  * @param {Event} e 
  */
 function ripple(e) {
-    /** 点击事件 */
+    /**
+     * 点击事件
+     * @type {Event}
+     */
     let event = e || window.event || arguments.callee.caller.arguments[0];
-    /** 点击目标 */
+
+    /**
+     * 点击目标 
+     * @type {HTMLElement}
+     */
     let target = event.target;
-    /** 水波纹动画节点 */
+
+    /**
+     * 水波纹动画节点
+     * @type {HTMLElement}
+     */
     let ripple = target.querySelector('.ripple');
-    /** 点击目标矩阵尺寸 */
-    var rect = target.getBoundingClientRect();
+
+    /**
+     * 点击目标矩阵尺寸
+     * @type {ClientRect | DOMRect}
+     */
+    let rect = target.getBoundingClientRect();
 
     // 判断是否存在动画节点
     if (!ripple) {
