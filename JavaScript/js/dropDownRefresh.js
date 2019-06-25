@@ -2,11 +2,11 @@
 // 好处是我用在Vue这类单页应用的时候，路由销毁时不用去解绑 window 的 scroll 事件
 // 但是滑动到底部事件就必须要用 window 的 scroll 事件，这点需要注意
 
-/**
- * 下拉刷新
- * @param {string} name 下拉的元素 class | id
- */
 class DropDownRefresh {
+    /**
+     * 下拉刷新
+     * @param {string} name class|id|<label> 
+     */
     constructor(name) {
         /** 页面整体 */
         this.page = document.querySelector(name);
