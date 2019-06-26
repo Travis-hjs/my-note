@@ -107,11 +107,14 @@ function ajax(param) {
             break;
 
         case 'GET':
-            // 解析对象传参
-            var send_data = '';
-            for (var key in param.data) send_data += '&' + key + '=' + param.data[key];
-            send_data = '?' + send_data.slice(1);
-            url += send_data;
+            // 判断是否一个空对象
+            if (JSON.stringify(param.data) != '{}') {
+                // 解析对象传参
+                var send_data = '';
+                for (var key in param.data) send_data += '&' + key + '=' + param.data[key];
+                send_data = '?' + send_data.slice(1);
+                url += send_data;
+            }
             break;
     }
 
