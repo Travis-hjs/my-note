@@ -34,50 +34,59 @@
 	</div>
 	<script type="text/javascript">
 		/**
-		 * lazyLoad 图片懒加载
-		 * obj.errorImage: 加载失败时显示的图片路径
-		 * obj.attr: 自定义加载的属性
-		 * obj.toBottom: 距离底部像素加载
- 		 * callback 全部加载完回调
-		*/
-		function lazyLoad (obj, callback) {
-			var err = obj.errorImage || null;	
-			var attr = obj.lazyAttr || 'lazy';
-			var offset = obj.toBottom || 0;						
-			function loadImage(el) {
-				var img = new Image();
-				img.src = el.getAttribute(attr);
-				el.src = el.getAttribute(attr);
-				el.removeAttribute(attr);
-				// 图片加载失败
-				img.onerror = function() {
-					el.src = err || el.getAttribute('src');
-					el.removeAttribute(attr);
-				};
-			}
-			function judgeImages() {
-				var images = document.querySelectorAll('['+ attr +']');
-				if (images.length) {
-					for(var i = 0;  i < images.length; i++){
-						if (images[i].getBoundingClientRect().top <= (window.innerHeight || document.documentElement.clientHeight) - parseInt(offset)) {
-							loadImage(images[i]);
-						}
-					}
-				}else {
-					window.removeEventListener('scroll', judgeImages);
-					if (typeof callback === 'function') callback.call(this);
-				}
-			}
-			judgeImages();
-			window.addEventListener('scroll', judgeImages);
-		}
-		lazyLoad({
-			errorImage: './img/big-1.jpg',
-			lazyAttr: 'lazy',
-			toBottom: 100
-		}, function () { 
-			console.log('全部加载完成');
-		});
+         * 图片懒加载
+         * @param {object} params 传参对象
+         * @param {number} params.toBottom 距离底部像素加载开始加载（可选）
+         * @param {string} params.errorImage 加载失败时显示的图片路径（可选）
+         * @param {string} params.lazyAttr 自定义加载的属性（可选） 
+         * @param {Function} callback 全部加载完回调（可选）
+         */
+        function lazyLoad(params, callback) {
+            /** 懒加载属性类型 */
+            let attr = params.lazyAttr || 'lazy';
+            /** 距离底部距离 */
+            let offset = params.toBottom || 0;
+            /**
+             * 加载图片
+             * @param {HTMLElement} el 
+             */
+            function loadImage(el) { 
+                /** 新建一个 img 对象去试探路径是否正确 */
+                let img = new Image();
+                img.src = el.getAttribute(attr);
+                el.src = el.getAttribute(attr);
+                el.removeAttribute(attr);
+                // 图片加载失败
+                img.onerror = function () {
+                    el.src = params.errorImage || el.getAttribute('src');
+                    el.removeAttribute(attr);
+                };
+            }
+            /** 判断监听图片加载 */
+            function judgeImages() {
+                let images = document.querySelectorAll('[' + attr + ']');
+                if (images.length) {
+                    for (let i = 0; i < images.length; i++) {
+                        if (images[i].getBoundingClientRect().top <= (window.innerHeight || document.documentElement.clientHeight) - parseInt(offset)) {
+                            loadImage(images[i]);
+                        }
+                    }
+                } else {
+                    window.removeEventListener('scroll', judgeImages);
+                    if (typeof callback === 'function') callback();
+                }
+            }
+            judgeImages();
+            window.addEventListener('scroll', judgeImages);
+        }
+
+        lazyLoad({
+            errorImage: './img/big-1.jpg',
+            lazyAttr: 'lazy',
+            toBottom: 100
+        }, function () {
+            console.log('全部加载完成');
+        });
 
 	</script>
 </body>
