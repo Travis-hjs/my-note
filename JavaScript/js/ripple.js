@@ -36,21 +36,10 @@ function rippleClick(el) {
 
 /**
  * 点击水波纹
- * @param {Event} e 
+ * @param {Event} event 点击事件
+ * @param {HTMLElement} target 点击目标
  */
-function ripple(e) {
-    /**
-     * 点击事件
-     * @type {Event}
-     */
-    let event = e || window.event || arguments.callee.caller.arguments[0];
-
-    /**
-     * 点击目标 
-     * @type {HTMLElement}
-     */
-    let target = event.target;
-
+function ripple(event, target) {
     /**
      * 水波纹动画节点
      * @type {HTMLElement}
@@ -68,6 +57,10 @@ function ripple(e) {
         ripple = document.createElement('div');
         ripple.className = 'ripple';
         ripple.style.height = ripple.style.width = Math.max(rect.width, rect.height) + 'px';
+        /** 当前自定义颜色值 */
+        let color = target.getAttribute('color');
+        // 默认是白色透明
+        ripple.style.backgroundColor = color || 'rgba(255, 255, 255, .45)';
         target.appendChild(ripple);
     }
     ripple.classList.remove('show');
@@ -102,17 +95,29 @@ function createButton() {
         button.setAttribute('ripple', 'true');
         button.textContent = 'BUTTON-' + (i + 1);
         listNode.appendChild(button);
-
-        // 第一种：给各个 button 添加事件
-        // button.addEventListener(eventType, ripple);
     }
 }
-
 createButton();
 
-// 第二种做法，事件代理 推荐
-document.body.addEventListener(eventType, e => {
-    if (e.target.getAttribute('ripple') === 'true') {
-        ripple(e);
+// 这里我使用事件代理去完成方法操作
+// 因为我在Vue项目中，节点是动态生成的，不可能每次生成都单独为对应节点绑定事件
+document.body.addEventListener(eventType, function(e) {
+    /** 事件类型 */
+    let event = e || window.event || arguments.callee.caller.arguments[0];
+    /** 循环的次数 */
+    let loop_count = 3; // 这里的 3 次是布局的子节点层数，可根据布局层数增加减少
+    /** 
+     * 定义目标变量 
+     * @type {HTMLElement} 
+     */
+    let target = event.target;
+    // 循环 3 次由里向外查找目标节点
+    while(loop_count > 0 && target != document.body) {
+        loop_count --;
+        if(target.getAttribute('ripple') === 'true') {
+            ripple(event, target);
+            break;
+        }
+        target = target.parentNode;
     }
-})
+});
