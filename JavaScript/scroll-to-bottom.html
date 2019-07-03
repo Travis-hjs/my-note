@@ -21,20 +21,36 @@
                 _html += '<li></li>'
             }
             document.querySelector('.app ul').innerHTML = _html;
-            // 参数：距离底部多少像素触发，回调函数，是否为一次性（防止重复用）
-            function scrollToBottom(_num = 0, fn, isClearScroll) {
+
+            /** 是否到底部 */
+            function isBottom() {
+                return document.documentElement.clientHeight + window.scrollY >= (document.documentElement.scrollHeight || document.documentElement.clientHeight)
+            }
+
+            /**
+             * 监听滚动到底部事件
+             * @param {number} number 距离底部多少像素触发(像素)
+             * @param {Function} callback 到达底部回调函数
+             * @param {boolean} once 是否为一次性（防止重复用）
+             */
+            function scrollToBottom(number = 0, callback, once) {
                 // 滚动事件
                 function isScroll() {
-                    let _scrollTop = document.documentElement.scrollTop === 0 ? document.body.scrollTop : document.documentElement.scrollTop;
-                    let _scrollHeight = document.documentElement.scrollTop === 0 ? document.body.scrollHeight : document.documentElement.scrollHeight;
-                    if (_scrollHeight-_scrollTop-_num <= window.innerHeight) {
-                        if (typeof fn === 'function') fn.call(this);
-                        if (isClearScroll) window.removeEventListener('scroll',isScroll);
+                    /** 滚动的高度 */
+                    let scrollTop = document.documentElement.scrollTop === 0 ? document.body.scrollTop : document.documentElement.scrollTop;
+                    /** 滚动条高度 */
+                    let scrollHeight = document.documentElement.scrollTop === 0 ? document.body.scrollHeight : document.documentElement.scrollHeight;
+                    if (scrollHeight - scrollTop - number <= window.innerHeight) {
+                        if (typeof callback === 'function') callback();
+                        if (once) window.removeEventListener('scroll', isScroll);
                     }
                 }
-                window.addEventListener('scroll',isScroll);
+                window.addEventListener('scroll', isScroll);
             }
-            scrollToBottom(100, () => console.log('到底底部~'),true)
+
+            scrollToBottom(100, function () {
+                console.log('到底底部~');
+            }, true);
         </script>
     </body>
 </html>
