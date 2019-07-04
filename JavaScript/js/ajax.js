@@ -3,7 +3,7 @@ const BASEURL = 'http://che.qihao.lzei.com';
 
 /**
  * fetch 请求 learn：https://developer.mozilla.org/zh-CN/docs/Web/API/Fetch_API
- * @param {string} type 请求类型 get 或者 post
+ * @param {'GET'|'POST'} type 请求方法 => 这里我只枚举了常用的两种
  * @param {string} url 请求路径
  * @param {object} data 请求参数对象
  * @param {Function} success 请求成功 
@@ -13,8 +13,6 @@ function fetchRequest(type, url, data, success, fail) {
     if (!type) return console.error('fetch 缺少请求类型 GET 或者 POST');
     if (!url) return console.error('fetch 缺少请求 url');
     if (typeof data !== "object") return console.error('fetch 传参必须为 object');
-    // 转大写
-    type = type.toUpperCase();
     /** 请求选项设置 */
     let options = {
         // credentials: 'include', // 打开 cookie
@@ -32,12 +30,15 @@ function fetchRequest(type, url, data, success, fail) {
             break;
 
         case 'GET':
-            /** 参数拼接字符串 */
-            let str = '';
-            // 解析对象传参
-            for (let key in data) str += '&' + key + '=' + data[key];
-            if (str) str = '?' + str.slice(1);
-            url += str;
+            // 判断是否一个空对象
+            if (JSON.stringify(data) != '{}') {
+                /** 参数拼接字符串 */
+                let str = '';
+                // 解析对象传参
+                for (let key in data) str += '&' + key + '=' + data[key];
+                if (str) str = '?' + str.slice(1);
+                url += str;
+            }
             break;
     }
 
