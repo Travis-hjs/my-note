@@ -74,7 +74,7 @@ function fetchData() {
  * learn: https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest
  * @param {object} param 传参对象
  * @param {string} param.url 请求路径
- * @param {string} param.method GET 或者 POST
+ * @param {'GET'|'POST'} param.method 请求方法 => 这里我只枚举了常用的两种
  * @param {object} param.data 传参对象
  * @param {FromData} param.file 上传图片 FromData
  * @param {Function} param.success 成功回调 
