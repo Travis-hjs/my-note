@@ -1,5 +1,4 @@
 
-/** 节点 class */
 class NodeModule {
     /**
      * 节点组件
