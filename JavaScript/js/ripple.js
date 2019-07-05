@@ -54,11 +54,15 @@ function ripple(event, target) {
 
     // 判断是否存在动画节点
     if (!ripple) {
-        ripple = document.createElement('div');
-        ripple.className = 'ripple';
-        ripple.style.height = ripple.style.width = Math.max(rect.width, rect.height) + 'px';
         /** 当前自定义颜色值 */
         let color = target.getAttribute('color');
+        /** 波纹大小 */
+        let size = Math.max(rect.width, rect.height);
+        // 设置最大范围
+        if (size > 200) size = 200;
+        ripple = document.createElement('div');
+        ripple.className = 'ripple';
+        ripple.style.height = ripple.style.width = size + 'px';
         // 默认是白色透明
         ripple.style.backgroundColor = color || 'rgba(255, 255, 255, .45)';
         target.appendChild(ripple);
