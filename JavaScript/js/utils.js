@@ -1,29 +1,35 @@
 /** 浏览器模块 */
 class WindowModule {
-    constructor() {
+    /**
+     * 缓存类型 localStorage | sessionStorage
+     * @type {Storage}
+     */
+    cache = window.sessionStorage;
 
-    }
     /**
      * 本地储存数据
      * @param {string} key 对应的 key 值
      * @param {object} data 对应的数据
      */
     saveData(key, data) {
-        window.localStorage.setItem(key, JSON.stringify(data));
+        this.cache.setItem(key, JSON.stringify(data));
     }
+
     /**
      * 获取本地数据
      * @param {string} key 对应的 key 值
      */
     fetchData(key) {
-        let data = window.localStorage.getItem(key) ? JSON.parse(window.localStorage.getItem(key)) : null;
+        let data = this.cache.getItem(key) ? JSON.parse(this.cache.getItem(key)) : null;
         return data;
     }
+
     /** 清除本地数据 */
     removeData() {
-        window.localStorage.clear();
+        this.cache.clear();
         // localStorage.removeItem('key');　// 删除键值对
     }
+
     /** 长震动 */
     vibrateLong() {
         if ('vibrate' in window.navigator) {
@@ -32,6 +38,7 @@ class WindowModule {
             wx.vibrateLong();
         }
     }
+
     /** 短震动 */
     vibrateShort() {
         if ('vibrate' in window.navigator) {
@@ -49,39 +56,10 @@ class WindowModule {
             return (userAgentInfo.indexOf(item) > 0);
         });
     }
-
-    /**
-     * 在浏览器上打开新的窗口 PC端用到
-     * @param {string} url 打开的地址
-     * @param {title} title 标题
-     * @param {number} w 窗口宽度
-     * @param {number} h 窗口高度
-     */
-    openWindow(url, title, w, h) {
-        // Fixes dual-screen position                            Most browsers       Firefox
-        const dualScreenLeft = window.screenLeft !== undefined ? window.screenLeft : screen.left
-        const dualScreenTop = window.screenTop !== undefined ? window.screenTop : screen.top
-
-        const width = window.innerWidth ? window.innerWidth : document.documentElement.clientWidth ? document.documentElement.clientWidth : screen.width
-        const height = window.innerHeight ? window.innerHeight : document.documentElement.clientHeight ? document.documentElement.clientHeight : screen.height
-
-        const left = ((width / 2) - (w / 2)) + dualScreenLeft
-        const top = ((height / 2) - (h / 2)) + dualScreenTop
-        const newWindow = window.open(url, title, 'toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=no, resizable=yes, copyhistory=no, width=' + w + ', height=' + h + ', top=' + top + ', left=' + left)
-
-        // Puts focus on the newWindow
-        if (newWindow.focus) {
-            newWindow.focus()
-        }
-    }
 }
 
 /** 数组类处理模块 */
-class ArrayModule extends WindowModule {
-    constructor() {
-        super();
-    }
-
+class ArrayModule {
     /**
      * 过滤剩下数字 及小数点
      * @param {string} string 字符串
@@ -103,6 +81,7 @@ class ArrayModule extends WindowModule {
         value = Number(value);
         return isNaN(value) ? 0 : value;
     }
+
     /**
      * 过滤掉特殊符号
      * @param {string} string 
@@ -124,7 +103,8 @@ class ArrayModule extends WindowModule {
      * @param {number} num
      */
     toThousandFilter(num) {
-        return (+num || 0).toString().replace(/^-?\d+/g, m => m.replace(/(?=(?!\b)(\d{3})+$)/g, ','))
+        // return num.toLocaleString('en-US');
+        return (+num || 0).toString().replace(/^-?\d+/g, m => m.replace(/(?=(?!\b)(\d{3})+$)/g, ','));
     }
 
     /**
@@ -180,15 +160,15 @@ class ArrayModule extends WindowModule {
      * @param {number} count 元素个数
      */
     getRandomArrayElements(array, count) {
-        /** 数组长度 */
         let length = array.length;
-        /** 最小长度 */
-        let min = length - count, temp, range;
+        let min = length - count;
+        let index = 0;
+        let value = '';
         while (length-- > min) {
-            range = Math.floor((length + 1) * Math.random());
-            temp = array[range];
-            array[range] = array[length];
-            array[length] = temp;
+            index = Math.floor((length + 1) * Math.random());
+            value = array[index];
+            array[index] = array[length];
+            array[length] = value;
         }
         return array.slice(min);
     }
@@ -242,9 +222,8 @@ class ArrayModule extends WindowModule {
 }
 
 /** 时间日期类型日期模块 */
-class DateModule extends ArrayModule {
+class DateModule {
     constructor() {
-        super();
         // new Date().toLocaleDateString(); => 2020/12/12
         // new Date().toLocaleTimeString(); => 上/下午12:12:12
         // new Date().toLocaleString();     => 2020/12/12 上/下午12:12:12          
@@ -280,7 +259,7 @@ class DateModule extends ArrayModule {
         calendar[0].sub[0].sub.splice(0, new Date().getDate());
         return calendar;
     }
-    
+
     /**
      * 时间生成器
      * @param {number} minInterval 时间间隔(分钟)
@@ -300,19 +279,30 @@ class DateModule extends ArrayModule {
     }
 
     /**
-     * 时间戳生成 '2020/12/12 12:12:12'
+     * 时间戳生成 
      * @param {number} num 1时为明天，-1为昨天天，以此类推
      */
     timeFormat(num = 0) {
-        let date, month, day, hour, minute, second, time;
-        date = new Date(new Date().getTime() + (num * 24 * 3600 * 1000));
-        month = ('0' + (date.getMonth() + 1)).slice(-2);
-        day = ('0' + date.getDate()).slice(-2);
-        hour = ('0' + date.getHours()).slice(-2);
-        minute = ('0' + date.getMinutes()).slice(-2);
-        second = ('0' + date.getSeconds()).slice(-2);
-        time = `${date.getFullYear()}/${month}/${day} ${hour}:${minute}:${second}`
-        return time;
+        let _date, year, month, day, hour, minute, second;
+        _date = new Date(new Date().getTime() + (num * 24 * 3600 * 1000));
+        year = _date.getFullYear();
+        month = ('0' + (_date.getMonth() + 1)).slice(-2);
+        day = ('0' + _date.getDate()).slice(-2);
+        hour = ('0' + _date.getHours()).slice(-2);
+        minute = ('0' + _date.getMinutes()).slice(-2);
+        second = ('0' + _date.getSeconds()).slice(-2);
+        return {
+            /** 完整日期 '2020/12/12 12:12:12' */
+            date: `${year}/${month}/${day} ${hour}:${minute}:${second}`,
+            /** 日期 '2020/12/12 */
+            date_day: `${year}/${month}/${day}`,
+            year,
+            month,
+            day,
+            hour,
+            minute,
+            second
+        }
     }
 
     /**
@@ -390,11 +380,7 @@ class DateModule extends ArrayModule {
 }
 
 /** dom 模块 */
-class DomModule extends DateModule {
-    constructor() {
-        super();
-    }
-
+class DomModule {
     /**
      * 单个元素查找
      * @param {string} name class | id | label <div> <p>
@@ -524,7 +510,7 @@ class DomModule extends DateModule {
         document.body.appendChild(input);
         input.select(); // 选择对象;
         // 执行浏览器复制命令
-        document.execCommand("Copy"); 
+        document.execCommand("Copy");
         input.remove();
     }
 
@@ -540,12 +526,9 @@ class DomModule extends DateModule {
         let width = el.getBoundingClientRect().width;
         html.style.fontSize = width / value + 'px';
         // 窗口变动时更新适配
-        window.addEventListener('resize', function() {
+        window.addEventListener('resize', function () {
             width = el.getBoundingClientRect().width;
             html.style.fontSize = width / value + 'px';
         });
     }
 }
-
-/** 工具模块 */
-const utils = new DomModule();
