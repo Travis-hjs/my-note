@@ -196,11 +196,9 @@ class Main {
         // console.log('清空 canvas 所有绘画');
     }
 
-    /** 开始 */
     start() {
         for (let i = 0; i < this.bubble_total; i++) {
             setTimeout(() => {
-                /** 节点 */
                 const node = new NodeModule(this.canvas, this.context);
                 this.nodeList.push(node);
             }, i * 300);
