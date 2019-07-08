@@ -59,7 +59,7 @@ class WindowModule {
 }
 
 /** 数组类处理模块 */
-class ArrayModule {
+class ArrayModule extends WindowModule {
     /**
      * 过滤剩下数字 及小数点
      * @param {string} string 字符串
@@ -222,8 +222,9 @@ class ArrayModule {
 }
 
 /** 时间日期类型日期模块 */
-class DateModule {
+class DateModule extends ArrayModule {
     constructor() {
+        super();
         // new Date().toLocaleDateString(); => 2020/12/12
         // new Date().toLocaleTimeString(); => 上/下午12:12:12
         // new Date().toLocaleString();     => 2020/12/12 上/下午12:12:12          
@@ -380,7 +381,7 @@ class DateModule {
 }
 
 /** dom 模块 */
-class DomModule {
+class DomModule extends DateModule {
     /**
      * 单个元素查找
      * @param {string} name class | id | label <div> <p>
@@ -532,3 +533,5 @@ class DomModule {
         });
     }
 }
+
+const utils = new DomModule();
