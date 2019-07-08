@@ -76,16 +76,16 @@ class NodeModule {
         this.context.fillStyle = this.color;
         // 设置透明度
         this.context.globalAlpha = this.opacity;
-        // 填充
-        this.context.fill();
-
+        
         // 描边色
         // this.context.strokeStyle = '#ccc';
         // 填充描边
         // this.context.stroke();
 
-        // 路径介绍 相当于 </div>
+        // 路径结束 相当于 </div>
         this.context.closePath();
+        // 填充
+        this.context.fill();
     }
 
     /** 圆运动 */
