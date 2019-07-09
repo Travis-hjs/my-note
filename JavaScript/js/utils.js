@@ -61,7 +61,25 @@ class WindowModule {
 /** 数组类处理模块 */
 class ArrayModule extends WindowModule {
     /**
-     * 过滤剩下数字 及小数点
+     * 从对象数组中查找匹配项 ES5 实现 ES6 array.find()
+     * @param {Array<object>} array array
+     * @param {Function} contrast 对比函数
+     */
+    findItem(array, contrast) {
+        if (typeof contrast !== 'function') return console.warn('findItem 传入的第二个参数类型必须为function');
+        var result = null;
+        for (var i = 0; i < array.length; i++) {
+            var item = array[i];
+            if (contrast(item, i)) {
+                result = item;
+                break;
+            }
+        }
+        return result;
+    }
+
+    /**
+     * 过滤只保留数字及小数点
      * @param {string} string 字符串
      */
     onlyNumber(string) {
