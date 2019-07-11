@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>canvas-圆环</title>
+    <style>
+        *{ padding: 0; margin: 0; }
+        .page{ box-sizing: border-box; width: 100%; max-width: 680px; margin: 0 auto; padding: 4px; }
+        .input{ display: block; width: 100%; box-sizing: border-box; padding: 5px; border: solid 1px #dadada; margin-bottom: 10px; }
+    </style>
+</head>
+<body>
+    <div class="page">
+        <input type="number" class="input" placeholder="输入1-100" oninput="inputNumber(this)">
+        <canvas id="ring"></canvas>
+    </div>
+    
+    <script src="./js/canvas_ring.js"></script>
+</body>
+</html>
