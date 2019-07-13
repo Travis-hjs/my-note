@@ -11,12 +11,16 @@
  */
 function ringProgress(el, info) {
     if (!el) return console.warn('没有设置 canvas 节点!!!');
-    const AnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame || window.msRequestAnimationFrame;
+    /**
+     * 动画帧
+     * @type {requestAnimationFrame}
+     */
+    const animation = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame || window.msRequestAnimationFrame;
     /** canvas节点 */
     const node = el;    
     /** canvas 上下文 */
     const context = el.getContext('2d');
-    /**  */
+    /** 结束角 */
     const CIRC = Math.PI * 2;
     /** 起始角，以弧度计（弧的圆形的三点钟位置是 0 度） */
     const QUART = Math.PI / 2;
@@ -83,14 +87,14 @@ function ringProgress(el, info) {
 
         context.putImageData(imgData, 0, 0);
         context.beginPath();
-        context.arc(x, y, radius, -(QUART), ((CIRC) * value) - QUART, false);
+        context.arc(x, y, radius, -QUART, CIRC * value - QUART, false);
         context.stroke();
         // context.fill();
 
         // 绘画文字
         context.fillText(progress + '%', x, y);
 
-        AnimationFrame(update);
+        animation(update);
     }
     update();
     
