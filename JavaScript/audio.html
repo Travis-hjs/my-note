@@ -7,19 +7,24 @@
     <title>音频播放</title>
     <style>
         *{ padding: 0; margin: 0; }
-        body{ overflow: hidden; }
+        div { box-sizing: border-box; }
         .page{ width: 100%; padding: 50px; box-sizing: border-box; text-align: center; }
-        .page button{ width: 140px; height: 40px; text-align: center; }
+        .page button{ min-width: 140px; height: 40px; text-align: center; }
+        .webAudio{ width: 100%; margin: 0 auto; padding: 10px; }
+        .webAudio .file{ padding: 5px; margin-bottom: 10px; }
+        .webAudio .audio-item{ width: 100%; border: dashed 1px coral; padding: 10px; text-align: center; margin-bottom: 10px; }
+        .webAudio button{ padding: 0 10px; margin-bottom: 10px; }
+        .webAudio canvas{ display: block; margin: 0 auto; }
     </style>
 </head>
 <body>
     <div class="page">
-        <div id="audioBox"></div>
-
-        <button onclick="playAudio()">播放音效</button>
-        <button onclick="pauseAudio()">停止音效</button>
+        <button onclick="playAudio()">播放标签音效</button>
+        <button onclick="pauseAudio()">停止标签音效</button>
+        <div class="webAudio">
+            <input class="file" type="file" onchange="uploadAudio(this)">
+        </div>
     </div>
-
     <script src="./js/audio.js"></script>
 </body>
 </html>
