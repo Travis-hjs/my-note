@@ -1,10 +1,9 @@
 /** 浏览器模块 */
 class WindowModule {
-    /**
-     * 缓存类型 localStorage | sessionStorage
-     * @type {Storage}
-     */
-    cache = window.sessionStorage;
+    constructor() {
+        /** 缓存类型 */
+        this.cache = window.sessionStorage;
+    }
 
     /**
      * 本地储存数据
