@@ -35,6 +35,12 @@ function rippleClick(el) {
 }
 
 /**
+ * 水波纹节点对象池
+ * @type {Array<HTMLElement>}
+ */
+const RIPPLE_LIST = [];
+
+/**
  * 点击水波纹
  * @param {Event} event 点击事件
  * @param {HTMLElement} target 点击目标
@@ -44,42 +50,46 @@ function ripple(event, target) {
      * 水波纹动画节点
      * @type {HTMLElement}
      */
-    let ripple = target.querySelector('.ripple');
+    let ripple = null;
 
-    /**
-     * 点击目标矩阵尺寸
-     * @type {ClientRect | DOMRect}
-     */
-    let rect = target.getBoundingClientRect();
-
-    // 判断是否存在动画节点
-    if (!ripple) {
-        /** 当前自定义颜色值 */
-        let color = target.getAttribute('color');
-        /** 波纹大小 */
-        let size = Math.max(rect.width, rect.height);
-        // 设置最大范围
-        if (size > 200) size = 200;
+    // 从对象池里面拿取节点
+    if (RIPPLE_LIST.length > 1) {
+        ripple = RIPPLE_LIST.shift(); 
+    } else {
         ripple = document.createElement('div');
         ripple.className = 'ripple';
-        ripple.style.height = ripple.style.width = size + 'px';
-        // 默认是白色透明
-        ripple.style.backgroundColor = color || 'rgba(255, 255, 255, .45)';
-        target.appendChild(ripple);
     }
-    ripple.classList.remove('show');
 
-    let y = event.touches ? event.touches[0].pageY : event.clientY,
-        x = event.touches ? event.touches[0].pageX : event.clientX;
+    /** 点击目标矩阵尺寸 */
+    let rect = target.getBoundingClientRect();
+    /** 当前自定义颜色值 */
+    let color = target.getAttribute('color');
+    /** 波纹大小 */
+    let size = Math.max(rect.width, rect.height);
+    // 设置最大范围
+    if (size > 200) size = 200;
+    // 设置大小
+    ripple.style.height = ripple.style.width = size + 'px';
+    // 默认是白色透明
+    ripple.style.backgroundColor = color || 'rgba(255, 255, 255, .45)';
+    // 这里必须输出节点后再设置位置，不然会有问题
+    target.appendChild(ripple);
 
-    let top = y - rect.top - (ripple.offsetHeight / 2),
-        left = x - rect.left - (ripple.offsetWidth / 2);
+    let y = event.touches ? event.touches[0].pageY : event.clientY;
+    let x = event.touches ? event.touches[0].pageX : event.clientX;
+    let top = y - rect.top - (ripple.offsetHeight / 2);
+    let left = x - rect.left - (ripple.offsetWidth / 2);
     // console.log(top, left);
-
     ripple.style.top = top + 'px';
     ripple.style.left = left + 'px';
 
-    ripple.classList.add('show');
+    function an() {
+        ripple.removeEventListener('animationend', an);
+        // console.log('动画结束', ripple);
+        target.removeChild(ripple);
+        RIPPLE_LIST.push(ripple);
+    }
+    ripple.addEventListener('animationend', an);
 }
 
 /** 是否移动端 */
