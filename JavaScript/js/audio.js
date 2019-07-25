@@ -208,7 +208,7 @@ function uploadAudio(el) {
     AudioModule.loadFile(el.files[0], function () {
         let canvas = document.createElement('canvas');
         let btn = document.createElement('button');
-        btn.innerHTML = '播放AudioContext音频';
+        btn.innerHTML = '播放' + el.files[0].name;
         item.className = 'audio-item';
         item.appendChild(btn);
         item.appendChild(canvas);
@@ -218,6 +218,7 @@ function uploadAudio(el) {
             AudioModule.play();
             Chart.setAnalyser(AudioModule.analyser);
         }
+        el.value = null;
     });
 }
 
