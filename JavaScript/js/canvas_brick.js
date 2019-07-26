@@ -37,6 +37,10 @@ class Tetris {
         x: 0,
         /** y坐标 */
         y: 0,
+        /** 砖块宽度 */
+        width: 0,
+        /** 砖块高度 */
+        height: 0,
         /**
          * 砖块类型
          * @type {number[][]}
@@ -92,7 +96,7 @@ class Tetris {
     /** 创建一个砖块 */
     createBlock() {
         /** 方块类型 */
-        let types = [
+        const types = [
             [[1, 1, 1, 1]],
             [[1, 1], [1, 1]],
             [[1, 1, 0], [0, 1, 1]],
@@ -102,10 +106,13 @@ class Tetris {
             [[0, 0, 1], [1, 1, 1]]
         ];
         let index = Math.floor(Math.random() * types.length);
-        this.brick.type = types[index];
-        // 初始化砖块的位置
+        let type = types[index];
+        // 初始化砖块参数
+        this.brick.type = type;
+        this.brick.width = Math.max(type[0].length, type[1] ? type[1].length : 0);
+        this.brick.height = type.length;
         this.brick.y = 0;
-        this.brick.x = Math.floor(this.node.row / 2) - Math.floor(this.brick.type[0].length);
+        this.brick.x = Math.floor(this.node.row / 2) - Math.floor(type[0].length);
     }
 
     /** 每一帧更新 */
@@ -146,8 +153,6 @@ class Tetris {
      * @param {'top'|'right'|'bottom'|'left'} direction 方向
      */
     move(direction) {
-        /** 最大超出距离 */
-        let max = 0;
         switch (direction) {
             case 'top':
                 if (this.brick.y <= 0) return;
@@ -156,14 +161,13 @@ class Tetris {
                 break;
 
             case 'right':
-                max = Math.max(this.brick.type[0].length, this.brick.type[1] ? this.brick.type[1].length : 0);
-                if (this.brick.x >= this.node.row - max) return;
+                if (this.brick.x >= this.node.row - this.brick.width) return;
                 this.map = this.createMap();
                 this.brick.x++;
                 break;
 
             case 'bottom':
-                if (this.brick.y >= this.node.column - this.brick.type.length) return this.next();
+                if (this.brick.y >= this.node.column - this.brick.height) return this.next();
                 this.map = this.createMap();
                 this.brick.y++;
                 break;
