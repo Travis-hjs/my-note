@@ -1,64 +1,113 @@
-/** 浏览器模块 */
-class WindowModule {
-    constructor() {
-        /** 缓存类型 */
-        this.cache = window.sessionStorage;
+/** 字符串模块 */
+class StringModule {
+    /**
+     * 过滤只保留数字及小数点
+     * @param {string} string 字符串
+     * @return {number}
+     */
+    onlyNumber(string) {
+        /** 最终返回值 */
+        let value = string.trim();
+        // 去空格
+        if (value.length == 0) return 0;
+        // 正则过滤剩下数字和小数点
+        value = value.replace(/[^0-9.]+/g, '');
+        /** 分割小数点数组 */
+        let array = value.split('.');
+        // 判断是否有小数点
+        if (array.length > 1) {
+            value = array[0] + '.' + array[1];
+        }
+        // 最后转数字
+        value = Number(value);
+        return isNaN(value) ? 0 : value;
     }
 
     /**
-     * 本地储存数据
-     * @param {string} key 对应的 key 值
-     * @param {object} data 对应的数据
+     * 过滤掉特殊符号
+     * @param {string} string 
      */
-    saveData(key, data) {
-        this.cache.setItem(key, JSON.stringify(data));
+    filterSpecial(string) {
+        let pattern = new RegExp("[`~!@#$^&*()=|{}':;',\\[\\].<>/?~！@#￥……&*（）——|{}【】‘；：”“'。，、？%+_]");
+        let result = '';
+        for (let i = 0; i < string.length; i++) {
+            result += string.substr(i, 1).replace(pattern, '');
+        }
+        return result;
     }
 
     /**
-     * 获取本地数据
-     * @param {string} key 对应的 key 值
+     * 数字带逗号分隔
+     * 10000 => "10,000"
+     * @param {number} num
      */
-    fetchData(key) {
-        let data = this.cache.getItem(key) ? JSON.parse(this.cache.getItem(key)) : null;
-        return data;
+    flterToThousand(num) {
+        // return num.toLocaleString('en-US');
+        return (+num || 0).toString().replace(/^-?\d+/g, m => m.replace(/(?=(?!\b)(\d{3})+$)/g, ','));
     }
 
-    /** 清除本地数据 */
-    removeData() {
-        this.cache.clear();
-        // localStorage.removeItem('key');　// 删除键值对
+    /**
+     * 首字母大写
+     * @param {string} string 
+     */
+    firstToUpperCase(string) {
+        return string.charAt(0).toUpperCase() + string.slice(1);
     }
 
-    /** 长震动 */
-    vibrateLong() {
-        if ('vibrate' in window.navigator) {
-            window.navigator.vibrate(400);
-        } else if (window['wx'] && wx.vibrateLong) {
-            wx.vibrateLong();
-        }
+    /**
+     * 带单位的数值转换
+     * @param {number} value 数字
+     */
+    unitsNumber(value) {
+        value = Math.floor(value);
+        if (value == 0) return 0;
+        let units = ['', 'k', 'm', 'b', 'f', 'e', 'ae', 'be', 'ce', 'de', 'ee', 'fe', 'ge', 'he', 'ie'];
+        let index = Math.floor(Math.log(value) / Math.log(1000));
+        let result = value / Math.pow(1000, index);
+        if (index === 0) return result;
+        result = result.toFixed(3);
+        // 不进行四舍五入 取小数点后一位
+        result = result.substring(0, result.lastIndexOf('.') + 2);
+        return result + units[index];
     }
 
-    /** 短震动 */
-    vibrateShort() {
-        if ('vibrate' in window.navigator) {
-            window.navigator.vibrate(15);
-        } else if (window['wx'] && wx.vibrateShort) {
-            wx.vibrateShort();
-        }
+    /**
+     * 格式化?后面参数成 JSON 对象
+     * @param {string} value 
+     * @example {
+     * searchFormat(window.location.search);
+     * }
+     */
+    searchFormat(value) {
+        return JSON.parse(`{"${decodeURIComponent(value.substring(1)).replace(/"/g, '\\"').replace(/&/g, '","').replace(/=/g, '":"')}"}`);
     }
 
-    /** 检查是否移动端 */
-    checkMobile() {
-        var userAgentInfo = navigator.userAgent,
-            Agents = ['Android', 'iPhone', 'SymbianOS', 'Windows Phone', 'iPad', 'iPod'];
-        return Agents.some(function (item) {
-            return (userAgentInfo.indexOf(item) > 0);
-        });
+    /**
+     * rgb 转 16进制 
+     * @param {string} string rgb(125, 125, 125)
+     */
+    rgbToHex(string) {
+        var rgb = string.split(',');
+        var r = parseInt(rgb[0].split('(')[1]);
+        var g = parseInt(rgb[1]);
+        var b = parseInt(rgb[2].split(')')[0]);
+        var hex = '#' + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1);
+        return hex;
     }
+
+    /** 
+    * hex16 进制颜色转 rgb(rgba)
+    * @param {string} hex '#23ff45' 
+    */
+    hexToRgb(hex) {
+        return 'rgb(' + parseInt('0x' + hex.slice(1, 3)) + ',' + parseInt('0x' + hex.slice(3, 5)) + ',' + parseInt('0x' + hex.slice(5, 7)) + ')';
+    }
+
+
 }
 
 /** 数组类处理模块 */
-class ArrayModule extends WindowModule {
+class ArrayModule extends StringModule {
     /**
      * 从对象数组中查找匹配项 ES5 实现 ES6 array.find()
      * @param {Array<object>} array array
@@ -78,82 +127,6 @@ class ArrayModule extends WindowModule {
     }
 
     /**
-     * 过滤只保留数字及小数点
-     * @param {string} string 字符串
-     */
-    onlyNumber(string) {
-        /** 最终返回值 */
-        let value = string.trim();
-        // 去空格
-        if (value.length == 0) return '';
-        // 正则过滤剩下数字和小数点
-        value = value.replace(/[^0-9.]+/g, '');
-        /** 分割小数点数组 */
-        let array = value.split('.');
-        // 判断是否有小数点
-        if (array.length > 1) {
-            value = array[0] + '.' + array[1];
-        }
-        // 最后转数字
-        value = Number(value);
-        return isNaN(value) ? 0 : value;
-    }
-
-    /**
-     * 过滤掉特殊符号
-     * @param {string} string 
-     */
-    filterSpecial(string) {
-        // 将字符串过滤剩下数字 要保留其他字符 则 replace(/[^\d.!?]/g, '')
-        // string.replace(/[^\d]/g, ''); 
-        let pattern = new RegExp("[`~!@#$^&*()=|{}':;',\\[\\].<>/?~！@#￥……&*（）——|{}【】‘；：”“'。，、？%+_]");
-        let newStr = '';
-        for (let i = 0; i < string.length; i++) {
-            newStr += string.substr(i, 1).replace(pattern, '');
-        }
-        return newStr;
-    }
-
-    /**
-     * 数字带逗号分隔
-     * 10000 => "10,000"
-     * @param {number} num
-     */
-    toThousandFilter(num) {
-        // return num.toLocaleString('en-US');
-        return (+num || 0).toString().replace(/^-?\d+/g, m => m.replace(/(?=(?!\b)(\d{3})+$)/g, ','));
-    }
-
-    /**
-     * 首字母大写
-     * @param {string} string 
-     */
-    firstToUpperCase(string) {
-        return string.charAt(0).toUpperCase() + string.slice(1);
-    }
-
-    /**
-     * 带单位的数值转换
-     * @param {number} value 数字
-     */
-    unitsNumber(value) {
-        // 取整
-        value = Math.floor(value);
-        if (value == 0) return 0;
-        /** 单位 */
-        let units = ['', 'k', 'm', 'b', 'f', 'e', 'ae', 'be', 'ce', 'de', 'ee', 'fe', 'ge', 'he', 'ie'];
-        /** 索引 */
-        let index = Math.floor(Math.log(value) / Math.log(1000));
-        /** 结果 */
-        let result = value / Math.pow(1000, index);
-        if (index === 0) return result;
-        result = result.toFixed(3);
-        // 不进行四舍五入 取小数点后一位
-        result = result.substring(0, result.lastIndexOf('.') + 2);
-        return result + units[index];
-    }
-
-    /**
      * 范围随机数
      * @param {number} min 最小数
      * @param {number} max 最大数
@@ -167,8 +140,7 @@ class ArrayModule extends WindowModule {
      * @param {array} array
      */
     shuffleArray(array) {
-        let random = (a, b) => Math.random() > 0.5 ? -1 : 1;
-        return array.sort(random);
+        return array.sort(() => Math.random() > 0.5 ? -1 : 1);
     }
 
     /**
@@ -219,7 +191,7 @@ class ArrayModule extends WindowModule {
             console.log('已经处于置底');
         }
     }
-
+    
     /**
      * 获取两点距离
      * @param {number} lng1 经度
@@ -247,7 +219,7 @@ class DateModule extends ArrayModule {
         // new Date().toLocaleString();     => 2020/12/12 上/下午12:12:12          
     }
     /** 日期列表生成 */
-    dayJson() {
+    dateJson() {
         var calendar = [],
             minYears = new Date().getFullYear(),
             maxYears = new Date().getFullYear() + 10,
@@ -283,14 +255,13 @@ class DateModule extends ArrayModule {
      * @param {number} minInterval 时间间隔(分钟)
      */
     timeInterval(minInterval) {
-        var arr = [],
-            minTotal = 0;
+        let arr = [], minTotal = 0;
         while (minTotal < 1440) {
-            var hour = Math.floor(minTotal / 60),
-                min = Math.floor(minTotal % 60);
+            let hour = Math.floor(minTotal / 60);
+            let minute = Math.floor(minTotal % 60);
             hour = ('0' + hour).slice(-2);
-            min = ('0' + min).slice(-2);
-            arr.push(hour + ':' + min);
+            minute = ('0' + minute).slice(-2);
+            arr.push(`${hour}':'${minute}`);
             minTotal += minInterval;
         }
         return arr;
@@ -299,8 +270,9 @@ class DateModule extends ArrayModule {
     /**
      * 时间戳生成 
      * @param {number} num 1时为明天，-1为昨天天，以此类推
+     * @return {'yyyy/mm/dd hh:mm:ss'}
      */
-    timeFormat(num = 0) {
+    getDateFormat(num = 0) {
         let _date, year, month, day, hour, minute, second;
         _date = new Date(new Date().getTime() + (num * 24 * 3600 * 1000));
         year = _date.getFullYear();
@@ -309,57 +281,33 @@ class DateModule extends ArrayModule {
         hour = ('0' + _date.getHours()).slice(-2);
         minute = ('0' + _date.getMinutes()).slice(-2);
         second = ('0' + _date.getSeconds()).slice(-2);
-        return {
-            /** 完整日期 '2020/12/12 12:12:12' */
-            date: `${year}/${month}/${day} ${hour}:${minute}:${second}`,
-            /** 日期 '2020/12/12 */
-            date_day: `${year}/${month}/${day}`,
-            year,
-            month,
-            day,
-            hour,
-            minute,
-            second
-        }
+        return `${year}/${month}/${day} ${hour}:${minute}:${second}`;
     }
 
     /**
      * 获取日期周几
      * @param {string} date 日期 '2019/04/28' & '2019/04/28 12:12:12'
      */
-    getDayString(date) {
+    getDateDayString(date) {
         return '周' + '日一二三四五六'.charAt(new Date(date).getDay());
     }
 
     /**
      * 获取两个时间段的秒数
-     * @param {string} now 对比的时间
-     * @param {string} before 之前的时间
+     * @param {Date} now 现在时间
+     * @param {Date} before 之前的时间
      */
-    getSecond(now, before) {
-        return (new Date(now).getTime() - new Date(before).getTime()) / 1000;
+    getDateSlotSecond(now, before) {
+        return (now.getTime() - before.getTime()) / 1000;
     }
 
     /**
-     * 带天数的倒计时
-     * @param {number} value 秒数
+     * 获取两个日期之间的天数
+     * @param {Date} now 现在时间
+     * @param {Date} before 之前时间
      */
-    countDown(value) {
-        let timer = setInterval(() => {
-            if (value <= 0) return clearInterval(timer);
-            let day = 0, hour = 0, minute = 0, second = 0;
-            day = Math.floor(value / (3600 * 24));
-            hour = Math.floor(value / 3600) - (day * 24);
-            minute = Math.floor(value / 60) - (day * 24 * 60) - (hour * 60);
-            second = Math.floor(value) - (day * 24 * 3600) - (hour * 3600) - (minute * 60);
-            // 格式化
-            day = ('0' + day).slice(-2);
-            hour = ('0' + hour).slice(-2);
-            minute = ('0' + minute).slice(-2);
-            second = ('0' + second).slice(-2);
-            console.log(`${day}天：${hour}小时：${minute}分钟：${second}秒`);
-            value--;
-        }, 1000);
+    getDateSlotDays(now, before) {
+        return Math.floor((now.getTime() - before.getTime()) / 86400000);
     }
 
     /**
@@ -388,17 +336,86 @@ class DateModule extends ArrayModule {
     }
 
     /**
-     * 获取两个日期之间的天数
-     * @param {Date} now 现在时间
-     * @param {Date} before 之前时间
+     * 带天数的倒计时
+     * @param {number} value 秒数
      */
-    getDays(now, before) {
-        return Math.floor((now.getTime() - before.getTime()) / 86400000);
+    countDown(value) {
+        let timer = setInterval(() => {
+            if (value <= 0) return clearInterval(timer);
+            let day = 0, hour = 0, minute = 0, second = 0;
+            day = Math.floor(value / (3600 * 24));
+            hour = Math.floor(value / 3600) - (day * 24);
+            minute = Math.floor(value / 60) - (day * 24 * 60) - (hour * 60);
+            second = Math.floor(value) - (day * 24 * 3600) - (hour * 3600) - (minute * 60);
+            // 格式化
+            day = ('0' + day).slice(-2);
+            hour = ('0' + hour).slice(-2);
+            minute = ('0' + minute).slice(-2);
+            second = ('0' + second).slice(-2);
+            console.log(`${day}天：${hour}小时：${minute}分钟：${second}秒`);
+            value--;
+        }, 1000);
+    }
+}
+
+/** 浏览器模块 */
+class BomModule extends DateModule {
+    constructor() {
+        /** 缓存类型 */
+        this.cache = window.sessionStorage;
+    }
+
+    /**
+     * 本地储存数据
+     * @param {string} key 对应的 key 值
+     * @param {object} data 对应的数据
+     */
+    saveData(key, data) {
+        this.cache.setItem(key, JSON.stringify(data));
+    }
+
+    /**
+     * 获取本地数据
+     * @param {string} key 对应的 key 值
+     */
+    fetchData(key) {
+        let data = this.cache.getItem(key) ? JSON.parse(this.cache.getItem(key)) : null;
+        return data;
+    }
+
+    /** 清除本地数据 */
+    removeData() {
+        this.cache.clear();
+        // this.cache.removeItem('key');　// 删除键值对
+    }
+
+    /** 长震动 */
+    vibrateLong() {
+        if ('vibrate' in window.navigator) {
+            window.navigator.vibrate(400);
+        } else if (window['wx'] && wx.vibrateLong) {
+            wx.vibrateLong();
+        }
+    }
+
+    /** 短震动 */
+    vibrateShort() {
+        if ('vibrate' in window.navigator) {
+            window.navigator.vibrate(15);
+        } else if (window['wx'] && wx.vibrateShort) {
+            wx.vibrateShort();
+        }
+    }
+
+    /** 检查是否移动端 */
+    checkMobile() {
+        const pattern = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|OperaMini/i;
+        return pattern.test(navigator.userAgent); //  ? 'Mobile' : 'Desktop';
     }
 }
 
 /** dom 模块 */
-class DomModule extends DateModule {
+class DomModule extends BomModule {
     /**
      * 单个元素查找
      * @param {string} name class | id | label <div> <p>
