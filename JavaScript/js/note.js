@@ -315,3 +315,48 @@ function disc() {
     }
     console.log('概率索引', index);
 }
+
+/** 数字类型扩展 */
+function numberExtend() {
+    Number.MAX_SAFE_DIGITS = Number.MAX_SAFE_INTEGER.toString().length - 2;
+    Number.prototype.digits = function () {
+        var result = (this.valueOf().toString().split('.')[1] || '').length;
+        return result > Number.MAX_SAFE_DIGITS ? Number.MAX_SAFE_DIGITS : result;
+    }
+    Number.prototype.add = function (val = 0) {
+        if (typeof val !== 'number') return console.warn('请输入正确的数字');
+        const value = this.valueOf();
+        const thisDigits = this.digits();
+        const valDigits = val.digits();
+        const baseNum = Math.pow(10, Math.max(thisDigits, valDigits));
+        const result = (value * baseNum + val * baseNum) / baseNum;
+        if (result > 0) { 
+            return result > Number.MAX_SAFE_INTEGER ? Number.MAX_SAFE_INTEGER : result;
+        } else { 
+            return result < Number.MIN_SAFE_INTEGER ? Number.MIN_SAFE_INTEGER : result;
+        }
+    }
+    Number.prototype.minus = function (val = 0) {
+        if (typeof val !== 'number') return console.warn('请输入正确的数字');
+        const value = this.valueOf();
+        const thisDigits = this.digits();
+        const valDigits = val.digits();
+        const baseNum = Math.pow(10, Math.max(thisDigits, valDigits));
+        const result = (value * baseNum - val * baseNum) / baseNum;
+        if (result > 0) {
+            return result > Number.MAX_SAFE_INTEGER ? Number.MAX_SAFE_INTEGER : result;
+        } else {
+            return result < Number.MIN_SAFE_INTEGER ? Number.MIN_SAFE_INTEGER : result;
+        }
+    }
+}
+
+function sort() {
+    const key = 3;
+    const arr1 = ['A1', 'A2', 'B1', 'B2', 'D1', 'D2', 'C1', 'C2'];
+    const arr2 = ['A', 'B', 'C', 'D'].map(item => item + key);
+    let result = [].concat(arr1, arr2);
+    result.sort();
+    result = result.map(item => item.replace(key, ''));
+    console.log(result);
+}
