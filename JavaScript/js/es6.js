@@ -260,4 +260,32 @@ function classModule() {
 
     console.log('静态方法：', MergeModule.logName());
 }
-classModule();
+// classModule();
+
+function watch() {
+    const Android = {
+        version: 9.0,
+        styem: 'MIUI',
+        list: [1, 2, 3, 4]
+    }
+    
+    // Proxy 可以监听任意类型值，不支持 IE
+    const info = new Proxy(Android, {
+        get(target, key, receiver) {
+            // console.log('get', target, key, receiver);
+            return target[key];
+        },
+        set(target, key, value, receiver) {
+            console.log('set', target, key, value, receiver);
+            target[key] = value;
+        }
+    });
+    
+    // Object.defineProperty 无法监听数组
+    const watchList = Object.defineProperty(Android, 'list', {
+        set(val) {
+            console.log('watchList', val);
+            
+        }
+    });
+}
