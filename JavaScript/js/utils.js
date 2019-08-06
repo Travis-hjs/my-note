@@ -408,9 +408,39 @@ class BomModule extends DateModule {
     }
 
     /** 检查是否移动端 */
-    checkMobile() {
+    isMobile() {
         const pattern = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|OperaMini/i;
         return pattern.test(navigator.userAgent); //  ? 'Mobile' : 'Desktop';
+    }
+
+    /**
+     * 创建浏览器指纹
+     * @param {string} domain window.location.host
+     */
+    createFingerprint(domain) {
+        function bin2hex(string) {
+            let result = '';
+            for (let i = 0; i < string.length; i++) {
+                let n = string.charCodeAt(i).toString(16);
+                result += n.length < 2 ? '0' + n : n;
+            }
+            return result;
+        }
+        let canvas = document.createElement('canvas');
+        let ctx = canvas.getContext('2d');
+        let txt = domain || 'hjs.cn';
+        ctx.textBaseline = 'top';
+        ctx.font = '14px Arial';
+        ctx.textBaseline = 'tencent';
+        ctx.fillStyle = '#f60';
+        ctx.fillRect(125, 1, 62, 20);
+        ctx.fillStyle = '#069';
+        ctx.fillText(txt, 2, 15);
+        ctx.fillStyle = 'rgba(102, 204, 0, 0.7)';
+        ctx.fillText(txt, 4, 17);
+        let b64 = canvas.toDataURL().replace('data:image/png;base64,', '');
+        let bin = atob(b64);
+        return bin2hex(bin.slice(-16, -12));
     }
 }
 
