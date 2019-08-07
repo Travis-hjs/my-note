@@ -137,15 +137,23 @@ class ArrayModule extends StringModule {
 
     /**
      * 随机打乱数组
-     * @param {array} array
+     * @param {Array<object>} array
      */
     shuffleArray(array) {
         return array.sort(() => Math.random() > 0.5 ? -1 : 1);
+        // 洗牌随机法（性能最优）
+        for (let i = array.length - 1; i >= 0; i--) {
+            let randomIndex = Math.floor(Math.random() * (i + 1));
+            let itemAtIndex = array[randomIndex];
+            array[randomIndex] = array[i];
+            array[i] = itemAtIndex;
+        }
+        return array;
     }
 
     /**
      * 数组中随机取几个元素
-     * @param {array} array 数组
+     * @param {Array<object>} array 数组
      * @param {number} count 元素个数
      */
     getRandomArrayElements(array, count) {
@@ -164,7 +172,7 @@ class ArrayModule extends StringModule {
 
     /**
      * 将指定位置的元素置顶
-     * @param {array} array 改数组
+     * @param {Array<object>} array 改数组
      * @param {number} index 元素索引
      */
     zIndexToTop(array, index) {
@@ -179,7 +187,7 @@ class ArrayModule extends StringModule {
 
     /**
      * 将指定位置的元素置底
-     * @param {array} array 改数组
+     * @param {Array<object>} array 改数组
      * @param {number} index 元素索引
      */
     zIndexToBottom(array, index) {
