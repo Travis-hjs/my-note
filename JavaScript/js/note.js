@@ -14,6 +14,9 @@
 // sessionStorage.setItem('','')
 // sessionStorage.getItem('')
 
+// token：06fabc49b94c435ce95e150c2578a3c274950e13
+// id：299fa81eeef43388e730918dc894126e
+
 /** 列表容器 */
 let wrap = utils.find('#wrap');
 /** p标签 */
