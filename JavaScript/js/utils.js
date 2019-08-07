@@ -566,17 +566,29 @@ class DomModule extends BomModule {
     }
 
     /**
-     * 复制内容
-     * @param {string} value 内容 
+     * 点击复制
+     * @param {string} text 复制的内容
+     * @param {Function} success 成功回调
+     * @param {Function} fail 出错回调
      */
-    copyText(value) {
-        let input = document.createElement("input");
-        input.value = value;
-        document.body.appendChild(input);
-        input.select(); // 选择对象;
-        // 执行浏览器复制命令
-        document.execCommand("Copy");
-        input.remove();
+    copyText(text, success, fail) {
+        text = text.replace(/(^\s*)|(\s*$)/g, '');
+        if (!text) {
+            if (typeof fail === 'function') fail('复制的内容不能为空！');
+            return;
+        }
+        const clipboard = document.createElement('textarea');
+        document.body.appendChild(clipboard);
+        clipboard.value = text;
+        clipboard.style.cssText = 'font-size: 15px; padding: 4px 8px; position: fixed; top: -1000%; left: -1000%;';
+        clipboard.setAttribute('readonly', '');
+        clipboard.setAttribute('cols', 50);
+        clipboard.setAttribute('rows', 50);
+        clipboard.select();
+        clipboard.setSelectionRange(0, clipboard.value.length);
+        document.execCommand('copy');
+        clipboard.parentNode.removeChild(clipboard);
+        if (typeof success === 'function') success();
     }
 
     /**
