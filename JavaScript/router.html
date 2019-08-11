@@ -32,17 +32,20 @@
           this.currentUrl = '';
         }
         Router.prototype = {
-            route: function(path, callback) {
+            /**
+             * 监听路由跳转
+             * @param {string} path 路由路径
+             * @param {Function} callback 路由回调
+             */
+            onchange: function(path, callback) {
                 this.routes[path] = callback || function() {};
             },
             refresh: function() {
                 this.currentUrl = location.hash.slice(1) || '/';
                 // console.log(this.routes);
                 // console.log(this.currentUrl);
-                var fun = this.routes[this.currentUrl];
-                if (typeof fun === 'function') {
-                    fun();
-                }
+                var fn = this.routes[this.currentUrl];
+                if (typeof fn === 'function') fn();
             },
             init: function() {
                 window.addEventListener('load', this.refresh.bind(this), false);
@@ -61,13 +64,13 @@
                         <li>'+text+'</li>\
                     </ul><strong>'+(new Date()).toString()+'</strong>';
         }
-        route.route('/a', function() {
+        route.onchange('/a', function() {
             addHtml('首页', '首页内容');
         });
-        route.route('/b', function() {
+        route.onchange('/b', function() {
             addHtml('子页面', '第二个页面内容');
         });
-        route.route('/c', function() {
+        route.onchange('/c', function() {
             addHtml('最后的页面', '嘿嘿');
         });
     </script>
