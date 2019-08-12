@@ -458,10 +458,7 @@ class BomModule extends DateModule {
      */
     download(filename, content) {
         const label = document.createElement('a');
-        label.setAttribute(
-            'href',
-            'data:text/plain;charset=utf-8,' + encodeURIComponent(content)
-        );
+        label.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(content));
         label.setAttribute('download', filename);
         label.click();
     }
