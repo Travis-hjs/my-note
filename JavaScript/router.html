@@ -27,33 +27,44 @@
 
     </div>
     <script type="text/javascript">
-        function Router() {
-          this.routes = {};
-          this.currentUrl = '';
-        }
-        Router.prototype = {
+        class ModuleRouter {
+            /** 路由模块 */
+            constructor() {
+                /** 路由对象 */
+                this.routes = {};
+                /** 当前路径 */
+                this.currentUrl = '';
+            }
+
             /**
              * 监听路由跳转
              * @param {string} path 路由路径
              * @param {Function} callback 路由回调
              */
-            onchange: function(path, callback) {
-                this.routes[path] = callback || function() {};
-            },
-            refresh: function() {
+            onchange(path, callback) {
+                this.routes[path] = callback || function () { };
+            }
+
+            /** 路由变动时做出处理 */
+            refresh() {
                 this.currentUrl = location.hash.slice(1) || '/';
-                // console.log(this.routes);
-                // console.log(this.currentUrl);
                 var fn = this.routes[this.currentUrl];
-                if (typeof fn === 'function') fn();
-            },
-            init: function() {
+                if (typeof fn === 'function') {
+                    fn();
+                }
+            }
+            
+            /** 路由初始化 */
+            init() {
+                // 注意这里如果设置到 window.addEventListener('popstate' 的话会影响到路由跳转
                 window.addEventListener('load', this.refresh.bind(this), false);
                 window.addEventListener('hashchange', this.refresh.bind(this), false);
             }
         }
-        var route = new Router();
-        route.init();
+        
+        const Router = new ModuleRouter();
+
+        Router.init();
 
         function addHtml(title, text) {
             var content = document.querySelector('.wrap');
@@ -64,13 +75,13 @@
                         <li>'+text+'</li>\
                     </ul><strong>'+(new Date()).toString()+'</strong>';
         }
-        route.onchange('/a', function() {
+        Router.onchange('/a', function() {
             addHtml('首页', '首页内容');
         });
-        route.onchange('/b', function() {
+        Router.onchange('/b', function() {
             addHtml('子页面', '第二个页面内容');
         });
-        route.onchange('/c', function() {
+        Router.onchange('/c', function() {
             addHtml('最后的页面', '嘿嘿');
         });
     </script>
