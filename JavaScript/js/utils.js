@@ -458,9 +458,15 @@ class BomModule extends DateModule {
      */
     download(filename, content) {
         const label = document.createElement('a');
-        label.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(content));
+        label.setAttribute('href','data:text/plain;charset=utf-8,' + encodeURIComponent(content));
         label.setAttribute('download', filename);
-        label.click();
+        if (document.createEvent) {
+            const event = document.createEvent('MouseEvents');
+            event.initEvent('click', true, true);
+            label.dispatchEvent(event);
+        } else {
+            label.click();
+        }
     }
 }
 
