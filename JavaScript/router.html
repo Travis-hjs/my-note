@@ -65,25 +65,37 @@
         const Router = new ModuleRouter();
 
         Router.init();
+        
+        const content = document.querySelector('.wrap');
 
         function addHtml(title, text) {
-            var content = document.querySelector('.wrap');
-            content.innerHTML = '<ul class="ul">\
-                        <li>'+title+'</li>\
-                        <li>'+text+'</li>\
-                        <li>'+text+'</li>\
-                        <li>'+text+'</li>\
-                    </ul><strong>'+(new Date()).toString()+'</strong>';
+            content.innerHTML = `<ul class="ul">
+                                    <li>${ title }</li>
+                                    <li>${ text }</li>
+                                    <li>${ text }</li>
+                                    <li>${ text }</li>
+                                </ul>
+                                <strong>${ (new Date()).toString() }</strong>`;
         }
         Router.onchange('/a', function() {
             addHtml('首页', '首页内容');
         });
+
         Router.onchange('/b', function() {
             addHtml('子页面', '第二个页面内容');
         });
+
         Router.onchange('/c', function() {
             addHtml('最后的页面', '嘿嘿');
         });
+
+        window.addEventListener('load', function () {
+            // 初始化路由重定向
+            const link = document.createElement('a');
+            link.href = '#/a';
+            link.click();
+        });
+
     </script>
 </body>
 
