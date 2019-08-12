@@ -450,6 +450,21 @@ class BomModule extends DateModule {
         let bin = atob(b64);
         return bin2hex(bin.slice(-16, -12));
     }
+
+    /**
+     * 写入并下载文件（只支持Chrome && Firefox）
+     * @param {string} filename 文件名 xxx.text | xxx.js | xxx.[type]
+     * @param {string} content 文件内容
+     */
+    download(filename, content) {
+        const label = document.createElement('a');
+        label.setAttribute(
+            'href',
+            'data:text/plain;charset=utf-8,' + encodeURIComponent(content)
+        );
+        label.setAttribute('download', filename);
+        label.click();
+    }
 }
 
 /** dom 模块 */
