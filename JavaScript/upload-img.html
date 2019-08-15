@@ -1,46 +1,63 @@
 <!DOCTYPE html>
 <html lang="en">
 	<head>
-		<meta charset="UTF-8">
-		<title>上传图片并预览</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="maximum-scale=1.0, minimum-scale=1.0, user-scalable=0, initial-scale=1.0, width=device-width"/>
+        <meta name="format-detection" content="telephone=no, email=no, date=no, address=no">
+        <title>上传图片并预览</title>
+        <link rel="stylesheet" href="./css/base.css">
 		<style>
-	        *{ padding: 0; margin: 0; }
-	        .click{ display: block; width: 200px; height: 200px; background-color: #ccc; color: #fff; margin: auto; font-size: 168px; text-align: center; line-height: 200px; cursor: pointer; }
-	        #file{ opacity: 0; }
-	        .updataImg{ width: 500px; margin: auto; display: block; }
-			.number-input{ height: 30px; margin: 0 auto 20px; display: block; box-sizing: border-box; padding: 0 12px; }
-			.progress{ width: 90%; margin: 0 auto; display: block; }
+            *{ padding: 0; margin: 0; }
+            .page{ padding: 8px; }
+	        .upload-img{ width: 280px; min-height: 280px; margin: 0 auto 20px; }
+            .upload-img .img-box{ position: relative; width: 100%; height: 100%; overflow: hidden; }
+            .upload-img .img-box .image{ display: block; width: 100%; }
+            .upload-img .img-box .remove{ position: absolute; top: 2px; right: 2px; border-radius: 100%; cursor: pointer; width: 30px; height: 30px; background-color: rgba(0,0,0,0.5); text-align: center; display: table-cell; vertical-align: middle; font-size: 28px; color: #fff; }
+            .upload-img .upload{ width: 100%; min-height: 280px; position: relative; }
+            .upload-img .upload .add-icon{ position: relative; width: 50px; height: 50px; }
+            .upload-img .upload .add-icon::after{ content: ""; position: absolute; top: 0; left: 50%; width: 2px; height: 100%; background-color: #999; transform: translateX(-50%); }
+            .upload-img .upload .add-icon::before{ content: ""; position: absolute; top: 50%; left: 0; width: 100%; height: 2px; background-color: #999; transform: translateY(-50%); }
+            .upload-img .upload .upload-input{ width: 100%; height: 100%; position: absolute; top: 0; left: 0; z-index: 2; opacity: 0; cursor: pointer; }
+            .hide{ display: none; }
 		</style>
 	</head>
 	<body>
-		<div class="img_box">
-			<label for="file" class="click">+</label>
-			<input type="file" id="file" name="picture" onchange="upLoad(this)" />
-			<img src="" class="updataImg">
-            <!-- 进度条 -->
-			<input type="number" class="number-input" oninput="inputText(this)">
-			<progress class="progress" value="0" max="100"></progress>
-		</div>
-
-		<script type="text/javascript">
-
-			function upLoad(source) {
+        <div class="page">
+            <div class="card upload-img">
+                <div class="img-box hide">
+                    <img class="image" src="">
+                    <div onclick="removeImg(this)" class="remove flex flex_vertical flex_center">×</div>
+                </div>
+                <div class="upload flex flex_vertical flex_center">
+                    <div class="add-icon"></div>
+                    <input class="upload-input" type="file" name="picture" onchange="upLoad(this)">
+                </div>
+            </div>
+        </div>
+		<script>
+            /**
+             * input上传图片
+             * @param {HTMLInputElement} el 
+             */
+			function upLoad(el) {
                 /** 上传文件 */
-                let file = source.files[0];
+                const file = el.files[0];
                 /** 上传类型数组 */
-                let typeStr = ['image/jpg', 'image/png', 'image/jpeg', 'image/gif'];
+                const types = ['image/jpg', 'image/png', 'image/jpeg', 'image/gif'];
                 // 判断文件类型
-                if (typeStr.indexOf(file.type) < 0) return alert('文件格式只支持：jpg 和 png');
-                /** 判断大小 */
+                if (types.indexOf(file.type) < 0) return alert('文件格式只支持：jpg 和 png');
+                // 判断大小
                 if (file.size > 2 * 1024 * 1024) return alert('上传的文件不能大于2M');
 
-                // let formData = new FormData();
+                // const formData = new FormData();
                 // formData.append('img', file);
                 // console.log(formData, file);
                 
 				getBase64(file, res => {
                     console.log('base64 >> ', res);
-                    document.querySelector('.updataImg').src = res;
+                    el.parentNode.classList.add('hide');
+                    el.parentNode.parentNode.querySelector('.img-box').classList.remove('hide');
+                    el.parentNode.parentNode.querySelector('.img-box .image').src = res;
                 });
 
 				let url = getObjectURL(file);
@@ -51,7 +68,7 @@
              * 获取 base64
              * @param {File} file 文件
              * @param {Function} callback 回调
-            */
+             */
 			function getBase64(file, callback) {
 				let reader = new FileReader();
 				reader.onload = function() {
@@ -67,7 +84,7 @@
             /**
              * 获取二进制路径（需要打开服务器调试）
              * @param {File} file 文件
-            */
+             */
 			function getObjectURL(file) {
 				let url = null;
 				if (window.createObjectURL) {
@@ -80,10 +97,15 @@
 				return url;
 			}
 			
-			function inputText(el) {
-				if (Number(el.value) == NaN) return;
- 				document.querySelector('.progress').value = el.value
-			}
+			/**
+             * 清除图片
+             * @param {HTMLElement} el 
+             */
+            function removeImg(el) {
+                el.parentNode.classList.add('hide');
+                el.parentNode.querySelector('.image').src = '';
+                el.parentNode.parentNode.querySelector('.upload').classList.remove('hide');
+            }
 		</script>
 	</body>
 </html>
