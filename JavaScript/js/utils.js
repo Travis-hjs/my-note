@@ -426,6 +426,9 @@ class BomModule extends DateModule {
      * @param {string} domain window.location.host
      */
     createFingerprint(domain) {
+        /**
+         * @param {string} string 
+         */
         function bin2hex(string) {
             let result = '';
             for (let i = 0; i < string.length; i++) {
@@ -436,7 +439,7 @@ class BomModule extends DateModule {
         }
         let canvas = document.createElement('canvas');
         let ctx = canvas.getContext('2d');
-        let txt = domain || 'hjs.cn';
+        let txt = domain || 'hjs.com';
         ctx.textBaseline = 'top';
         ctx.font = '14px Arial';
         ctx.textBaseline = 'tencent';
@@ -467,6 +470,33 @@ class BomModule extends DateModule {
         } else {
             label.click();
         }
+    }
+
+    /**
+     * 点击复制
+     * @param {string} text 复制的内容
+     * @param {Function} success 成功回调
+     * @param {Function} fail 出错回调
+     */
+    copyText(text, success, fail) {
+        text = text.replace(/(^\s*)|(\s*$)/g, '');
+        if (!text) {
+            if (typeof fail === 'function') fail('复制的内容不能为空！');
+            return;
+        }
+        const id = 'the_clipboard';
+        let clipboard = document.getElementById(id);
+        if (!clipboard) {
+            clipboard = document.createElement('textarea');
+            clipboard.id = id;
+            clipboard.style.cssText = 'font-size: 15px; position: fixed; top: -1000%; left: -1000%;';
+            document.body.appendChild(clipboard);
+        }
+        clipboard.value = text;
+        clipboard.select();
+        clipboard.setSelectionRange(0, clipboard.value.length);
+        document.execCommand('copy');
+        if (typeof success === 'function') success();
     }
 }
 
@@ -589,32 +619,6 @@ class DomModule extends BomModule {
             AnimationFrame(move);
         }
         move();
-    }
-
-    /**
-     * 点击复制
-     * @param {string} text 复制的内容
-     * @param {Function} success 成功回调
-     * @param {Function} fail 出错回调
-     */
-    copyText(text, success, fail) {
-        text = text.replace(/(^\s*)|(\s*$)/g, '');
-        if (!text) {
-            if (typeof fail === 'function') fail('复制的内容不能为空！');
-            return;
-        }
-        const clipboard = document.createElement('textarea');
-        document.body.appendChild(clipboard);
-        clipboard.value = text;
-        clipboard.style.cssText = 'font-size: 15px; padding: 4px 8px; position: fixed; top: -1000%; left: -1000%;';
-        clipboard.setAttribute('readonly', '');
-        clipboard.setAttribute('cols', 50);
-        clipboard.setAttribute('rows', 50);
-        clipboard.select();
-        clipboard.setSelectionRange(0, clipboard.value.length);
-        document.execCommand('copy');
-        clipboard.parentNode.removeChild(clipboard);
-        if (typeof success === 'function') success();
     }
 
     /**
