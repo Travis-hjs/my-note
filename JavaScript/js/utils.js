@@ -74,9 +74,9 @@ class StringModule {
     /**
      * 格式化?后面参数成 JSON 对象
      * @param {string} value 
-     * @example {
+     * @example 
      * searchFormat(window.location.search);
-     * }
+     * 
      */
     searchFormat(value) {
         return JSON.parse(`{"${decodeURIComponent(value.substring(1)).replace(/"/g, '\\"').replace(/&/g, '","').replace(/=/g, '":"')}"}`);
@@ -226,6 +226,7 @@ class DateModule extends ArrayModule {
         // new Date().toLocaleTimeString(); => 上/下午12:12:12
         // new Date().toLocaleString();     => 2020/12/12 上/下午12:12:12          
     }
+    
     /** 日期列表生成 */
     dateJson() {
         var calendar = [],
@@ -263,16 +264,17 @@ class DateModule extends ArrayModule {
      * @param {number} minInterval 时间间隔(分钟)
      */
     timeInterval(minInterval) {
-        let arr = [], minTotal = 0;
+        let arr = [];
+        let minTotal = 0;
         while (minTotal < 1440) {
             let hour = Math.floor(minTotal / 60);
             let minute = Math.floor(minTotal % 60);
             hour = ('0' + hour).slice(-2);
             minute = ('0' + minute).slice(-2);
-            arr.push(`${hour}':'${minute}`);
             minTotal += minInterval;
+            arr.push(hour + ':' + minute);
+            return arr;
         }
-        return arr;
     }
 
     /**
@@ -282,7 +284,7 @@ class DateModule extends ArrayModule {
      */
     getDateFormat(num = 0) {
         let _date, year, month, day, hour, minute, second;
-        _date = new Date(new Date().getTime() + (num * 24 * 3600 * 1000));
+        _date = new Date(Date.now() + (num * 24 * 3600 * 1000));
         year = _date.getFullYear();
         month = ('0' + (_date.getMonth() + 1)).slice(-2);
         day = ('0' + _date.getDate()).slice(-2);
