@@ -229,20 +229,21 @@ class DateModule extends ArrayModule {
     
     /** 日期列表生成 */
     dateJson() {
-        var calendar = [],
-            minYears = new Date().getFullYear(),
-            maxYears = new Date().getFullYear() + 10,
-            dayCount = 1;
+        var date = new Date();
+        var calendar = [];
+        var minYears = date.getFullYear();
+        var maxYears = date.getFullYear() + 10;
+        var dayCount = 1;
         for (var i = minYears; i <= maxYears; i++) {
-            /** 年 */
-            var year = {};
-            year.name = i.toString();
-            year.sub = [];
+            var year = {
+                name: i.toString(),
+                sub: []
+            }
             for (var j = 1; j <= 12; j++) {
-                /** 月 */
-                var month = {};
-                month.name = ('0' + j.toString()).slice(-2);
-                month.sub = [];
+                var month = {
+                    name: ('0' + j.toString()).slice(-2),
+                    sub: []
+                };
                 year.sub.push(month);
                 dayCount = new Date(i, j, 0).getDate();
                 for (var k = 1; k <= dayCount; k++) {
@@ -254,8 +255,8 @@ class DateModule extends ArrayModule {
             calendar.push(year);
         }
         // 这里是限制不能选小于之前的日期
-        calendar[0].sub.splice(0, new Date().getMonth());
-        calendar[0].sub[0].sub.splice(0, new Date().getDate());
+        calendar[0].sub.splice(0, date.getMonth());
+        calendar[0].sub[0].sub.splice(0, date.getDate());
         return calendar;
     }
 
@@ -325,9 +326,9 @@ class DateModule extends ArrayModule {
      * @param {number} value 
      */
     secondFormat(value) {
-        let second = Math.floor(value),
-            minute = 0,
-            hour = 0;
+        let second = Math.floor(value);
+        let minute = 0;
+        let hour = 0;
         // 如果秒数大于60，将秒数转换成整数
         if (second > 60) {
             // 获取分钟，除以60取整数，得到整数分钟
@@ -371,6 +372,7 @@ class DateModule extends ArrayModule {
 /** 浏览器模块 */
 class BomModule extends DateModule {
     constructor() {
+        super();
         /** 缓存类型 */
         this.cache = window.sessionStorage;
     }
@@ -639,6 +641,13 @@ class DomModule extends BomModule {
             width = el.getBoundingClientRect().width;
             html.style.fontSize = width / value + 'px';
         });
+    }
+
+    /** 自定义 log */
+    log() {
+        var args = [].slice.call(arguments);
+        args.unshift('%c the-log >>', 'color: #4fc08d');
+        console.log.apply(console, args);
     }
 }
 
