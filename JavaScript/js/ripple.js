@@ -35,103 +35,109 @@ function rippleClick(el) {
 }
 
 /**
- * 水波纹节点对象池
- * @type {Array<HTMLElement>}
+ * 新的做法，效果最好
+ * 这里只是防止和其他全局变量重名而添加的立即执行函数包裹，`webpack` 环境下可以不需要
  */
-const RIPPLE_LIST = [];
-
-/**
- * 点击水波纹
- * @param {Event} event 点击事件
- * @param {HTMLElement} target 点击目标
- */
-function ripple(event, target) {
+(function () {
     /**
-     * 水波纹动画节点
-     * @type {HTMLElement}
+     * 水波纹节点对象池
+     * @type {Array<HTMLElement>}
      */
-    let ripple = null;
+    const RIPPLE_POOL = [];
 
-    // 从对象池里面拿取节点
-    if (RIPPLE_LIST.length > 1) {
-        ripple = RIPPLE_LIST.shift(); 
-    } else {
-        ripple = document.createElement('div');
-        ripple.className = 'ripple';
+    /**
+     * 点击水波纹
+     * @param {Event} event 点击事件
+     * @param {HTMLElement} target 点击目标
+     */
+    function ripple(event, target) {
+        /**
+         * 水波纹动画节点
+         * @type {HTMLElement}
+         */
+        let node = null;
+
+        // 从对象池里面拿取节点
+        if (RIPPLE_POOL.length > 1) {
+            node = RIPPLE_POOL.shift();
+        } else {
+            node = document.createElement('div');
+            node.className = 'ripple';
+        }
+
+        /** 点击目标矩阵尺寸 */
+        let rect = target.getBoundingClientRect();
+        /** 当前自定义颜色值 */
+        let color = target.getAttribute('color');
+        /** 波纹大小 */
+        let size = Math.max(rect.width, rect.height);
+        // 设置最大范围
+        if (size > 200) size = 200;
+        // 设置大小
+        node.style.height = node.style.width = size + 'px';
+        // 默认是白色透明
+        node.style.backgroundColor = color || 'rgba(255, 255, 255, .45)';
+        // 这里必须输出节点后再设置位置，不然会有问题
+        target.appendChild(node);
+
+        let y = event.touches ? event.touches[0].pageY : event.clientY;
+        let x = event.touches ? event.touches[0].pageX : event.clientX;
+        let top = y - rect.top - (node.offsetHeight / 2);
+        let left = x - rect.left - (node.offsetWidth / 2);
+        // console.log(top, left);
+        node.style.top = top + 'px';
+        node.style.left = left + 'px';
+
+        function an() {
+            node.removeEventListener('animationend', an);
+            // console.log('动画结束', node);
+            target.removeChild(node);
+            RIPPLE_POOL.push(node);
+        }
+        node.addEventListener('animationend', an);
     }
 
-    /** 点击目标矩阵尺寸 */
-    let rect = target.getBoundingClientRect();
-    /** 当前自定义颜色值 */
-    let color = target.getAttribute('color');
-    /** 波纹大小 */
-    let size = Math.max(rect.width, rect.height);
-    // 设置最大范围
-    if (size > 200) size = 200;
-    // 设置大小
-    ripple.style.height = ripple.style.width = size + 'px';
-    // 默认是白色透明
-    ripple.style.backgroundColor = color || 'rgba(255, 255, 255, .45)';
-    // 这里必须输出节点后再设置位置，不然会有问题
-    target.appendChild(ripple);
+    /** 是否移动端 */
+    let isMobile = utils.isMobile();
 
-    let y = event.touches ? event.touches[0].pageY : event.clientY;
-    let x = event.touches ? event.touches[0].pageX : event.clientX;
-    let top = y - rect.top - (ripple.offsetHeight / 2);
-    let left = x - rect.left - (ripple.offsetWidth / 2);
-    // console.log(top, left);
-    ripple.style.top = top + 'px';
-    ripple.style.left = left + 'px';
+    /** 添加事件类型 */
+    let eventType = isMobile ? 'touchstart' : 'mousedown';
 
-    function an() {
-        ripple.removeEventListener('animationend', an);
-        // console.log('动画结束', ripple);
-        target.removeChild(ripple);
-        RIPPLE_LIST.push(ripple);
-    }
-    ripple.addEventListener('animationend', an);
-}
-
-/** 是否移动端 */
-let isMobile = utils.checkMobile();
-
-/** 添加事件类型 */
-let eventType = isMobile ? 'touchstart' : 'mousedown';
+    // 这里我使用事件代理去完成方法操作
+    // 因为我在Vue项目中，节点是动态生成的，不可能每次生成都单独为对应节点绑定事件
+    document.body.addEventListener(eventType, function (e) {
+        /** 事件类型 */
+        const event = e || window.event || arguments.callee.caller.arguments[0];
+        /** 循环的次数 */
+        let loop_count = 3; // 这里的 3 次是布局的子节点层数，可根据布局层数增加减少
+        /** 
+         * 定义目标变量 
+         * @type {HTMLElement} 
+         */
+        let target = event.target;
+        // 循环 3 次由里向外查找目标节点
+        while (loop_count > 0 && target && target != document.body) {
+            loop_count--;
+            if (target.hasAttribute('ripple')) {
+                ripple(event, target);
+                break;
+            }
+            target = target.parentNode;
+        }
+    });
+})();
 
 /** 创建按钮 */
 function createButton() {
     /** 按钮列表 */
     let listNode = utils.find('.button-list');
-    
+
     for (let i = 0; i < 11; i++) {
         const button = document.createElement('button');
         button.className = 'button';
-        button.setAttribute('ripple', 'true');
+        button.setAttribute('ripple', '');
         button.textContent = 'BUTTON-' + (i + 1);
         listNode.appendChild(button);
     }
 }
 createButton();
-
-// 这里我使用事件代理去完成方法操作
-// 因为我在Vue项目中，节点是动态生成的，不可能每次生成都单独为对应节点绑定事件
-document.body.addEventListener(eventType, function(e) {
-    /** 事件类型 */
-    let event = e || window.event || arguments.callee.caller.arguments[0];
-    /** 循环的次数 */
-    let loop_count = 3; // 这里的 3 次是布局的子节点层数，可根据布局层数增加减少
-    /** 
-     * 定义目标变量 
-     * @type {HTMLElement} 
-     */
-    let target = event.target;
-    // 循环 3 次由里向外查找目标节点
-    while(loop_count > 0 && target != document.body) {
-        loop_count --;
-        if(target.getAttribute('ripple') === 'true') {
-            ripple(event, target);
-            break;
-        }
-        target = target.parentNode;
-    }
-});
