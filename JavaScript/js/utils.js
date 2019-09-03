@@ -284,14 +284,13 @@ class DateModule extends ArrayModule {
      * @return {'yyyy/mm/dd hh:mm:ss'}
      */
     getDateFormat(num = 0) {
-        let _date, year, month, day, hour, minute, second;
-        _date = new Date(Date.now() + (num * 24 * 3600 * 1000));
-        year = _date.getFullYear();
-        month = ('0' + (_date.getMonth() + 1)).slice(-2);
-        day = ('0' + _date.getDate()).slice(-2);
-        hour = ('0' + _date.getHours()).slice(-2);
-        minute = ('0' + _date.getMinutes()).slice(-2);
-        second = ('0' + _date.getSeconds()).slice(-2);
+        const date   = new Date(Date.now() + (num * 24 * 3600 * 1000));
+        const year   = date.getFullYear();
+        const month  = `0${date.getMonth() + 1}`.slice(-2);
+        const day    = `0${date.getDate()}`.slice(-2);
+        const hour   = `0${date.getHours()}`.slice(-2);
+        const minute = `0${date.getMinutes()}`.slice(-2);
+        const second = `0${date.getSeconds()}`.slice(-2);
         return `${year}/${month}/${day} ${hour}:${minute}:${second}`;
     }
 
