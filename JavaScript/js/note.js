@@ -87,103 +87,134 @@ function clickTest() {
 }
 clickTest();
 
-/** new 构造函数理解 */
-function newFun() {
-    /** 构造函数 Animal */
-    function Animal(name) {
-        this.name = name;
-    }
-    // 静态属性
-    Animal.color = 'black';
-    // 构造函数定义的对象只有在 new 之后才能调用
-    Animal.prototype.say = function () {
-        console.log("I'm " + this.name);    // I'm cat
-        console.log(this.color);            // undefined
-    };
-    var cat = new Animal('cat');
-    console.log(
-        cat.name, // cat
-        cat.color // undefined
-    );
-    cat.say();
-
-    console.log(
-        Animal.name, // Animal
-        Animal.color // back
-    );
-}
-// newFun();
-
-
-/** bind() 使用 */
-function bindFun() {
-    window.number = 9;
-    /** Module 对象 */
-    const Module = {
-        number: 72,
-        getNumber() {
-            console.log(this.number);
-        }
-    }
-    Module.getNumber(); // 72
-
-    /** 将 Module 的方法赋值给 number */
-    let number = Module.getNumber;
-    number(); // 9 因为在这个例子中，"this"指向全局对象 window
-
-    /** 将 Module 的方法赋值给 number 并且绑定自身 */
-    let bound = Module.getNumber.bind(Module); // number.bind(Module); 这样也可以
-    bound();
-}
-// bindFun();
 
 /**
- * 工厂模式
  * 工厂模式下不需要 new 因为他本身就是创建一个新的对象
- * @param {string} name class | id | label <div> <p>
+ * @param {string | HTMLElement} name class | id | label <div> <p>
  */
 function $(name) {
-    /** 当前对象 */
-    var obj = new Object();
-    /** 元素类型 */
-    var type = typeof name == 'string' ? 'array' : 'single';
-    // 元素定义
-    obj.el = typeof name == 'string' ? document.querySelectorAll(name) : name;
-    // 遍历 
-    obj.forEach = function (array, callback) {
+    /**
+     * 选中dom
+     * @type {HTMLElement | Array<HTMLElement>}
+     */
+    var node = name;
+
+    /**
+     * 元素类型
+     * @type {'single' | 'array'}
+     */
+    var type = 'single';
+
+    if (typeof name == 'string') {
+        node = [].slice.call(document.querySelectorAll(name));
+        type = 'array';
+    }
+
+    /**
+     * 列遍节点
+     * @param {Array<HTMLElement>} array 
+     * @param {function(HTMLElement, number)} callback 
+     */
+    function forEach(array, callback) {
         for (var i = 0; i < array.length; i++) {
-            array[i].index = i;
+            array[i]['index'] = i;
             if (typeof callback === 'function') callback(array[i], i);
         }
     }
-    // 添加事件
-    obj.on = function (method, callback) {
-        if (type == 'array') {
-            obj.forEach(obj.el, function (item, index) {
-                item.addEventListener(method, callback);
-            });
-        } else {
-            obj.el.addEventListener(method, callback);
-        }
-        return obj;
+
+    /**
+     * 解绑事件
+     * @param {HTMLElement} obj 
+     * @param {string} method
+     */
+    function offEvent(obj, method) {
+        /**
+         * @type {Array<{fn: Function, type: string}>}
+         */
+        var list = obj['the_eventList'];
+        for (var i = list.length - 1; i >= 0; i--) {
+            var info = list[i];
+            if (method) { 
+                if (method == info['type']) {
+                    obj.removeEventListener(method, info['fn']);
+                    list.splice(i, 1);
+                }
+            } else {
+                obj.removeEventListener(info['type'], info['fn']);
+                list.splice(i, 1);
+            }
+        }    
     }
-    // 修改内容
-    obj.html = function (str) {
-        if (type == 'array') {
-            obj.forEach(obj.el, function (item, index) {
-                item.innerHTML = str;
-            });
-        } else {
-            obj.el.innerHTML = str;
+
+    /** 工厂对象 */
+    var factory = {
+        /** 当前dom */
+        el: node,
+
+        /**
+         * 修改 html
+         * @param {string} content 
+         */
+        html: function(content) {
+            if (type == 'array') {
+                forEach(this.el, function (item, index) {
+                    item.innerHTML = content;
+                });
+            } else {
+                this.el.innerHTML = content;
+            }
+            return factory;
+        },
+
+        /**
+         * 添加事件
+         * @param {string} method 事件
+         * @param {Function} callback 
+         */
+        on: function(method, callback) {
+            if (type == 'array') {
+                forEach(this.el, function (item, index) {
+                    item.addEventListener(method, callback);
+                    // 添加事件到自定义数组中，解绑用
+                    if (!item['the_eventList']) {
+                        item['the_eventList'] = [];
+                    }
+                    item['the_eventList'].push({
+                        type: method,
+                        fn: callback
+                    });
+                });
+            } else {
+                this.el.addEventListener(method, callback);
+            }
+            return factory;
+        },
+
+        /**
+         * 解绑事件
+         * @param {string} method 要解绑的事件（可选）
+         */
+        off: function(method) {
+            if (type == 'array') {
+                forEach(this.el, function (item, index) {
+                    offEvent(item, method);
+                });
+            } else {
+                offEvent(this.el, method);
+            }
+            return factory;
         }
-        return obj;
-    }
-    return obj;
+    };
+
+    return factory;
 }
 // jQuery 的链式实现
 // $('.menu li').html('工厂模式更改').on('click', function () {
-//     console.log('索引', this.index);
 //     $(this).html(`li-${this.index+1}`);
+//     console.log('索引', this.index);
+//     setTimeout(function() {
+//         $('.menu li').off('click').html('取消点击事件');
+//     }, 500);
 // });
 
 /** 字符串类型 */
@@ -210,7 +241,7 @@ function stringModule() {
      */
     string.includes('name');    // return false true              
     string.search('name');      // return -1 or index
-    // 正则替换：i是首个，g是全局 
+    // 正则替换：i不区分大小写，g是全局 
     let regular = string.replace(/#/i, '?#');
     // 下面这种替换性能会更好点，但是不够灵活，只能是全局替换
     let replace = string.split('#').join('?#');
