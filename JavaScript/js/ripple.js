@@ -80,8 +80,8 @@ function rippleClick(el) {
         // 这里必须输出节点后再设置位置，不然会有问题
         target.appendChild(node);
 
-        let y = event.touches ? event.touches[0].pageY : event.clientY;
-        let x = event.touches ? event.touches[0].pageX : event.clientX;
+        let y = event.touches ? event.touches[0].clientY : event.clientY;
+        let x = event.touches ? event.touches[0].clientX : event.clientX;
         let top = y - rect.top - (node.offsetHeight / 2);
         let left = x - rect.left - (node.offsetWidth / 2);
         // console.log(top, left);
