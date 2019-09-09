@@ -61,7 +61,7 @@ textarea::-webkit-input-placeholder { color: #999; }
     /* line-height: 36px; */
     vertical-align: middle;
     padding: 0 16px; 
-    font-size: 14px;
+    font-size: 15px;
     cursor: pointer;
     -webkit-user-select: none;
     color: #fff;
