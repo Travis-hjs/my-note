@@ -27,13 +27,13 @@ textarea::-webkit-input-placeholder { color: #999; }
 
 /* flex布局 */
 .flex{ display: -webkit-box; display: -webkit-flex; display: flex; flex-wrap: wrap }
-.f1{ -webkit-box-flex: 1; -webkit-flex: 1; flex: 1; }
-.f2{ -webkit-box-flex: 2; -webkit-flex: 2; flex: 2; }
-.f3{ -webkit-box-flex: 3; -webkit-flex: 3; flex: 3; }
+.f1{ flex: 1; }
+.f2{ flex: 2; }
+.f3{ flex: 3; }
 /* 垂直居中 */
-.flex_vertical{ -webkit-box-align: center; -ms-flex-align: center; align-items: center; }
+.fvertical{ align-items: center; }
 /* 水平居中 */
-.flex_center{ -webkit-box-pack: center; -ms-flex-pack: center; justify-content: center; }
+.fcenter{ justify-content: center; }
 
 /* 溢出...显示 */
 .ellipsis{ overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
