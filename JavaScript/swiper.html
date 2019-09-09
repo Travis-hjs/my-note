@@ -20,6 +20,7 @@
 			.swiper .swiper_dot{ display: inline-block; margin-left: 8px; width: 8px; height: 8px; background-color: rgba(0,0,0,0.5); border-radius: 50%; }
             .swiper .swiper_dot_active{ background-color: #fff; }
 
+            .swiper{ margin-bottom: 10px; }
             .add-btn{ text-align: center; padding: 4px 10px; margin: 0 auto; display: block; font-size: 16px; }
 		</style>
 	</head>
@@ -36,6 +37,8 @@
                     <div class="swiper_item"></div>
                     <div class="swiper_item"></div>
                 </div>
+                <!-- 可不写，自动生成 -->
+                <div class="swiper_pagination"></div>
             </div>
         </script>
         
@@ -45,56 +48,38 @@
             let page = document.querySelector('.page');
             /** 颜色列表 */
             let colors = ['#2196f3', '#9c27b0', '#e91e63', '#f44336'];
-
-			function addSwiper (el) {
-				let _html = `<div class="swiper mybanner">
-								<div class="swiper_list">
-									<div class="swiper_item" style="background-color: #333">
-										<p>silder-1</p>
-									</div>
-									<div class="swiper_item" style="background-color: #333">
-										<p>silder-2</p>
-									</div>
-									<div class="swiper_item" style="background-color: #333">
-										<p>silder-3</p>
-									</div>
-								</div>
-								<div class="swiper_pagination"></div>
-							</div>`;
-				page.insertAdjacentHTML('beforeEnd',_html);
-				swiper({
-					el: '.mybanner',
-					pagination: true,
-					loop: true,
-					moveTime: 400,
-					vertical: true
-				})
-				el.parentNode.removeChild(el)
+            /**
+             * 动态生成组件html
+             * @param {string} className 
+             */
+			function createList(className = '') {
+                let itemList = '';
+                for (let i = 0; i < colors.length; i++) {
+                    itemList += `<div class="swiper_item" style="background-color: ${colors[i]}"><p>silder-${i+1}</p></div>`;
+                }
+                let component = `<div class="swiper ${className}">
+                                    <div class="swiper_list">${itemList}</div>
+                                </div>`;
+                page.insertAdjacentHTML('beforeend', component);
             }
             
-			// 动态生成html
-			function createList(needDot) {
-				let [node, list, item, dot] = [document.createElement('div'), document.createElement('ul'), '', document.createElement('div')];
-				node.className = 'swiper';
-				node.style.marginBottom = '10px';
-				list.className = 'swiper_list';
-				dot.className = 'swiper_pagination';
-				for (let i = 0; i < colors.length; i++) {
-                    item += `<li class="swiper_item" style="background-color: ${colors[i]}"><p>silder-${i+1}</p></li>`;
-                }
-				list.innerHTML = item;
-				node.appendChild(list);
-				if (needDot) node.appendChild(dot);
-                page.appendChild(node);
-                
-			}
-			createList(true);
+			function addSwiper (el) {
+				createList('new_swiper');
+				swiper({
+					el: '.new_swiper',
+					pagination: true,
+                    loop: true,
+					vertical: true
+				});
+				el.parentNode.removeChild(el);
+            }
+			createList();
 			swiper({
                 el: '.swiper',
                 pagination: true,
                 autoPaly: true,
-                interval: 3000,
-                // loop: true,
+                // interval: 5000,
+                loop: true,
                 // moveTime: 400,
                 // vertical: true
             });
