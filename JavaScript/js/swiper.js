@@ -49,7 +49,7 @@ function swiper(params) {
     let moveTime = 300;
     /**
      * css class 命名列表
-     * @type {['滑动列表','滑动item','圆点容器','底部圆点','圆点高亮']}
+     * @dec ['滑动列表','滑动item','圆点容器','底部圆点','圆点高亮']
      */
     const classNames = ['.swiper_list', '.swiper_item', '.swiper_pagination', '.swiper_dot', '.swiper_dot_active'];
     
