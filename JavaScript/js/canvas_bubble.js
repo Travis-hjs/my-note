@@ -221,5 +221,11 @@ class Main {
 
 let page = utils.find('.page');
 
-new Main(page);
+const bubble = new Main(page);
 
+function screenShot() {
+    const imgUrl = bubble.canvas.toDataURL("image/png");
+    const image = document.createElement("img");
+    image.src = imgUrl;
+    document.body.appendChild(image);
+}
