@@ -22,9 +22,23 @@
             }
             document.querySelector('.app ul').innerHTML = _html;
 
-            /** 是否到底部 */
-            function isBottom() {
-                return document.documentElement.clientHeight + window.scrollY >= (document.documentElement.scrollHeight || document.documentElement.clientHeight)
+            /**
+             * 监听到达底部
+             * @param {number} distance 距离底部多少像素触发(像素)
+             * @param {Function} callback 到达底部回调函数
+             * @param {boolean} once 是否为一次性
+             */
+            function onBottom(distance = 0, callback, once = false) {
+                function onScroll() {
+                    let { scrollTop, scrollHeight } = document.scrollingElement;
+                    let clientHeight = window.innerHeight;
+                    // 当前滚动高度 + 视口高度 >= 文档总高度
+                    if (scrollTop + clientHeight >= scrollHeight - distance) {
+                        if (typeof callback === 'function') callback();
+                        if (once) window.removeEventListener('scroll', onScroll);
+                    }
+                }
+                window.addEventListener('scroll', onScroll);
             }
 
             /**
@@ -33,7 +47,7 @@
              * @param {Function} callback 到达底部回调函数
              * @param {boolean} once 是否为一次性（防止重复用）
              */
-            function scrollToBottom(number = 0, callback, once) {
+            function scrollToBottom(number = 0, callback, once = false) {
                 // 滚动事件
                 function isScroll() {
                     /** 滚动的高度 */
