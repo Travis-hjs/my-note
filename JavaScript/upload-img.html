@@ -63,6 +63,7 @@
                     el.parentNode.classList.add('hide');
                     el.parentNode.parentNode.querySelector('.img-box').classList.remove('hide');
                     el.parentNode.parentNode.querySelector('.img-box .image').src = res;
+                    el.value = null;
                 });
 
 				let url = getObjectURL(file);
