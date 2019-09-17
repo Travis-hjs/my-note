@@ -18,29 +18,24 @@
                 cursor: pointer;
             }
             .rate_box{ width: 100%; display: flex; flex-flow: row-reverse; justify-content: center; }
-            .rate_box input[name="rate"]{ width: 28px; height: 28px; margin-right: 16px; position: relative; }
-            .rate_box input[name="rate"]::after{ position: absolute; top: 0; left: 0; content: ""; background-color: #dadada; transition: .3s all; width: 100%; height: 100%; border-radius: 100%; }
-            /* .rate_box input[name="rate"]:checked::after{ background-color: orange; } */
-
+            input[name="rate"]{ width: 28px; height: 28px; margin-right: 16px; position: relative; }
+            input[name="rate"]::after{ position: absolute; top: 0; left: 0; content: ""; background-color: #dadada; transition: .2s all; width: 100%; height: 100%; border-radius: 100%; }
+            /* input[name="rate"]:checked::after{ background-color: tomato; } */
             input[name="rate"]:hover::after{ transform: scale(1.2); }
-
-            input[name="rate"]:checked::after,
-            input[name="rate"]:hover::after { background-color: orange; }
-
-            input[name="rate"]:checked ~ input[name="rate"]::after,
-            input[name="rate"]:hover ~ input[name="rate"]::after { background-color: orange; }
+            input[name="rate"]:checked::after, input[name="rate"]:hover::after { background-color: tomato; }
+            input[name="rate"]:checked ~ input[name="rate"]::after, input[name="rate"]:hover ~ input[name="rate"]::after { background-color: tomato; }
             
-            input[name="select"]{ width: 28px; height: 28px; text-align: center; line-height: 26px; font-size: 15px; transition: .3s all; background-color: #fff; border-radius: 100%; border: solid 1px tomato; }
-            input[name="select"]::after{ content: "✔"; color: transparent; transition: .3s all; }
+            input[name="select"]{ width: 28px; height: 28px; background-color: transparent; border: solid 1px tomato; position: relative; transition: .2s all; }
+            input[name="select"]::after{ content: ""; position: absolute; top: 40%; left: 50%; transform: translate(-50%, -50%) rotate(45deg); width: 30%; height: 60%; border: solid 2px transparent; border-top: none; border-left: none; transition: .2s all; }
             input[name="select"]:checked{ background-color: tomato; }
-            input[name="select"]:checked::after{ color: #fff; }
+            input[name="select"]:checked::after{ border-color: #fff; }
 
             /* 背景层 */
-            input[name="switch"] { position: relative; width: 60px; height: 30px; background-color: #dadada; border-radius: 30px; border: none; outline: none; -webkit-appearance: none; transition: all .2s ease;}
+            input[name="switch"] { position: relative; width: 60px; height: 30px; background-color: #dadada; border-radius: 30px; border: none; outline: none; -webkit-appearance: none; transition: .2s all;}
             /* 按钮 */
-            input[name="switch"]::after { content: ''; position: absolute; top: 0; left: 0; width: 50%; height: calc(100% - 1px); background-color: #fff; border-radius: 50%; transition: all .2s; box-shadow: 1px 1px 1px 1px rgba(0, 0, 0, 0.08);}
+            input[name="switch"]::after { content: ''; position: absolute; top: 0; left: 0; width: 50%; height: calc(100% - 1px); background-color: #fff; border-radius: 50%; transition: .2s all; box-shadow: 1px 1px 1px 1px rgba(0, 0, 0, 0.08);}
             /* 选中状态时，背景色切换 */
-            input[name="switch"]:checked { background-color: orange; }
+            input[name="switch"]:checked { background-color: tomato; }
             /* 选中状态时，按钮的位置移动 */
             input[name="switch"]:checked::after { left: 50%;}
         </style>
@@ -48,12 +43,12 @@
     <body>
         <div class="page">
             <div class="box">
-                <input name="switch" value="switch" type="checkbox">
+                <input type="checkbox" name="switch" value="switch">
             </div>
             <div class="box">
-                <input name="select" type="checkbox" value="select1">
-                <input name="select" type="checkbox" value="select2">
-                <input name="select" type="checkbox" value="select3" checked>
+                <input type="checkbox" name="select" value="select1">
+                <input type="checkbox" name="select" value="select2">
+                <input type="checkbox" name="select" value="select3" checked>
             </div>
             <div class="rate_box box">
                 <input type="radio" name="rate" value="1">
