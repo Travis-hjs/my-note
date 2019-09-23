@@ -114,10 +114,18 @@ const ring = ringProgress(canvas, {
 });
 
 /**
+ * @type {HTMLElement}
+ */
+const line = document.querySelector('.progress');
+
+line.style.backgroundSize = '50%';
+
+/**
  * 输入百分比值
  * @param {HTMLInputElement} el 
  */
 function inputNumber(el) {
     ring.setValue(el.value);
+    line.style.backgroundSize = el.value + '%';
 }
 
