@@ -8,13 +8,57 @@
     <style>
         *{ padding: 0; margin: 0; }
         div { box-sizing: border-box; }
-        .box{ width: 240px; height: 240px; margin: 0 auto 16px; transition: .3s all; }
+        .box{ width: 240px; height: 240px; margin: 0 auto 16px; }
         .ring{ background: conic-gradient(rgba(0, 255, 149, 0.884) 0% 32%, hotpink 32% 100%); border-radius: 100%; }
+        .basis { 
+            background: repeating-conic-gradient(orange 0 15deg, rgba(255,255,255,0.4) 0 30deg); border-radius: 100%; 
+            animation: rotate 6s linear infinite; 
+        }
+        .rainbow { 
+            background: conic-gradient(#4e5934, #d91eb7, #3ebd97, #b97010, #62f5fc, #66e026, #9250a7, #566e46, #05f823, #87bd80, #3595e5, #ae0f83, #2ddb27, #2ce71a, #e7ba01, #f5facc, #54fdb5, #8b833f, #717e7f, #ec8ca8, #4d3a12, #09aae3, #bd335c, #5f9cf3, #93ed38, #4e5934, #d91eb7, #3ebd97, #b97010, #62f5fc, #66e026, #9250a7, #566e46, #05f823, #87bd80, #3595e5, #ae0f83, #2ddb27, #2ce71a, #e7ba01, #f5facc, #54fdb5, #8b833f, #717e7f, #ec8ca8, #4d3a12, #09aae3, #bd335c, #5f9cf3); 
+            animation: rotate 6s ease-in-out infinite; 
+            border-radius: 100%;
+        }
+        @keyframes rotate { 
+            to { 
+                transform: rotate(1turn); 
+            } 
+        }
+        .glow { background: radial-gradient(white, black); position: relative; overflow: hidden; }
+        .glow:before, .glow:after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            margin: -100vmax;
+            width: 200vmax;
+            height: 200vmax;
+            opacity: .5;
+            mix-blend-mode: overlay;
+            animation: rotate 7.1s ease-in-out infinite;
+        }
+        .glow:before {
+            background: conic-gradient(rgba(3, 10, 0, 0.11), rgba(3, 10, 0, 0.48), rgba(3, 10, 0, 0.73), rgba(3, 10, 0, 0.17), rgba(3, 10, 0, 0.15), rgba(3, 10, 0, 0.35), rgba(3, 10, 0, 0.84), rgba(3, 10, 0, 0.16), rgba(3, 10, 0, 0.82), rgba(3, 10, 0, 0.57), rgba(3, 10, 0, 0.85), rgba(3, 10, 0, 0.54), rgba(3, 10, 0, 0.71), rgba(3, 10, 0, 0.92), rgba(3, 10, 0, 0.16), rgba(3, 10, 0, 0.49), rgba(3, 10, 0, 0.73), rgba(3, 10, 0, 0.73), rgba(3, 10, 0, 0.59), rgba(3, 10, 0, 0.11), rgba(3, 10, 0, 0.48), rgba(3, 10, 0, 0.73), rgba(3, 10, 0, 0.17), rgba(3, 10, 0, 0.15), rgba(3, 10, 0, 0.35), rgba(3, 10, 0, 0.84), rgba(3, 10, 0, 0.16), rgba(3, 10, 0, 0.82), rgba(3, 10, 0, 0.57), rgba(3, 10, 0, 0.85), rgba(3, 10, 0, 0.54), rgba(3, 10, 0, 0.71), rgba(3, 10, 0, 0.92), rgba(3, 10, 0, 0.16), rgba(3, 10, 0, 0.49), rgba(3, 10, 0, 0.73), rgba(3, 10, 0, 0.73));
+        }
+        .glow:after {
+            background: conic-gradient(rgba(3, 10, 0, 0.21), rgba(3, 10, 0, 0.34), rgba(3, 10, 0, 0.81), rgba(3, 10, 0, 0.49), rgba(3, 10, 0, 0.61), rgba(3, 10, 0, 0.3), rgba(3, 10, 0, 0.31), rgba(3, 10, 0, 0.84), rgba(3, 10, 0, 0.96), rgba(3, 10, 0, 0.37), rgba(3, 10, 0, 0.93), rgba(3, 10, 0, 0.46), rgba(3, 10, 0, 0.24), rgba(3, 10, 0, 0.5), rgba(3, 10, 0, 0.09), rgba(3, 10, 0, 0.28), rgba(3, 10, 0, 0.63), rgba(3, 10, 0, 0.57), rgba(3, 10, 0, 0.62), rgba(3, 10, 0, 0.39), rgba(3, 10, 0, 0.81), rgba(3, 10, 0, 0.85), rgba(3, 10, 0, 0.48), rgba(3, 10, 0, 0.54), rgba(3, 10, 0, 0.48), rgba(3, 10, 0, 0.59), rgba(3, 10, 0, 0.21), rgba(3, 10, 0, 0.34), rgba(3, 10, 0, 0.81), rgba(3, 10, 0, 0.49), rgba(3, 10, 0, 0.61), rgba(3, 10, 0, 0.3), rgba(3, 10, 0, 0.31), rgba(3, 10, 0, 0.84), rgba(3, 10, 0, 0.96), rgba(3, 10, 0, 0.37), rgba(3, 10, 0, 0.93), rgba(3, 10, 0, 0.46), rgba(3, 10, 0, 0.24), rgba(3, 10, 0, 0.5), rgba(3, 10, 0, 0.09), rgba(3, 10, 0, 0.28), rgba(3, 10, 0, 0.63), rgba(3, 10, 0, 0.57), rgba(3, 10, 0, 0.62), rgba(3, 10, 0, 0.39), rgba(3, 10, 0, 0.81), rgba(3, 10, 0, 0.85), rgba(3, 10, 0, 0.48), rgba(3, 10, 0, 0.54), rgba(3, 10, 0, 0.48));
+            animation-duration: 6.1s;
+            animation-direction: reverse;
+        }
+        @keyframes rotate {
+            to {
+                transform: rotate(1turn);
+            }
+        }
     </style>
 </head>
 <body>
-    <!-- learn: https://www.imooc.com/article/27841 -->
+    <!-- learn: https://www.cnblogs.com/coco1s/p/7079529.html -->
     <div class="box ring"></div>
+    <div class="box basis"></div>
+    <div class="box rainbow"></div>
+    <div class="box glow"></div>
+
     <script>
         const ratio = 10;
         /** @type{HTMLElement} */
