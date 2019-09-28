@@ -9,7 +9,7 @@
         ul,li{ list-style: none; }
         nav{ width: 200px; background: lightblue; margin: auto; }
         nav li{ line-height: 28px; text-align: center; }
-        .wrap{ width: 300px; margin: auto; border: solid 2px orange; min-height: 200px; text-align: center; }
+        .content{ width: 300px; margin: auto; border: solid 2px orange; min-height: 200px; text-align: center; }
         .ul{ width: 100%; }
         .ul li{ background-color: #eee; line-height: 24px; }
         .ul li:nth-child(odd){ background: #fff; }
@@ -22,10 +22,10 @@
         <li><a href="#/b">导航二</a></li>
         <li><a href="#/c">导航三</a></li>
     </nav>
+    
     <!-- 路由渲染的位置 -->
-    <div class="wrap">
+    <div class="content"></div>
 
-    </div>
     <script type="text/javascript">
         class ModuleRouter {
             /** 路由模块 */
@@ -48,9 +48,9 @@
             /** 路由变动时做出处理 */
             refresh() {
                 this.currentUrl = location.hash.slice(1) || '/';
-                var fn = this.routes[this.currentUrl];
-                if (typeof fn === 'function') {
-                    fn();
+                const callback = this.routes[this.currentUrl];
+                if (typeof callback === 'function') {
+                    callback();
                 }
             }
             
@@ -66,7 +66,7 @@
 
         Router.init();
         
-        const content = document.querySelector('.wrap');
+        const content = document.querySelector('.content');
 
         function addHtml(title, text) {
             content.innerHTML = `<ul class="ul">
@@ -91,9 +91,7 @@
 
         window.addEventListener('load', function () {
             // 初始化路由重定向
-            const link = document.createElement('a');
-            link.href = '#/a';
-            link.click();
+            location.href = '#/a';
         });
 
     </script>
