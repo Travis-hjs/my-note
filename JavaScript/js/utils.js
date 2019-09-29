@@ -3,7 +3,7 @@ class StringModule {
     /**
      * 过滤只保留数字及小数点
      * @param {string} string 字符串
-     * @return {number}
+     * @returns {number}
      */
     onlyNumber(string) {
         /** 最终返回值 */
@@ -21,19 +21,6 @@ class StringModule {
         // 最后转数字
         value = Number(value);
         return isNaN(value) ? 0 : value;
-    }
-
-    /**
-     * 过滤掉特殊符号
-     * @param {string} string 
-     */
-    filterSpecial(string) {
-        let pattern = new RegExp("[`~!@#$^&*()=|{}':;',\\[\\].<>/?~！@#￥……&*（）——|{}【】‘；：”“'。，、？%+_]");
-        let result = '';
-        for (let i = 0; i < string.length; i++) {
-            result += string.substr(i, 1).replace(pattern, '');
-        }
-        return result;
     }
 
     /**
@@ -61,8 +48,8 @@ class StringModule {
     unitsNumber(value) {
         value = Math.floor(value);
         if (value == 0) return 0;
-        let units = ['', 'k', 'm', 'b', 'f', 'e', 'ae', 'be', 'ce', 'de', 'ee', 'fe', 'ge', 'he', 'ie'];
-        let index = Math.floor(Math.log(value) / Math.log(1000));
+        const units = ['', 'k', 'm', 'b', 'f', 'e', 'ae', 'be', 'ce', 'de', 'ee', 'fe', 'ge', 'he', 'ie'];
+        const index = Math.floor(Math.log(value) / Math.log(1000));
         let result = value / Math.pow(1000, index);
         if (index === 0) return result;
         result = result.toFixed(3);
@@ -103,7 +90,6 @@ class StringModule {
         return 'rgb(' + parseInt('0x' + hex.slice(1, 3)) + ',' + parseInt('0x' + hex.slice(3, 5)) + ',' + parseInt('0x' + hex.slice(5, 7)) + ')';
     }
 
-
 }
 
 /** 数组类处理模块 */
@@ -111,7 +97,7 @@ class ArrayModule extends StringModule {
     /**
      * 从对象数组中查找匹配项 ES5 实现 ES6 array.find()
      * @param {Array<object>} array array
-     * @param {Function} contrast 对比函数
+     * @param {() => boolean} contrast 对比函数
      */
     findItem(array, contrast) {
         if (typeof contrast !== 'function') return console.warn('findItem 传入的第二个参数类型必须为function');
@@ -177,7 +163,7 @@ class ArrayModule extends StringModule {
      */
     zIndexToTop(array, index) {
         if (index != 0) {
-            let item = array[index];
+            const item = array[index];
             array.splice(index, 1);
             array.unshift(item);
         } else {
@@ -192,7 +178,7 @@ class ArrayModule extends StringModule {
      */
     zIndexToBottom(array, index) {
         if (index != array.length - 1) {
-            let item = array[index];
+            const item = array[index];
             array.splice(index, 1);
             array.push(item);
         } else {
@@ -322,50 +308,22 @@ class DateModule extends ArrayModule {
 
     /**
      * 将秒数换成时分秒格式
-     * @param {number} value 
-     */
-    secondFormat(value) {
-        let second = Math.floor(value);
-        let minute = 0;
-        let hour = 0;
-        // 如果秒数大于60，将秒数转换成整数
-        if (second > 60) {
-            // 获取分钟，除以60取整数，得到整数分钟
-            minute = Math.floor(second / 60);
-            // 获取秒数，秒数取佘，得到整数秒数
-            second = Math.floor(second % 60);
-            // 如果分钟大于60，将分钟转换成小时
-            if (minute > 60) {
-                // 获取小时，获取分钟除以60，得到整数小时
-                hour = Math.floor(minute / 60);
-                // 获取小时后取佘的分，获取分钟除以60取佘的分
-                minute = Math.floor(minute % 60);
-            }
-        }
-        return { hour, minute, second };
-    }
-
-    /**
-     * 带天数的倒计时
      * @param {number} value 秒数
      */
-    countDown(value) {
-        let timer = setInterval(() => {
-            if (value <= 0) return clearInterval(timer);
-            let day = 0, hour = 0, minute = 0, second = 0;
-            day = Math.floor(value / (3600 * 24));
-            hour = Math.floor(value / 3600) - (day * 24);
-            minute = Math.floor(value / 60) - (day * 24 * 60) - (hour * 60);
-            second = Math.floor(value) - (day * 24 * 3600) - (hour * 3600) - (minute * 60);
-            // 格式化
-            day = ('0' + day).slice(-2);
-            hour = ('0' + hour).slice(-2);
-            minute = ('0' + minute).slice(-2);
-            second = ('0' + second).slice(-2);
-            console.log(`${day}天：${hour}小时：${minute}分钟：${second}秒`);
-            value--;
-        }, 1000);
+    secondFormat(value) {
+        let day = 0, hour = 0, minute = 0, second = 0;
+        day = Math.floor(value / (24 * 3600));
+        hour = Math.floor(value / 3600) - (day * 24);
+        minute = Math.floor(value / 60) - (day * 24 * 60) - (hour * 60);
+        second = Math.floor(value) - (day * 24 * 3600) - (hour * 3600) - (minute * 60);
+        // 格式化
+        day = ('0' + day).slice(-2);
+        hour = ('0' + hour).slice(-2);
+        minute = ('0' + minute).slice(-2);
+        second = ('0' + second).slice(-2);
+        return { day, hour, minute, second };
     }
+
 }
 
 /** 浏览器模块 */
@@ -435,14 +393,14 @@ class BomModule extends DateModule {
         function bin2hex(string) {
             let result = '';
             for (let i = 0; i < string.length; i++) {
-                let n = string.charCodeAt(i).toString(16);
+                const n = string.charCodeAt(i).toString(16);
                 result += n.length < 2 ? '0' + n : n;
             }
             return result;
         }
-        let canvas = document.createElement('canvas');
-        let ctx = canvas.getContext('2d');
-        let txt = domain || 'hjs.com';
+        const canvas = document.createElement('canvas');
+        const ctx = canvas.getContext('2d');
+        const txt = domain || 'hjs.com';
         ctx.textBaseline = 'top';
         ctx.font = '14px Arial';
         ctx.textBaseline = 'tencent';
@@ -487,7 +445,7 @@ class BomModule extends DateModule {
             if (typeof fail === 'function') fail('复制的内容不能为空！');
             return;
         }
-        const id = 'the_clipboard';
+        const id = 'the-clipboard';
         let clipboard = document.getElementById(id);
         if (!clipboard) {
             clipboard = document.createElement('textarea');
@@ -529,18 +487,18 @@ class DomModule extends BomModule {
 
     /**
      * 设置样式
-     * @param {Element} el 设置样式的元素
+     * @param {HTMLElement} el 设置样式的元素
      * @param {object} styles 样式 Example: {display: 'block', width: '100px'}
      */
     setStyle(el, styles) {
-        for (let key in styles) {
+        for (const key in styles) {
             el.style[key] = styles[key];
         }
     }
 
     /**
      * 检测元素是否存在指定 calss
-     * @param {Element} el 当前元素
+     * @param {HTMLElement} el 当前元素
      * @param {string} className class name
      */
     hasClass(el, className) {
@@ -553,7 +511,7 @@ class DomModule extends BomModule {
 
     /**
      * 给元素添加 calss
-     * @param {Element} el 当前元素
+     * @param {HTMLElement} el 当前元素
      * @param {string} className class name
      */
     addClass(el, className) {
@@ -569,7 +527,7 @@ class DomModule extends BomModule {
 
     /**
      * 给元素移除指定 calss
-     * @param {Element} el 当前元素
+     * @param {HTMLElement} el 当前元素
      * @param {string} className class name
      */
     removeClass(el, className) {
@@ -585,7 +543,7 @@ class DomModule extends BomModule {
 
     /**
      * 切换 calss name
-     * @param {Element} el 当前元素
+     * @param {HTMLElement} el 当前元素
      * @param {string} className class name
      */
     toggleClass(el, className) {
@@ -602,7 +560,7 @@ class DomModule extends BomModule {
 
     /**
      * 获取元素的的矩阵坐标
-     * @param {Element} el 当前元素
+     * @param {HTMLElement} el 当前元素
      */
     getRect(el) {
         return el.getBoundingClientRect();
@@ -610,34 +568,35 @@ class DomModule extends BomModule {
 
     /**
      * 动画帧更新
-     * @param {Function} fn 动画帧函数
+     * @param {Function} callback 动画帧函数
      */
-    update(fn = null) {
-        if (typeof fn !== 'function') return console.log('缺少动画函数');
+    update(callback = null) {
+        if (typeof callback !== 'function') return console.log('缺少动画函数');
         /** 动画帧 */
         const AnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame || window.msRequestAnimationFrame;
         /** 动画开始 */
         function move() {
-            fn();
+            callback();
             AnimationFrame(move);
         }
         move();
     }
 
     /**
-     * rem 适应
-     * @param {HTMLElement} el 指定元素适配
+     * rem 适配
+     * @param {HTMLElement} el 指定元素
      */
     remSetting(el) {
-        const html = document.documentElement; // 注意这里不能 使用 document.body
+        const html = document.documentElement; // 注意这里不能使用 document.body
         /** 比例值 */
         let value = 375 / 50;
         /** 视口宽度 */
-        let width = el.getBoundingClientRect().width;
+        let width = el.clientWidth;
+        // 首次适配
         html.style.fontSize = width / value + 'px';
         // 窗口变动时更新适配
         window.addEventListener('resize', function () {
-            width = el.getBoundingClientRect().width;
+            width = el.clientWidth;
             html.style.fontSize = width / value + 'px';
         });
     }
