@@ -119,7 +119,7 @@ function theDialog() {
                 hideBox();
                 if (typeof callback === 'function') callback();
             }
-            showBox();
+            setTimeout(showBox, 4);
         },
         /**
          * 确认弹框
@@ -145,7 +145,7 @@ function theDialog() {
                 hideBox();
                 if (typeof fail === 'function') fail();
             }
-            showBox();
+            setTimeout(showBox, 4);
         },
         /**
          * 显示加载
