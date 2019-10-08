@@ -13,12 +13,12 @@ function theDialog() {
         .the-dialog .c{ font-size: 15px; color: rgba(0,0,0,.64); line-height: 22px; margin-bottom: 24px; }
         .the-dialog .b{ width: 100%; overflow: hidden; }
         .the-dialog .b button{ cursor: pointer; outline: none; border: none; float: right; padding: 0 15px; margin-left: 10px; font-size: 15px; line-height: 36px; border-radius: 2px; transition: .2s all; }
-        .the-dialog .b .confirm{ color: #2196f3; }
-        .the-dialog .b .confirm:active{ background-color: rgba(33, 150, 243, 0.2); }
-        .the-dialog .b .cancel{ color: #999; }
-        .the-dialog .b .cancel:active{ background-color: rgba(0,0,0,0.1); } 
-        .the-dialog .the-loading .ring{ width: 46px; height: 46px; border: solid 3px #fff; border-radius: 50%; border-right-color: rgba(0,0,0,0); margin: 0 auto 16px; animation: circular 1.3s ease infinite; }
-        .the-dialog .the-loading .text{ font-size: 15px; color: #fff; text-align: center; }
+        .the-dialog .b .the-confirm{ color: #2196f3; }
+        .the-dialog .b .the-confirm:active{ background-color: rgba(33, 150, 243, 0.2); }
+        .the-dialog .b .the-cancel{ color: #999; }
+        .the-dialog .b .the-cancel:active{ background-color: rgba(0,0,0,0.1); } 
+        .the-dialog .the-loading .the-ring{ width: 46px; height: 46px; border: solid 3px #fff; border-radius: 50%; border-right-color: rgba(0,0,0,0); margin: 0 auto 16px; animation: circular 1.3s ease infinite; }
+        .the-dialog .the-loading .the-text{ font-size: 15px; color: #fff; text-align: center; }
         .the-dialog-hide{ opacity: 0; visibility: hidden; }
         .the-dialog-hide .the-dialog-box{ transform: scale(0.5, 0.5); }
         .the-toast{ padding: 8px 16px; background-color: rgba(0,0,0,0.45); border-radius: 4px; position: fixed; z-index: 999; bottom: 10%; left: 50%; transform: translateX(-50%); animation: toastMove 0.4s ease; transition: 0.2s all; }
@@ -49,20 +49,20 @@ function theDialog() {
                 <div class="t"></div>
                 <div class="c"></div>
                 <div class="b">
-                    <button class="confirm">确认</button>
+                    <button class="the-confirm">确认</button>
                 </div>
             </div>
             <div class="the-dialog-box hide">
                 <div class="t"></div>
                 <div class="c"></div>
                 <div class="b">
-                    <button class="confirm">确认</button>
-                    <button class="cancel">取消</button>
+                    <button class="the-confirm">确认</button>
+                    <button class="the-cancel">取消</button>
                 </div>
             </div>
             <div class="the-loading hide">
-                <div class="ring"></div>
-                <div class="text"></div>
+                <div class="the-ring"></div>
+                <div class="the-text"></div>
             </div>
         </div>`;
         doc.body.insertAdjacentHTML('beforeend', template);
@@ -76,14 +76,14 @@ function theDialog() {
     const alert = box.children[0];
     const alertTitle = alert.querySelector('.t');
     const alertContent = alert.querySelector('.c');
-    const alertConfirm = alert.querySelector('.confirm');
+    const alertConfirm = alert.querySelector('.the-confirm');
     const confirm = box.children[1];
     const confirmTitle = confirm.querySelector('.t');
     const confirmContent = confirm.querySelector('.c');
-    const confirmConfirm = confirm.querySelector('.confirm');
-    const confirmCancel = confirm.querySelector('.cancel');
+    const confirmConfirm = confirm.querySelector('.the-confirm');
+    const confirmCancel = confirm.querySelector('.the-cancel');
     const load = box.children[2];
-    const loadText = load.querySelector('.text');
+    const loadText = load.querySelector('.the-text');
 
     function hideBox() {
         box.classList.add('the-dialog-hide');
