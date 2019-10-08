@@ -6,33 +6,21 @@
         <meta name="format-detection" content="telephone=no, email=no, date=no, address=no">
         <title>用户交互提示</title>
         <link rel="stylesheet" type="text/css" href="./css/base.css"/>
-        <link rel="stylesheet" href="./css/dialogs.css">
     	<style>
+            html { font-size: calc(100vw / 7.5) }
             /* 触发按钮 */
-            .content{ width: 2.8rem; overflow: hidden; margin: auto; padding-top: 100px; }
-            .content button{
-                font-size: 0.32rem;
-                border: none;
-                outline: none;
-                width: 100%;
-                height: .8rem;
-                border-radius: .1rem;
-                color: #fff;
-                background-color: #2196f3;
-                box-shadow: 0 1px 3px rgba(0,0,0,.12), 0 1px 2px rgba(0,0,0,.24);
-            }
+            .content{ width: 2.8rem; overflow: hidden; margin: auto; padding-top: 100px; text-align: center; }
+            .content button{ min-width: 2rem; }
         </style>
     </head>
     <body>
         <div class="content">
-            <button onclick="myAlert()">提示框</button>
-            <button onclick="myComfirm()">对话框</button>
-            <button onclick="myLoad()">loading</button>
-            <button onclick="myBall()">loadingBall</button>
-            <button onclick="myToast()">toast</button>
-            <button onclick="testBtn()">原型链式调用</button>
-            <button onclick="classBtn()">类定义调用</button>
+            <button class="button blue-btn" onclick="showAlert()">提示框</button>
+            <button class="button blue-btn" onclick="showComfirm()">对话框</button>
+            <button class="button blue-btn" onclick="showLoad()">loading</button>
+            <button class="button blue-btn" onclick="showToast()">toast</button>
         </div>
+
         <script type="text/javascript" src="./js/dialogs.js"></script>
     </body>
 </html>
