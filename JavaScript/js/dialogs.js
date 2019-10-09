@@ -45,7 +45,7 @@ function theDialog() {
         head.appendChild(style);
     }
 
-    /** 输出样式 */
+    /** 输出组件模板 */
     function outputTemplate() {
         if (doc.querySelector('.the-dialog')) return;
         const template = `<div class="the-dialog the-dialog-hide">
