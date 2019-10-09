@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" dir="ltr">
+<html>
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="maximum-scale=1.0, minimum-scale=1.0, user-scalable=0, initial-scale=1.0, width=device-width"/>
@@ -7,18 +7,15 @@
         <title>picker</title>
         <link rel="stylesheet" type="text/css" href="./css/base.css">
         <link rel="stylesheet" type="text/css" href="./css/picker.css">
-        <style media="screen">
+        <style>
+            html { font-size: calc(100vw / 7.5) }
             .btn{ box-shadow: 0 0 25px 0 rgba(0,0,0,0.2); font-size: .32rem; background-color: gold; color: #fff; line-height: .88rem; margin-bottom: .3rem; text-align: center; }
             .select_list{ width: 100%; }
             .select_list li{ text-align: center; line-height: .88rem; font-size: .3rem; border-bottom: solid 1px #eee; }
-            .layer{ -webkit-animation: pickShow .4s ease; animation: pickShow .4s ease; }
-            @-webkit-keyframes pickShow {
-            	from { -webkit-transform: translateY(100%); transform: translateY(100%); }
-            	to { -webkit-transform: translateY(0%); transform: translateY(0%); }
-            }
+            .layer{ animation: pickShow .4s ease; }
             @keyframes pickShow {
-                from { -webkit-transform: translateY(100%); transform: translateY(100%); }
-            	to { -webkit-transform: translateY(0%); transform: translateY(0%); }
+                from { transform: translateY(100%); }
+            	to { transform: translateY(0%); }
             }
         </style>
     </head>
