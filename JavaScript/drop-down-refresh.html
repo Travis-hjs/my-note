@@ -7,56 +7,31 @@
 		<title>下拉刷新</title>
 		<link rel="stylesheet" href="./css/base.css">
 		<link rel="stylesheet" href="./css/loading.css">
-		<link rel="stylesheet" href="./css/refresh.css">
-		<style media="screen">
-			body {
-				background-color: #eee;
-			}
-
-			.wrap li {
-				background-color: gold;
-				height: 5rem;
-				position: relative;
-				z-index: 10;
-			}
-
-			.wrap li:nth-child(even) {
-				background-color: #212121;
-			}
+		<style>
+            html { font-size: calc(100vw / 7.5) }
+            body { background-color: #fff; }
+            .preloader{ width: 48px; height: 48px; }
+			.page .item { background-color: #333; height: 5rem; }
+            .page .item:nth-child(even) { background-color: #666; }
 		</style>
 	</head>
 	<body>
-		<div class="wrap">
-			<ul>
-				<li></li>
-			</ul>
-		</div>
-		<!-- 下拉头部状态节点模板 -->
-		<script type="text/template">
-			<div class="refresh_title">
-				<!-- icon -->
-				<div class="icon_refresh"></div>
-				<!-- 旋转的圈圈 -->
-				<div class="preloader hide">
-					<span class="preloader-inner">
-						<span class="preloader-inner-gap"></span>
-						<span class="preloader-inner-left">
-							<span class="preloader-inner-half-circle"></span>
-						</span>
-						<span class="preloader-inner-right">
-							<span class="preloader-inner-half-circle"></span>
-						</span>
-					</span>
-				</div>
-			</div>
-		</script>
-		<script type="text/javascript">
-			var _html = ''
-			for (let i = 0; i < 20; i++) {
-				_html += '<li></li>'
-			}
-			document.querySelector('.wrap ul').innerHTML = _html;
-		</script>
+        <div class="page"></div>
+        
+        <script type="text/template" id="loading-icon">
+            <!-- loading 圈圈 -->
+            <div class="preloader">
+                <div class="preloader-inner">
+                    <div class="preloader-inner-gap"></div>
+                    <div class="preloader-inner-left">
+                        <div class="preloader-inner-half-circle"></div>
+                    </div>
+                    <div class="preloader-inner-right">
+                        <div class="preloader-inner-half-circle"></div>
+                    </div>
+                </div>
+            </div>
+        </script>
 		<script src="./js/dropDownRefresh.js"></script>
 	</body>
 </html>
