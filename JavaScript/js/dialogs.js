@@ -1,14 +1,13 @@
-/** 交互提示组件 */
+/** 交互提示组件（不需要额外引入css） */
 function theDialog() {
     const doc = document;
 
     /** 输出样式 */
     function outputStyle() {
         if (doc.getElementById('the-dialog-style')) return;
-        const css = `.the-dialog, .the-dialog div, .the-dialog button{ padding: 0px; margin: 0px; box-sizing: border-box; }
-        .the-dialog .hide{ display: none; }
+        const css = `.the-dialog, .the-dialog div, .the-dialog button, .the-dialog p{ padding: 0px; margin: 0px; box-sizing: border-box; }
         .the-dialog{ width: 100%; height: 100vh; background-color: rgba(0,0,0,0.4); position: fixed; top: 0; left: 0; z-index: 999; transition: .2s all; display: flex; flex-wrap: wrap; align-items: center; justify-content: center; }
-        .the-dialog .the-dialog-box{ width: 78%; max-width: 360px; padding: 24px 24px 12px; box-shadow: 0 5px 5px -3px rgba(0,0,0,.2), 0 8px 10px 1px rgba(0,0,0,.14), 0 3px 14px 2px rgba(0,0,0,.12); border-radius: 2px; background-color: #fff; overflow: hidden; transition: .2s all; }
+        .the-dialog .the-dialog-box{ width: 78%; max-width: 360px; padding: 24px 24px 12px; box-shadow: 0 5px 5px -3px rgba(0,0,0,.2), 0 8px 10px 1px rgba(0,0,0,.14), 0 3px 14px 2px rgba(0,0,0,.12); border-radius: 2px; background-color: #fff; overflow: hidden; animation: dialogBoxShow .2s; transition: .2s all; }
         .the-dialog .t{ font-size: 22px; line-height: 32px; color: #333; margin-bottom: 20px; }
         .the-dialog .c{ font-size: 15px; color: rgba(0,0,0,.64); line-height: 22px; margin-bottom: 24px; }
         .the-dialog .b{ width: 100%; overflow: hidden; }
@@ -19,10 +18,15 @@ function theDialog() {
         .the-dialog .b .the-cancel:active{ background-color: rgba(0,0,0,0.1); } 
         .the-dialog .the-loading .the-ring{ width: 46px; height: 46px; border: solid 3px #fff; border-radius: 50%; border-right-color: rgba(0,0,0,0); margin: 0 auto 16px; animation: circular 1.3s ease infinite; }
         .the-dialog .the-loading .the-text{ font-size: 15px; color: #fff; text-align: center; }
-        .the-dialog-hide{ opacity: 0; visibility: hidden; }
-        .the-dialog-hide .the-dialog-box{ transform: scale(0.5, 0.5); }
         .the-toast{ padding: 8px 16px; background-color: rgba(0,0,0,0.45); border-radius: 4px; position: fixed; z-index: 999; bottom: 10%; left: 50%; transform: translateX(-50%); animation: toastMove 0.4s ease; transition: 0.2s all; }
         .the-toast p{ line-height: 22px; font-size: 14px; color: #fff; }
+        .the-dialog-hide{ opacity: 0; visibility: hidden; }
+        .the-dialog-hide .the-dialog-box{ transform: scale(0.5); }
+        .the-dialog .hide{ display: none; }
+        @keyframes dialogBoxShow {
+            0% { transform: scale(0.5); }
+            100% { transform: scale(1); }
+        }
         @keyframes circular {
             0% { transform: rotate(0deg); }
             50% { opacity: 0.5; }
@@ -95,13 +99,16 @@ function theDialog() {
 
     /**
      * 显示的节点
-     * @param {HTMLElement} node 显示的节点
+     * @param {HTMLElement} el 显示的节点
      */
-    function showNode(node) {
-        alert.classList.add('hide');
-        confirm.classList.add('hide');
-        load.classList.add('hide');
-        node.classList.remove('hide');
+    function showNode(el) {
+        [alert, confirm, load].forEach(item => {
+            if (item === el) {
+                item.classList.remove('hide');
+            } else {
+                item.classList.add('hide');
+            }
+        });
     }
 
     return {
@@ -111,15 +118,15 @@ function theDialog() {
          * @param {Function} callback 确认回调
          * @param {string} title 提示文字
          */
-        alert(content = '内容', callback, title = '提示') {
-            showNode(alert);
+        alert(content = '内容', callback = null, title = '提示') {
             alertTitle.textContent = title;
             alertContent.textContent = content;
             alertConfirm.onclick = function() {
                 hideBox();
                 if (typeof callback === 'function') callback();
             }
-            setTimeout(showBox, 4);
+            showBox();
+            showNode(alert);
         },
         /**
          * 确认弹框
@@ -131,8 +138,7 @@ function theDialog() {
          * @param {Function} callback 确认回调
          * @param {Function} fail 取消回调
          */
-        confirm(option, callback, fail) {
-            showNode(confirm);
+        confirm(option, callback = null, fail = null) {
             confirmTitle.textContent = option.title || '提示';
             confirmContent.textContent = option.content || '内容';
             confirmConfirm.textContent = option.comfirmText || '确定';
@@ -145,16 +151,17 @@ function theDialog() {
                 hideBox();
                 if (typeof fail === 'function') fail();
             }
-            setTimeout(showBox, 4);
+            showBox();
+            showNode(confirm);
         },
         /**
          * 显示加载
          * @param {string} content 加载提示文字
          */
         loading(content = '加载中') {
-            showNode(load);
             loadText.textContent = content;
             showBox();
+            showNode(load);
         },
         /**
          * 显示提示条
@@ -170,7 +177,7 @@ function theDialog() {
                 doc.body.removeChild(toast);
             }, time);
         },
-        /** 关闭所有 */
+        /** 关闭组件（配合loading用） */
         hide() {
             hideBox();
         }
