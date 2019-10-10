@@ -95,7 +95,7 @@ function dropDownRefresh(option) {
                     // 回调距离函数 如果有需要
                     if (typeof rangeCallback === 'function') rangeCallback(range);
                 }
-            }, false);
+            });
 
             // 触摸结束
             page.addEventListener('touchend', function () {
