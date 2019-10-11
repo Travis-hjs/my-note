@@ -12,21 +12,17 @@ html, body{
 	font-family: "Helvetica Neue", Helvetica, sans-serif;
 }
 li{ list-style: none; }
-a{ text-decoration: none; color: #333; }
-span, img{ display: block; }
+a{ text-decoration: none; color: inherit; }
 img{ display: block; width: 100%; }
-h1,h2,h3,h4,h5,h6,b,i{ font-weight: normal; font-style: normal }
-button, input, textarea{ outline: none; border: none; background-color: transparent; -webkit-user-select: auto; }
+h1,h2,h3,h4,h5,h6,b,i{ font-weight: normal; font-style: normal; }
+button, input, textarea{ outline: none; border: none; background-color: transparent; }
 input::-webkit-input-placeholder { color: #999; }
 button::after, input::after{ border: none; }
 textarea{ resize: none; display: block; }
 textarea::-webkit-input-placeholder { color: #999; }
 
-/* 页面结构处理 */
-.page{ width: 100%; overflow: hidden; margin: 0 auto; max-width: 680px; }
-
 /* flex布局 */
-.flex{ display: -webkit-box; display: -webkit-flex; display: flex; flex-wrap: wrap }
+.flex{ display: flex; flex-wrap: wrap }
 .f1{ flex: 1; }
 .f2{ flex: 2; }
 .f3{ flex: 3; }
@@ -35,10 +31,13 @@ textarea::-webkit-input-placeholder { color: #999; }
 /* 水平居中 */
 .fcenter{ justify-content: center; }
 
-/* 溢出...显示 */
+/* 溢出...显示 当前节点生效 */
 .ellipsis{ overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.ellipsis-2{ display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 3; text-overflow: ellipsis; overflow: hidden; }
-.ellipsis-3{ display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 3; text-overflow: ellipsis; overflow: hidden; }
+
+/* 溢出...显示 子节点生效 */
+.ellipsis-1{ display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 1; overflow: hidden; }
+.ellipsis-2{ display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden; }
+.ellipsis-3{ display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 3; overflow: hidden; }
 
 /* 卡片 */
 .card{ 
@@ -50,7 +49,6 @@ textarea::-webkit-input-placeholder { color: #999; }
 
 /* 按钮 */
 .button {
-    display: inline-block;
     overflow: hidden;
     outline: none;
     border: none;
@@ -58,7 +56,6 @@ textarea::-webkit-input-placeholder { color: #999; }
     border-radius: 2px;
     min-width: 88px;
     height: 36px;
-    /* line-height: 36px; */
     vertical-align: middle;
     padding: 0 16px; 
     font-size: 15px;
@@ -72,3 +69,6 @@ textarea::-webkit-input-placeholder { color: #999; }
 .blue-btn{ background-color: #409eff; }
 .green-btn{ background-color: #4caf50; }
 .red-btn{ background-color: #f44336; }
+
+/* 页面结构处理 */
+.page{ width: 100%; min-height: 100vh; overflow: hidden; margin: 0 auto; max-width: 680px; }
