@@ -204,35 +204,43 @@ class ArrayModule extends StringModule {
     }
 }
 
-/** 时间日期类型日期模块 */
 class DateModule extends ArrayModule {
+    /**
+     * 时间日期类型日期模块
+     * @example
+     * new Date().toLocaleDateString();         => `2020/12/12`
+     * new Date().toTimeString().slice(0, 8);   => `12:12:12`
+     * new Date().toLocaleTimeString();         => `上/下午12:12:12` 
+     * new Date().toLocaleString();             => `2020/12/12 上/下午12:12:12`
+     */
     constructor() {
-        super();
-        // new Date().toLocaleDateString(); => 2020/12/12
-        // new Date().toLocaleTimeString(); => 上/下午12:12:12
-        // new Date().toLocaleString();     => 2020/12/12 上/下午12:12:12          
+        super();     
     }
     
     /** 日期列表生成 */
     dateJson() {
-        var date = new Date();
-        var calendar = [];
-        var minYears = date.getFullYear();
-        var maxYears = date.getFullYear() + 10;
-        var dayCount = 1;
-        for (var i = minYears; i <= maxYears; i++) {
-            var year = {
+        /**
+         * 日历数组
+         * @type {Array<{name: string, sub: Array<{name: string, sub: Array<{name: string}>}>}>}
+         */
+        const calendar = [];
+        const date = new Date();
+        const minYear = date.getFullYear();
+        const maxYear = date.getFullYear() + 10;
+        let dayCount = 1;
+        for (let i = minYear; i <= maxYear; i++) {
+            const year = {
                 name: i.toString(),
                 sub: []
             }
-            for (var j = 1; j <= 12; j++) {
-                var month = {
+            for (let j = 1; j <= 12; j++) {
+                const month = {
                     name: ('0' + j.toString()).slice(-2),
                     sub: []
                 };
                 year.sub.push(month);
                 dayCount = new Date(i, j, 0).getDate();
-                for (var k = 1; k <= dayCount; k++) {
+                for (let k = 1; k <= dayCount; k++) {
                     month.sub.push({
                         name: ('0' + k.toString()).slice(-2)
                     });
@@ -309,6 +317,7 @@ class DateModule extends ArrayModule {
     /**
      * 将秒数换成时分秒格式
      * @param {number} value 秒数
+     * @returns {{day: string, hour: string, minute: string, second: string}}
      */
     secondFormat(value) {
         let day = 0, hour = 0, minute = 0, second = 0;
@@ -326,8 +335,8 @@ class DateModule extends ArrayModule {
 
 }
 
-/** 浏览器模块 */
 class BomModule extends DateModule {
+    /** 浏览器模块 */
     constructor() {
         super();
         /** 缓存类型 */
