@@ -1,5 +1,5 @@
 /** 字符串模块 */
-class StringModule {
+class ModuleString {
     /**
      * 过滤只保留数字及小数点
      * @param {string} string 字符串
@@ -92,12 +92,68 @@ class StringModule {
 
 }
 
+/** 数字模块 */
+class ModuleNumber extends ModuleString {
+    /**
+     * 范围随机整数
+     * @param {number} min 最小数
+     * @param {number} max 最大数
+     */
+    ranInt(min, max) {
+        return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+
+    /**
+     * 获取两个坐标（二维）之间距离
+     * @param {object} size1 坐标一
+     * @param {number} size1.x
+     * @param {number} size1.y 
+     * @param {object} size2 坐标二
+     * @param {number} size1.x
+     * @param {number} size1.y 
+     */
+    getSizeDistance(size1, size2) {
+        function hypot() {
+            const length = arguments.length;
+            let y = 0;
+            for (let i = 0; i < length; i++) {
+                if (arguments[i] === Infinity || arguments[i] === -Infinity) {
+                    return Infinity;
+                }
+                y += arguments[i] * arguments[i];
+            }
+            return Math.sqrt(y);
+        }
+        return hypot(size2.x - size1.x, size2.y - size1.y);
+    }
+
+    /**
+     * 获取两个坐标（经纬度）点距离
+     * @param {object} location1 坐标1
+     * @param {number} location1.lng 经度
+     * @param {number} location1.lat 维度
+     * @param {object} location2 坐标2
+     * @param {number} location2.lng 经度
+     * @param {number} location2.lat 维度
+     */
+    getLocationDistance(location1, location2) {
+        const toRad = d => d * Math.PI / 180;
+        const radLat1 = toRad(location1.lat);
+        const radLat2 = toRad(location2.lat);
+        const deltaLat = radLat1 - radLat2;
+        const deltaLng = toRad(location1.lng) - toRad(location2.lng);
+        const dis = 2 * Math.asin(Math.sqrt(Math.pow(Math.sin(deltaLat / 2), 2) + Math.cos(radLat1) * Math.cos(radLat2) * Math.pow(Math.sin(deltaLng / 2), 2)));
+        return dis * 6378137;
+    }
+
+}
+
 /** 数组类处理模块 */
-class ArrayModule extends StringModule {
+class ModuleArray extends ModuleString {
     /**
      * 从对象数组中查找匹配项 ES5 实现 ES6 array.find()
-     * @param {Array<object>} array array
-     * @param {() => boolean} contrast 对比函数
+     * @param {Array<T>} array array
+     * @param {(item: T, index: number) => boolean} contrast 对比函数
      */
     findItem(array, contrast) {
         if (typeof contrast !== 'function') return console.warn('findItem 传入的第二个参数类型必须为function');
@@ -113,17 +169,8 @@ class ArrayModule extends StringModule {
     }
 
     /**
-     * 范围随机数
-     * @param {number} min 最小数
-     * @param {number} max 最大数
-     */
-    ranInt(min, max) {
-        return Math.floor(Math.random() * (max - min + 1)) + min;
-    }
-
-    /**
      * 随机打乱数组
-     * @param {Array<object>} array
+     * @param {Array<T>} array
      */
     shuffleArray(array) {
         return array.sort(() => Math.random() > 0.5 ? -1 : 1);
@@ -139,7 +186,7 @@ class ArrayModule extends StringModule {
 
     /**
      * 数组中随机取几个元素
-     * @param {Array<object>} array 数组
+     * @param {Array<T>} array 数组
      * @param {number} count 元素个数
      */
     getRandomArrayElements(array, count) {
@@ -158,7 +205,7 @@ class ArrayModule extends StringModule {
 
     /**
      * 将指定位置的元素置顶
-     * @param {Array<object>} array 改数组
+     * @param {Array<T>} array 改数组
      * @param {number} index 元素索引
      */
     zIndexToTop(array, index) {
@@ -173,7 +220,7 @@ class ArrayModule extends StringModule {
 
     /**
      * 将指定位置的元素置底
-     * @param {Array<object>} array 改数组
+     * @param {Array<T>} array 改数组
      * @param {number} index 元素索引
      */
     zIndexToBottom(array, index) {
@@ -185,26 +232,10 @@ class ArrayModule extends StringModule {
             console.log('已经处于置底');
         }
     }
-    
-    /**
-     * 获取两点距离
-     * @param {number} lng1 经度
-     * @param {number} lat1 纬度
-     * @param {number} lng2 经度
-     * @param {number} lat2 纬度
-     */
-    getDistance(lng1, lat1, lng2, lat2) {
-        let toRad = d => d * Math.PI / 180;
-        let radLat1 = toRad(lat1);
-        let radLat2 = toRad(lat2);
-        let deltaLat = radLat1 - radLat2;
-        let deltaLng = toRad(lng1) - toRad(lng2);
-        let dis = 2 * Math.asin(Math.sqrt(Math.pow(Math.sin(deltaLat / 2), 2) + Math.cos(radLat1) * Math.cos(radLat2) * Math.pow(Math.sin(deltaLng / 2), 2)));
-        return dis * 6378137;
-    }
+
 }
 
-class DateModule extends ArrayModule {
+class ModuleDate extends ModuleArray {
     /**
      * 时间日期类型日期模块
      * @example
@@ -214,9 +245,9 @@ class DateModule extends ArrayModule {
      * new Date().toLocaleString();             => `2020/12/12 上/下午12:12:12`
      */
     constructor() {
-        super();     
+        super();
     }
-    
+
     /** 日期列表生成 */
     dateJson() {
         /**
@@ -278,11 +309,11 @@ class DateModule extends ArrayModule {
      * @return {'yyyy/mm/dd hh:mm:ss'}
      */
     getDateFormat(num = 0) {
-        const date   = new Date(Date.now() + (num * 24 * 3600 * 1000));
-        const year   = date.getFullYear();
-        const month  = `0${date.getMonth() + 1}`.slice(-2);
-        const day    = `0${date.getDate()}`.slice(-2);
-        const hour   = `0${date.getHours()}`.slice(-2);
+        const date = new Date(Date.now() + (num * 24 * 3600 * 1000));
+        const year = date.getFullYear();
+        const month = `0${date.getMonth() + 1}`.slice(-2);
+        const day = `0${date.getDate()}`.slice(-2);
+        const hour = `0${date.getHours()}`.slice(-2);
         const minute = `0${date.getMinutes()}`.slice(-2);
         const second = `0${date.getSeconds()}`.slice(-2);
         return `${year}/${month}/${day} ${hour}:${minute}:${second}`;
@@ -335,7 +366,7 @@ class DateModule extends ArrayModule {
 
 }
 
-class BomModule extends DateModule {
+class ModuleBom extends ModuleDate {
     /** 浏览器模块 */
     constructor() {
         super();
@@ -431,7 +462,7 @@ class BomModule extends DateModule {
      */
     download(filename, content) {
         const label = document.createElement('a');
-        label.setAttribute('href','data:text/plain;charset=utf-8,' + encodeURIComponent(content));
+        label.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(content));
         label.setAttribute('download', filename);
         if (document.createEvent) {
             const event = document.createEvent('MouseEvents');
@@ -471,18 +502,20 @@ class BomModule extends DateModule {
 }
 
 /** dom 模块 */
-class DomModule extends BomModule {
+class ModuleDom extends ModuleBom {
     /**
      * 单个元素查找
      * @param {string} name class | id | label <div> <p>
+     * @returns {HTMLElement}
      */
     find(name) {
         return document.querySelector(name);
     }
 
     /**
-     * 多个元素查找 返回 array[...dom]
+     * 多个元素查找
      * @param {string} name class | id | label <div> <p>
+     * @returns {Array<HTMLElement>}
      */
     findAll(name) {
         let nodes = document.querySelectorAll(name);
@@ -497,7 +530,7 @@ class DomModule extends BomModule {
     /**
      * 设置样式
      * @param {HTMLElement} el 设置样式的元素
-     * @param {object} styles 样式 Example: {display: 'block', width: '100px'}
+     * @param {CSSStyleDeclaration} styles 样式 
      */
     setStyle(el, styles) {
         for (const key in styles) {
@@ -598,7 +631,7 @@ class DomModule extends BomModule {
     remSetting(el) {
         const html = document.documentElement; // 注意这里不能使用 document.body
         /** 比例值 */
-        let value = 375 / 50;
+        const value = 375 / 50;
         /** 视口宽度 */
         let width = el.clientWidth;
         // 首次适配
@@ -612,10 +645,10 @@ class DomModule extends BomModule {
 
     /** 自定义 log */
     log() {
-        var args = [].slice.call(arguments);
+        const args = [].slice.call(arguments);
         args.unshift('%c the-log >>', 'color: #4fc08d');
         console.log.apply(console, args);
     }
 }
 
-const utils = new DomModule();
+const utils = new ModuleDom();
