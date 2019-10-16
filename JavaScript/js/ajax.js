@@ -78,11 +78,11 @@ function fetchData() {
  * @param {'GET'|'POST'} param.method 请求方法 => 这里我只枚举了常用的两种
  * @param {object} param.data 传参对象
  * @param {FromData} param.file 上传图片 FromData
- * @param {Function} param.success 成功回调 
- * @param {Function} param.fail 失败回调 
+ * @param {(result?: any) => void} param.success 成功回调 
+ * @param {(error?: XMLHttpRequest) => void} param.fail 失败回调 
  * @param {number} param.overtime 超时检测毫秒数
- * @param {Function} param.timeout 超时回调
- * @param {Function} param.progress 进度回调 貌似没什么用 
+ * @param {(info?: XMLHttpRequest) => void} param.timeout 超时回调
+ * @param {(e?: ProgressEvent<XMLHttpRequestEventTarget>) => void} param.progress 进度回调 貌似没什么用 
  */
 function ajax(param) {
     if (typeof param !== 'object') return console.error('ajax 缺少请求传参');
