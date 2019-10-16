@@ -2,28 +2,24 @@
 const BASEURL = 'http://che.qihao.lzei.com';
 
 /**
- * fetch 请求 learn：https://developer.mozilla.org/zh-CN/docs/Web/API/Fetch_API
- * @param {'GET'|'POST'} type 请求方法 => 这里我只枚举了常用的两种
+ * fetch 请求 
+ * @dec learn：https://developer.mozilla.org/zh-CN/docs/Web/API/Fetch_API
+ * @param {'GET'|'POST'} method 请求方法 => 这里我只枚举了常用的两种
  * @param {string} url 请求路径
  * @param {object} data 请求参数对象
- * @param {Function} success 请求成功 
- * @param {Function} fail 请求失败
  */
-function fetchRequest(type, url, data, success, fail) {
-    if (!type) return console.error('fetch 缺少请求类型 GET 或者 POST');
-    if (!url) return console.error('fetch 缺少请求 url');
-    if (typeof data !== "object") return console.error('fetch 传参必须为 object');
+function fetchRequest(method, url, data) {
     /** 请求选项设置 */
     let options = {
         // credentials: 'include', // 打开 cookie
-        // mode: 'cors',           // 打开跨域
-        method: type,
+        // mode: 'cors',           // 打开跨域（需要后台设置）
+        method: method,
         headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
+            'Content-Type': 'application/json',
         },
         body: null
     };
-    switch (type) {
+    switch (method) {
         case 'POST':
             // 若后台没设置接收 JSON 则不行 需要跟 GET 一样的解析对象传参
             options.body = JSON.stringify(data);
@@ -41,14 +37,15 @@ function fetchRequest(type, url, data, success, fail) {
             }
             break;
     }
-
-    fetch(url, options).then(response => {
-        // 请求状态 => 注意，这里不转换 json 下面会 undefined
-        return response.json();
-    }).then(res => {
-        if (typeof success === 'function') success(res);
-    }).catch(error => {
-        if (typeof fail === 'function') fail(error);
+    return new Promise(function (resolve, reject) {
+        fetch(url, options).then(response => {
+            // 请求状态 => 注意，这里不转换 json 下面会 undefined
+            return response.json();
+        }).then(res => {
+            resolve(res);
+        }).catch(error => {
+            reject(error);
+        });
     });
 }
 
@@ -63,24 +60,24 @@ function fetchData() {
         sort: 'distance',
         order: 'asc',
         keyword: ''
-    }, res => {
+    }).then(res => {
         console.log('Fetch success', res);
-    }, err => {
+    }).catch(err => {
         console.warn('Fetch fail', err);
-    });
+    })
 }
 
 /**
  * XMLHttpRequest 请求 
- * learn: https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest
+ * @dec learn: https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest
  * @param {object} param 传参对象
  * @param {string} param.url 请求路径
  * @param {'GET'|'POST'} param.method 请求方法 => 这里我只枚举了常用的两种
  * @param {object} param.data 传参对象
- * @param {FromData} param.file 上传图片 FromData
+ * @param {FormData} param.file 上传图片`FormData`
+ * @param {number} param.overtime 超时检测毫秒数
  * @param {(result?: any) => void} param.success 成功回调 
  * @param {(error?: XMLHttpRequest) => void} param.fail 失败回调 
- * @param {number} param.overtime 超时检测毫秒数
  * @param {(info?: XMLHttpRequest) => void} param.timeout 超时回调
  * @param {(e?: ProgressEvent<XMLHttpRequestEventTarget>) => void} param.progress 进度回调 貌似没什么用 
  */
@@ -91,19 +88,20 @@ function ajax(param) {
     if (typeof param.data !== 'object') return console.error('请求参数类型必须为 object');
 
     /** XMLHttpRequest */
-    var XHR = new XMLHttpRequest();
+    const XHR = new XMLHttpRequest();
     /** 请求方法 */
-    var method = param.method.toUpperCase();
-    /** 请求链接 */
-    var url = param.url;
-    /** 请求数据 */
-    var data = null;
+    const method = param.method;
     /** 超时检测 */
-    var overtime = typeof param.overtime === 'number' ? param.overtime : 0;
+    const overtime = typeof param.overtime === 'number' ? param.overtime : 0;
+    /** 请求链接 */
+    let url = param.url;
+    /** 请求数据 */
+    let data = null;
 
     // 传参处理
     switch (method) {
         case 'POST':
+            // 若后台没设置接收 JSON 则不行 需要跟 GET 一样的解析对象传参
             data = JSON.stringify(param.data);
             break;
 
@@ -140,16 +138,18 @@ function ajax(param) {
     // XHR.withCredentials = true;	
     XHR.open(method, url, true);
 
-    // 判断是否上传文件通常用于上传图片
+    // 判断是否上传文件通常用于上传图片，上传图片时不能设置头信息
     if (param.file) {
         data = param.file;
     } else {
-        // Content-Type:
-        // application/json
-        // application/x-www-form-urlencoded
-        XHR.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+        /**
+         * @example 
+         * XHR.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded')
+         * XHR.setRequestHeader('Content-Type', 'application/json')
+         */
+        XHR.setRequestHeader('Content-Type', 'application/json');
     }
-    
+
 
     // 在IE中，超时属性只能在调用 open() 方法之后且在调用 send() 方法之前设置。
     if (overtime > 0) {
@@ -162,8 +162,6 @@ function ajax(param) {
     }
 
     XHR.send(data);
-
-    // return XHR;
 }
 
 function ajaxRequest() {
@@ -208,13 +206,46 @@ function ajaxRequest() {
     });
 }
 
-// $.ajax({
-//     type: "post",
-//     url: "http://xxxxxxxx",
-//     data: {
-//         key: ''
-//     },
-//     success (msg) {
-//         console.log(msg);
-//     }
-// });
+// 简洁版
+(function () {
+    /**
+    * http 请求
+    * @param {'GET'|'POST'} method 请求方法
+    * @param {string} url 请求地址
+    * @param {object} data 请求参数
+    * @param {(result: any) => void} success 成功回调
+    * @param {(error: XMLHttpRequest) => void} fail 失败回调
+    */
+    function ajax(method, url, data, success, fail) {
+        const XHR = new XMLHttpRequest();
+        /** 请求参数 */
+        let sendData = '';
+        // 解析对象传参
+        for (const key in data) {
+            sendData += '&' + key + '=' + data[key];
+        }
+        switch (method) {
+            case 'GET':
+                url = sendData ? `${url}?${sendData}` : url;
+                sendData = null;
+                break;
+
+            case 'POST':
+                if (sendData) {
+                    sendData = sendData.slice(1);
+                }
+                break;
+        }
+        XHR.onreadystatechange = function () {
+            if (XHR.readyState !== 4) return;
+            if (XHR.status === 200 || XHR.status === 304) {
+                if (typeof success === 'function') success(XHR.response);
+            } else {
+                if (typeof fail === 'function') fail(XHR);
+            }
+        }
+        XHR.open(method, url, true);
+        XHR.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+        XHR.send(sendData);
+    }
+})();
