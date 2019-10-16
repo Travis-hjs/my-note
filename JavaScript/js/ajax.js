@@ -165,6 +165,10 @@ function ajax(param) {
 }
 
 function ajaxRequest() {
+    const error = {
+        message: '',
+        info: null
+    }
     ajax({
         url: BASEURL + '/api/app/parking',
         method: 'post',
@@ -184,21 +188,21 @@ function ajaxRequest() {
             console.log('请求成功', res);
         },
         fail: function (err) {
-            let error = { message: '接口报错，请看 network ' };
+            error.message = '接口报错，请看 network';
+            error.info = err;
             if (err.response.charAt(0) == '{') {
-                error = JSON.parse(err.response);
+                error.info = JSON.parse(err.response);
             }
             console.log('请求失败', error);
         },
-        timeout: function () {
-            var error = {
-                message: '请求超时'
-            }
-            console.log(error.message);
+        timeout: function (info) {
+            error.message = '请求超时';
+            error.info = info;
+            console.log(error);
         },
         progress: function (e) {
             if (e.lengthComputable) {
-                var percentComplete = e.loaded / e.total
+                let percentComplete = e.loaded / e.total
                 console.log('请求进度', percentComplete, e.loaded, e.total);
             }
             console.log(e);
