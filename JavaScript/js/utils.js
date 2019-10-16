@@ -102,27 +102,31 @@ class ModuleNumber extends ModuleString {
     ranInt(min, max) {
         return Math.floor(Math.random() * (max - min + 1)) + min;
     }
-
+    
     /**
      * 获取两个坐标（二维）之间距离
      * @param {object} size1 坐标一
      * @param {number} size1.x
      * @param {number} size1.y 
      * @param {object} size2 坐标二
-     * @param {number} size1.x
-     * @param {number} size1.y 
+     * @param {number} size2.x
+     * @param {number} size2.y 
      */
     getSizeDistance(size1, size2) {
-        function hypot() {
-            const length = arguments.length;
-            let y = 0;
+        /**
+         * `Math.hypot`兼容方法
+         * @param {Array<number>} values 
+         */
+        function hypot(...values) {
+            const length = values.length;
+            let result = 0;
             for (let i = 0; i < length; i++) {
-                if (arguments[i] === Infinity || arguments[i] === -Infinity) {
+                if (values[i] === Infinity || values[i] === -Infinity) {
                     return Infinity;
                 }
-                y += arguments[i] * arguments[i];
+                result += values[i] * values[i];
             }
-            return Math.sqrt(y);
+            return Math.sqrt(result);
         }
         return hypot(size2.x - size1.x, size2.y - size1.y);
     }
@@ -149,7 +153,7 @@ class ModuleNumber extends ModuleString {
 }
 
 /** 数组类处理模块 */
-class ModuleArray extends ModuleString {
+class ModuleArray extends ModuleNumber {
     /**
      * 从对象数组中查找匹配项 ES5 实现 ES6 array.find()
      * @param {Array<T>} array array
