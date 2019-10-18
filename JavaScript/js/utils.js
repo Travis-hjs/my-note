@@ -3,30 +3,22 @@ class ModuleString {
     /**
      * 过滤只保留数字及小数点
      * @param {string} string 字符串
-     * @returns {number}
      */
     onlyNumber(string) {
-        /** 最终返回值 */
-        let value = string.trim();
         // 去空格
-        if (value.length == 0) return 0;
+        let value = string.trim();
+        // 默认返回 0
+        if (value.length === 0) return 0;
         // 正则过滤剩下数字和小数点
         value = value.replace(/[^0-9.]+/g, '');
-        /** 分割小数点数组 */
-        let array = value.split('.');
-        // 判断是否有小数点
-        if (array.length > 1) {
-            value = array[0] + '.' + array[1];
-        }
-        // 最后转数字
-        value = Number(value);
-        return isNaN(value) ? 0 : value;
+        return parseFloat(value);
     }
 
     /**
      * 数字带逗号分隔
-     * 10000 => "10,000"
      * @param {number} num
+     * @example 
+     * flterToThousand(10000) => "10,000"
      */
     flterToThousand(num) {
         // return num.toLocaleString('en-US');
@@ -47,7 +39,7 @@ class ModuleString {
      */
     unitsNumber(value) {
         value = Math.floor(value);
-        if (value == 0) return 0;
+        if (value === 0) return 0;
         const units = ['', 'k', 'm', 'b', 'f', 'e', 'ae', 'be', 'ce', 'de', 'ee', 'fe', 'ge', 'he', 'ie'];
         const index = Math.floor(Math.log(value) / Math.log(1000));
         let result = value / Math.pow(1000, index);
@@ -62,8 +54,9 @@ class ModuleString {
      * 格式化?后面参数成 JSON 对象
      * @param {string} value 
      * @example 
-     * searchFormat(window.location.search);
-     * 
+     * searchFormat(location.search);
+     * const data = '?id=12&name=hjs&date=2018/12/12';
+     * searchFormat(data)
      */
     searchFormat(value) {
         return JSON.parse(`{"${decodeURIComponent(value.substring(1)).replace(/"/g, '\\"').replace(/&/g, '","').replace(/=/g, '":"')}"}`);
