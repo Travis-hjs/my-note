@@ -37,7 +37,7 @@ function theFetch(method, url, data = {}) {
                  * 通常为`application/json`因为等下我要请求豆瓣的接口
                  * 所以这里用`application/x-www-form-urlencoded`
                 */
-                'content-type': 'application/x-www-form-urlencoded'
+                'Content-Type': 'application/x-www-form-urlencoded'
             },
             body: dataPost
         }).then(response => {
@@ -51,7 +51,7 @@ function theFetch(method, url, data = {}) {
     });
 }
 
-function fetchData() {
+function fetchRequest() {
     // 这里是豆瓣的接口
     theFetch('GET', 'https://douban.uieee.com/v2/movie/top250', {
         start: 1,
@@ -64,13 +64,13 @@ function fetchData() {
 }
 
 /**
- * XMLHttpRequest 请求 
+ * `XMLHttpRequest`请求 
  * @dec learn: https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest
  * @param {object} param 传参对象
  * @param {string} param.url 请求路径
  * @param {'GET'|'POST'} param.method 请求方法：这里我只枚举了常用的两种
  * @param {object} param.data 传参对象
- * @param {FormData} param.file 上传图片`FormData`
+ * @param {FormData} param.file 上传图片`FormData`对象
  * @param {number} param.overtime 超时检测毫秒数
  * @param {(result?: any) => void} param.success 成功回调 
  * @param {(error?: XMLHttpRequest) => void} param.fail 失败回调 
@@ -91,24 +91,26 @@ function ajax(param) {
     const overtime = typeof param.overtime === 'number' ? param.overtime : 0;
     /** 请求链接 */
     let url = param.url;
-    /** 请求数据 */
-    let data = null;
+    /** POST请求传参 */
+    let dataPost = null;
+    /** GET请求传参 */
+    let dataGet = '';
 
     // 传参处理
     switch (method) {
         case 'POST':
             // 若后台没设置接收 JSON 则不行 需要跟 GET 一样的解析对象传参
-            data = JSON.stringify(param.data);
+            dataPost = JSON.stringify(param.data);
             break;
 
         case 'GET':
-            // 判断是否一个空对象
-            if (JSON.stringify(param.data) != '{}') {
-                // 解析对象传参
-                var send_data = '';
-                for (var key in param.data) send_data += '&' + key + '=' + param.data[key];
-                send_data = '?' + send_data.slice(1);
-                url += send_data;
+            // 解析对象传参
+            for (const key in param.data) {
+                dataGet += '&' + key + '=' + param.data[key];
+            }
+            if (dataGet) {
+                dataGet = '?' + dataGet.slice(1);
+                url += dataGet;
             }
             break;
     }
@@ -134,9 +136,9 @@ function ajax(param) {
     // XHR.withCredentials = true;	
     XHR.open(method, url, true);
 
-    // 判断是否上传文件通常用于上传图片，上传图片时不能设置头信息
+    // 判断是否上传文件通常用于上传图片，上传图片时不需要设置头信息
     if (param.file) {
-        data = param.file;
+        dataPost = param.file;
     } else {
         /**
          * @example 
@@ -145,7 +147,6 @@ function ajax(param) {
          */
         XHR.setRequestHeader('Content-Type', 'application/json');
     }
-
 
     // 在IE中，超时属性只能在调用 open() 方法之后且在调用 send() 方法之前设置。
     if (overtime > 0) {
@@ -157,7 +158,7 @@ function ajax(param) {
         }
     }
 
-    XHR.send(data);
+    XHR.send(dataPost);
 }
 
 function ajaxRequest() {
@@ -209,7 +210,8 @@ function ajaxRequest() {
 // 简洁版
 (function () {
     /**
-    * http 请求
+    * `http`请求
+    * @dec 适用`GET`和`POST`一样的拼接参数传参
     * @param {'GET'|'POST'} method 请求方法
     * @param {string} url 请求地址
     * @param {object} data 请求参数
