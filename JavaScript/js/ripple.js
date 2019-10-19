@@ -98,10 +98,10 @@ function rippleClick(el) {
     }
 
     /** 是否移动端 */
-    let isMobile = utils.isMobile();
+    const isMobile = utils.isMobile();
 
     /** 添加事件类型 */
-    let eventType = isMobile ? 'touchstart' : 'mousedown';
+    const eventType = isMobile ? 'touchstart' : 'mousedown';
 
     // 这里我使用事件代理去完成方法操作
     // 因为我在Vue项目中，节点是动态生成的，不可能每次生成都单独为对应节点绑定事件
