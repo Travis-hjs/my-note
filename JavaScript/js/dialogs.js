@@ -11,7 +11,7 @@ function theDialog() {
         .the-dialog .t{ font-size: 22px; line-height: 32px; color: #333; margin-bottom: 20px; }
         .the-dialog .c{ font-size: 15px; color: rgba(0,0,0,.64); line-height: 22px; margin-bottom: 24px; }
         .the-dialog .b{ width: 100%; overflow: hidden; }
-        .the-dialog .b button{ cursor: pointer; outline: none; border: none; float: right; padding: 0 15px; margin-left: 10px; font-size: 15px; line-height: 36px; border-radius: 2px; transition: .2s all; }
+        .the-dialog .b button{ cursor: pointer; outline: none; border: none; float: right; padding: 0 15px; margin-left: 10px; font-size: 15px; line-height: 36px; border-radius: 2px; background-color: transparent; transition: .2s all; }
         .the-dialog .b .the-confirm{ color: #2196f3; }
         .the-dialog .b .the-confirm:active{ background-color: rgba(33, 150, 243, 0.2); }
         .the-dialog .b .the-cancel{ color: #999; }
