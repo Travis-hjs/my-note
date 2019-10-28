@@ -27,8 +27,8 @@
     <div class="content"></div>
 
     <script type="text/javascript">
+        /** 路由模块 */
         class ModuleRouter {
-            /** 路由模块 */
             constructor() {
                 /** 路由对象 */
                 this.routes = {};
@@ -41,17 +41,15 @@
              * @param {string} path 路由路径
              * @param {Function} callback 路由回调
              */
-            onchange(path, callback) {
-                this.routes[path] = callback || function () { };
+            onchange(path, callback = null) {
+                this.routes[path] = callback;
             }
 
             /** 路由变动时做出处理 */
             refresh() {
                 this.currentUrl = location.hash.slice(1) || '/';
                 const callback = this.routes[this.currentUrl];
-                if (typeof callback === 'function') {
-                    callback();
-                }
+                if (typeof callback === 'function') callback();
             }
             
             /** 路由初始化 */
