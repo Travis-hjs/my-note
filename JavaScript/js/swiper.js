@@ -254,14 +254,14 @@ function swiper(params) {
             count = 0;
             loopCount = moveTime / 1000 * 60;
             stopAnimation();
-            startDistance = direction ? ev.touches[0].pageY : ev.touches[0].pageX;
+            startDistance = direction ? ev.touches[0].clientY : ev.touches[0].clientX;
         });
 
         // 触摸移动
         nodeItem.addEventListener('touchmove', ev => {
             ev.preventDefault();
             count = 0;
-            endDistance = direction ? ev.touches[0].pageY : ev.touches[0].pageX;
+            endDistance = direction ? ev.touches[0].clientY : ev.touches[0].clientX;
             slideStyle(touchRange());
         });
 
