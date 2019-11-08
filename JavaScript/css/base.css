@@ -1,17 +1,17 @@
-/* 只适用于移动端 */
-*{ padding: 0; margin: 0; }
+/* 用于移动端 */
+*{ padding: 0; margin: 0; box-sizing: border-box; }
 html, body{
 	background-color: #fff;
 	color: #333;
+	font-family: "Helvetica Neue", Helvetica, sans-serif;
 	/* 禁用系统长按菜单 */
 	-webkit-touch-callout: none; 
 	/* 禁用字体大小自动调整 */
 	-webkit-text-size-adjust: none !important;
 	/* 去掉点击高亮 */
 	-webkit-tap-highlight-color: transparent;
-	font-family: "Helvetica Neue", Helvetica, sans-serif;
 }
-li{ list-style: none; }
+ul, li{ list-style: none; }
 a{ text-decoration: none; color: inherit; }
 img{ display: block; width: 100%; }
 h1,h2,h3,h4,h5,h6,b,i{ font-weight: normal; font-style: normal; }
@@ -22,7 +22,7 @@ textarea{ resize: none; display: block; }
 textarea::-webkit-input-placeholder { color: #999; }
 
 /* flex布局 */
-.flex{ display: flex; flex-wrap: wrap }
+.flex{ display: flex; flex-wrap: wrap; }
 .f1{ flex: 1; }
 .f2{ flex: 2; }
 .f3{ flex: 3; }
@@ -41,24 +41,24 @@ textarea::-webkit-input-placeholder { color: #999; }
 
 /* 卡片 */
 .card{ 
-    box-shadow: 0px 1px 5px 0px rgba(0, 0, 0, 0.2), 0px 2px 2px 0px rgba(0, 0, 0, 0.14), 0px 3px 1px -2px rgba(0, 0, 0, 0.12); 
     border-radius: 2px; 
+    box-shadow: 0px 1px 5px 0px rgba(0, 0, 0, 0.2), 0px 2px 2px 0px rgba(0, 0, 0, 0.14), 0px 3px 1px -2px rgba(0, 0, 0, 0.12); 
     background-color: #fff;
     overflow: hidden;
 }
 
 /* 按钮 */
 .button {
+    padding: 0 16px; 
+    font-size: 15px;
+    border-radius: 2px;
+    min-width: 88px;
+    height: 36px;
     overflow: hidden;
     outline: none;
     border: none;
     text-align: center;
-    border-radius: 2px;
-    min-width: 88px;
-    height: 36px;
     vertical-align: middle;
-    padding: 0 16px; 
-    font-size: 15px;
     cursor: pointer;
     -webkit-user-select: none;
     color: #fff;
