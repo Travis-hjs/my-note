@@ -125,6 +125,17 @@ class ModuleNumber extends ModuleString {
     }
 
     /**
+     * 传入角度计算圆周长上的点坐标
+     * @param {number} deg 角度
+     * @param {number} radius 范围半径
+     */
+    computeCircularPosition(deg = 0, radius = 100) {
+        const x = Math.round(radius * Math.sin(deg * Math.PI / 180));
+        const y = Math.round(radius * Math.cos(deg * Math.PI / 180));
+        return { x, y }
+    }
+
+    /**
      * 获取两个坐标（经纬度）点距离
      * @param {object} location1 坐标1
      * @param {number} location1.lng 经度
@@ -639,6 +650,36 @@ class ModuleDom extends ModuleBom {
             html.style.fontSize = width / value + 'px';
         });
     }
+
+    /**
+     * 设置节点数字动画
+     * @param {object} options 配置参数
+     * @param {HTMLElement} options.el 目标节点
+     * @param {number} options.number 最终显示的数字
+     * @param {number} options.time （可选）多少毫秒内完成，默认1秒
+     * @param {Function} options.callback （可选）完成回调
+     */
+    setNumberAnimation(options) {
+        const an = requestAnimationFrame;
+        const el = options.el;
+        const result = options.number || 188.88;
+        const time = (options.time || 1000) / 1000;
+        const step = result / (time * 60);
+        let count = 0;
+        function move() {
+            count += step;
+            if (count >= result) {
+                count = result;
+                el.textContent = count.toFixed(2);
+                if (typeof options.callback === 'function') options.callback();
+            } else {
+                el.textContent = count.toFixed(2);
+                an(move);
+            }
+        }
+        el.textContent = count.toFixed(2);
+        move();
+    } 
 
     /** 自定义 log */
     log() {
