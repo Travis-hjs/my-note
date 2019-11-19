@@ -118,15 +118,12 @@ class ModuleNumber extends ModuleString {
             case '+':
                 result = a * value + b * value;
                 break;
-        
             case '-':
                 result = a * value - b * value;
                 break;
-
             case '*':
                 result = (a * value) * (b * value);
                 break;
-
             case '/':
                 result = (a * value) / (b * value);
                 break;
