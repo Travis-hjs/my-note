@@ -97,6 +97,44 @@ class ModuleNumber extends ModuleString {
     }
     
     /**
+     * 数字运算（主要用于小数点精度问题）
+     * @param {'+'|'-'|'*'|'/'} type 计算方式
+     * @param {number} a 
+     * @param {number} b 
+     */
+    computeNumber(type, a, b) {
+        /**
+         * 获取数字小数点的位数
+         * @param {number} n 数字
+         */
+        const getLenth = n => {
+            const string = n.toString().split('.')[1];
+            return string ? string.length : 0;
+        }
+        /** 倍率 */
+        const value = Math.pow(10, Math.max(getLenth(a), getLenth(b)));
+        let result = 0;
+        switch (type) {
+            case '+':
+                result = a * value + b * value;
+                break;
+        
+            case '-':
+                result = a * value - b * value;
+                break;
+
+            case '*':
+                result = (a * value) * (b * value);
+                break;
+
+            case '/':
+                result = (a * value) / (b * value);
+                break;
+        }
+        return result / value;
+    }
+
+    /**
      * 获取两个坐标（二维）之间距离
      * @param {object} size1 坐标一
      * @param {number} size1.x
