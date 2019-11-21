@@ -6,8 +6,8 @@
         <meta name="format-detection" content="telephone=no, email=no, date=no, address=no">
         <title>滚动事件</title>
         <link rel="stylesheet" href="./css/base.css">
-        <style media="screen">
-            .app li{ background-color: gold; height: 5rem; position: relative; z-index: 10; }
+        <style>
+            .app li{ background-color: gold; height: 150px; position: relative; z-index: 10; }
             .app li:nth-child(even){ background-color: #212121; }
         </style>
     </head>
@@ -23,7 +23,7 @@
             document.querySelector('.app ul').innerHTML = _html;
 
             /**
-             * 监听到达底部
+             * 监听到达底部（方法一，可能有兼容问题）
              * @param {number} distance 距离底部多少像素触发(像素)
              * @param {Function} callback 到达底部回调函数
              * @param {boolean} once 是否为一次性
@@ -39,27 +39,30 @@
                     }
                 }
                 window.addEventListener('scroll', onScroll);
+                onScroll();
             }
 
             /**
-             * 监听滚动到底部事件
+             * 监听滚动到底部（方法二）
              * @param {number} number 距离底部多少像素触发(像素)
              * @param {Function} callback 到达底部回调函数
              * @param {boolean} once 是否为一次性（防止重复用）
              */
             function scrollToBottom(number = 0, callback, once = false) {
-                // 滚动事件
-                function isScroll() {
+                const doc = document;
+                /** 滚动事件 */
+                function onScroll() {
                     /** 滚动的高度 */
-                    let scrollTop = document.documentElement.scrollTop === 0 ? document.body.scrollTop : document.documentElement.scrollTop;
+                    let scrollTop = doc.documentElement.scrollTop === 0 ? doc.body.scrollTop : doc.documentElement.scrollTop;
                     /** 滚动条高度 */
-                    let scrollHeight = document.documentElement.scrollTop === 0 ? document.body.scrollHeight : document.documentElement.scrollHeight;
+                    let scrollHeight = doc.documentElement.scrollTop === 0 ? doc.body.scrollHeight : doc.documentElement.scrollHeight;
                     if (scrollHeight - scrollTop - number <= window.innerHeight) {
                         if (typeof callback === 'function') callback();
-                        if (once) window.removeEventListener('scroll', isScroll);
+                        if (once) window.removeEventListener('scroll', onScroll);
                     }
                 }
-                window.addEventListener('scroll', isScroll);
+                window.addEventListener('scroll', onScroll);
+                onScroll(); // 先执行一次
             }
 
             scrollToBottom(100, function () {
