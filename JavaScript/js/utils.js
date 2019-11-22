@@ -95,7 +95,7 @@ class ModuleNumber extends ModuleString {
     ranInt(min, max) {
         return Math.floor(Math.random() * (max - min + 1)) + min;
     }
-    
+
     /**
      * 数字运算（主要用于小数点精度问题）
      * @param {'+'|'-'|'*'|'/'} type 计算方式
@@ -132,31 +132,31 @@ class ModuleNumber extends ModuleString {
     }
 
     /**
+     * `Math.hypot`兼容方法
+     * @param {Array<number>} values 
+     */
+    hypot(...values) {
+        const length = values.length;
+        let result = 0;
+        for (let i = 0; i < length; i++) {
+            if (values[i] === Infinity || values[i] === -Infinity) {
+                return Infinity;
+            }
+            result += values[i] * values[i];
+        }
+        return Math.sqrt(result);
+    }
+
+    /**
      * 获取两个坐标（二维）之间距离
-     * @param {object} size1 坐标一
-     * @param {number} size1.x
-     * @param {number} size1.y 
-     * @param {object} size2 坐标二
-     * @param {number} size2.x
-     * @param {number} size2.y 
+     * @param {{x: number, y: number}} size1 坐标一
+     * @param {{x: number, y: number}} size2 坐标二
      */
     getSizeDistance(size1, size2) {
-        /**
-         * `Math.hypot`兼容方法
-         * @param {Array<number>} values 
-         */
-        function hypot(...values) {
-            const length = values.length;
-            let result = 0;
-            for (let i = 0; i < length; i++) {
-                if (values[i] === Infinity || values[i] === -Infinity) {
-                    return Infinity;
-                }
-                result += values[i] * values[i];
-            }
-            return Math.sqrt(result);
-        }
-        return hypot(size2.x - size1.x, size2.y - size1.y);
+        const dx = size2.x - size1.x;
+        const dy = size2.y - size1.y;
+        return Math.sqrt(Math.pow(dx, 2) + Math.pow(dy, 2));  
+        // return this.hypot(size2.x - size1.x, size2.y - size1.y);
     }
 
     /**
@@ -714,7 +714,7 @@ class ModuleDom extends ModuleBom {
         }
         el.textContent = count.toFixed(2);
         move();
-    } 
+    }
 
     /** 自定义 log */
     log() {

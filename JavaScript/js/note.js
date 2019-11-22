@@ -394,3 +394,28 @@ function sort() {
     result = result.map(item => item.replace(key, ''));
     console.log(result);
 }
+
+function checkDebugging() {
+    const doc = document;
+    // 禁止鼠标事件和键盘事件打开开发者模式
+    doc.oncontextmenu = function () {
+        return false;
+    }
+    doc.onkeydown = doc.onkeyup = doc.onkeypress = function (event) {
+        const e = event || window.event || arguments.callee.caller.arguments[0];
+        if (e && e.keyCode == 123) {
+            e.returnValue = false;
+            return false;
+        }
+    }
+    // 监听是否开发者模式
+    const handler = setInterval(() => {
+        const before = Date.now();
+        debugger;
+        if (Date.now() - before > 100) {
+            // 是开发者模式就跳转百度
+            location.replace('https://www.baidu.com');
+            clearInterval(handler);
+        }
+    }, 500);
+}
