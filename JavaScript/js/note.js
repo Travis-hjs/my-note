@@ -41,7 +41,7 @@ function clickTest() {
     // for (var i = 0; i < total; i++) {
     //     var item = document.createElement('li');
     //     item.textContent = '测试li-' + i;
-        
+
     //     (function (index) {
     //         item.addEventListener('click', function () {
     //             console.log('第' + index + '个li');
@@ -134,7 +134,7 @@ function $(name) {
         var list = obj['the_eventList'];
         for (var i = list.length - 1; i >= 0; i--) {
             var info = list[i];
-            if (method) { 
+            if (method) {
                 if (method == info['type']) {
                     obj.removeEventListener(method, info['fn']);
                     list.splice(i, 1);
@@ -143,7 +143,7 @@ function $(name) {
                 obj.removeEventListener(info['type'], info['fn']);
                 list.splice(i, 1);
             }
-        }    
+        }
     }
 
     /** 工厂对象 */
@@ -155,7 +155,7 @@ function $(name) {
          * 修改 html
          * @param {string} content 
          */
-        html: function(content) {
+        html: function (content) {
             if (type == 'array') {
                 forEach(this.el, function (item, index) {
                     item.innerHTML = content;
@@ -171,7 +171,7 @@ function $(name) {
          * @param {string} method 事件
          * @param {Function} callback 
          */
-        on: function(method, callback) {
+        on: function (method, callback) {
             if (type == 'array') {
                 forEach(this.el, function (item, index) {
                     item.addEventListener(method, callback);
@@ -194,7 +194,7 @@ function $(name) {
          * 解绑事件
          * @param {string} method 要解绑的事件（可选）
          */
-        off: function(method) {
+        off: function (method) {
             if (type == 'array') {
                 forEach(this.el, function (item, index) {
                     offEvent(item, method);
@@ -364,9 +364,9 @@ function numberExtend() {
         const valDigits = val.digits();
         const baseNum = Math.pow(10, Math.max(thisDigits, valDigits));
         const result = (value * baseNum + val * baseNum) / baseNum;
-        if (result > 0) { 
+        if (result > 0) {
             return result > Number.MAX_SAFE_INTEGER ? Number.MAX_SAFE_INTEGER : result;
-        } else { 
+        } else {
             return result < Number.MIN_SAFE_INTEGER ? Number.MIN_SAFE_INTEGER : result;
         }
     }
@@ -418,4 +418,100 @@ function checkDebugging() {
             clearInterval(handler);
         }
     }, 500);
+}
+
+/**
+ * 获取图片数据（二进制数据流）
+ * @param {string} src 请求图片路径
+ * @param {(res: string, code: string) => void} callback 回调函数
+ */
+function getImageData(src, callback) {
+    const XHR = new XMLHttpRequest();
+    XHR.open('GET', src, true);
+    XHR.responseType = 'arraybuffer';
+    XHR.overrideMimeType('text/plain; charset=x-user-defined');
+    XHR.onreadystatechange = function () {
+        if (XHR.readyState === 4 && XHR.status === 200) {
+            const file = XHR.response || XHR.responseText;
+            const blob = new Blob([file], { type: 'image/jpeg' });
+            const fr = new FileReader();
+            // console.log('Blob', blob);
+            fr.readAsText(blob);
+            fr.onload = function (e) {
+                /** @type {string} */
+                const code = e.target.result;
+                const index = code.search('data=');
+                const res = code.slice(index + 5, code.length);
+                // console.log(code);
+                if (typeof callback === 'function') callback(res, code);
+            }
+        }
+    }
+    XHR.send();
+}
+// getImageData('https://resxz.eqh5.com/qngroup001%2Fu12212%2F1%2F0%2Fde6d163bd2f14598b9d89bb58607a8ad.jpeg', (res, code) => {
+//     console.log(res, code);
+
+// });
+
+function getCanvasData() {
+    /**
+     * @param {string} dataurl Base64字符串转二进制
+    */
+    function dataURLtoBlob(dataurl) {
+        var arr = dataurl.split(','),
+            mime = arr[0].match(/:(.*?);/)[1],
+            bstr = atob(arr[1]),
+            n = bstr.length,
+            u8arr = new Uint8Array(n);
+        while (n--) {
+            u8arr[n] = bstr.charCodeAt(n);
+        }
+        return new Blob([u8arr], {
+            type: mime
+        });
+    }
+
+    /**
+     * 获取base64数据
+     * @param {string} url 图片路径
+     * @param {string} ext 图片格式
+     * @param {(res: string) => void} callback 结果回调
+     */
+    function getUrlBase64(url, ext, callback) {
+        const canvas = document.createElement("canvas");
+        const ctx = canvas.getContext("2d");
+        const img = new Image;
+        img.crossOrigin = 'Anonymous';
+        img.src = url;
+        img.onload = function () {
+            console.log(img.height, img.width);
+            canvas.width = img.width;
+            canvas.height = img.height;
+            ctx.drawImage(img, 0, 0);
+            const dataURL = canvas.toDataURL("image/" + ext);
+            const blob = dataURLtoBlob(dataURL);
+            const fr = new FileReader();
+            console.log(blob);
+            fr.readAsText(blob);
+            fr.onload = function (e) {
+                /** @type {string} */
+                const code = e.target.result;
+                // console.log(code);
+                const index = code.search('data=');
+                const res = code.slice(index + 5, code.length);
+                if (typeof callback === 'function') callback(res);
+            }
+        };
+        // document.body.innerHTML = null;
+        // document.body.appendChild(canvas);
+    }
+
+    let path = 'https://resxz.eqh5.com/qngroup001%2Fu12212%2F1%2F0%2Fde6d163bd2f14598b9d89bb58607a8ad.jpeg';
+
+    getUrlBase64(path, 'jpeg', res => {
+        // console.log('图片数据', res);
+        // console.log(atob(res));
+
+    });
 }
