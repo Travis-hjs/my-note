@@ -330,12 +330,12 @@ function arrayModule() {
 }
 
 function disc() {
+    /** 抽奖概率范围 */
+    const range = parseInt(100 * Math.random()) + 1;
+    /** 概率列表（加起来必须是100） */
+    const list = [1, 5, 54, 20, 10, 10];
     /** 概率索引 */
     let index = 0;
-    /** 抽奖概率范围 */
-    let range = parseInt(100 * Math.random()) + 1;
-    /** 概率列表 */
-    let list = [1, 5, 54, 20, 10, 10];
     /** 单个概率 */
     let rate = 0;
     // console.log('随机数', range);
@@ -347,7 +347,7 @@ function disc() {
             break;
         }
     }
-    console.log('概率索引', index);
+    console.log(`概率 ${list[index]}%，索引 ${index}`);
 }
 
 /** 数字类型扩展 */
@@ -423,7 +423,7 @@ function checkDebugging() {
 /**
  * 获取图片数据（二进制数据流）
  * @param {string} src 请求图片路径
- * @param {(res: string, code: string) => void} callback 回调函数
+ * @param {(code: string) => void} callback 回调函数
  */
 function getImageData(src, callback) {
     const XHR = new XMLHttpRequest();
@@ -440,26 +440,25 @@ function getImageData(src, callback) {
             fr.onload = function (e) {
                 /** @type {string} */
                 const code = e.target.result;
-                const index = code.search('data=');
-                const res = code.slice(index + 5, code.length);
                 // console.log(code);
-                if (typeof callback === 'function') callback(res, code);
+                if (typeof callback === 'function') callback(code);
             }
         }
     }
     XHR.send();
 }
-// getImageData('https://resxz.eqh5.com/qngroup001%2Fu12212%2F1%2F0%2Fde6d163bd2f14598b9d89bb58607a8ad.jpeg', (res, code) => {
-//     console.log(res, code);
+// getImageData('https://resxz.eqh5.com/qngroup001%2Fu12212%2F1%2F0%2Fde6d163bd2f14598b9d89bb58607a8ad.jpeg', (code) => {
+//     console.log(code);
 
 // });
 
 function getCanvasData() {
     /**
-     * @param {string} dataurl Base64字符串转二进制
+     * Base64字符串转二进制
+     * @param {string} base64 
     */
-    function dataURLtoBlob(dataurl) {
-        var arr = dataurl.split(','),
+    function base64ToBlob(base64) {
+        let arr = base64.split(','),
             mime = arr[0].match(/:(.*?);/)[1],
             bstr = atob(arr[1]),
             n = bstr.length,
@@ -478,7 +477,7 @@ function getCanvasData() {
      * @param {string} ext 图片格式
      * @param {(res: string) => void} callback 结果回调
      */
-    function getUrlBase64(url, ext, callback) {
+    function getBase64Info(url, ext, callback) {
         const canvas = document.createElement("canvas");
         const ctx = canvas.getContext("2d");
         const img = new Image;
@@ -489,10 +488,10 @@ function getCanvasData() {
             canvas.width = img.width;
             canvas.height = img.height;
             ctx.drawImage(img, 0, 0);
-            const dataURL = canvas.toDataURL("image/" + ext);
-            const blob = dataURLtoBlob(dataURL);
+            const base64 = canvas.toDataURL("image/" + ext);
+            const blob = base64ToBlob(base64);
             const fr = new FileReader();
-            console.log(blob);
+            // console.log(blob);
             fr.readAsText(blob);
             fr.onload = function (e) {
                 /** @type {string} */
@@ -509,9 +508,64 @@ function getCanvasData() {
 
     let path = 'https://resxz.eqh5.com/qngroup001%2Fu12212%2F1%2F0%2Fde6d163bd2f14598b9d89bb58607a8ad.jpeg';
 
-    getUrlBase64(path, 'jpeg', res => {
+    getBase64Info(path, 'jpeg', res => {
         // console.log('图片数据', res);
         // console.log(atob(res));
 
     });
+}
+
+/**
+ * 数字转中文
+ * @param {number} number 
+ */
+function getNumCNSpell(number) {
+    if (number < 0) return console.warn('数字必须大于零');
+    const numMapSpell = ['零', '一', '二', '三', '四', '五', '六', '七', '八', '九'];
+    const posMapUnit = ['', '十', '百', '千'];
+    const splitUnit = ['', '万', '亿'];
+    const value = number.toString();
+    const length = value.length;
+    let result = '';
+    let count = 0
+
+    for (let i = 0; i < length; i++) {
+        const index = length - i - 1;   // 反序索引
+        const pos = index % 4;          // 千百十个 -> 3210
+        const str = value[i];
+
+        if (str === '0') {
+            count++;
+        }
+        else {
+            if (count > 0) {
+                result += '零'
+                count = 0
+            }
+        }
+
+        if (pos === 0 && str === '2' && i === 0 && length > 4) {
+            // 两万 两亿的情况
+            result += '两';
+        } else if (pos === 1 && str === '1' && (i - 1 < 0 || value[i - 1] === '0') && (i - 2 < 0 || value[i - 2] === '0')) {
+            // 十一，十二 不读一的情况
+            result += '';
+        } else if (pos >= 2 && str === '2') {
+            // 千位，百位读两
+            result += '两';
+        } else {
+            if (str !== '0') {
+                result += numMapSpell[value[i]];
+            }
+        }
+
+        if (str !== '0') {
+            result += posMapUnit[pos];
+        }
+
+        if (index % 4 === 0 && count < 4) {
+            result += splitUnit[Math.floor(index / 4)];
+        }
+    }
+    return result;
 }
