@@ -55,7 +55,7 @@ function dropDownRefresh(option) {
          * @param {Function} callback 下拉结束回调
          * @param {(n: number) => void} rangeCallback 下拉状态回调
          */
-        onStart(callback, rangeCallback = null) {
+        onRefresh(callback, rangeCallback = null) {
             /** 顶部距离 */
             let scrollTop = 0;
             /** 开始距离 */
@@ -144,7 +144,7 @@ const drop = dropDownRefresh({
     distance: 100
 });
 
-drop.onStart(() => {
+drop.onRefresh(() => {
     setTimeout(() => {
         drop.end();
     }, 3000);
