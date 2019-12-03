@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>时钟翻牌</title>
+    <style>
+        *{ padding: 0; margin: 0; }
+        div{ box-sizing: border-box; }
+        .page{ width: 100%; max-width: 680px; margin: 0 auto; padding: 10px; text-align: center; }
+        .btn-box{ width: 100%; padding: 20px 0; }
+        .btn-box button{ padding: 8px 16px; font-size: 16px; }
+        .flip {
+            display: inline-block;
+            position: relative;
+            width: 100px;
+            height: 160px;
+            line-height: 160px;
+            border: solid 1px #000;
+            border-radius: 10px;
+            background: #fff;
+            font-size: 100px;
+            color: #fff;
+            box-shadow: 0 0 6px rgba(0, 0, 0, .5);
+            text-align: center;
+            font-family: "Helvetica Neue";
+        }
+        
+        .flip .digital:before, .flip .digital:after {
+            content: "";
+            position: absolute;
+            left: 0;
+            right: 0;
+            background: #000;
+            overflow: hidden;
+            box-sizing: border-box;
+        }
+
+        .flip .digital:before {
+            top: 0;
+            bottom: 50%;
+            border-radius: 10px 10px 0 0;
+            border-bottom: solid 1px #666;
+        }
+
+        .flip .digital:after {
+            top: 50%;
+            bottom: 0;
+            border-radius: 0 0 10px 10px;
+            line-height: 0;
+        }
+
+        /* 向下翻 */
+        .flip.down .front:before { z-index: 3; }
+        .flip.down .back:after { z-index: 2; transform-origin: 50% 0%; transform: perspective(160px) rotateX(180deg); }
+        .flip.down .front:after, .flip.down .back:before { z-index: 1; }
+        .flip.down.go .front:before {
+            transform-origin: 50% 100%;
+            animation: frontFlipDown 0.6s ease-in-out both;
+            box-shadow: 0 -2px 6px rgba(255, 255, 255, 0.3);
+            backface-visibility: hidden;
+        }
+        .flip.down.go .back:after { animation: backFlipDown 0.6s ease-in-out both; }
+        @keyframes frontFlipDown {
+            0% {
+                transform: perspective(160px) rotateX(0deg);
+            }
+
+            100% {
+                transform: perspective(160px) rotateX(-180deg);
+            }
+        }
+        @keyframes backFlipDown {
+            0% {
+                transform: perspective(160px) rotateX(180deg);
+            }
+
+            100% {
+                transform: perspective(160px) rotateX(0deg);
+            }
+        }
+        
+        /* 向上翻 */
+        .flip.up .front:after { z-index: 3; }
+        .flip.up .back:before { z-index: 2; transform-origin: 50% 100%; transform: perspective(160px) rotateX(-180deg); }
+        .flip.up .front:before, .flip.up .back:after { z-index: 1; }
+        .flip.up.go .front:after {
+            transform-origin: 50% 0;
+            animation: frontFlipUp 0.6s ease-in-out both;
+            box-shadow: 0 2px 6px rgba(255, 255, 255, 0.3);
+            backface-visibility: hidden;
+        }
+        .flip.up.go .back:before {
+            animation: backFlipUp 0.6s ease-in-out both;
+        }
+        @keyframes frontFlipUp {
+            0% {
+                transform: perspective(160px) rotateX(0deg);
+            }
+
+            100% {
+                transform: perspective(160px) rotateX(180deg);
+            }
+        }
+        @keyframes backFlipUp {
+            0% {
+                transform: perspective(160px) rotateX(-180deg);
+            }
+
+            100% {
+                transform: perspective(160px) rotateX(0deg);
+            }
+        }
+        .flip .number0:before, .flip .number0:after { content: "0"; }
+        .flip .number1:before, .flip .number1:after { content: "1"; }
+        .flip .number2:before, .flip .number2:after { content: "2"; }
+        .flip .number3:before, .flip .number3:after { content: "3"; }
+        .flip .number4:before, .flip .number4:after { content: "4"; }
+        .flip .number5:before, .flip .number5:after { content: "5"; }
+        .flip .number6:before, .flip .number6:after { content: "6"; }
+        .flip .number7:before, .flip .number7:after { content: "7"; }
+        .flip .number8:before, .flip .number8:after { content: "8"; }
+        .flip .number9:before, .flip .number9:after { content: "9"; }
+    </style>
+</head>
+<body>
+    <!-- learn：https://juejin.im/post/5dd9490a6fb9a07a961d11e7 -->
+    <div class="page">
+        <!-- 翻牌的外框 -->
+        <div class="flip down go" the-flip>
+            <!-- 位于前面的纸牌 -->
+            <div class="digital number0"></div>
+            <!-- 位于后面的纸牌 -->
+            <div class="digital number0"></div>
+        </div>
+
+        <div class="btn-box">
+            <button>up</button>
+            <button>down</button>
+        </div>
+    </div>
+
+    <script>
+        (function () {
+            /**
+             * 查找单个元素
+             * @param {string} name 
+             * @returns {HTMLElement}
+             */
+            const $ = name => document.querySelector(name);
+            /** 翻排整体 */
+            const flip = $('[the-flip]');
+            /** 位于后面的纸牌 */
+            const backNode = flip.children[0];
+            /** 位于前面的纸牌 */
+            const frontNode = flip.children[1];
+            /** 按钮容器 */
+            const btnBox = $('.btn-box');
+            /** 当前数字 */
+            let count = 0;
+            /** 计算后牌文字（越界判断） */
+            let nextCount = 0;
+            /** 是否正在翻转（防止翻转未结束就进行下一次翻转） */
+            let isFlipping = false;
+            /**
+             * 点击类型
+             * @type {'up'|'down'}
+             */
+            let clickType = null;
+
+            /** 向下翻转+1 */
+            function flipDown() {
+                if (isFlipping) return;
+                isFlipping = true;
+                clickType = 'down';
+                nextCount = count >= 9 ? 0 : count + 1;
+                // 设置前牌的文字
+                frontNode.setAttribute('class', 'digital front number' + count);
+                // 设置后牌的文字
+                backNode.setAttribute('class', 'digital back number' + nextCount);
+                // 添加go，执行翻转动画
+                flip.setAttribute('class', 'flip down go');
+
+                // 翻转结束后，恢复状态
+                // setTimeout(function() {
+                //     flip.setAttribute('class', 'flip down');
+                //     frontNode.setAttribute('class', 'digital front number' + nextCount);
+                //     count = nextCount;
+                //     isFlipping = false;
+                // }, 610);
+            }
+            
+            /** 向上翻转-1 */
+            function flipUp() {
+                if (isFlipping) return;
+                isFlipping = true;
+                clickType = 'up';
+                nextCount = count <= 0 ? 9 : count - 1;
+                frontNode.setAttribute('class', 'digital front number' + count);
+                backNode.setAttribute('class', 'digital back number' + nextCount);
+                flip.setAttribute('class', 'flip up go');
+                
+                // 翻转结束后，恢复状态
+                // setTimeout(function() {
+                //     flip.setAttribute('class', 'flip up');
+                //     frontNode.setAttribute('class', 'digital front number' + nextCount);
+                //     count = nextCount;
+                //     isFlipping = false;
+                // }, 610);
+            }
+
+            /** 动画监听结束 */
+            function flipMoveEnd() {
+                switch (clickType) {
+                    case 'up':
+                        flip.setAttribute('class', 'flip up');
+                        frontNode.setAttribute('class', 'digital front number' + nextCount);
+                        break;
+                    case 'down':
+                        flip.setAttribute('class', 'flip down');
+                        frontNode.setAttribute('class', 'digital front number' + nextCount);
+                        break;
+                    default:
+                        break;
+                }
+                count = nextCount;
+                isFlipping = false;
+                // console.log('执行', clickType, count);
+            }
+            
+            backNode.addEventListener('animationend', flipMoveEnd);
+            btnBox.children[0].addEventListener('click', flipUp);
+            btnBox.children[1].addEventListener('click', flipDown);
+
+        })();
+    </script>
+</body>
+</html>
