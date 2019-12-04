@@ -83,6 +83,26 @@ class ModuleString {
         return 'rgb(' + parseInt('0x' + hex.slice(1, 3)) + ',' + parseInt('0x' + hex.slice(3, 5)) + ',' + parseInt('0x' + hex.slice(5, 7)) + ')';
     }
 
+    /**
+     * 获取 `url?` 后面的参数
+     * @param {string} key 获取指定`key`值
+     */
+    getQueryParam(key = null) {
+        let value = location.search;
+        let result = null;
+        if (value) {
+            result = {};
+            value = value.slice(1, value.length).split('&');
+            for (let i = 0; i < value.length; i++) {
+                const item = value[i].split('=');
+                result[item[0]] = item[1] || null;
+            }
+            if (key && result[key]) {
+                result = result[key];
+            }
+        }
+        return result;
+    }
 }
 
 /** 数字模块 */
