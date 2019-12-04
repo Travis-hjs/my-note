@@ -97,8 +97,8 @@ class ModuleString {
                 const item = value[i].split('=');
                 result[item[0]] = item[1] || null;
             }
-            if (key && result[key]) {
-                result = result[key];
+            if (key) {
+                result = result[key] || null;
             }
         }
         return result;
