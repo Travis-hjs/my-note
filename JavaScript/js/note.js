@@ -452,6 +452,37 @@ function getImageData(src, callback) {
 
 // });
 
+/**
+ * 将图片画成圆并返回`base64`
+ * @param {string} imgUrl 图片路径
+ * @param {number} width 设置图片的宽度/高度
+ * @param {(res: string) => void} callback base64回调
+ */
+function circleImage(imgUrl, width, callback) {
+    const img = new Image();
+    const canvas = doc.createElement('canvas');
+    const contex = canvas.getContext('2d');
+    const circle = {
+        x: width / 2,
+        y: width / 2,
+        r: width / 2
+    };
+    img.crossOrigin = 'Anonymous';
+    img.src = imgUrl;
+    img.onload = function () {
+        canvas.width = width;
+        canvas.height = width;
+        contex.clearRect(0, 0, width, width);
+        contex.save();
+        contex.beginPath();
+        contex.arc(circle.x, circle.y, circle.r, 0, Math.PI * 2, false);
+        contex.clip();
+        contex.drawImage(img, 0, 0, img.width, img.height, 0, 0, width, width);
+        contex.restore();
+        callback(canvas.toDataURL('image/png'));
+    }
+}
+
 function getCanvasData() {
     /**
      * Base64字符串转二进制
