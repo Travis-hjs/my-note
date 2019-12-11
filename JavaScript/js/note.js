@@ -460,7 +460,7 @@ function getImageData(src, callback) {
  */
 function circleImage(imgUrl, width, callback) {
     const img = new Image();
-    const canvas = doc.createElement('canvas');
+    const canvas = document.createElement('canvas');
     const contex = canvas.getContext('2d');
     const circle = {
         x: width / 2,
