@@ -540,9 +540,9 @@ class ModuleBom extends ModuleDate {
      * 点击复制
      * @param {string} text 复制的内容
      * @param {Function} success 成功回调
-     * @param {Function} fail 出错回调
+     * @param {(error: string) => void} fail 出错回调
      */
-    copyText(text, success, fail) {
+    copyText(text, success = null, fail = null) {
         text = text.replace(/(^\s*)|(\s*$)/g, '');
         if (!text) {
             if (typeof fail === 'function') fail('复制的内容不能为空！');
