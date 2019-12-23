@@ -9,7 +9,9 @@ html, body{
 	/* 禁用字体大小自动调整 */
 	-webkit-text-size-adjust: none !important;
 	/* 去掉点击高亮 */
-	-webkit-tap-highlight-color: transparent;
+    -webkit-tap-highlight-color: transparent;
+    /* ios滚动设置 */
+    -webkit-overflow-scrolling: touch;
 }
 ul, li{ list-style: none; }
 a{ text-decoration: none; color: inherit; }
