@@ -1,6 +1,5 @@
 (function () {
-    const doc = document;
-    const content = doc.querySelector('.box');
+    const content = document.querySelector('.box');
     const activeClassName = 'item-active';
     /** 动画进行列表 */
     const list = [0, 1, 2, 5, 8, 7, 6, 3];
