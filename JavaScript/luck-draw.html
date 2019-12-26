@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="maximum-scale=1.0, minimum-scale=1.0, user-scalable=0, initial-scale=1.0, width=device-width"/>
+	<meta name="format-detection" content="telephone=no, email=no, date=no, address=no">
+    <title>抽奖</title>
+    <link rel="stylesheet" href="./css/base.css">
+    <style>
+        .box{ width: 100%; }
+        .box .item{ min-width: 31%; margin: 0 auto 2%; padding: 10% 0; background-color: tomato; color: #fff; font-size: 32px; font-weight: bold; text-align: center; transition: .2s all; }
+        .box .item-active{ background-color: rgba(255,99,71,0.6); }
+        .box .center{ cursor: pointer; -webkit-user-select: none; }
+        .box .center:active{ transform: scale(0.9); }
+    </style>
+</head>
+<body>
+    <div class="page">
+        <div class="box flex">
+            <div class="item">1</div>
+            <div class="item">2</div>
+            <div class="item">3</div>
+            <div class="item">8</div>
+            <div class="item center">srart</div>
+            <div class="item">4</div>
+            <div class="item">7</div>
+            <div class="item">6</div>
+            <div class="item">5</div>
+        </div>
+    </div>
+    <script src="./js/luckDraw.js"></script>
+</body>
+</html>
