@@ -7,8 +7,9 @@ const BASEURL = 'http://che.qihao.lzei.com';
  * @param {'GET'|'POST'} method 请求方法：这里我只枚举了常用的两种
  * @param {string} url 请求路径
  * @param {object} data 请求参数对象
+ * @param {number} timeout 超时毫秒
  */
-function theFetch(method, url, data = {}) {
+function theFetch(method, url, data = {}, timeout = 5000) {
     let dataPost = null;
     let dataGet = '';
     switch (method) {
@@ -48,6 +49,7 @@ function theFetch(method, url, data = {}) {
         }).catch(error => {
             reject(error);
         });
+        setTimeout(reject.bind(this, 'fetch is timeout'), timeout);
     });
 }
 
