@@ -85,9 +85,10 @@ class ModuleString {
 
     /**
      * 获取 `url?` 后面的参数
-     * @param {string} key 获取指定`key`值
+     * @param {string} name 获取指定`key`值
+     * @returns {{}|string}
      */
-    getQueryParam(key = null) {
+    getQueryParam(name = null) {
         let value = location.search;
         let result = null;
         if (value) {
@@ -97,8 +98,8 @@ class ModuleString {
                 const item = value[i].split('=');
                 result[item[0]] = item[1] || null;
             }
-            if (key) {
-                result = result[key] || null;
+            if (name) {
+                result = result[name] || null;
             }
         }
         return result;
