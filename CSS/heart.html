@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>heart</title>
+    <style>
+        .heart{
+            background: red;
+            transform: rotate(-45deg);
+            width: 30px;
+            height: 30px;
+            margin: 100px auto;
+            animation: beat .35s infinite alternate;
+        }
+
+        @keyframes beat{
+            to { transform: scale(1.8); }
+        }
+
+        .heart:before, .heart:after{
+            content: "";
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            background: red;
+            position: absolute;
+        }
+
+        .heart:before{
+            top: -15px;
+            left: 0;
+        }
+
+        .heart:after{
+            top: 0;
+            right: -15px;
+        }
+    </style>
+</head>
+<body>
+    <div class="heart"></div>
+</body>
+</html>
