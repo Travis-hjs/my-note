@@ -1,5 +1,7 @@
 /**
  * 轮播组件
+ * @author https://github.com/Hansen-hjs
+ * @description 移动端`swiper`组件，如果需要兼容`pc`自行修改对应的`touch`到`mouse`事件即可
  * @param {object} params 配置传参
  * @param {string} params.el 组件节点 class|id|<label>
  * @param {number} params.moveTime 过渡时间（毫秒）默认 300
@@ -10,6 +12,11 @@
  * @param {boolean} params.pagination 是否需要底部圆点
  */
 function swiper(params) {
+    /**
+     * css class 命名列表
+     * @dec ['滑动列表','滑动item','圆点容器','底部圆点','圆点高亮']
+     */
+    const classNames = ['.swiper_list', '.swiper_item', '.swiper_pagination', '.swiper_dot', '.swiper_dot_active'];
     /**
      * 组件节点
      * @type {HTMLElement}
@@ -36,28 +43,23 @@ function swiper(params) {
      */
     let nodeNodePaginationItems = [];
     /** 是否需要底部圆点 */
-    let pagination = false; 
+    let pagination = false;
     /** 是否需要回路 */
     let isLoop = false;
     /** 方向 true = X & Y = false */
-    let direction = false; 
+    let direction = false;
     /** 是否需要自动播放 */
-    let autoPaly = false; 
+    let autoPaly = false;
     /** 自动播放间隔（毫秒）默认 3000 */
-    let interval = 3000; 
+    let interval = 3000;
     /** 过渡时间（毫秒）默认 300 */
     let moveTime = 300;
-    /**
-     * css class 命名列表
-     * @dec ['滑动列表','滑动item','圆点容器','底部圆点','圆点高亮']
-     */
-    const classNames = ['.swiper_list', '.swiper_item', '.swiper_pagination', '.swiper_dot', '.swiper_dot_active'];
-    
+
     /** 设置动画 */
     function startAnimation() {
-        nodeItem.style.transition = `${moveTime / 1000}s all`;
+        nodeItem.style.transition = `${moveTime / 1000}s all`; 
     }
-    
+
     /** 关闭动画 */
     function stopAnimation() {
         nodeItem.style.transition = '0s all';
@@ -83,13 +85,15 @@ function swiper(params) {
      * @param {number} height 滚动容器的高度
      */
     function onTouch(width, height) {
+        /** 动画帧 */
+        const animationFrame = requestAnimationFrame;
         /** 触摸开始时间 */
-        let startTime = 0; 
+        let startTime = 0;
         /** 触摸结束时间 */
         let endTime = 0;
         /** 开始的距离 */
         let startDistance = 0;
-        /** 结束的距离 */ 
+        /** 结束的距离 */
         let endDistance = 0;
         /** 结束距离状态 */
         let endState = 0;
@@ -103,57 +107,55 @@ function swiper(params) {
         let loopCount = 0;
         /** 移动范围 */
         let range = direction ? height : width;
-        /** 动画帧 */
-        const animationFrame = requestAnimationFrame;
-        
+
         /** 判断最大拖动距离 */
         function touchRange() {
             /** 拖动距离 */
-            let _d = 0;
+            let dragDistance = 0;
             // 默认这个公式
-            _d = moveDistance + (endDistance - startDistance);
+            dragDistance = moveDistance + (endDistance - startDistance);
             // 判断最大正负值
             if ((endDistance - startDistance) >= range) {
-                _d = moveDistance + range;
+                dragDistance = moveDistance + range;
             } else if ((endDistance - startDistance) <= -range) {
-                _d = moveDistance - range;
+                dragDistance = moveDistance - range;
             }
             // 没有 loop 的时候惯性拖拽
             if (!isLoop) {
                 if ((endDistance - startDistance) > 0 && index === 0) {
                     // console.log('到达最初');
-                    _d = moveDistance + ((endDistance - startDistance) - ((endDistance - startDistance) * 0.6));
+                    dragDistance = moveDistance + ((endDistance - startDistance) - ((endDistance - startDistance) * 0.6));
                 } else if ((endDistance - startDistance) < 0 && index === nodeItems.length - 1) {
                     // console.log('到达最后');
-                    _d = moveDistance + ((endDistance - startDistance) - ((endDistance - startDistance) * 0.6));
+                    dragDistance = moveDistance + ((endDistance - startDistance) - ((endDistance - startDistance) * 0.6));
                 }
             }
-            return _d;
+            return dragDistance;
         }
-        
+
         /**
          * 判断触摸处理函数 
-         * @param {number} _d 移动的距离
+         * @param {number} slideDistance 移动的距离
          */
-        function judgeTouch(_d) {
+        function judgeTouch(slideDistance) {
             //	这里我设置了200毫秒的有效拖拽间隔
             if ((endTime - startTime) < 200) return true;
             // 这里判断方向（正值和负值）
-            if (_d < 0) {
-                if ((endDistance - startDistance) < (_d / 2)) return true;
+            if (slideDistance < 0) {
+                if ((endDistance - startDistance) < (slideDistance / 2)) return true;
                 return false;
             } else {
-                if ((endDistance - startDistance) > (_d / 2)) return true;
+                if ((endDistance - startDistance) > (slideDistance / 2)) return true;
                 return false;
             }
         }
- 
+
         /** 返回原来位置 */
         function backLocation() {
             startAnimation();
             slideStyle(moveDistance);
         }
-        
+
         /**
          * 滑动
          * @param {number} _d 滑动的距离
@@ -193,7 +195,7 @@ function swiper(params) {
             }
         }
 
-        /** 判断移动 */ 
+        /** 判断移动 */
         function judgeMove() {
             // 判断是否需要执行过渡
             if (endDistance < startDistance) {
@@ -215,7 +217,7 @@ function swiper(params) {
                 } else backLocation();
             }
         }
-        
+
         /** 自动播放移动 */
         function autoMove() {
             // 这里判断 loop 的自动播放
@@ -250,7 +252,7 @@ function swiper(params) {
 
         // 开始触摸
         nodeItem.addEventListener('touchstart', ev => {
-            startTime = Date.now(); 
+            startTime = Date.now();
             count = 0;
             loopCount = moveTime / 1000 * 60;
             stopAnimation();
@@ -281,15 +283,14 @@ function swiper(params) {
             count = 0;
         });
     }
-    
+
     /**
      * 如果要回路的话前后增加元素
      * @param {number} width 滚动容器的宽度
      * @param {number} height 滚动容器的高度
      */
     function outputLoop(width, height) {
-        let first = nodeItems[0].cloneNode(true),
-            last = nodeItems[nodeItems.length - 1].cloneNode(true);
+        let first = nodeItems[0].cloneNode(true), last = nodeItems[nodeItems.length - 1].cloneNode(true);
         nodeItem.insertBefore(last, nodeItems[0]);
         nodeItem.appendChild(first);
         nodeItems.unshift(last);
@@ -321,7 +322,7 @@ function swiper(params) {
 
     /** 输出底部圆点 */
     function outputPagination() {
-        let html = '';
+        let paginations = '';
         nodePagination = node.querySelector(classNames[2]);
         // 如果没有找到对应节点则创建一个
         if (!nodePagination) {
@@ -330,13 +331,13 @@ function swiper(params) {
             node.appendChild(nodePagination);
         }
         for (let i = 0; i < nodeItems.length; i++) {
-            html += `<div class="${classNames[3].slice(1)}"></div>`;
+            paginations += `<div class="${classNames[3].slice(1)}"></div>`;
         }
-        nodePagination.innerHTML = html;
+        nodePagination.innerHTML = paginations;
         nodeNodePaginationItems = [...nodePagination.querySelectorAll(classNames[3])];
         nodePagination.querySelector(classNames[3]).classList.add(classNames[4].slice(1));
     }
-    
+
     /** 动态布局初始化 */
     function format() {
         node = document.querySelector(params.el);
@@ -353,7 +354,7 @@ function swiper(params) {
         layout(moveWidth, moveHeight);
         onTouch(moveWidth, moveHeight);
     }
-    
+
     /** 初始化参数 */
     function init() {
         if (typeof params !== 'object') return console.warn('传参有误');
