@@ -135,7 +135,7 @@ function swiper(params) {
 
         /**
          * 判断触摸处理函数 
-         * @param {number} slideDistance 移动的距离
+         * @param {number} slideDistance 滑动的距离
          */
         function judgeTouch(slideDistance) {
             //	这里我设置了200毫秒的有效拖拽间隔
@@ -158,11 +158,11 @@ function swiper(params) {
 
         /**
          * 滑动
-         * @param {number} _d 滑动的距离
+         * @param {number} slideDistance 滑动的距离
          */
-        function slideMove(_d) {
+        function slideMove(slideDistance) {
             startAnimation();
-            slideStyle(_d);
+            slideStyle(slideDistance);
             loopCount = 0;
             // 判断 loop 时回到第一张或最后一张
             if (isLoop && index < 0) {
@@ -347,8 +347,7 @@ function swiper(params) {
         nodeItems = [...node.querySelectorAll(classNames[1])];
         if (nodeItems.length == 0) return console.warn('滑动节点个数必须大于0！');
 
-        let moveWidth = node.offsetWidth,
-            moveHeight = node.offsetHeight;
+        let moveWidth = node.offsetWidth, moveHeight = node.offsetHeight;
         if (pagination) outputPagination();
         if (isLoop) outputLoop(moveWidth, moveHeight);
         layout(moveWidth, moveHeight);
