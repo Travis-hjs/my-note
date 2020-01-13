@@ -18,26 +18,26 @@
                 cursor: pointer;
             }
             .rate_box{ width: 100%; display: flex; flex-flow: row-reverse; justify-content: center; }
+            
+            /* input-rate */
             input[name="rate"]{ width: 28px; height: 28px; margin-right: 16px; position: relative; }
             input[name="rate"]::after{ position: absolute; top: 0; left: 0; content: ""; background-color: #dadada; transition: .2s all; width: 100%; height: 100%; border-radius: 100%; }
-            /* input[name="rate"]:checked::after{ background-color: tomato; } */
+            /* input[name="rate"]:checked::after{ background-color: #5dcb61; } */
             input[name="rate"]:hover::after{ transform: scale(1.2); }
-            input[name="rate"]:checked::after, input[name="rate"]:hover::after { background-color: tomato; }
-            input[name="rate"]:checked ~ input[name="rate"]::after, input[name="rate"]:hover ~ input[name="rate"]::after { background-color: tomato; }
+            input[name="rate"]:checked::after, input[name="rate"]:hover::after { background-color: #5dcb61; }
+            input[name="rate"]:checked ~ input[name="rate"]::after, input[name="rate"]:hover ~ input[name="rate"]::after { background-color: #5dcb61; }
             
-            input[name="select"]{ width: 28px; height: 28px; background-color: transparent; border: solid 1px tomato; position: relative; transition: .2s all; }
+            /* input-select */
+            input[name="select"]{ width: 28px; height: 28px; background-color: transparent; border: solid 1px #5dcb61; position: relative; transition: .2s all; }
             input[name="select"]::after{ content: ""; position: absolute; top: 40%; left: 50%; transform: translate(-50%, -50%) rotate(45deg); width: 30%; height: 60%; border: solid 2px transparent; border-top: none; border-left: none; transition: .2s all; }
-            input[name="select"]:checked{ background-color: tomato; }
+            input[name="select"]:checked{ background-color: #5dcb61; }
             input[name="select"]:checked::after{ border-color: #fff; }
 
-            /* 背景层 */
+            /* input-switch */
             input[name="switch"] { position: relative; width: 60px; height: 30px; background-color: #dadada; border-radius: 30px; border: none; outline: none; -webkit-appearance: none; transition: .2s all;}
-            /* 按钮 */
-            input[name="switch"]::after { content: ''; position: absolute; top: 0; left: 0; width: 50%; height: calc(100% - 1px); background-color: #fff; border-radius: 50%; transition: .2s all; box-shadow: 1px 1px 1px 1px rgba(0, 0, 0, 0.08);}
-            /* 选中状态时，背景色切换 */
-            input[name="switch"]:checked { background-color: tomato; }
-            /* 选中状态时，按钮的位置移动 */
-            input[name="switch"]:checked::after { left: 50%;}
+            input[name="switch"]::after { content: ''; position: absolute; top: 1px; left: 1px; width: calc(50% - 2px); height: calc(100% - 2px); background-color: #fff; border-radius: 50%; transition: .2s all; box-shadow: 1px 1px 1px 1px rgba(0, 0, 0, 0.08);}
+            input[name="switch"]:checked { background-color: #5dcb61; }
+            input[name="switch"]:checked::after { left: calc(50% + 1px); }
         </style>
     </head>
     <body>
