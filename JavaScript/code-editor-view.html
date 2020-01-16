@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="maximum-scale=1.0, minimum-scale=1.0, user-scalable=0, initial-scale=1.0, width=device-width"/>
+    <meta name="format-detection" content="telephone=no, email=no, date=no, address=no">
+    <title>代码编辑器-实时预览</title>
+    <link rel="stylesheet" href="./css/base.css">
+    <style>
+        .page{ padding: 8px 4px; }
+        .code-box{ resize: vertical; width: 100%; height: 200px; border: dashed #409eff 1px; padding: 8px; border-radius: 8px; margin-bottom: 16px; }
+        .view-box{ width: 100%; max-width: 375px; height: 667px; margin: 0 auto; }
+    </style>
+</head>
+<body>
+    <div class="page">
+        <textarea class="code-box" placeholder="代码输入框"></textarea>
+        <div class="view-box card"></div>
+    </div>
+    <script src="./js/codeEditorView.js"></script>
+</body>
+</html>
