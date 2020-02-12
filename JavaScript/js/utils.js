@@ -104,6 +104,11 @@ class ModuleString {
         }
         return result;
     }
+
+    /** 随机16进制颜色 */
+    randomHex() {
+        return '#' + Math.floor(Math.random() * 0xffffff).toString(16).padEnd(6, '0');
+    }
 }
 
 /** 数字模块 */
