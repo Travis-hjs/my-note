@@ -88,13 +88,13 @@ function rippleClick(el) {
         node.style.top = top + 'px';
         node.style.left = left + 'px';
 
-        function an() {
-            node.removeEventListener('animationend', an);
+        function end() {
+            node.removeEventListener('animationend', end);
             // console.log('动画结束', node);
             target.removeChild(node);
             RIPPLE_POOL.push(node);
         }
-        node.addEventListener('animationend', an);
+        node.addEventListener('animationend', end);
     }
 
     /** 是否移动端 */
