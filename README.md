@@ -2,7 +2,9 @@
 
 >> 个人学习笔记 & 一些移动端插件：**喜欢造一些高效的轮子**
 
->>> [技术博客：https://hansen-hjs.github.io/blog/](https://hansen-hjs.github.io/blog/ "要不是为了生活，我才不会写代码") （之后可能移步到掘金）
+>>> [技术博客](https://hansen-hjs.github.io/blog/) （之后可能移步到掘金）
+
+>>> [掘金](https://juejin.im/user/5d0754e4f265da1b95705770/posts) （之后可能移步到掘金）
 
 >>> 邮箱：1141752341@qq.com
 
