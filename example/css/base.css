@@ -1,45 +1,76 @@
-*{ padding: 0; margin: 0; }
+/* 用于移动端 */
+*{ padding: 0; margin: 0; box-sizing: border-box; }
 html, body{
 	background-color: #fff;
 	color: #333;
+	font-family: "Helvetica Neue", Helvetica, sans-serif;
 	/* 禁用系统长按菜单 */
-	-webkit-touch-callout: none;
+	-webkit-touch-callout: none; 
 	/* 禁用字体大小自动调整 */
 	-webkit-text-size-adjust: none !important;
-    text-size-adjust: none !important;
 	/* 去掉点击高亮 */
-	-webkit-tap-highlight-color:rgba(0, 0, 0, 0);
-	/* 禁止选择内容 */
-	-webkit-user-select: none;
-	font-family: "Helvetica Neue", Helvetica, sans-serif;
+    -webkit-tap-highlight-color: transparent;
+    /* ios滚动设置 */
+    -webkit-overflow-scrolling: touch;
 }
-div{ box-sizing: border-box; }
-li{ list-style: none; box-sizing: border-box; }
-a{ text-decoration: none; color: #333; background-color: transparent; }
+ul, li{ list-style: none; }
+a{ text-decoration: none; color: inherit; background-color: transparent; }
 img{ display: block; width: 100%; }
-h1,h2,h3,h4,h5,h6,i,b,i{ font-weight: 400; font-style: normal; }
-input, textarea{ outline: none; background-color: rgba(0, 0, 0, 0); -webkit-user-select: auto; border: none; box-sizing: border-box; font-family: "Helvetica Neue", Helvetica, sans-serif; }
+h1,h2,h3,h4,h5,h6,b,i{ font-weight: normal; font-style: normal; }
+button, input, textarea{ outline: none; border: none; background-color: transparent; }
 input::-webkit-input-placeholder { color: #999; }
-textarea { resize: none; display: block; }
+button::after, input::after{ border: none; }
+textarea{ resize: none; display: block; }
 textarea::-webkit-input-placeholder { color: #999; }
 
-/* flex布局 vertical：垂直平居中 center：水平居中*/
-.flex{ display: -webkit-box; display: -webkit-flex; display: flex; flex-wrap: wrap }
-.f1{ -webkit-box-flex: 1; -webkit-flex: 1; flex: 1; }
-.f2{ -webkit-box-flex: 2; -webkit-flex: 2; flex: 2; }
-.f3{ -webkit-box-flex: 3; -webkit-flex: 3; flex: 3; }
+/* flex布局 */
+.flex{ display: flex; flex-wrap: wrap; }
+.f1{ flex: 1; }
+.f2{ flex: 2; }
+.f3{ flex: 3; }
 /* 垂直居中 */
-.flex_vertical{ -webkit-box-align: center; -ms-flex-align: center; align-items: center; }
+.fvertical{ align-items: center; }
 /* 水平居中 */
-.flex_center{ -webkit-box-pack: center; -ms-flex-pack: center; justify-content: center; }
-/* 水平居右 */
-.flex_right{ flex-direction: row; justify-content: flex-end; }
-/* 卡片阴影 */
-.card{ box-shadow: 0px 1px 5px 0px rgba(0, 0, 0, 0.2), 0px 2px 2px 0px rgba(0, 0, 0, 0.14), 0px 3px 1px -2px rgba(0, 0, 0, 0.12); }
-/* 文本超出... */
+.fcenter{ justify-content: center; }
+
+/* 溢出...显示 当前节点生效 */
 .ellipsis{ overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.ellipsis_2{ overflow: hidden; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; text-overflow: ellipsis; }
-.ellipsis_3{ overflow: hidden; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 3; text-overflow: ellipsis; }
+
+/* 溢出...显示 子节点生效 */
+.ellipsis-1{ display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 1; overflow: hidden; }
+.ellipsis-2{ display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden; }
+.ellipsis-3{ display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 3; overflow: hidden; }
+
+/* 卡片 */
+.card{ 
+    border-radius: 2px; 
+    box-shadow: 0px 1px 5px 0px rgba(0, 0, 0, 0.2), 0px 2px 2px 0px rgba(0, 0, 0, 0.14), 0px 3px 1px -2px rgba(0, 0, 0, 0.12); 
+    background-color: #fff;
+    overflow: hidden;
+}
+
 /* 按钮 */
-.bluebtn{ min-width: 140px; height: 40px; padding: 0 10px; font-size: 15px; border: solid 1px #409eff; cursor: pointer; background-color: #409eff; color: #fff; text-align: center; line-height: 40px; border-radius: 5px; }
-.linebtn{ min-width: 140px; height: 40px; padding: 0 10px; font-size: 15px; border: solid 1px #dcdfe6; cursor: pointer; background-color: #fff; color: #606266; text-align: center; line-height: 40px; border-radius: 5px; }
+.button {
+    padding: 0 16px; 
+    font-size: 15px;
+    border-radius: 2px;
+    min-width: 88px;
+    height: 36px;
+    overflow: hidden;
+    outline: none;
+    border: none;
+    text-align: center;
+    vertical-align: middle;
+    cursor: pointer;
+    -webkit-user-select: none;
+    color: #fff;
+    transition: .2s all;
+    box-shadow: 0 3px 1px -2px rgba(0,0,0,.2), 0 2px 2px 0 rgba(0,0,0,.14), 0 1px 5px 0 rgba(0,0,0,.12);
+}
+.button:active{ box-shadow: 0 5px 5px -3px rgba(0,0,0,.2), 0 8px 10px 1px rgba(0,0,0,.14), 0 3px 14px 2px rgba(0,0,0,.12); }
+.blue-btn{ background-color: #409eff; }
+.green-btn{ background-color: #4caf50; }
+.red-btn{ background-color: #f44336; }
+
+/* 页面结构处理 */
+.page{ width: 100%; min-height: 100vh; overflow: hidden; margin: 0 auto; max-width: 680px; }
