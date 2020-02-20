@@ -14,7 +14,7 @@ html, body{
     -webkit-overflow-scrolling: touch;
 }
 ul, li{ list-style: none; }
-a{ text-decoration: none; color: inherit; }
+a{ text-decoration: none; color: inherit; background-color: transparent; }
 img{ display: block; width: 100%; }
 h1,h2,h3,h4,h5,h6,b,i{ font-weight: normal; font-style: normal; }
 button, input, textarea{ outline: none; border: none; background-color: transparent; }
