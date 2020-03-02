@@ -32,8 +32,6 @@
             constructor() {
                 /** 路由对象 */
                 this.routes = {};
-                /** 当前路径 */
-                this.currentUrl = '';
             }
 
             /**
@@ -47,8 +45,8 @@
 
             /** 路由变动时做出处理 */
             refresh() {
-                this.currentUrl = location.hash.slice(1) || '/';
-                const callback = this.routes[this.currentUrl];
+                const currentUrl = location.hash.slice(1) || '/';
+                const callback = this.routes[currentUrl];
                 if (typeof callback === 'function') callback();
             }
             
@@ -59,39 +57,43 @@
                 window.addEventListener('hashchange', this.refresh.bind(this), false);
             }
         }
-        
+
         const Router = new ModuleRouter();
 
         Router.init();
-        
+
         const content = document.querySelector('.content');
 
-        function addHtml(title, text) {
-            content.innerHTML = `<ul class="ul">
-                                    <li>${ title }</li>
-                                    <li>${ text }</li>
-                                    <li>${ text }</li>
-                                    <li>${ text }</li>
-                                </ul>
-                                <strong>${ (new Date()).toString() }</strong>`;
+        function setHtml(title, text) {
+            const template = `<ul class="ul">
+                <li>${ title }</li>
+                <li>${ text }</li>
+                <li>${ text }</li>
+                <li>${ text }</li>
+            </ul>
+            <strong>${ (new Date()).toString() }</strong>`;
+            content.innerHTML = template;
         }
-        Router.onchange('/a', function() {
-            addHtml('首页', '首页内容');
+        Router.onchange('/a', function () {
+            setHtml('首页', '首页内容');
         });
 
-        Router.onchange('/b', function() {
-            addHtml('子页面', '第二个页面内容');
+        Router.onchange('/b', function () {
+            setHtml('子页面', '第二个页面内容');
         });
 
-        Router.onchange('/c', function() {
-            addHtml('最后的页面', '嘿嘿');
+        Router.onchange('/c', function () {
+            setHtml('最后的页面', '嘿嘿');
         });
 
         window.addEventListener('load', function () {
+            const hash = location.hash.slice(1);
+            // console.log(hash);
             // 初始化路由重定向
-            location.href = '#/a';
+            if (!hash || hash == '/') {
+                location.href = '#/a';
+            }
         });
-
     </script>
 </body>
 
