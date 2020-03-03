@@ -51,15 +51,34 @@ class ModuleString {
     }
 
     /**
-     * 格式化?后面参数成 JSON 对象
-     * @param {string} value 
+     * 获取`url?`后面参数（JSON对象）
+     * @param {string} value 要格式的字段，默认`location.search`
+     * @param {string} name 获取指定`key`值
      * @example 
-     * searchFormat(location.search);
-     * const data = '?id=12&name=hjs&date=2018/12/12';
-     * searchFormat(data)
+     * searchFormat();
+     * const data = '?id=12&name=hjs&age=2018/12/12';
+     * searchFormat(data, 'age')
+     * @returns {{}|string}
      */
-    searchFormat(value) {
-        return JSON.parse(`{"${decodeURIComponent(value.substring(1)).replace(/"/g, '\\"').replace(/&/g, '","').replace(/=/g, '":"')}"}`);
+    getQueryParam(value = location.search, name = null) {
+        const code = decodeURIComponent(value.slice(1));
+        const param = JSON.parse(`{"${code.replace(/"/g, '\\"').replace(/&/g, '","').replace(/=/g, '":"')}"}`);
+        if (name) {
+            return param[name] || null;
+        } else {
+            return param
+        }
+    }
+
+    /**
+     * 获取目标类型
+     * @description 判定`JavaScript`中数据类型的终极解决方法
+     * @param {any} target 
+     */
+    getTargetType(target) {
+        const arrayType = Object.prototype.toString.call(target);
+        // return arrayType.replace(/\[object\s(.+)\]/, '$1').toLowerCase();
+        return arrayType.slice(8, arrayType.length - 1).toLowerCase();
     }
 
     /**
@@ -81,28 +100,6 @@ class ModuleString {
     */
     hexToRgb(hex) {
         return 'rgb(' + parseInt('0x' + hex.slice(1, 3)) + ',' + parseInt('0x' + hex.slice(3, 5)) + ',' + parseInt('0x' + hex.slice(5, 7)) + ')';
-    }
-
-    /**
-     * 获取 `url?` 后面的参数
-     * @param {string} name 获取指定`key`值
-     * @returns {{}|string}
-     */
-    getQueryParam(name = null) {
-        let value = location.search;
-        let result = null;
-        if (value) {
-            result = {};
-            value = value.slice(1, value.length).split('&');
-            for (let i = 0; i < value.length; i++) {
-                const item = value[i].split('=');
-                result[item[0]] = item[1] || null;
-            }
-            if (name) {
-                result = result[name] || null;
-            }
-        }
-        return result;
     }
 
     /** 随机16进制颜色 */
