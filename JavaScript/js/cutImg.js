@@ -7,7 +7,9 @@
 
     /**
      * 裁剪图片组件
-     * @description learn: https://juejin.im/post/5e5f5a716fb9a07ca301e3c4#heading-0
+     * @description 
+     * learn: https://juejin.im/post/5e5f5a716fb9a07ca301e3c4#heading-0
+     * learn: https://fengyuanchen.github.io/cropperjs/
      * @param {HTMLCanvasElement} canvas 裁剪图片的<canvas>
      */
     function componentCutImg(canvas) {
