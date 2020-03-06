@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="maximum-scale=1.0, minimum-scale=1.0, user-scalable=0, initial-scale=1.0, width=device-width"/>
+    <meta name="format-detection" content="telephone=no, email=no, date=no, address=no">
+    <link rel="stylesheet" href="./css/base.css">
+    <title>裁剪图片</title>
+    <style>
+        .page{ padding: 10px; }
+        .upload-img{ width: 280px; min-height: 280px; margin: 0 auto 20px; }
+        .upload-img .img-box{ position: relative; width: 100%; height: 100%; overflow: hidden; }
+        .upload-img .img-box .image{ display: block; width: 100%; }
+        .upload-img .img-box .remove{ position: absolute; top: 2px; right: 2px; border-radius: 100%; cursor: pointer; width: 30px; height: 30px; background-color: rgba(0,0,0,0.5); display: flex; flex-wrap: wrap; align-items: center; justify-content: center; }
+        .upload-img .upload{ width: 100%; min-height: 280px; position: relative; }
+        .upload-img .upload .add-icon{ position: relative; width: 50px; height: 50px; }
+        .upload-img .upload .add-icon::after{ content: ""; position: absolute; top: 0; left: 50%; width: 2px; height: 100%; background-color: #999; transform: translateX(-50%); }
+        .upload-img .upload .add-icon::before{ content: ""; position: absolute; top: 50%; left: 0; width: 100%; height: 2px; background-color: #999; transform: translateY(-50%); }
+        .upload-img .upload .upload-input{ width: 100%; height: 100%; position: absolute; top: 0; left: 0; z-index: 2; opacity: 0; cursor: pointer; }
+        .hide{ display: none; }
+
+        .cut-img{ width: 100%; height: 100%; position: fixed; background-color: rgba(0,0,0,0.45); z-index: 10; top: 0; left: 0; transition: 0.3s all; display: flex; }
+        .cut-img .cut-box{ width: 100%; max-width: 680px; background-color: #fff; margin: auto; text-align: center; padding: 10px; transition: 0.3s all; }
+        .cut-img .cut-canvas{ display: block; margin: 0 auto 16px; }
+        .cut-hide{ visibility: hidden; opacity: 0; }
+        .cut-hide .cut-box{ transform: translateY(100px); }
+    </style>
+</head>
+<body>
+    <div class="page">
+        <!-- 上传图片 -->
+        <div class="card upload-img">
+            <div class="img-box hide">
+                <img class="image" src="">
+                <div class="remove">
+                    <svg t="1567996911031" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2169" width="18" height="18">
+                        <path d="M806.4 172.8l-633.6 633.6c-12.8 12.8-12.8 32 0 44.8 12.8 12.8 32 12.8 44.8 0l633.6-633.6c12.8-12.8 12.8-32 0-44.8-12.8-12.8-32-12.8-44.8 0z" fill="#ffffff" p-id="2170"></path>
+                        <path d="M172.8 172.8c-12.8 12.8-12.8 32 0 44.8l633.6 633.6c12.8 12.8 32 12.8 44.8 0 12.8-12.8 12.8-32 0-44.8L217.6 172.8c-12.8-12.8-32-12.8-44.8 0z" fill="#ffffff" p-id="2171"></path>
+                    </svg>
+                </div>
+            </div>
+            <div class="upload flex fvertical fcenter">
+                <div class="add-icon"></div>
+                <input class="upload-input" type="file" multiple="false" accept="image/*" name="picture">
+            </div>
+        </div>
+        <!-- 裁剪图片 -->
+        <div class="cut-img cut-hide">
+            <div class="cut-box">
+                <canvas class="cut-canvas"></canvas>
+                <button class="button red-btn cancel">取消</button>
+                <button class="button green-btn save">保存</button>
+            </div>
+        </div>
+    </div>
+    <script src="./js/cutImg.js"></script>
+</body>
+</html>
