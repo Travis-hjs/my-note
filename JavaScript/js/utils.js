@@ -62,6 +62,7 @@ class ModuleString {
      */
     getQueryParam(value = location.search, name = null) {
         const code = decodeURIComponent(value.slice(1));
+        if (!code) return null;
         const param = JSON.parse(`{"${code.replace(/"/g, '\\"').replace(/&/g, '","').replace(/=/g, '":"')}"}`);
         if (name) {
             return param[name] || null;
