@@ -600,3 +600,22 @@ function getNumCNSpell(number) {
     }
     return result;
 }
+
+/**
+ * 文档加载完成等同于`jQuery $ready()`
+ * @param {Function} fn 
+ */
+function documentReady(fn) {
+    // 严格模式
+    // function onReady () {
+    //     document.removeEventListener('DOMContentLoaded', onReady);
+    //     if (typeof fn === 'function') fn();
+    // }
+    // document.addEventListener('DOMContentLoaded', onReady);
+
+    // 非严格模式
+    document.addEventListener('DOMContentLoaded', function() {
+        document.removeEventListener('DOMContentLoaded', arguments.callee);
+        if (typeof fn === 'function') fn();
+    });
+}
