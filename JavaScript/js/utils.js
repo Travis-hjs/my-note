@@ -107,6 +107,20 @@ class ModuleString {
     randomHex() {
         return '#' + Math.floor(Math.random() * 0xffffff).toString(16).padEnd(6, '0');
     }
+
+    /**
+     * 检测类型
+     * @param {any} target 检测的目标
+     * @returns {'string'|'number'|'array'|'object'|'function'|'null'|'undefined'}
+     */
+    checkType(target) {
+        /** 
+         * @type {string} 
+        */
+        const value = Object.prototype.toString.call(target);
+        const result = value.match(/\[object (\S*)\]/)[1];
+        return result.toLocaleLowerCase();
+    }
 }
 
 /** 数字模块 */
