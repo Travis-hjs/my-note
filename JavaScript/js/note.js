@@ -614,8 +614,63 @@ function documentReady(fn) {
     // document.addEventListener('DOMContentLoaded', onReady);
 
     // 非严格模式
-    document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', function () {
         document.removeEventListener('DOMContentLoaded', arguments.callee);
         if (typeof fn === 'function') fn();
     });
 }
+
+/**
+ * 加载图片列表
+ * @param {Array<string>} imgList 图片列表
+ * @param {(res: Array<HTMLImageElement>) => void} callback 全部加载完成回调
+ * @param {(count: number, err: string) => void} countCallback 加载进度回调
+ */
+function loadImages(imgList, callback, countCallback) {
+    /** 总数 */
+    const total = imgList.length;
+    /** 加载完成图片列表 */
+    const images = [];
+    /** 加载个数 */
+    let loadCount = 0;
+
+    /**
+     * 加载图片
+     * @param {string} path 图片路径
+     */
+    function loadImage(path) {
+        const image = new Image;
+        image.onload = function () {
+            images.push(image);
+            check();
+        }
+        image.onerror = function () {
+            check(path);
+        }
+        image.src = path;
+    }
+
+    /**
+     * 加载监听
+     * @param {string} path 图片路径
+     */
+    function check(path = null) {
+        loadCount++;
+        if (typeof countCallback === 'function') countCallback(loadCount, path);
+        if (loadCount == total) {
+            if (typeof callback === 'function') callback(images);
+        }
+    }
+
+    for (let i = 0; i < imgList.length; i++) {
+        const src = imgList[i];
+        loadImage(src);
+    }
+}
+// loadImages(images, res => {
+//     console.log(res);
+
+// }, (count, err) => {
+//     console.log(count, err);
+
+// })
