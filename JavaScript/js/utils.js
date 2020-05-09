@@ -227,6 +227,22 @@ class ModuleNumber extends ModuleString {
         return dis * 6378137;
     }
 
+    /**
+     * 检测两个节点坐标是否相交
+     * @param {{left: number, top: number, width: number, height: number}} a 
+     * @param {{left: number, top: number, width: number, height: number}} b 
+     */
+    isCollision(a, b) {
+        const ax = a.left;
+        const ay = a.top;
+        const aw = a.width;
+        const ah = a.height;
+        const bx = b.left;
+        const by = b.top;
+        const bw = b.width;
+        const bh = b.height;
+        return (ax + aw > bx && ax < bx + bw && ay + ah > by && ay < by + bh);
+    }
 }
 
 /** 数组类处理模块 */
