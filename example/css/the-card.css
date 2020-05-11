@@ -1,0 +1,58 @@
+.user-card {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    max-width: 680px;
+    height: 180px;
+    background-color: #d4d4d4;
+    border: 1px solid #d5d5d5;
+    box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.1);
+    border-radius: 3px;
+    overflow: hidden;
+    padding: 10px;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+.user-card a {
+    text-decoration: none;
+    color: inherit;
+}
+
+.user-card .head {
+    flex: 0 0 auto;
+    width: 160px;
+    height: 160px;
+    vertical-align: middle;
+    border-radius: 5px;
+}
+
+.user-card .info {
+    box-sizing: border-box;
+    flex: 1;
+    padding: 20px;
+    height: 160px;
+}
+
+.user-card .info .name {
+    font-size: 20px;
+    font-weight: 600;
+    line-height: 1;
+    margin: 0;
+    margin-bottom: 16px;
+}
+
+.user-card .info .email {
+    font-size: 12px;
+    opacity: 0.75;
+    line-height: 1;
+    margin: 0;
+    margin-bottom: 15px;
+}
+
+.user-card .info .button {
+    padding: 10px 25px;
+    font-size: 12px;
+    border-radius: 5px;
+    text-transform: uppercase;
+}
