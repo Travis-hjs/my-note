@@ -769,7 +769,21 @@ class ModuleDom extends ModuleBom {
         el.textContent = count.toFixed(2);
         move();
     }
-
+    /** 
+     * 获取`body`标签中的所有内容 
+     * @param {string} value 
+    */
+    getBodyLabelContent(value) {
+        // value = value.replace(/\n/g, '');
+        const rule = /<[^>]*?body[^>]*?>([\s\S]*)<\/\s*body\s*>/;
+        // console.log(rule.exec(value));
+        const result = rule.exec(value);
+        if(result && result.length === 2) {
+            return result[1];
+        }
+        return value;
+    }
+    
     /** 自定义 log */
     log() {
         const args = [].slice.call(arguments);
