@@ -783,7 +783,25 @@ class ModuleDom extends ModuleBom {
         }
         return value;
     }
-    
+
+    /**
+     * 获取所有`script`标签的内容
+     * @param {string} value 
+     */
+    getAllScriptContent(value) {
+        const rule = /<[^>]*?script[^>]*?>[\s\S]*<\/\s*script\s*>/i;  // /<script id="main">([\s\S]*)<\/script>/;
+        const start = /<script[^>]*?>/g; // <[^>]*?script[^>]*?>
+        const end = /<\/\s*script\s*>/g;
+        const code = rule.exec(value);
+        let result = '';
+        // console.log(code);
+        if(code && code.length === 1) {
+            result = code[0];
+        } 
+        // console.log(result.replace(start, ''));
+        return result.replace(start, '').replace(end, ';');
+    }
+
     /** 自定义 log */
     log() {
         const args = [].slice.call(arguments);
