@@ -1,9 +1,8 @@
-/* 用于移动端 */
 *{ padding: 0; margin: 0; box-sizing: border-box; }
 html, body{
 	background-color: #fff;
 	color: #333;
-	font-family: "Helvetica Neue", Helvetica, sans-serif;
+	font-family: "Helvetica Neue", "Helvetica", "sans-serif";
 	/* 禁用系统长按菜单 */
 	-webkit-touch-callout: none; 
 	/* 禁用字体大小自动调整 */
@@ -17,7 +16,7 @@ ul, li{ list-style: none; }
 a{ text-decoration: none; color: inherit; background-color: transparent; }
 img{ display: block; width: 100%; }
 h1,h2,h3,h4,h5,h6,b,i{ font-weight: normal; font-style: normal; }
-button, input, textarea{ outline: none; border: none; background-color: transparent; font-family: "Helvetica Neue", Helvetica, sans-serif; }
+button, input, textarea{ outline: none; border: none; background-color: transparent; font-family: "Helvetica Neue", "Helvetica", "sans-serif"; }
 input::-webkit-input-placeholder { color: #999; }
 button::after, input::after{ border: none; }
 textarea{ resize: none; display: block; }
@@ -52,25 +51,27 @@ textarea::-webkit-input-placeholder { color: #999; }
 /* 按钮 */
 .button {
     padding: 0 16px; 
-    font-size: 15px;
+    font-size: 14px;
     border-radius: 2px;
     min-width: 88px;
     height: 36px;
+    line-height: 1;
     overflow: hidden;
     outline: none;
     border: none;
     text-align: center;
-    vertical-align: middle;
+    /* vertical-align: middle; */
     cursor: pointer;
     user-select: none;
-    color: #fff;
+    background-color: #fff;
+    color: #333;
     transition: .2s all;
     box-shadow: 0 3px 1px -2px rgba(0,0,0,.2), 0 2px 2px 0 rgba(0,0,0,.14), 0 1px 5px 0 rgba(0,0,0,.12);
 }
 .button:active{ box-shadow: 0 5px 5px -3px rgba(0,0,0,.2), 0 8px 10px 1px rgba(0,0,0,.14), 0 3px 14px 2px rgba(0,0,0,.12); }
-.button_blue{ background-color: #409eff; }
-.button_green{ background-color: #4caf50; }
-.button_red{ background-color: #f44336; }
+.button_blue{ background-color: #409eff; color: #fff; }
+.button_green{ background-color: #4caf50; color: #fff; }
+.button_red{ background-color: #f44336; color: #fff; }
 
 /* 页面结构处理 */
 .page{ width: 100%; min-height: 100vh; overflow: hidden; margin: 0 auto; max-width: 680px; }

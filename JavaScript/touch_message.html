@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+        <meta name="viewport" content="maximum-scale=1.0, minimum-scale=1.0, user-scalable=0, initial-scale=1.0, width=device-width" />
+        <meta name="format-detection" content="telephone=no, email=no, date=no, address=no">
+        <title>聊天界面拖拽</title>
+        <link rel="stylesheet" href="./css/base.css">
+		<style>
+			html,body{ width: 100%; height: 100%; }
+            .wrap{ width: 100%; height: 100%; overflow: hidden; }
+            *::-webkit-scrollbar{ width: 4px; }
+            *::-webkit-scrollbar-track { border-radius: 2px; background: rgba(0,0,0,0.15); }
+            *::-webkit-scrollbar-thumb{ border-radius: 2px; background-color: rgba(0,0,0,0.3); }
+
+			/* 聊天框框 */
+            .message_window{ width: 800px; background-color: #fff; box-shadow: 0 0 40px 0 rgba(0,0,0,0.2); border-radius: 4px; overflow: hidden; position: fixed; z-index: 5; margin: -260px -400px; top: 50%; left: 50%; transition: 0.3s all; }
+            .message_window_hide{ visibility: hidden; opacity: 0; transform: scale(0.3); }
+
+            /* 左边列表 */
+            .message_window .left{ width: 200px; background-color: #D9D9D9; }
+            .message_window .left .list{ height: 100%; padding: 5px; overflow-y: auto; }
+            .message_window .user_item{ overflow: hidden; padding: 5px; border-radius: 4px; margin-bottom: 5px; cursor: pointer; }
+            .message_window .user_item:hover{ background-color: #E2E2E2; }
+			.message_window .user_head{ width: 40px; height: 40px; border-radius: 50%; margin-right: 10px; }
+			.message_window .user_name{ font-size: 15px; color: #333; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+			.message_window .user_item_active{ background-color: #F3F3F3; }
+            .message_window .user_item_active:hover{ background-color: #F3F3F3; }
+            
+            /* 聊天内容 */
+			.message_window .content_box{ position: relative; }
+            .message_window .content_box .top{ background-color: #eee; padding: 15px; width: 100%; cursor: move; user-select: none; }
+            .message_window .content{ height: 280px; overflow-y: auto; }
+            .message_window .content .message{ padding: 10px; }
+            .message_window .content .message .info{ width: 80%; }
+            .message_window .content .message .state{ font-size: 14px; color: #999; line-height: 26px; }
+            .message_window .content .message .text{ font-size: 15px; padding: 5px 8px; border-radius: 4px; display: inline-block; line-height: 24px; }
+            .message_window .content .message .placeholder{ width: 50px; }
+            .message_window .content .message_left .text{ color: #555; background-color: #eee; }
+            .message_window .content .message_right{ text-align: right; }
+            .message_window .content .message_right .text{ color: #fff; background-color: #5FB878; }
+            
+            /* 输入文本框 */
+			.message_window .send_box{ padding: 10px; }
+            .message_window .upload{ padding: 8px 0; border: solid 1px transparent; border-top-color: #eee; border-bottom-color: #eee; margin-bottom: 8px; }
+			.message_window .send_box .input_box{ display: block; width: 100%; height: 76px; outline: none; border: none; color: #333; font-size: 15px; resize: none; margin-bottom: 8px; }
+            
+			/* 右下角联系人入口 */
+			.message_list{ position: fixed; bottom: 0; right: 0; width: 260px; height: 500px; z-index: 2; border: solid 1px #333; overflow: hidden; transition: 0.3s all; }
+            .message_list .message_list_header{ background-color: #333; cursor: move; color: #fff; user-select: none; }
+            .message_list .message_list_top{ width: 100%; height: 40px; }
+            .message_list .user_name{ font-size: 16px; text-indent: 10px; }
+            .message_list .icon_close{ cursor: pointer; margin-left: 10px; font-size: 28px; padding: 0px 10px; user-select: none; }
+            .message_list .user_text{ width: 100%; padding: 0 10px; font-size: 14px; transition: 0.3s all; height: 36px; color: #ddd; outline: solid 1px #333; }
+            .message_list .user_text:focus{ outline: solid 1px #999; }
+            .message_list .menu{ width: 100%; }
+            .message_list .menu .item{ font-size: 15px; color: #eee; cursor: pointer; text-align: center; line-height: 36px; border-radius: 4px; transition: 0.2s all; }
+            .message_list .menu .item:hover{ background-color: rgba(0,0,0,0.8); }
+            .message_list .list_content{ width: 100%; height: 400px; overflow: auto; }
+            .message_list .list_content .contact{ width: 100%; overflow: hidden; }
+            .message_list .list_content .contact_item { width: 100%; padding: 10px; cursor: pointer; border-bottom: solid 1px #f1f1f1; }
+            .message_list .list_content .contact_item:hover{ background-color: rgba(0,0,0,.05); }
+            .message_list .list_content .contact_item .contact_head{ width: 44px; height: 44px; object-fit: cover; margin-right: 8px; border-radius: 50%; }
+            .message_list .list_content .contact_item .contact_name{ font-size: 14px; line-height: 24px; }
+            .message_list .list_content .contact_item .contact_label{ font-size: 12px; line-height: 12px; color: #999; }
+            .message_list_hide{ visibility: hidden; opacity: 0; transform: translateY(100%); }
+
+            .open_message_list{ position: fixed; bottom: 10px; right: 10px; z-index: 5; }
+            
+            .hide{ display: none !important; }
+            
+		</style>
+	</head>
+	<body>
+		<div class="wrap">
+
+			<!-- 聊天框 -->
+			<section class="message_window flex message_window_hide">
+				<!-- 左边列表 -->
+				<div class="left">
+                    <div class="list">
+                        <div class="user_item flex fvertical user_item_active">
+                            <img class="user_head" src="./img/model.jpg" alt="">
+                            <div class="user_name f1">佛拉基米尔-得来萨尔</div>
+                        </div>
+                        <div class="user_item flex fvertical">
+                            <img class="user_head" src="./img/model.jpg" alt="">
+                            <div class="user_name f1">诺克萨斯</div>
+                        </div>
+                    </div>
+				</div>
+                
+                <!-- 右边内容 -->
+				<div class="content_box f1">
+					<!-- 当前用户信息 -->
+					<div class="top flex fvertical">
+                        <img class="user_head" src="./img/model.jpg" alt="">
+                        <div class="user_name f1">用户名用户名用户名用户名</div>
+                    </div>
+                    
+					<!-- 聊天信息 -->
+					<div class="content f1">
+
+                        <div class="message flex message_left">
+                            <img class="user_head" src="./img/model.jpg" alt="">
+                            <div class="f1">
+                                <div class="state">2017-12-12 12:12:12</div>
+                                <div class="text">内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容</div>
+                            </div>
+                            <div class="placeholder"></div>
+                        </div>
+                        
+                        <div class="message flex message_right">
+                            <div class="placeholder"></div>
+                            <div class="f1">
+                                <div class="state">2017-12-12 12:12:12</div>
+                                <div class="text">内容内容内容内容内容内容内容</div>
+                            </div>
+                            <img class="user_head" src="./img/model.jpg" alt="">
+                        </div>
+
+                        <div class="message flex message_left">
+                            <img class="user_head" src="./img/model.jpg" alt="">
+                            <div class="f1">
+                                <div class="state">2017-12-12 12:12:12</div>
+                                <div class="text">内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容</div>
+                            </div>
+                            <div class="placeholder"></div>
+                        </div>
+                        
+                        <div class="message flex message_right">
+                            <div class="placeholder"></div>
+                            <div class="f1">
+                                <div class="state">2017-12-12 12:12:12</div>
+                                <div class="text">内容内容内容内容内容内容内容内容内容内容</div>
+                            </div>
+                            <img class="user_head" src="./img/model.jpg" alt="">
+                        </div>
+                    </div>
+                    
+					<!-- 发送消息 -->
+					<div class="send_box">
+						<div class="upload">
+							上传文件位置占位，不需要可以去掉
+						</div>
+                        <textarea class="input_box" name="input-box" rows="8" cols="80"></textarea>
+                        <div style="text-align: right;">
+                            <button class="button button_red close_window">关闭</button>
+                            <button class="button button_green">发送</button>
+                        </div>
+						<!-- <span onclick="colseMsg()" class="close_btn">关闭</span> -->
+					</div>
+                </div>
+                
+            </section>
+            
+			<!-- 聊天列表 -->
+			<div class="message_list message_list_hide">
+				<div class="message_list_header">
+                    <div class="message_list_top flex fvertical">
+                        <div class="user_name f1">用户昵称</div>
+                        <div class="icon_close">×</div>
+                    </div>
+					<input class="user_text" type="text" name="" value="" placeholder="请输入个性签名">
+					<div class="flex menu">
+						<div class="item f1">推荐</div>
+						<div class="item f1">消息</div>
+					</div>
+                </div>
+                <div class="list_content">
+                    <div class="contact">
+                        <div class="contact_item flex fvertical">
+                            <img class="contact_head" src="./img/model.jpg" alt="">
+                            <div class="f1">
+                                <div class="contact_name">联系人一</div>
+                                <div class="contact_label">个性签名</div>
+                            </div>
+                        </div>
+                        <div class="contact_item flex fvertical">
+                            <img class="contact_head" src="./img/model.jpg" alt="">
+                            <div class="f1">
+                                <div class="contact_name">联系人二</div>
+                                <div class="contact_label">个性签名</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 右下角 -->
+            <div class="open_message_list">
+                <button class="button button_blue">点击打开聊天界面</button>
+            </div>
+
+        </div>
+        
+        <script src="./js/touch_message.js"></script>
+	</body>
+</html>
