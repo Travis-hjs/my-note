@@ -62,6 +62,27 @@
         
     }
 
+    /**
+     * 切换聊天界面联系人状态
+     * @param {HTMLElement} el 
+     */
+    function switchUserItemState(el) {
+        const className = 'user_item_active';
+        for (let i = 0; i < userList.children.length; i++) {
+            const item = userList.children[i];
+            item.classList.remove(className);
+        }
+        el.classList.add(className);
+    }
+
+    /**
+     * 设置当前用户信息
+     * @param {object} data 
+     */
+    function setCurrentUserInfo(data) {
+        
+    }
+
     /** 关闭联系人列表 */
     function closeMessageList() {
         openMessageList.classList.remove('hide');
@@ -74,24 +95,46 @@
     const messageList = find('.message_list');
     /** 打开`聊天联系人列表`节点 */
     const openMessageList = find('.open_message_list');
+    /** 聊天界面联系人列表 */
+    const userList = find('.message_window .user_list');
 
     initMouse(messageWindow, messageWindow.querySelector('.top'));
 
     initMouse(messageList, messageList.querySelector('.message_list_header'));
 
+    // 联系人列表关闭按钮点击事件
     messageList.querySelector('.icon_close').addEventListener('click', closeMessageList);
 
+    // 联系人列表点击事件
     messageList.querySelector('.list_content').addEventListener('click', function(e) {
         /**
          * @type {HTMLElement}
          */
-        let target = e.target
+        let target = e.target;
         const p1 = target.parentElement;
         const p2 = target.parentElement.parentElement;
         if (p1.className.includes('contact_item') || p2.className.includes('contact_item')) {
             // console.log('点击item');
             messageWindow.classList.remove('message_window_hide');
             closeMessageList();
+        }
+    });
+
+    // 聊天界面联系人列表点击
+    userList.addEventListener('click', function(e) {
+        /**
+         * @type {HTMLElement}
+         */
+        let target = e.target;
+        const p1 = target.parentElement;
+
+        if (target.className.includes('user_item')) {
+            // console.log(target);
+            switchUserItemState(target);
+        }
+        if (p1.className.includes('user_item')) {
+            // console.log('点击', p1);
+            switchUserItemState(p1);
         }
     })
 
@@ -104,4 +147,6 @@
         messageWindow.classList.add('message_window_hide');
     });
 
+    // https://lol.qq.com/data/info-heros.shtml
+    
 })();
