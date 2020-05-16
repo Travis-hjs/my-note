@@ -42,9 +42,9 @@
             .message_window .content .message_right .user_head{ margin-right: 0; margin-left: 10px; }
 
             /* 输入文本框 */
-			.message_window .send_box{ padding: 10px; }
+			.message_window .bottom{ padding: 10px; }
             .message_window .option{ padding: 8px 0; border: solid 1px transparent; border-top-color: #eee; border-bottom-color: #eee; margin-bottom: 8px; }
-			.message_window .send_box .input_box{ display: block; width: 100%; height: 76px; outline: none; border: none; color: #333; font-size: 15px; resize: none; margin-bottom: 8px; }
+			.message_window .bottom .input_box{ display: block; width: 100%; height: 76px; outline: none; border: none; color: #333; font-size: 15px; resize: none; margin-bottom: 8px; }
             
 			/* 右下角联系人入口 */
 			.contact_box{ position: fixed; bottom: 0; right: 0; width: 260px; height: 500px; z-index: 2; border: solid 1px #333; overflow: hidden; transition: 0.3s all; }
@@ -66,7 +66,7 @@
             .contact_box .contact_list .contact_item .contact_label{ font-size: 12px; line-height: 12px; color: #999; }
             .contact_box_hide{ visibility: hidden; opacity: 0; transform: translateY(100%); }
 
-            .open_contact_box{ position: fixed; bottom: 10px; right: 10px; z-index: 5; }
+            .open_contact_box{ position: fixed; bottom: 10px; right: 10px; z-index: 3; }
             
             .hide{ display: none !important; }
             
@@ -102,51 +102,33 @@
                     
 					<!-- 聊天信息 -->
 					<div class="content f1">
-
-                        <div class="message flex message_left">
-                            <img class="user_head" src="https://mirror-gold-cdn.xitu.io/16b64a3a3b2baec66af?imageView2/1/w/100/h/100/q/85/format/webp/interlace/1" alt="">
-                            <div class="f1">
-                                <div class="state">2017-12-12 12:12:12</div>
-                                <div class="text">内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容</div>
+                        <template>
+                            <div class="message flex message_left">
+                                <img class="user_head" src="" alt="">
+                                <div class="f1">
+                                    <div class="state">2017-12-12 12:12:12</div>
+                                    <div class="text">聊天内容</div>
+                                </div>
+                                <div class="placeholder"></div>
                             </div>
-                            <div class="placeholder"></div>
-                        </div>
-                        
-                        <div class="message flex message_right">
-                            <div class="placeholder"></div>
-                            <div class="f1">
-                                <div class="state">2017-12-12 12:12:12</div>
-                                <div class="text">内容内容内容内容内容内容内容</div>
+                            <div class="message flex message_right">
+                                <div class="placeholder"></div>
+                                <div class="f1">
+                                    <div class="state">2017-12-12 12:12:12</div>
+                                    <div class="text">聊天内容</div>
+                                </div>
+                                <img class="user_head" src="" alt="">
                             </div>
-                            <img class="user_head" src="https://mirror-gold-cdn.xitu.io/16b64a3a3b2baec66af?imageView2/1/w/100/h/100/q/85/format/webp/interlace/1" alt="">
-                        </div>
-
-                        <div class="message flex message_left">
-                            <img class="user_head" src="https://mirror-gold-cdn.xitu.io/16b64a3a3b2baec66af?imageView2/1/w/100/h/100/q/85/format/webp/interlace/1" alt="">
-                            <div class="f1">
-                                <div class="state">2017-12-12 12:12:12</div>
-                                <div class="text">内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容内容</div>
-                            </div>
-                            <div class="placeholder"></div>
-                        </div>
-                        
-                        <div class="message flex message_right">
-                            <div class="placeholder"></div>
-                            <div class="f1">
-                                <div class="state">2017-12-12 12:12:12</div>
-                                <div class="text">内容内容内容内容内容内容内容内容内容内容</div>
-                            </div>
-                            <img class="user_head" src="https://mirror-gold-cdn.xitu.io/16b64a3a3b2baec66af?imageView2/1/w/100/h/100/q/85/format/webp/interlace/1" alt="">
-                        </div>
+                        </template>
                     </div>
                     
 					<!-- 发送消息 -->
-					<div class="send_box">
+					<div class="bottom">
 						<div class="option">其他操作</div>
-                        <textarea class="input_box" name="input-box" rows="8" cols="80"></textarea>
+                        <textarea class="input_box" name="input-box" rows="8" cols="80" placeholder="请输入内容"></textarea>
                         <div style="text-align: right;">
                             <button class="button button_red close_window">关闭</button>
-                            <button class="button button_green">发送</button>
+                            <button class="button button_green send_btn">发送</button>
                         </div>
 					</div>
                 </div>
