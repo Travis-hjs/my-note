@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="maximum-scale=1.0, minimum-scale=1.0, user-scalable=0, initial-scale=1.0, width=device-width"/>
+    <meta name="format-detection" content="telephone=no, email=no, date=no, address=no">
+    <link rel="stylesheet" href="./css/base.css">
+    <title>个人笔记</title>
+    <style>
+        body{ background-color: #333; }
+        .page{ background-color: #fff; border-radius: 4px; overflow: hidden; }
+        header{ width: 100%; height: 40px; background-color: #eee; }
+        header .option{ padding: 0 8px; height: 100%; user-select: none; cursor: pointer; }
+        header .title{ text-align: center; font-size: 16px; color: #333; flex: 1; }
+        .content{ width: 100%; height: calc(100vh - 80px); }
+        .button_list{ padding: 8px; text-align: center; }
+        .button_list button{ margin: auto 4px; }
+        .mousemove {
+            height: 300px;
+            background-color: tomato;
+            overflow: auto;
+            color: #fff;
+        }
+        footer{ width: 100%; height: 40px; background-color: #000; color: #fff; text-align: center; line-height: 40px; } 
+    </style>
+</head>
+<body>
+    <div class="page">
+        <header class="flex fvertical">
+            <div class="flex fvertical fcenter option">···</div>
+            <div class="title">测试页</div>
+            <div class="flex fvertical fcenter option">···</div>
+        </header>
+        <div class="content">
+            <div class="button_list">
+                <!-- <button class="button button_blue">button</button> -->
+            </div>
+            <div class="mousemove">
+                <p></p>
+                <p></p>
+            </div>
+        </div>
+        <footer>底部</footer>
+    </div>
+    <script src="./js/utils.js"></script>
+    <script src="./js/index.js"></script>
+    <!-- <script type="modules" src="./js/index.js"></script> -->
+</body>
+</html>
