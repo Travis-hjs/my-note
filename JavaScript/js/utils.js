@@ -111,12 +111,10 @@ class ModuleString {
     /**
      * 检测类型
      * @param {any} target 检测的目标
-     * @returns {'string'|'number'|'array'|'object'|'function'|'null'|'undefined'}
+     * @returns {'string'|'number'|'array'|'object'|'function'|'null'|'undefined'} 只枚举一些常用的类型
      */
     checkType(target) {
-        /** 
-         * @type {string} 
-        */
+        /** @type {string} */
         const value = Object.prototype.toString.call(target);
         const result = value.match(/\[object (\S*)\]/)[1];
         return result.toLocaleLowerCase();
