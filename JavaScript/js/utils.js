@@ -134,11 +134,11 @@ class ModuleNumber extends ModuleString {
 
     /**
      * 数字运算（主要用于小数点精度问题）
+     * @param {number} a 前面的值
      * @param {'+'|'-'|'*'|'/'} type 计算方式
-     * @param {number} a 
-     * @param {number} b 
+     * @param {number} b 后面的值
      */
-    computeNumber(type, a, b) {
+    computeNumber(a, type, b) {
         /**
          * 获取数字小数点的位数
          * @param {number} n 数字
