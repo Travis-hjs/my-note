@@ -264,6 +264,31 @@ class ModuleArray extends ModuleNumber {
     }
 
     /**
+     * es5兼容es6 "Array.findIndex"
+     * @param {Array<any>} arr 
+     * @param {Function} compare 
+     */
+    findIndex(arr, compare) {
+        for (var i = 0; i < arr.length; i++) {
+            if (compare(arr[i], i)) {
+                return i;
+            }
+        }
+    }
+
+    /**
+     * 自定义对象数组去重
+     * @param {Array<T>} arr 
+     * @param {(a: T, b: T) => void} compare 
+     */
+    filterRepeat(arr, compare) {
+        return arr.filter(function (element, index, self) {
+            // return findIndex(self, el => compare(el, element)) === index;
+            return self.findIndex(el => compareFn(el, element)) === index;
+        })
+    }
+
+    /**
      * 随机打乱数组
      * @param {Array<T>} array
      */
