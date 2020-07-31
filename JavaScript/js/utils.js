@@ -4,7 +4,7 @@ class ModuleString {
      * 过滤只保留数字及小数点
      * @param {string} string 字符串
      */
-    onlyNumber(string) {
+    filterOnlyNumber(string) {
         // 去空格
         let value = string.trim();
         // 默认返回 0
@@ -15,12 +15,38 @@ class ModuleString {
     }
 
     /**
+     * 输入只能是数字(包括小数点)
+     * @param {string} value 字符串
+     */
+    inputOnlyNumber(value) {
+        let result = value.trim();
+        if (result.length == 0) return "";
+        result = result.replace(/[^0-9.]+/ig, "");
+        let array = result.split(".");
+        if (array.length > 1) {
+            result = array[0] + "." + array[1];
+        }
+        return result;
+    }
+
+    /**
+     * 过滤掉特殊字符（包括emoji）
+     * @param {string} value
+     */
+    filterSpecialValue(value) {
+        value = value.trim();
+        const emojiReg = /[\uD83C|\uD83D|\uD83E][\uDC00-\uDFFF][\u200D|\uFE0F]|[\uD83C|\uD83D|\uD83E][\uDC00-\uDFFF]|[0-9|*|#]\uFE0F\u20E3|[0-9|#]\u20E3|[\u203C-\u3299]\uFE0F\u200D|[\u203C-\u3299]\uFE0F|[\u2122-\u2B55]|\u303D|[\A9|\AE]\u3030|\uA9|\uAE|\u3030/ig;
+        const reg = new RegExp("[`~!@#$^&*()=|{}':;',\\[\\].<>/?~！@#￥……&*（）——|{}【】‘；：”“'。，、？%]");
+        return value.replace(emojiReg, "").replace(reg, "");
+    }
+
+    /**
      * 数字带逗号分隔
      * @param {number} num
      * @example 
-     * flterToThousand(10000) => "10,000"
+     * stringToThousand(10000) => "10,000"
      */
-    flterToThousand(num) {
+    stringToThousand(num) {
         // return num.toLocaleString('en-US');
         return (+num || 0).toString().replace(/^-?\d+/g, m => m.replace(/(?=(?!\b)(\d{3})+$)/g, ','));
     }
@@ -51,9 +77,9 @@ class ModuleString {
     }
 
     /**
-     * 获取`url?`后面参数（JSON对象）
-     * @param {string} value 要格式的字段，默认`location.search`
-     * @param {string} name 获取指定`key`值
+     * 获取 url? 后面参数（JSON对象）
+     * @param {string} value 要格式的字段，默认 location.search
+     * @param {string} name 获取指定 key 值
      * @example 
      * searchFormat();
      * const data = '?id=12&name=hjs&age=2018/12/12';
@@ -73,7 +99,7 @@ class ModuleString {
 
     /**
      * 获取目标类型
-     * @description 判定`JavaScript`中数据类型的终极解决方法
+     * @description 判定 JavaScript 中数据类型的终极解决方法
      * @param {any} target 
      */
     getTargetType(target) {
@@ -168,7 +194,7 @@ class ModuleNumber extends ModuleString {
     }
 
     /**
-     * `Math.hypot`兼容方法
+     * Math.hypot 兼容方法
      * @param {Array<number>} values 
      */
     hypot(...values) {
@@ -246,17 +272,16 @@ class ModuleNumber extends ModuleString {
 /** 数组类处理模块 */
 class ModuleArray extends ModuleNumber {
     /**
-     * 从对象数组中查找匹配项 ES5 实现 ES6 array.find()
-     * @param {Array<T>} array array
-     * @param {(item: T, index: number) => boolean} contrast 对比函数
+     * es5兼容es6 "Array.find"
+     * @param {Array<T>} array
+     * @param {(value: T, index: number) => boolean} compare 对比函数
      */
-    findItem(array, contrast) {
-        if (typeof contrast !== 'function') return console.warn('findItem 传入的第二个参数类型必须为function');
+    findItem(array, compare) {
         var result = null;
         for (var i = 0; i < array.length; i++) {
-            var item = array[i];
-            if (contrast(item, i)) {
-                result = item;
+            var value = array[i];
+            if (compare(value, i)) {
+                result = value;
                 break;
             }
         }
@@ -265,26 +290,32 @@ class ModuleArray extends ModuleNumber {
 
     /**
      * es5兼容es6 "Array.findIndex"
-     * @param {Array<any>} arr 
-     * @param {Function} compare 
+     * @param {Array<T>} array 
+     * @param {(value: T, index: number) => boolean} compare 对比函数
      */
-    findIndex(arr, compare) {
-        for (var i = 0; i < arr.length; i++) {
-            if (compare(arr[i], i)) {
-                return i;
+    findIndex(array, compare) {
+        var result = null;
+        for (var i = 0; i < array.length; i++) {
+            if (compare(array[i], i)) {
+                result = i;
+                break;
             }
         }
+        return result;
     }
 
     /**
      * 自定义对象数组去重
-     * @param {Array<T>} arr 
-     * @param {(a: T, b: T) => void} compare 
+     * @param {Array<T>} array 
+     * @param {(a: T, b: T) => void} compare 对比函数
+     * @example 
+     * const list = [{ id: 10, code: "abc" }, {id: 12, code: "abc"}, {id: 12, code: "abc"}];
+     * findIndex(list, (a, b) => a.id == b.id)
      */
-    filterRepeat(arr, compare) {
-        return arr.filter(function (element, index, self) {
-            // return findIndex(self, el => compare(el, element)) === index;
-            return self.findIndex(el => compareFn(el, element)) === index;
+    filterRepeat(array, compare) {
+        return array.filter((element, index, self) => {
+            // return this.findIndex(self, el => compare(el, element)) === index;
+            return self.findIndex(el => compare(el, element)) === index;
         })
     }
 
@@ -359,10 +390,10 @@ class ModuleDate extends ModuleArray {
     /**
      * 时间日期类型日期模块
      * @example
-     * new Date().toLocaleDateString();         => `2020/12/12`
-     * new Date().toTimeString().slice(0, 8);   => `12:12:12`
-     * new Date().toLocaleTimeString();         => `上/下午12:12:12` 
-     * new Date().toLocaleString();             => `2020/12/12 上/下午12:12:12`
+     * new Date().toLocaleDateString();         => 2020/12/12
+     * new Date().toTimeString().slice(0, 8);   => 12:12:12
+     * new Date().toLocaleTimeString();         => 上/下午12:12:12`
+     * new Date().toLocaleString();             => 2020/12/12 上/下午12:12:12
      */
     constructor() {
         super();
@@ -500,7 +531,7 @@ class ModuleBom extends ModuleDate {
      * @param {object} data 对应的数据
      */
     saveData(key, data) {
-        this.cache.setItem(key, JSON.stringify(data));
+        window.sessionStorage.setItem(key, JSON.stringify(data));
     }
 
     /**
@@ -508,14 +539,14 @@ class ModuleBom extends ModuleDate {
      * @param {string} key 对应的 key 值
      */
     fetchData(key) {
-        let data = this.cache.getItem(key) ? JSON.parse(this.cache.getItem(key)) : null;
+        let data = window.sessionStorage.getItem(key) ? JSON.parse(window.sessionStorage.getItem(key)) : null;
         return data;
     }
 
     /** 清除本地数据 */
     removeData() {
-        this.cache.clear();
-        // this.cache.removeItem('key');　// 删除键值对
+        window.sessionStorage.clear();
+        // window.sessionStorage.removeItem('key');　// 删除键值对
     }
 
     /** 长震动 */
@@ -793,7 +824,7 @@ class ModuleDom extends ModuleBom {
         move();
     }
     /** 
-     * 获取`body`标签中的所有内容 
+     * 获取 body 标签中的所有内容 
      * @param {string} value 
     */
     getBodyLabelContent(value) {
@@ -808,7 +839,7 @@ class ModuleDom extends ModuleBom {
     }
 
     /**
-     * 获取所有`script`标签的内容
+     * 获取所有 script 标签的内容
      * @param {string} value 
      */
     getAllScriptContent(value) {
