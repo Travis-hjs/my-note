@@ -1,46 +1,36 @@
-/** 请求域名 */
-const BASEURL = 'http://che.qihao.lzei.com';
 
 /**
- * `fetch`请求 
- * @dec learn：https://developer.mozilla.org/zh-CN/docs/Web/API/Fetch_API
- * @param {'GET'|'POST'} method 请求方法：这里我只枚举了常用的两种
+ * `fetch`请求 [MDN文档](https://developer.mozilla.org/zh-CN/docs/Web/API/Fetch_API)
+ * @param {'GET'|'POST'|'PUT'|'DELETE'} method 请求方法
  * @param {string} url 请求路径
  * @param {object} data 请求参数对象
  * @param {number} timeout 超时毫秒
  */
 function theFetch(method, url, data = {}, timeout = 5000) {
-    let dataPost = null;
-    let dataGet = '';
-    switch (method) {
-        case 'POST':
-            // 若后台没设置接收 JSON 则不行 需要跟 GET 一样的解析对象传参
-            dataPost = JSON.stringify(data);
-            break;
-
-        case 'GET':
-            // 解析对象传参
-            for (const key in data) {
-                dataGet += `&${key}=${data[key]}`;
-            }
-            if (dataGet) {
-                dataGet = '?' + dataGet.slice(1);
-            }
-            break;
+    let payload = null;
+    let query = '';
+    if (method === 'GET') {
+        // 解析对象传参
+        for (const key in data) {
+            query += `&${key}=${data[key]}`;
+        }
+        if (query) {
+            query = '?' + query.slice(1);
+        }
+    } else {
+        // 若后台没设置接收 JSON 则不行 需要跟 GET 一样的解析对象传参
+        payload = JSON.stringify(data);
     }
     return new Promise((resolve, reject) => {
-        fetch(url + dataGet, {
+        fetch(url + query, {
             // credentials: 'include',  // 携带cookie配合后台用
             // mode: 'cors',            // 貌似也是配合后台设置用的跨域模式
             method: method,
             headers: {
-                /**  
-                 * 通常为`application/json`因为等下我要请求豆瓣的接口
-                 * 所以这里用`application/x-www-form-urlencoded`
-                */
-                'Content-Type': 'application/x-www-form-urlencoded'
+                // 'Content-Type': 'application/json'
+                'Content-Type': 'application/x-www-form-urlencoded' 
             },
-            body: dataPost
+            body: payload
         }).then(response => {
             // 把响应的信息转为`json`
             return response.json();
@@ -54,10 +44,9 @@ function theFetch(method, url, data = {}, timeout = 5000) {
 }
 
 function fetchRequest() {
-    // 这里是豆瓣的接口
-    theFetch('GET', 'https://douban.uieee.com/v2/movie/top250', {
-        start: 1,
-        count: 5
+    theFetch('GET', 'http://192.168.10.220:8000/bg/common/pm/category/', {
+        page: 1,
+        per_page: 10
     }).then(res => {
         console.log('Fetch success', res);
     }).catch(err => {
@@ -66,18 +55,17 @@ function fetchRequest() {
 }
 
 /**
- * `XMLHttpRequest`请求 
- * @dec learn: https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest
+ * `XMLHttpRequest`请求 [MDN文档](https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest)
  * @param {object} param 传参对象
  * @param {string} param.url 请求路径
- * @param {'GET'|'POST'} param.method 请求方法：这里我只枚举了常用的两种
- * @param {object} param.data 传参对象
- * @param {FormData} param.file 上传图片`FormData`对象
- * @param {number} param.overtime 超时检测毫秒数
+ * @param {'GET'|'POST'|'PUT'|'DELETE'} param.method 请求方法
+ * @param {object?} param.data 传参对象
+ * @param {FormData?} param.file 上传图片`FormData`对象
+ * @param {number?} param.overtime 超时检测毫秒数
  * @param {(result?: any) => void} param.success 成功回调 
  * @param {(error?: XMLHttpRequest) => void} param.fail 失败回调 
  * @param {(info?: XMLHttpRequest) => void} param.timeout 超时回调
- * @param {(e?: ProgressEvent<XMLHttpRequestEventTarget>) => void} param.progress 进度回调 貌似没什么用 
+ * @param {(res?: ProgressEvent<XMLHttpRequestEventTarget>) => void} param.progress 进度回调 貌似没什么用 
  */
 function ajax(param) {
     if (typeof param !== 'object') return console.error('ajax 缺少请求传参');
@@ -93,28 +81,24 @@ function ajax(param) {
     const overtime = typeof param.overtime === 'number' ? param.overtime : 0;
     /** 请求链接 */
     let url = param.url;
-    /** POST请求传参 */
-    let dataPost = null;
+    /** 非`GET`请求传参 */
+    let payload = null;
     /** GET请求传参 */
-    let dataGet = '';
+    let query = '';
 
     // 传参处理
-    switch (method) {
-        case 'POST':
-            // 若后台没设置接收 JSON 则不行 需要跟 GET 一样的解析对象传参
-            dataPost = JSON.stringify(param.data);
-            break;
-
-        case 'GET':
-            // 解析对象传参
-            for (const key in param.data) {
-                dataGet += '&' + key + '=' + param.data[key];
-            }
-            if (dataGet) {
-                dataGet = '?' + dataGet.slice(1);
-                url += dataGet;
-            }
-            break;
+    if (method === 'GET') {
+        // 解析对象传参
+        for (const key in param.data) {
+            query += '&' + key + '=' + param.data[key];
+        }
+        if (query) {
+            query = '?' + query.slice(1);
+            url += query;
+        }
+    } else {
+        // 若后台没设置接收 JSON 则不行 需要跟 GET 一样的解析对象传参
+        payload = JSON.stringify(param.data);
     }
 
     // 监听请求变化
@@ -122,9 +106,9 @@ function ajax(param) {
     XHR.onreadystatechange = function () {
         if (XHR.readyState !== 4) return;
         if (XHR.status === 200 || XHR.status === 304) {
-            if (typeof param.success === 'function') param.success(JSON.parse(XHR.response));
+            typeof param.success === 'function' && param.success(JSON.parse(XHR.response));
         } else {
-            if (typeof param.fail === 'function') param.fail(XHR);
+            typeof param.fail === 'function' && param.fail(XHR);
         }
     }
 
@@ -140,7 +124,7 @@ function ajax(param) {
 
     // 判断是否上传文件通常用于上传图片，上传图片时不需要设置头信息
     if (param.file) {
-        dataPost = param.file;
+        payload = param.file;
     } else {
         /**
          * @example 
@@ -154,13 +138,13 @@ function ajax(param) {
     if (overtime > 0) {
         XHR.timeout = overtime;
         XHR.ontimeout = function () {
-            console.warn('ajax 请求超时 !!!');
+            console.warn('XMLHttpRequest 请求超时 !!!');
             XHR.abort();
-            if (typeof param.timeout === 'function') param.timeout(XHR);
+            typeof param.timeout === 'function' && param.timeout(XHR);
         }
     }
 
-    XHR.send(dataPost);
+    XHR.send(payload);
 }
 
 function ajaxRequest() {
@@ -169,8 +153,8 @@ function ajaxRequest() {
         info: null
     }
     ajax({
-        url: BASEURL + '/api/app/parking',
-        method: 'post',
+        url: 'http://che.qihao.lzei.com/api/app/parking',
+        method: 'POST',
         data: {
             appkey: 'e2fb20ea3f3df33310788a4247834c93',
             token: '2a11d6d67a8b8196afbcefbac3e0a573',
