@@ -10,7 +10,7 @@ class ModuleString {
         // 默认返回 0
         if (value.length === 0) return 0;
         // 正则过滤剩下数字和小数点
-        value = value.replace(/[^0-9.]+/g, '');
+        value = value.replace(/[^0-9.]+/g, "");
         return parseFloat(value);
     }
 
@@ -47,8 +47,8 @@ class ModuleString {
      * stringToThousand(10000) => "10,000"
      */
     stringToThousand(num) {
-        // return num.toLocaleString('en-US');
-        return (+num || 0).toString().replace(/^-?\d+/g, m => m.replace(/(?=(?!\b)(\d{3})+$)/g, ','));
+        // return num.toLocaleString("en-US");
+        return (+num || 0).toString().replace(/^-?\d+/g, m => m.replace(/(?=(?!\b)(\d{3})+$)/g, ","));
     }
 
     /**
@@ -66,13 +66,13 @@ class ModuleString {
     unitsNumber(value) {
         value = Math.floor(value);
         if (value === 0) return 0;
-        const units = ['', 'k', 'm', 'b', 'f', 'e', 'ae', 'be', 'ce', 'de', 'ee', 'fe', 'ge', 'he', 'ie'];
+        const units = ["", "k", "m", "b", "f", "e", "ae", "be", "ce", "de", "ee", "fe", "ge", "he", "ie"];
         const index = Math.floor(Math.log(value) / Math.log(1000));
         let result = value / Math.pow(1000, index);
         if (index === 0) return result;
         result = result.toFixed(3);
         // 不进行四舍五入 取小数点后一位
-        result = result.substring(0, result.lastIndexOf('.') + 2);
+        result = result.substring(0, result.lastIndexOf(".") + 2);
         return result + units[index];
     }
 
@@ -82,8 +82,8 @@ class ModuleString {
      * @param {string} name 获取指定 key 值
      * @example 
      * searchFormat();
-     * const data = '?id=12&name=hjs&age=2018/12/12';
-     * searchFormat(data, 'age')
+     * const data = "?id=12&name=hjs&age=2018/12/12";
+     * searchFormat(data, "age")
      * @returns {{}|string}
      */
     getQueryParam(value = location.search, name = null) {
@@ -98,46 +98,35 @@ class ModuleString {
     }
 
     /**
-     * 获取目标类型
-     * @description 判定 JavaScript 中数据类型的终极解决方法
-     * @param {any} target 
-     */
-    getTargetType(target) {
-        const arrayType = Object.prototype.toString.call(target);
-        // return arrayType.replace(/\[object\s(.+)\]/, '$1').toLowerCase();
-        return arrayType.slice(8, arrayType.length - 1).toLowerCase();
-    }
-
-    /**
      * rgb 转 16进制 
      * @param {string} string rgb(125, 125, 125)
      */
     rgbToHex(string) {
-        var rgb = string.split(',');
-        var r = parseInt(rgb[0].split('(')[1]);
+        var rgb = string.split(",");
+        var r = parseInt(rgb[0].split("(")[1]);
         var g = parseInt(rgb[1]);
-        var b = parseInt(rgb[2].split(')')[0]);
-        var hex = '#' + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1);
+        var b = parseInt(rgb[2].split(")")[0]);
+        var hex = "#" + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1);
         return hex;
     }
 
     /** 
     * hex16 进制颜色转 rgb(rgba)
-    * @param {string} hex '#23ff45' 
+    * @param {string} hex "#23ff45" 
     */
     hexToRgb(hex) {
-        return 'rgb(' + parseInt('0x' + hex.slice(1, 3)) + ',' + parseInt('0x' + hex.slice(3, 5)) + ',' + parseInt('0x' + hex.slice(5, 7)) + ')';
+        return "rgb(" + parseInt("0x" + hex.slice(1, 3)) + "," + parseInt("0x" + hex.slice(3, 5)) + "," + parseInt("0x" + hex.slice(5, 7)) + ")";
     }
 
     /** 随机16进制颜色 */
     randomHex() {
-        return '#' + Math.floor(Math.random() * 0xffffff).toString(16).padEnd(6, '0');
+        return "#" + Math.floor(Math.random() * 0xffffff).toString(16).padEnd(6, "0");
     }
 
     /**
      * 检测类型
      * @param {any} target 检测的目标
-     * @returns {'string'|'number'|'array'|'object'|'function'|'null'|'undefined'} 只枚举一些常用的类型
+     * @returns {"string"|"number"|"array"|"object"|"function"|"null"|"undefined"} 只枚举一些常用的类型
      */
     checkType(target) {
         /** @type {string} */
@@ -161,7 +150,7 @@ class ModuleNumber extends ModuleString {
     /**
      * 数字运算（主要用于小数点精度问题）
      * @param {number} a 前面的值
-     * @param {'+'|'-'|'*'|'/'} type 计算方式
+     * @param {"+"|"-"|"*"|"/"} type 计算方式
      * @param {number} b 后面的值
      */
     computeNumber(a, type, b) {
@@ -170,23 +159,23 @@ class ModuleNumber extends ModuleString {
          * @param {number} n 数字
          */
         const getLenth = n => {
-            const string = n.toString().split('.')[1];
+            const string = n.toString().split(".")[1];
             return string ? string.length : 0;
         }
         /** 倍率 */
         const value = Math.pow(10, Math.max(getLenth(a), getLenth(b)));
         let result = 0;
         switch (type) {
-            case '+':
+            case "+":
                 result = a * value + b * value;
                 break;
-            case '-':
+            case "-":
                 result = a * value - b * value;
                 break;
-            case '*':
+            case "*":
                 result = (a * value) * (b * value);
                 break;
-            case '/':
+            case "/":
                 result = (a * value) / (b * value);
                 break;
         }
@@ -324,7 +313,7 @@ class ModuleArray extends ModuleNumber {
      * @param {Array<T>} array
      */
     shuffleArray(array) {
-        return array.sort(() => Math.random() > 0.5 ? -1 : 1);
+        // return array.sort(() => Math.random() > 0.5 ? -1 : 1);
         // 洗牌随机法（性能最优）
         for (let i = array.length - 1; i >= 0; i--) {
             let randomIndex = Math.floor(Math.random() * (i + 1));
@@ -344,7 +333,7 @@ class ModuleArray extends ModuleNumber {
         let length = array.length;
         let min = length - count;
         let index = 0;
-        let value = '';
+        let value = "";
         while (length-- > min) {
             index = Math.floor((length + 1) * Math.random());
             value = array[index];
@@ -365,7 +354,7 @@ class ModuleArray extends ModuleNumber {
             array.splice(index, 1);
             array.unshift(item);
         } else {
-            console.log('已经处于置顶');
+            console.log("已经处于置顶");
         }
     }
 
@@ -380,7 +369,7 @@ class ModuleArray extends ModuleNumber {
             array.splice(index, 1);
             array.push(item);
         } else {
-            console.log('已经处于置底');
+            console.log("已经处于置底");
         }
     }
 
@@ -390,10 +379,10 @@ class ModuleDate extends ModuleArray {
     /**
      * 时间日期类型日期模块
      * @example
-     * new Date().toLocaleDateString();         => 2020/12/12
-     * new Date().toTimeString().slice(0, 8);   => 12:12:12
-     * new Date().toLocaleTimeString();         => 上/下午12:12:12`
-     * new Date().toLocaleString();             => 2020/12/12 上/下午12:12:12
+     * new Date().toLocaleDateString();         => "2020/12/12"
+     * new Date().toTimeString().slice(0, 8);   => "12:12:12"
+     * new Date().toLocaleTimeString();         => "上/下午12:12:12"
+     * new Date().toLocaleString();             => "2020/12/12 上/下午12:12:12"
      */
     constructor() {
         super();
@@ -417,14 +406,14 @@ class ModuleDate extends ModuleArray {
             }
             for (let j = 1; j <= 12; j++) {
                 const month = {
-                    name: ('0' + j.toString()).slice(-2),
+                    name: ("0" + j.toString()).slice(-2),
                     sub: []
                 };
                 year.sub.push(month);
                 dayCount = new Date(i, j, 0).getDate();
                 for (let k = 1; k <= dayCount; k++) {
                     month.sub.push({
-                        name: ('0' + k.toString()).slice(-2)
+                        name: ("0" + k.toString()).slice(-2)
                     });
                 }
             }
@@ -446,10 +435,10 @@ class ModuleDate extends ModuleArray {
         while (minTotal < 1440) {
             let hour = Math.floor(minTotal / 60);
             let minute = Math.floor(minTotal % 60);
-            hour = ('0' + hour).slice(-2);
-            minute = ('0' + minute).slice(-2);
+            hour = ("0" + hour).slice(-2);
+            minute = ("0" + minute).slice(-2);
             minTotal += minInterval;
-            arr.push(hour + ':' + minute);
+            arr.push(hour + ":" + minute);
             return arr;
         }
     }
@@ -457,7 +446,7 @@ class ModuleDate extends ModuleArray {
     /**
      * 时间戳生成 
      * @param {number} num 1时为明天，-1为昨天天，以此类推
-     * @return {'yyyy/mm/dd hh:mm:ss'}
+     * @return {"yyyy/mm/dd hh:mm:ss"}
      */
     getDateFormat(num = 0) {
         const date = new Date(Date.now() + (num * 24 * 3600 * 1000));
@@ -472,10 +461,10 @@ class ModuleDate extends ModuleArray {
 
     /**
      * 获取日期周几
-     * @param {string} date 日期 '2019/04/28' & '2019/04/28 12:12:12'
+     * @param {string} date 日期 "2019/04/28" & "2019/04/28 12:12:12"
      */
     getDateDayString(date) {
-        return '周' + '日一二三四五六'.charAt(new Date(date).getDay());
+        return "周" + "日一二三四五六".charAt(new Date(date).getDay());
     }
 
     /**
@@ -508,10 +497,10 @@ class ModuleDate extends ModuleArray {
         minute = Math.floor(value / 60) - (day * 24 * 60) - (hour * 60);
         second = Math.floor(value) - (day * 24 * 3600) - (hour * 3600) - (minute * 60);
         // 格式化
-        day = ('0' + day).slice(-2);
-        hour = ('0' + hour).slice(-2);
-        minute = ('0' + minute).slice(-2);
-        second = ('0' + second).slice(-2);
+        day = ("0" + day).slice(-2);
+        hour = ("0" + hour).slice(-2);
+        minute = ("0" + minute).slice(-2);
+        second = ("0" + second).slice(-2);
         return { day, hour, minute, second };
     }
 
@@ -546,23 +535,23 @@ class ModuleBom extends ModuleDate {
     /** 清除本地数据 */
     removeData() {
         window.sessionStorage.clear();
-        // window.sessionStorage.removeItem('key');　// 删除键值对
+        // window.sessionStorage.removeItem("key");　// 删除键值对
     }
 
     /** 长震动 */
     vibrateLong() {
-        if ('vibrate' in window.navigator) {
+        if ("vibrate" in window.navigator) {
             window.navigator.vibrate(400);
-        } else if (window['wx'] && wx.vibrateLong) {
+        } else if (window["wx"] && wx.vibrateLong) {
             wx.vibrateLong();
         }
     }
 
     /** 短震动 */
     vibrateShort() {
-        if ('vibrate' in window.navigator) {
+        if ("vibrate" in window.navigator) {
             window.navigator.vibrate(15);
-        } else if (window['wx'] && wx.vibrateShort) {
+        } else if (window["wx"] && wx.vibrateShort) {
             wx.vibrateShort();
         }
     }
@@ -570,7 +559,7 @@ class ModuleBom extends ModuleDate {
     /** 检查是否移动端 */
     isMobile() {
         const pattern = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|OperaMini/i;
-        return pattern.test(navigator.userAgent); //  ? 'Mobile' : 'Desktop';
+        return pattern.test(navigator.userAgent); //  ? "Mobile" : "Desktop";
     }
 
     /**
@@ -582,26 +571,26 @@ class ModuleBom extends ModuleDate {
          * @param {string} string 
          */
         function bin2hex(string) {
-            let result = '';
+            let result = "";
             for (let i = 0; i < string.length; i++) {
                 const n = string.charCodeAt(i).toString(16);
-                result += n.length < 2 ? '0' + n : n;
+                result += n.length < 2 ? "0" + n : n;
             }
             return result;
         }
-        const canvas = document.createElement('canvas');
-        const ctx = canvas.getContext('2d');
-        const txt = domain || 'hjs.com';
-        ctx.textBaseline = 'top';
-        ctx.font = '14px Arial';
-        ctx.textBaseline = 'tencent';
-        ctx.fillStyle = '#f60';
+        const canvas = document.createElement("canvas");
+        const ctx = canvas.getContext("2d");
+        const txt = domain || "hjs.com";
+        ctx.textBaseline = "top";
+        ctx.font = "14px Arial";
+        ctx.textBaseline = "tencent";
+        ctx.fillStyle = "#f60";
         ctx.fillRect(125, 1, 62, 20);
-        ctx.fillStyle = '#069';
+        ctx.fillStyle = "#069";
         ctx.fillText(txt, 2, 15);
-        ctx.fillStyle = 'rgba(102, 204, 0, 0.7)';
+        ctx.fillStyle = "rgba(102, 204, 0, 0.7)";
         ctx.fillText(txt, 4, 17);
-        let b64 = canvas.toDataURL().replace('data:image/png;base64,', '');
+        let b64 = canvas.toDataURL().replace("data:image/png;base64,", "");
         let bin = atob(b64);
         return bin2hex(bin.slice(-16, -12));
     }
@@ -612,12 +601,12 @@ class ModuleBom extends ModuleDate {
      * @param {string} content 文件内容
      */
     download(filename, content) {
-        const label = document.createElement('a');
-        label.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(content));
-        label.setAttribute('download', filename);
+        const label = document.createElement("a");
+        label.setAttribute("href", "data:text/plain;charset=utf-8," + encodeURIComponent(content));
+        label.setAttribute("download", filename);
         if (document.createEvent) {
-            const event = document.createEvent('MouseEvents');
-            event.initEvent('click', true, true);
+            const event = document.createEvent("MouseEvents");
+            event.initEvent("click", true, true);
             label.dispatchEvent(event);
         } else {
             label.click();
@@ -627,28 +616,32 @@ class ModuleBom extends ModuleDate {
     /**
      * 复制文本
      * @param {string} text 复制的内容
-     * @param {function(): void} success 成功回调
+     * @param {() => void} success 成功回调
      * @param {(error: string) => void} fail 出错回调
      */
     copyText(text, success = null, fail = null) {
-        text = text.replace(/(^\s*)|(\s*$)/g, '');
+        text = text.replace(/(^\s*)|(\s*$)/g, "");
         if (!text) {
-            typeof fail === 'function' && fail('复制的内容不能为空！');
+            typeof fail === "function" && fail("复制的内容不能为空！");
             return;
         }
-        const id = 'the-clipboard';
+        const id = "the-clipboard";
+        /**
+         * 粘贴板节点
+         * @type {HTMLTextAreaElement}
+         */
         let clipboard = document.getElementById(id);
         if (!clipboard) {
-            clipboard = document.createElement('textarea');
+            clipboard = document.createElement("textarea");
             clipboard.id = id;
-            clipboard.style.cssText = 'font-size: 15px; position: fixed; top: -1000%; left: -1000%;';
+            clipboard.style.cssText = "font-size: 15px; position: fixed; top: -1000%; left: -1000%;";
             document.body.appendChild(clipboard);
         }
         clipboard.value = text;
         clipboard.select();
         clipboard.setSelectionRange(0, clipboard.value.length);
-        document.execCommand('copy');
-        typeof success === 'function' && success();
+        document.execCommand("copy");
+        typeof success === "function" && success();
     }
 }
 
@@ -698,7 +691,7 @@ class ModuleDom extends ModuleBom {
         if (el.classList) {
             return el.classList.contains(className);
         } else {
-            return el.className.match(new RegExp('(\\s|^)' + className + '(\\s|$)'));
+            return el.className.match(new RegExp("(\\s|^)" + className + "(\\s|$)"));
         }
     }
 
@@ -712,7 +705,7 @@ class ModuleDom extends ModuleBom {
             el.classList.add(className);
         } else {
             if (!this.hasClass(el, className)) {
-                let name = el.className.charAt(el.className.length - 1) === ' ' ? className : ' ' + className;
+                let name = el.className.charAt(el.className.length - 1) === " " ? className : " " + className;
                 el.className += name;
             }
         }
@@ -728,8 +721,8 @@ class ModuleDom extends ModuleBom {
             el.classList.remove(className);
         } else {
             if (this.hasClass(el, className)) {
-                let reg = new RegExp('(\\s|^)' + className + '(\\s|$)');
-                el.className = el.className.replace(reg, ' ');
+                let reg = new RegExp("(\\s|^)" + className + "(\\s|$)");
+                el.className = el.className.replace(reg, " ");
             }
         }
     }
@@ -764,7 +757,7 @@ class ModuleDom extends ModuleBom {
      * @param {Function} callback 动画帧函数
      */
     update(callback = null) {
-        if (typeof callback !== 'function') return console.log('缺少动画函数');
+        if (typeof callback !== "function") return console.log("缺少动画函数");
         /** 动画帧 */
         const AnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame || window.msRequestAnimationFrame;
         /** 动画开始 */
@@ -786,11 +779,11 @@ class ModuleDom extends ModuleBom {
         /** 视口宽度 */
         let width = el.clientWidth;
         // 首次适配
-        html.style.fontSize = width / value + 'px';
+        html.style.fontSize = width / value + "px";
         // 窗口变动时更新适配
-        window.addEventListener('resize', function () {
+        window.addEventListener("resize", function () {
             width = el.clientWidth;
-            html.style.fontSize = width / value + 'px';
+            html.style.fontSize = width / value + "px";
         });
     }
 
@@ -814,7 +807,7 @@ class ModuleDom extends ModuleBom {
             if (count >= result) {
                 count = result;
                 el.textContent = count.toFixed(2);
-                if (typeof options.callback === 'function') options.callback();
+                if (typeof options.callback === "function") options.callback();
             } else {
                 el.textContent = count.toFixed(2);
                 an(move);
@@ -828,7 +821,7 @@ class ModuleDom extends ModuleBom {
      * @param {string} value 
     */
     getBodyLabelContent(value) {
-        // value = value.replace(/\n/g, '');
+        // value = value.replace(/\n/g, "");
         const rule = /<[^>]*?body[^>]*?>([\s\S]*)<\/\s*body\s*>/;
         // console.log(rule.exec(value));
         const result = rule.exec(value);
@@ -847,19 +840,19 @@ class ModuleDom extends ModuleBom {
         const start = /<script[^>]*?>/g; // <[^>]*?script[^>]*?>
         const end = /<\/\s*script\s*>/g;
         const code = rule.exec(value);
-        let result = '';
+        let result = "";
         // console.log(code);
         if(code && code.length === 1) {
             result = code[0];
         } 
-        // console.log(result.replace(start, ''));
-        return result.replace(start, '').replace(end, ';');
+        // console.log(result.replace(start, ""));
+        return result.replace(start, "").replace(end, ";");
     }
 
     /** 自定义 log */
     log() {
         const args = [].slice.call(arguments);
-        args.unshift('%c the-log >>', 'color: #4fc08d');
+        args.unshift("%c the-log >>", "color: #4fc08d");
         console.log.apply(console, args);
     }
 }
