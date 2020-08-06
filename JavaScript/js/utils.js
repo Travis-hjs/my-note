@@ -865,3 +865,5 @@ class ModuleDom extends ModuleBom {
 }
 
 const utils = new ModuleDom();
+
+export default utils;

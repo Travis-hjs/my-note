@@ -42,8 +42,11 @@
         </div>
         <footer>底部</footer>
     </div>
-    <script src="./js/utils.js"></script>
-    <script src="./js/index.js"></script>
-    <!-- <script type="modules" src="./js/index.js"></script> -->
+    <script>
+        if (!/^(https?:|mailto:|tel:)/.test(location.href)) {
+            alert("请用服务器线上方式或本地服务打开")
+        }
+    </script>
+    <script type="module" src="./js/index.js"></script>
 </body>
 </html>

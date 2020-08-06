@@ -6,15 +6,15 @@ function rippleClick(el) {
         centerY = 0,
         radius = 0,
         scale = 8,  // 这个值和扩散速度有关
-        color = el.dataset.color || '#999999',
+        color = el.dataset.color || "#999999",
         myAinmFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame || window.msRequestAnimationFrame,
         ev = window.event || arguments.callee.caller.arguments[0];
-    canvas = document.createElement('canvas');
+    canvas = document.createElement("canvas");
     el.appendChild(canvas);
-    canvas.style.width = canvas.style.height = '100%';
+    canvas.style.width = canvas.style.height = "100%";
     canvas.width = canvas.offsetWidth;
     canvas.height = canvas.offsetHeight;
-    context = canvas.getContext('2d');
+    context = canvas.getContext("2d");
     centerX = ev.offsetX;
     centerY = ev.offsetY;
     if (canvas.offsetWidth <= 60) scale = 3;
@@ -61,22 +61,22 @@ function rippleClick(el) {
         if (RIPPLE_POOL.length > 1) {
             node = RIPPLE_POOL.shift();
         } else {
-            node = document.createElement('div');
-            node.className = 'ripple';
+            node = document.createElement("div");
+            node.className = "ripple";
         }
 
         /** 点击目标矩阵尺寸 */
         let rect = target.getBoundingClientRect();
         /** 当前自定义颜色值 */
-        let color = target.getAttribute('color');
+        let color = target.getAttribute("color");
         /** 波纹大小 */
         let size = Math.max(rect.width, rect.height);
         // 设置最大范围
         if (size > 200) size = 200;
         // 设置大小
-        node.style.height = node.style.width = size + 'px';
+        node.style.height = node.style.width = size + "px";
         // 默认是白色透明
-        node.style.backgroundColor = color || 'rgba(255, 255, 255, .45)';
+        node.style.backgroundColor = color || "rgba(255, 255, 255, .45)";
         // 这里必须输出节点后再设置位置，不然会有问题
         target.appendChild(node);
 
@@ -85,26 +85,26 @@ function rippleClick(el) {
         let top = y - rect.top - (node.offsetHeight / 2);
         let left = x - rect.left - (node.offsetWidth / 2);
         // console.log(top, left);
-        node.style.top = top + 'px';
-        node.style.left = left + 'px';
+        node.style.top = top + "px";
+        node.style.left = left + "px";
 
         function end() {
-            node.removeEventListener('animationend', end);
-            // console.log('动画结束', node);
+            node.removeEventListener("animationend", end);
+            // console.log("动画结束", node);
             target.removeChild(node);
             RIPPLE_POOL.push(node);
         }
-        node.addEventListener('animationend', end);
+        node.addEventListener("animationend", end);
     }
 
     /** 是否移动端 */
     const isMobile = utils.isMobile();
 
     /** 添加事件类型 */
-    const eventType = isMobile ? 'touchstart' : 'mousedown';
+    const eventType = isMobile ? "touchstart" : "mousedown";
 
-    // 这里我使用事件代理去完成方法操作
-    // 因为我在Vue项目中，节点是动态生成的，不可能每次生成都单独为对应节点绑定事件
+    // 这里我使用事件代理去完成方法操作，因为节点是动态生成的
+    // Vue项目中可以使用自定义指令的方式代替事假代理
     document.body.addEventListener(eventType, function (e) {
         /** 事件类型 */
         const event = e || window.event || arguments.callee.caller.arguments[0];
@@ -118,7 +118,7 @@ function rippleClick(el) {
         // 循环 3 次由里向外查找目标节点
         while (loop_count > 0 && target && target != document.body) {
             loop_count--;
-            if (target.hasAttribute('ripple')) {
+            if (target.hasAttribute("ripple")) {
                 ripple(event, target);
                 break;
             }
@@ -130,13 +130,13 @@ function rippleClick(el) {
 /** 创建按钮 */
 function createButton() {
     /** 按钮列表 */
-    let listNode = utils.find('.button-list');
+    let listNode = utils.find(".button-list");
 
     for (let i = 0; i < 11; i++) {
-        const button = document.createElement('button');
-        button.className = 'button';
-        button.setAttribute('ripple', '');
-        button.textContent = 'BUTTON-' + (i + 1);
+        const button = document.createElement("button");
+        button.className = "button";
+        button.setAttribute("ripple", "");
+        button.textContent = "BUTTON-" + (i + 1);
         listNode.appendChild(button);
     }
 }

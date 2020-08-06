@@ -15,9 +15,9 @@
 function swiper(params) {
     /**
      * css class 命名列表
-     * @dec ['滑动列表','滑动item','圆点容器','底部圆点','圆点高亮']
+     * @dec ["滑动列表","滑动item","圆点容器","底部圆点","圆点高亮"]
      */
-    const classNames = ['.swiper_list', '.swiper_item', '.swiper_pagination', '.swiper_dot', '.swiper_dot_active'];
+    const classNames = [".swiper_list", ".swiper_item", ".swiper_pagination", ".swiper_dot", ".swiper_dot_active"];
     /**
      * 组件节点
      * @type {HTMLElement}
@@ -63,7 +63,7 @@ function swiper(params) {
 
     /** 关闭动画 */
     function stopAnimation() {
-        nodeItem.style.transition = '0s all';
+        nodeItem.style.transition = "0s all";
     }
 
     /**
@@ -124,10 +124,10 @@ function swiper(params) {
             // 没有 loop 的时候惯性拖拽
             if (!isLoop) {
                 if ((endDistance - startDistance) > 0 && index === 0) {
-                    // console.log('到达最初');
+                    // console.log("到达最初");
                     dragDistance = moveDistance + ((endDistance - startDistance) - ((endDistance - startDistance) * 0.6));
                 } else if ((endDistance - startDistance) < 0 && index === nodeItems.length - 1) {
-                    // console.log('到达最后');
+                    // console.log("到达最后");
                     dragDistance = moveDistance + ((endDistance - startDistance) - ((endDistance - startDistance) * 0.6));
                 }
             }
@@ -252,7 +252,7 @@ function swiper(params) {
         if (autoPaly && nodeItems.length > 1) startAuto();
 
         // 开始触摸
-        nodeItem.addEventListener('touchstart', ev => {
+        nodeItem.addEventListener("touchstart", ev => {
             startTime = Date.now();
             count = 0;
             loopCount = moveTime / 1000 * 60;
@@ -261,7 +261,7 @@ function swiper(params) {
         });
 
         // 触摸移动
-        nodeItem.addEventListener('touchmove', ev => {
+        nodeItem.addEventListener("touchmove", ev => {
             ev.preventDefault();
             count = 0;
             endDistance = direction ? ev.touches[0].clientY : ev.touches[0].clientX;
@@ -269,7 +269,7 @@ function swiper(params) {
         });
 
         // 触摸离开
-        nodeItem.addEventListener('touchend', () => {
+        nodeItem.addEventListener("touchend", () => {
             endTime = Date.now();
             // 判断是否点击
             if (endState !== endDistance) {
@@ -323,11 +323,11 @@ function swiper(params) {
 
     /** 输出底部圆点 */
     function outputPagination() {
-        let paginations = '';
+        let paginations = "";
         nodePagination = node.querySelector(classNames[2]);
         // 如果没有找到对应节点则创建一个
         if (!nodePagination) {
-            nodePagination = document.createElement('div');
+            nodePagination = document.createElement("div");
             nodePagination.className = classNames[2].slice(1);
             node.appendChild(nodePagination);
         }
@@ -342,11 +342,11 @@ function swiper(params) {
     /** 动态布局初始化 */
     function format() {
         node = document.querySelector(params.el);
-        if (!node) return console.warn('没有可执行的节点！');
+        if (!node) return console.warn("没有可执行的节点！");
         nodeItem = node.querySelector(classNames[0]);
         if (!nodeItem) return console.warn(`缺少"${classNames[0]}"节点！`);
         nodeItems = [...node.querySelectorAll(classNames[1])];
-        if (nodeItems.length == 0) return console.warn('滑动节点个数必须大于0！');
+        if (nodeItems.length == 0) return console.warn("滑动节点个数必须大于0！");
 
         let moveWidth = node.offsetWidth, moveHeight = node.offsetHeight;
         if (pagination) outputPagination();
@@ -357,7 +357,7 @@ function swiper(params) {
 
     /** 初始化参数 */
     function init() {
-        if (typeof params !== 'object') return console.warn('传参有误');
+        if (typeof params !== "object") return console.warn("传参有误");
         pagination = params.pagination || false;
         direction = params.vertical || false;
         autoPaly = params.autoPaly || false;
