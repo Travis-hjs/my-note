@@ -16,11 +16,11 @@
             <ul></ul>
         </div>
         <script>
-            let _html = '';
+            let _html = "";
             for (let i = 0; i < 20; i++) {
-                _html += '<li></li>'
+                _html += "<li></li>"
             }
-            document.querySelector('.app ul').innerHTML = _html;
+            document.querySelector(".app ul").innerHTML = _html;
 
             /**
              * 监听到达底部（方法一，可能有兼容问题）
@@ -34,11 +34,11 @@
                     let clientHeight = window.innerHeight;
                     // 当前滚动高度 + 视口高度 >= 文档总高度
                     if (scrollTop + clientHeight >= scrollHeight - distance) {
-                        if (typeof callback === 'function') callback();
-                        if (once) window.removeEventListener('scroll', onScroll);
+                        if (typeof callback === "function") callback();
+                        if (once) window.removeEventListener("scroll", onScroll);
                     }
                 }
-                window.addEventListener('scroll', onScroll);
+                window.addEventListener("scroll", onScroll);
                 onScroll();
             }
 
@@ -57,16 +57,16 @@
                     /** 滚动条高度 */
                     let scrollHeight = doc.documentElement.scrollTop === 0 ? doc.body.scrollHeight : doc.documentElement.scrollHeight;
                     if (scrollHeight - scrollTop - number <= window.innerHeight) {
-                        if (typeof callback === 'function') callback();
-                        if (once) window.removeEventListener('scroll', onScroll);
+                        if (typeof callback === "function") callback();
+                        if (once) window.removeEventListener("scroll", onScroll);
                     }
                 }
-                window.addEventListener('scroll', onScroll);
+                window.addEventListener("scroll", onScroll);
                 onScroll(); // 先执行一次
             }
 
             scrollToBottom(100, function () {
-                console.log('到底底部~');
+                console.log("到底底部~");
             }, true);
         </script>
     </body>
