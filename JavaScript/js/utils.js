@@ -173,10 +173,10 @@ class ModuleNumber extends ModuleString {
                 result = a * value - b * value;
                 break;
             case "*":
-                result = (a * value) * (b * value);
+                return result = (a * value) * (b * value) / (value * value);
                 break;
             case "/":
-                result = (a * value) / (b * value);
+                return result = (a * value) / (b * value);
                 break;
         }
         return result / value;
@@ -641,6 +641,7 @@ class ModuleBom extends ModuleDate {
         clipboard.select();
         clipboard.setSelectionRange(0, clipboard.value.length);
         document.execCommand("copy");
+        clipboard.blur();
         typeof success === "function" && success();
     }
 }
