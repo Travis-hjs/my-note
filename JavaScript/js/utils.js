@@ -152,34 +152,51 @@ class ModuleNumber extends ModuleString {
      * @param {number} a 前面的值
      * @param {"+"|"-"|"*"|"/"} type 计算方式
      * @param {number} b 后面的值
+     * @example 
+     * // 可链式调用
+     * const res = computeNumber(1.3, "-", 1.2).next("+", 1.5).next("*", 2.3).next("/", 0.2).result;
+     * console.log(res);
      */
     computeNumber(a, type, b) {
         /**
          * 获取数字小数点的位数
-         * @param {number} n 数字
+         * @param {number} value 数字
          */
-        const getLenth = n => {
-            const string = n.toString().split(".")[1];
+        function getLenth(value) {
+            const string = value.toString().split(".")[1];
             return string ? string.length : 0;
         }
         /** 倍率 */
-        const value = Math.pow(10, Math.max(getLenth(a), getLenth(b)));
+        const power = Math.pow(10, Math.max(getLenth(a), getLenth(b)));
         let result = 0;
+        
         switch (type) {
             case "+":
-                result = a * value + b * value;
+                result = (a * power + b * power) / power;
                 break;
             case "-":
-                result = a * value - b * value;
+                result = (a * power - b * power) / power;
                 break;
             case "*":
-                return result = (a * value) * (b * value) / (value * value);
+                result = (a * power) * (b * power) / (power * power);
                 break;
             case "/":
-                return result = (a * value) / (b * value);
+                result = (a * power) / (b * power);
                 break;
         }
-        return result / value;
+        
+        return {
+            /** 计算结果 */
+            result,
+            /**
+             * 继续计算
+             * @param {"+"|"-"|"*"|"/"} nextType 继续计算方式
+             * @param {number} nextValue 继续计算的值
+             */
+            next(nextType, nextValue) {
+                return computeNumber(result, nextType, nextValue);
+            }
+        };
     }
 
     /**
