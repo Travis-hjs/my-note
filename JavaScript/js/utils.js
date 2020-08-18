@@ -149,6 +149,7 @@ class ModuleNumber extends ModuleString {
 
     /**
      * 数字运算（主要用于小数点精度问题）
+     * [see](https://juejin.im/post/6844904066418491406#heading-12)
      * @param {number} a 前面的值
      * @param {"+"|"-"|"*"|"/"} type 计算方式
      * @param {number} b 后面的值
