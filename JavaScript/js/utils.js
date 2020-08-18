@@ -158,6 +158,7 @@ class ModuleNumber extends ModuleString {
      * console.log(res);
      */
     computeNumber(a, type, b) {
+        const THAT = this;
         /**
          * 获取数字小数点的位数
          * @param {number} value 数字
@@ -194,7 +195,7 @@ class ModuleNumber extends ModuleString {
              * @param {number} nextValue 继续计算的值
              */
             next(nextType, nextValue) {
-                return computeNumber(result, nextType, nextValue);
+                return THAT.computeNumber(result, nextType, nextValue);
             }
         };
     }
