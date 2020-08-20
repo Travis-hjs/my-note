@@ -39,8 +39,9 @@ function ringProgress(info) {
     /** 当前进度 */
     let progressNow = 50;
 
-    node.width = info.width || info.el.parentNode.clientWidth;
-    node.height = info.height || info.el.parentNode.clientHeight;
+    // 移动端上抗锯齿要乘以像素比，然后 canvas 设置 css { width: 100%; height: 100% }
+    node.width = (info.width || info.el.parentNode.clientWidth) * window.devicePixelRatio;
+    node.height = (info.height || info.el.parentNode.clientHeight) * window.devicePixelRatio;
 
     /** 圆环尺寸 */
     const ringSize = Math.min(node.width, node.height);
