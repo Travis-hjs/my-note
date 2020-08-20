@@ -67,7 +67,7 @@ function ringProgress(info) {
     function drawLayerLine() {
         context.beginPath();
         context.strokeStyle = info.lineLayerColor || "#eeeeee";
-        context.lineCap = "round";
+        context.lineCap = "butt";
         context.lineWidth = (info.lineWidth || 1) * scaleValue;
         /** 圆环的半径 这里要减去圆环的线宽 */
         const radius = (ringSize - context.lineWidth) / 2; 
