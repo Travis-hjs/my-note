@@ -176,6 +176,3 @@ function inputNumber(el) {
     line.style.backgroundSize = el.value + "%";
 }
 
-setTimeout(function () {
-    ring.destroy();
-}, 3000)
