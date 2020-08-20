@@ -39,8 +39,8 @@ function ringProgress(info) {
     /** 当前进度 */
     let progressNow = 50;
 
-    node.width = info.width || info.el.clientWidth;
-    node.height = info.height || info.el.clientHeight;
+    node.width = info.width || info.el.parentNode.clientWidth;
+    node.height = info.height || info.el.parentNode.clientHeight;
 
     /** 圆环尺寸 */
     const ringSize = Math.min(node.width, node.height);
