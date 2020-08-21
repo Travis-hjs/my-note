@@ -48,7 +48,8 @@ function ringProgress(info) {
     canvas.height = info.el.clientHeight * scaleValue;
     
     /** 圆环尺寸 */
-    const ringSize = Math.min(canvas.width, canvas.height);
+    // const ringSize = Math.min(canvas.width, canvas.height);
+    const ringSize = Math.min(canvas.width, canvas.height) - scaleValue; // 这里减去缩放比是因为让canvas绘画不贴近边界（类似padding的效果），不然会有些许切割的瑕疵
     /** 中心坐标`x` */
     const centerX = canvas.width / 2;
     /** 中心坐标`y` */
@@ -148,7 +149,6 @@ function ringProgress(info) {
         },
     
         destroy() {
-            // console.log(animationId);
             clearAnimation(animationId);
         }
     }
