@@ -161,29 +161,33 @@ class ModuleNumber extends ModuleString {
     computeNumber(a, type, b) {
         const THAT = this;
         /**
-         * 获取数字小数点的位数
-         * @param {number} value 数字
+         * 获取数字小数点的长度
+         * @param {number} n 数字
          */
-        function getLenth(value) {
-            const string = value.toString().split(".")[1];
-            return string ? string.length : 0;
+        function getDecimalLength(n) {
+            const decimal = n.toString().split(".")[1];
+            return decimal ? decimal.length : 0;
         }
         /** 倍率 */
-        const power = Math.pow(10, Math.max(getLenth(a), getLenth(b)));
+        const power = Math.pow(10, Math.max(getDecimalLength(a), getDecimalLength(b)));
         let result = 0;
         
+        // 防止出现 `33.33333*100000 = 3333332.9999999995` && `33.33*10 = 333.29999999999995` 这类情况做的暴力处理
+        a = Math.round(a * power);
+        b = Math.round(b * power);
+
         switch (type) {
             case "+":
-                result = (a * power + b * power) / power;
+                result = (a + b) / power;
                 break;
             case "-":
-                result = (a * power - b * power) / power;
+                result = (a - b) / power;
                 break;
             case "*":
-                result = (a * power) * (b * power) / (power * power);
+                result = (a * b) / (power * power);
                 break;
             case "/":
-                result = (a * power) / (b * power);
+                result = a  / b ;
                 break;
         }
         
@@ -197,6 +201,20 @@ class ModuleNumber extends ModuleString {
              */
             next(nextType, nextValue) {
                 return THAT.computeNumber(result, nextType, nextValue);
+            },
+            /** 
+             * 小数点进位 
+             * @param {number} n 小数点后的位数
+            */
+            toHex(n) {
+                const strings = result.toString().split(".");
+                if (n > 0 && strings[1] && strings[1].length > n) {
+                    const decimal = strings[1].slice(0, n);
+                    const value = Number(`${strings[0]}.${decimal}`);
+                    const difference = 1 / Math.pow(10, decimal.length);
+                    result = THAT.computeNumber(value, "+", difference).result;
+                }
+                return result;
             }
         };
     }
