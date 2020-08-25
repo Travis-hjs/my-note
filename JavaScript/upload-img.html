@@ -12,7 +12,9 @@
 	        .upload-img{ width: 280px; min-height: 280px; margin: 0 auto 20px; }
             .upload-img .img-box{ position: relative; width: 100%; height: 100%; overflow: hidden; }
             .upload-img .img-box .image{ display: block; width: 100%; }
-            .upload-img .img-box .remove{ position: absolute; top: 2px; right: 2px; border-radius: 100%; cursor: pointer; width: 30px; height: 30px; background-color: rgba(0,0,0,0.5); display: flex; flex-wrap: wrap; align-items: center; justify-content: center; }
+            .upload-img .img-box .remove{ position: absolute; top: 2px; right: 2px; cursor: pointer; width: 30px; height: 30px; border-radius: 50%; background-color: rgba(0,0,0,0.5); }
+            .upload-img .img-box .remove::before{ content: ""; width: 64%; height: 2px; background-color: #eee; border-radius: 1px; position: absolute; top: 50%; left: 18%; transform: translateY(-50%) rotate(45deg); }
+            .upload-img .img-box .remove::after{ content: ""; width: 64%; height: 2px; background-color: #eee; border-radius: 1px; position: absolute; top: 50%; left: 18%; transform: translateY(-50%) rotate(-45deg); }
             .upload-img .upload{ width: 100%; min-height: 280px; position: relative; }
             .upload-img .upload .add-icon{ position: relative; width: 50px; height: 50px; }
             .upload-img .upload .add-icon::after{ content: ""; position: absolute; top: 0; left: 50%; width: 2px; height: 100%; background-color: #999; transform: translateX(-50%); }
@@ -26,12 +28,7 @@
             <div class="card upload-img">
                 <div class="img-box hide">
                     <img class="image" src="">
-                    <div onclick="removeImg(this)" class="remove">
-                        <svg t="1567996911031" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2169" width="18" height="18">
-                            <path d="M806.4 172.8l-633.6 633.6c-12.8 12.8-12.8 32 0 44.8 12.8 12.8 32 12.8 44.8 0l633.6-633.6c12.8-12.8 12.8-32 0-44.8-12.8-12.8-32-12.8-44.8 0z" fill="#ffffff" p-id="2170"></path>
-                            <path d="M172.8 172.8c-12.8 12.8-12.8 32 0 44.8l633.6 633.6c12.8 12.8 32 12.8 44.8 0 12.8-12.8 12.8-32 0-44.8L217.6 172.8c-12.8-12.8-32-12.8-44.8 0z" fill="#ffffff" p-id="2171"></path>
-                        </svg>
-                    </div>
+                    <div onclick="removeImg(this)" class="remove"></div>
                 </div>
                 <div class="upload flex fvertical fcenter">
                     <div class="add-icon"></div>
@@ -48,32 +45,39 @@
                 /** 上传文件 */
                 const file = el.files[0];
                 /** 上传类型数组 */
-                const types = ['image/jpg', 'image/png', 'image/jpeg', 'image/gif'];
+                const types = ["image/jpg", "image/png", "image/jpeg", "image/gif"];
                 // 判断文件类型
-                if (types.indexOf(file.type) < 0) return alert('文件格式只支持：jpg 和 png');
+                if (types.indexOf(file.type) < 0) {
+                    el.value = null;
+                    return alert("文件格式只支持：jpg 和 png");
+                }
+                
                 // 判断大小
-                if (file.size > 2 * 1024 * 1024) return alert('上传的文件不能大于2M');
+                if (file.size > 2 * 1024 * 1024) {
+                    el.value = null;
+                    return alert("上传的文件不能大于2M");
+                }
 
                 // const formData = new FormData();
-                // formData.append('img', file);
+                // formData.append("img", file);
                 // console.log(formData, file);
                 
 				getBase64(file, res => {
-                    console.log('base64 >> ', res);
-                    el.parentNode.classList.add('hide');
-                    el.parentNode.parentNode.querySelector('.img-box').classList.remove('hide');
-                    el.parentNode.parentNode.querySelector('.img-box .image').src = res;
+                    console.log("base64 >> ", res);
+                    el.parentNode.classList.add("hide");
+                    el.parentNode.parentNode.querySelector(".img-box").classList.remove("hide");
+                    el.parentNode.parentNode.querySelector(".img-box .image").src = res;
                     el.value = null;
                 });
 
 				let url = getObjectURL(file);
-				console.log('二进制路径', url);
+				console.log("二进制路径", url);
 			}
 
             /** 
              * 获取 base64
              * @param {File} file 文件
-             * @param {Function} callback 回调
+             * @param {(value: string) => void} callback 回调
              */
 			function getBase64(file, callback) {
 				let reader = new FileReader();
@@ -81,8 +85,8 @@
                     /** base64 路径 */
                     let src = reader.result;
                     // 转义base64: 
-                    // src = src.split('+').join('%2B').split('&').join('%26');
-                    if (typeof callback === 'function') callback(src);
+                    // src = src.split("+").join("%2B").split("&").join("%26");
+                    typeof callback === "function" && callback(src);
 				}
 				reader.readAsDataURL(file);
 			}
@@ -108,9 +112,9 @@
              * @param {HTMLElement} el 
              */
             function removeImg(el) {
-                el.parentNode.classList.add('hide');
-                el.parentNode.querySelector('.image').src = '';
-                el.parentNode.parentNode.querySelector('.upload').classList.remove('hide');
+                el.parentNode.classList.add("hide");
+                el.parentNode.querySelector(".image").src = "";
+                el.parentNode.parentNode.querySelector(".upload").classList.remove("hide");
             }
 		</script>
 	</body>
