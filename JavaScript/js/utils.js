@@ -830,12 +830,14 @@ class ModuleDom extends ModuleBom {
      * @param {object} options 配置参数
      * @param {HTMLElement} options.el 目标节点
      * @param {number} options.number 最终显示的数字
+     * @param {number} options.decimals 小数位（传`0`则为整数）
      * @param {number} options.time （可选）多少毫秒内完成，默认1秒
      * @param {Function} options.callback （可选）完成回调
      */
     setNumberAnimation(options) {
-        const an = requestAnimationFrame;
+        const animation = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame || window.msRequestAnimationFrame;
         const el = options.el;
+        const int = options.decimals == 0;
         const result = options.number || 188.88;
         const time = (options.time || 1000) / 1000;
         const step = result / (time * 60);
@@ -844,14 +846,14 @@ class ModuleDom extends ModuleBom {
             count += step;
             if (count >= result) {
                 count = result;
-                el.textContent = count.toFixed(2);
-                if (typeof options.callback === "function") options.callback();
+                el.textContent = int ? Math.round(count) : count.toFixed(options.decimals);
+                typeof options.callback === "function" && options.callback();
             } else {
-                el.textContent = count.toFixed(2);
-                an(move);
+                el.textContent = int ? Math.round(count) : count.toFixed(options.decimals);
+                animation(move);
             }
         }
-        el.textContent = count.toFixed(2);
+        el.textContent = count;
         move();
     }
     /** 
