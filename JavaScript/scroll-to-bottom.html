@@ -4,95 +4,36 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="maximum-scale=1.0, minimum-scale=1.0, user-scalable=0, initial-scale=1.0, width=device-width"/>
         <meta name="format-detection" content="telephone=no, email=no, date=no, address=no">
-        <title>滚动事件</title>
+        <title>监听滚动到底部</title>
         <link rel="stylesheet" href="./css/base.css">
         <style>
-            .app li{ background-color: gold; height: 150px; position: relative; z-index: 10; }
-            .app li:nth-child(even){ background-color: #212121; }
+            .page{ padding-top: 10px; }
+            .list li{ background-color: gold; height: 150px; position: relative; z-index: 10; }
+            .list li:nth-child(even){ background-color: #212121; }
+            .scroll_view{ width: 100%; height: 375px; overflow-y: auto; padding: 0 10px; margin-bottom: 20px; }
+            .scroll_view .item{ width: 100%; height: 100px; background-color: lightseagreen; color: #fff; text-align: center; line-height: 100px; }
+            .scroll_view .item:nth-child(even){ background-color: lightsalmon; }
         </style>
     </head>
     <body>
-        <div class="app">
-            <ul></ul>
+        <div class="page">
+            <div class="scroll_view">
+                <div class="item">节点滚动</div>
+                <div class="item">节点滚动</div>
+                <div class="item">节点滚动</div>
+                <div class="item">节点滚动</div>
+                <div class="item">节点滚动</div>
+                <div class="item">节点滚动</div>
+            </div>
+            <ul class="list">
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+            </ul>
         </div>
-        <script>
-            let _html = "";
-            for (let i = 0; i < 20; i++) {
-                _html += "<li></li>"
-            }
-            document.querySelector(".app ul").innerHTML = _html;
-
-            /**
-             * 监听到达底部（方法一，可能有兼容问题）
-             * @param {number} distance 距离底部多少像素触发（px）
-             * @param {() => void} callback 到达底部回调函数
-             * @param {boolean} once 是否为一次性
-             */
-            function onBottom(distance = 0, callback, once = false) {
-                function onScroll() {
-                    let { scrollTop, scrollHeight } = document.scrollingElement;
-                    let clientHeight = window.innerHeight;
-                    // 当前滚动高度 + 视口高度 >= 文档总高度
-                    if (scrollTop + clientHeight >= scrollHeight - distance) {
-                        if (typeof callback === "function") callback();
-                        if (once) window.removeEventListener("scroll", onScroll);
-                    }
-                }
-                window.addEventListener("scroll", onScroll);
-                onScroll();
-            }
-
-            /**
-             * 监听滚动到底部（方法二）
-             * @param {number} number 距离底部多少像素触发（px）
-             * @param {() => void} callback 到达底部回调函数
-             * @param {boolean} once 是否为一次性（防止重复用）
-             */
-            function scrollToBottom(number = 0, callback, once = false) {
-                const doc = document;
-                /** 滚动事件 */
-                function onScroll() {
-                    /** 滚动的高度 */
-                    let scrollTop = doc.documentElement.scrollTop === 0 ? doc.body.scrollTop : doc.documentElement.scrollTop;
-                    /** 滚动条高度 */
-                    let scrollHeight = doc.documentElement.scrollTop === 0 ? doc.body.scrollHeight : doc.documentElement.scrollHeight;
-                    if (scrollHeight - scrollTop - number <= window.innerHeight) {
-                        if (typeof callback === "function") callback();
-                        if (once) window.removeEventListener("scroll", onScroll);
-                    }
-                }
-                window.addEventListener("scroll", onScroll);
-                // 必要时先执行一次
-                // onScroll(); 
-            }
-
-            scrollToBottom(100, function () {
-                console.log("到底底部~");
-            }, true);
-
-            /**
-             * 监听指定元素滚动到底部
-             * @param {HTMLElement} el 指定的元素
-             * @param {number} number 距离底部多少像素触发（px）
-             * @param {() => void} callback 到达底部回调函数
-             * @param {boolean} once 是否为一次性
-             */
-            function elementScrollToBottom(el, number = 0, callback, once = false) {
-                /** 滚动事件 */
-                function onScroll() {
-                    /** 滚动的高度 */
-                    let scrollTop = el.scrollTop;
-                    /** 滚动条高度 */
-                    let scrollHeight = el.scrollHeight;
-                    if (scrollHeight - scrollTop - number <= el.clientHeight) {
-                        if (typeof callback === "function") callback();
-                        if (once) el.removeEventListener("scroll", onScroll);
-                    }
-                }
-                el.addEventListener("scroll", onScroll);
-                // 先执行一次
-                // onScroll();
-            }
-        </script>
+        <script src="./js/scrollToBottom.js"></script>
     </body>
 </html>
