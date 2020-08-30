@@ -82,4 +82,84 @@
 
     // 添加点击事件
     content.children[4].addEventListener('click', srart);
+});
+
+(function () {
+    /**
+     * 九宫抽奖
+     * @param {object} info 
+     * @param {number} info.circleTotal 圈数（第一圈和最后一圈不算）
+     * @param {(index: number) => void} info.callback 间隔回调
+     */
+    function luckDrawGrid(info) {
+        /**
+         * 动画帧
+         * @type {requestAnimationFrame}
+         */
+        const animation = window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || window.msRequestAnimationFrame;
+        /** 一圈的总数 */
+        const totalGrid = 8;
+        /** 最小间隔（帧） */
+        const minInterval = 6;
+        /** 最大间隔（帧） */
+        const maxInterval = 26;
+        /** 计数间隔 */
+        let countInterval = maxInterval;
+        /** 计数帧 */
+        let countFrame = 0;
+        /** 当前索引 */
+        let index = 0;
+        
+        function update() {
+            
+            if (countFrame >= countInterval) {
+                countFrame = 0;
+                typeof info.callback === "function" && info.callback(index);
+                index ++;
+                if (index == totalGrid) index = 0;
+                countInterval -= (maxInterval - totalGrid) / totalGrid;
+                if (countInterval < minInterval) countInterval = minInterval;
+                // if (countInterval == minInterval) {
+                //     console.log("执行");
+                // }
+            } 
+            // else {
+            //     // typeof info.callback === "function" && info.callback(index);
+            //     // animation(update);
+            // }
+            countFrame ++;
+            animation(update);
+        }
+        update();
+        // 先执行一次
+        typeof info.callback === "function" && info.callback(index);
+    }
+    
+    const content = document.querySelector(".box");
+    /** 高亮样式 */
+    const activeClassName = "item-active";
+    /** 动画进行列表 */
+    const list = [0, 1, 2, 5, 8, 7, 6, 3];
+    /** 概率列表（加起来必须是100）对应上面 */
+    const rangeList = [1, 5, 37, 20, 10, 10, 8, 9];
+
+    function switchItem(index) {
+        for (let i = 0; i < list.length; i++) {
+            const item = list[i];
+            if (i == index) {
+                content.children[list[index]].classList.add(activeClassName);
+            } else {
+                content.children[item].classList.remove(activeClassName);
+            }
+        }
+    }
+
+    luckDrawGrid({
+        circleTotal: 2,
+        callback(index) {
+            // console.log(index);
+            switchItem(index);
+        }
+    })
+
 })();
