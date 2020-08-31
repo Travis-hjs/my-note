@@ -1,3 +1,4 @@
+// ============== setTimeout模式 ==============
 (function () {
     const content = document.querySelector('.box');
     const activeClassName = 'item-active';
@@ -84,12 +85,13 @@
     content.children[4].addEventListener('click', srart);
 });
 
+// ============== 动画帧模式 ==============
 (function () {
     /**
      * 九宫抽奖
      * @param {object} info 
-     * @param {number} info.circleTotal 圈数（第一圈和最后一圈不算）
-     * @param {(index: number) => void} info.callback 间隔回调
+     * @param {number} info.rangeIndex 概率索引`0-7` 
+     * @param {(index: number, last: boolean) => void} info.callback 间隔回调
      */
     function luckDrawGrid(info) {
         /**
@@ -97,42 +99,53 @@
          * @type {requestAnimationFrame}
          */
         const animation = window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || window.msRequestAnimationFrame;
-        /** 一圈的总数 */
-        const totalGrid = 8;
+        /** 圈数（第一圈和最后一圈不算） */
+        const circleTotal = 3;
         /** 最小间隔（帧） */
         const minInterval = 6;
         /** 最大间隔（帧） */
         const maxInterval = 26;
+        /** 最大索引数 */
+        const maxTotal = 8;
+        /** 一共要跑的格子总数 */
+        let totalGrid = (circleTotal + 2) * maxTotal - (maxTotal - (info.rangeIndex + 1));
         /** 计数间隔 */
         let countInterval = maxInterval;
         /** 计数帧 */
         let countFrame = 0;
         /** 当前索引 */
         let index = 0;
-        
+        /** 每次增加&减少值 */
+        const value = (maxInterval - minInterval) / maxTotal;
+
         function update() {
-            
+            if (totalGrid <= 0) return;
+
             if (countFrame >= countInterval) {
                 countFrame = 0;
-                typeof info.callback === "function" && info.callback(index);
+                typeof info.callback === "function" && info.callback(index, totalGrid === 1);
+                
                 index ++;
-                if (index == totalGrid) index = 0;
-                countInterval -= (maxInterval - totalGrid) / totalGrid;
-                if (countInterval < minInterval) countInterval = minInterval;
-                // if (countInterval == minInterval) {
-                //     console.log("执行");
-                // }
+                if (index == maxTotal) index = 0;
+
+                // 判断是减速还是加速
+                if (totalGrid <= maxTotal) {
+                    countInterval += value;
+                    if (countInterval > maxInterval) countInterval = maxInterval;
+                } else {
+                    countInterval -= value;
+                    if (countInterval < minInterval) countInterval = minInterval;
+                }
+
+                totalGrid --;
             } 
-            // else {
-            //     // typeof info.callback === "function" && info.callback(index);
-            //     // animation(update);
-            // }
+
             countFrame ++;
             animation(update);
         }
         update();
         // 先执行一次
-        typeof info.callback === "function" && info.callback(index);
+        typeof info.callback === "function" && info.callback(index, false);
     }
     
     const content = document.querySelector(".box");
@@ -148,18 +161,50 @@
             const item = list[i];
             if (i == index) {
                 content.children[list[index]].classList.add(activeClassName);
+                content.children[list[index]].textContent = `${i + 1}: index-${i}`
             } else {
                 content.children[item].classList.remove(activeClassName);
+                content.children[item].textContent = i + 1;
             }
         }
     }
 
-    luckDrawGrid({
-        circleTotal: 2,
-        callback(index) {
-            // console.log(index);
-            switchItem(index);
+    /** 获取概率索引 */
+    function getRangeIndex() {
+        /** 抽奖概率范围 */
+        const range = parseInt(100 * Math.random()) + 1;
+        /** 概率索引 */
+        let index = 0;
+        /** 单个概率 */
+        let rate = 0;
+        for (let i = 0; i < rangeList.length; i++) {
+            const number = rangeList[i];
+            rate += number;
+            if (range <= rate) {
+                index = i;
+                break;
+            }
         }
-    })
+        console.log(`概率:${rangeList[index]}% 索引:${index}`);
+        return index;
+    }
+
+    let isMove = false;
+
+    content.children[4].addEventListener('click', function() {
+        if (isMove) return console.log("动画进行中");
+        isMove = true;
+        luckDrawGrid({
+            rangeIndex: getRangeIndex(),
+            callback(index, last) {
+                // console.log(index);
+                switchItem(index);
+                if (last) {
+                    // console.log(index);
+                    isMove = false;
+                }
+            }
+        })
+    });
 
 })();
