@@ -865,3 +865,110 @@ function theToast() {
         }
     }
 }
+
+/**
+ * 显示提示框
+ * @param {object} options 传参信息
+ * @param {string} options.title 标题内容
+ * @param {string} options.content 提示内容
+ * @param {string} options.confirmText 确认文字
+ * @param {() => void} options.callback 点击回调
+ */
+function showAlert(options) {
+    /** 弹出层整体 */
+    let alertBox = document.querySelector(".alert_component");
+    if (!alertBox) {
+        const time = `0.3s`;
+        const cssText = `
+        .alert_component{ 
+            position: fixed; 
+            top: 0; 
+            left: 0; 
+            z-index: 999; 
+            width: 100%; 
+            height: 100vh; 
+            display: flex; 
+            background-color: rgba(0,0,0,0.45); 
+            z-index: 99; transition: ${time} all; 
+            animation: showAlert ${time} ease;
+        }
+        .alert_box{ 
+            width: 80%; 
+            max-width: 375px; 
+            margin: auto; 
+            background-color: #fff; 
+            text-align: center; 
+            box-shadow: 1px 1px 40px rgba(0,0,0,.25); 
+            transition: ${time} all; 
+            animation: showAlertContent ${time} ease;
+        }
+        .alert_content{ 
+            padding: 0 10px 16px; 
+            font-size: 16px; 
+            color: #333; 
+        }
+        .alert_title{ 
+            text-align: center; 
+            font-size: 18px; 
+            color: #333; 
+            line-height: 44px; 
+            padding-top: 4px;
+        }
+        .alert_btn{ 
+            width: 100%; 
+            background-color: #eee; 
+            height: 44px; 
+            color: #1BBC9B; 
+            font-size: 15px; 
+            border: none; 
+            outline: none; 
+            line-height: 1; 
+            cursor: pointer; 
+        }
+        .alert_hide{ 
+            visibility: hidden; 
+            opacity: 0; 
+        }
+        .alert_hide .alert_box{ 
+            transform: translateY(80px); 
+        }
+        @keyframes showAlert {
+            0%{ opacity: 0;  }
+            100%{ opacity: 1;  }
+        }
+        @keyframes showAlertContent {
+            0%{ transform: translateY(80px); }
+            100%{ transform: translateY(0px); }
+        }
+        `;
+        const style = document.createElement("style");
+        const box = document.createElement("div");
+        style.textContent = cssText.replace(/(\n|\t|\s)*/ig, "$1").replace(/\n|\t|\s(\{|\}|\,|\:|\;)/ig, "$1").replace(/(\{|\}|\,|\:|\;)\s/ig, "$1");
+        document.head.appendChild(style);
+        // ====================== 创建节点 ======================
+        alertBox = document.createElement("div");
+        alertBox.props = {
+            title: document.createElement("div"),
+            content: document.createElement("div"),
+            btn: document.createElement("button")
+        }
+        alertBox.className = "alert_component";
+        box.className = "alert_box";
+        alertBox.props.title.className = "alert_title";
+        alertBox.props.content.className = "alert_content";
+        alertBox.props.btn.className = "alert_btn";
+        box.append(alertBox.props.title, alertBox.props.content, alertBox.props.btn);
+        alertBox.appendChild(box);
+        document.body.appendChild(alertBox);
+    }
+    // ====================== 显示并设置内容 ======================
+    alertBox.classList.remove("alert_hide");
+    alertBox.props.title.textContent = options.title || "提示";
+    alertBox.props.content.innerHTML = options.content || "无内容";
+    alertBox.props.btn.textContent = options.confirmText || "确定";
+    // ====================== 重置点击事件 ======================
+    alertBox.props.btn.onclick = function () {
+        alertBox.classList.add("alert_hide");
+        typeof options.callback === "function" && options.callback();
+    }
+}
