@@ -1,12 +1,12 @@
 
 /**
- * `fetch`请求 [MDN文档](https://developer.mozilla.org/zh-CN/docs/Web/API/Fetch_API)
+ * 基于`fetch`请求 [MDN文档](https://developer.mozilla.org/zh-CN/docs/Web/API/Fetch_API)
  * @param {"GET"|"POST"|"PUT"|"DELETE"} method 请求方法
  * @param {string} url 请求路径
  * @param {object} data 请求参数对象
  * @param {number} timeout 超时毫秒
  */
-function theFetch(method, url, data = {}, timeout = 5000) {
+function fetchRequest(method, url, data = {}, timeout = 5000) {
     let payload = null;
     let query = "";
     if (method === "GET") {
@@ -43,8 +43,8 @@ function theFetch(method, url, data = {}, timeout = 5000) {
     });
 }
 
-function fetchRequest() {
-    theFetch("GET", "http://192.168.10.220:8000/bg/common/pm/category/", {
+function clickFetchRequest() {
+    fetchRequest("GET", "http://192.168.10.220:8000/bg/common/pm/category/", {
         page: 1,
         per_page: 10
     }).then(res => {
