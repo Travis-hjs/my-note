@@ -11,6 +11,7 @@
  * @param {boolean} params.vertical 是否垂直滚动
  * @param {boolean} params.autoPaly 是否需要自动播放
  * @param {boolean} params.pagination 是否需要底部圆点
+ * @param {(index: number) => void} params.slideCallback 滑动/切换结束回调
  */
 function swiper(params) {
     /**
@@ -18,6 +19,8 @@ function swiper(params) {
      * @dec ["滑动列表","滑动item","圆点容器","底部圆点","圆点高亮"]
      */
     const classNames = [".swiper_list", ".swiper_item", ".swiper_pagination", ".swiper_dot", ".swiper_dot_active"];
+    /** 滑动结束函数 */
+    const slideEnd = params.slideCallback || function() {};
     /**
      * 组件节点
      * @type {HTMLElement}
@@ -85,9 +88,12 @@ function swiper(params) {
      * @param {number} width 滚动容器的宽度
      * @param {number} height 滚动容器的高度
      */
-    function onTouch(width, height) {
-        /** 动画帧 */
-        const animationFrame = requestAnimationFrame;
+    function touchStart(width, height) {
+        /**
+         * 动画帧
+         * @type {requestAnimationFrame}
+         */
+        const animation = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame || window.msRequestAnimationFrame;
         /** 触摸开始时间 */
         let startTime = 0;
         /** 触摸结束时间 */
@@ -170,7 +176,7 @@ function swiper(params) {
                 // 我这里是想让滑块过渡完之后再重置位置所以加的延迟 (之前用setTimeout，快速滑动有问题，然后换成 requestAnimationFrame解决了这类问题)
                 function loopMoveMin() {
                     loopCount += 1;
-                    if (loopCount < moveTime / 1000 * 60) return animationFrame(loopMoveMin);
+                    if (loopCount < moveTime / 1000 * 60) return animation(loopMoveMin);
                     stopAnimation();
                     slideStyle(range * -(nodeItems.length - 3));
                     // 重置一下位置
@@ -181,7 +187,7 @@ function swiper(params) {
             } else if (isLoop && index > nodeItems.length - 3) {
                 function loopMoveMax() {
                     loopCount += 1;
-                    if (loopCount < moveTime / 1000 * 60) return animationFrame(loopMoveMax);
+                    if (loopCount < moveTime / 1000 * 60) return animation(loopMoveMax);
                     stopAnimation();
                     slideStyle(0);
                     moveDistance = 0;
@@ -207,7 +213,10 @@ function swiper(params) {
                     index += 1;
                     slideMove(moveDistance - range);
                     moveDistance -= range;
-                } else backLocation();
+                    slideEnd(index);
+                } else {
+                    backLocation();
+                }
             } else {
                 // 往下滑动 or 向右滑动
                 if (judgeTouch(range)) {
@@ -215,7 +224,10 @@ function swiper(params) {
                     index -= 1;
                     slideMove(moveDistance + range);
                     moveDistance += range;
-                } else backLocation();
+                    slideEnd(index)
+                } else {
+                    backLocation();
+                }
             }
         }
 
@@ -237,12 +249,13 @@ function swiper(params) {
                     moveDistance -= range;
                 }
             }
+            slideEnd(index);
         }
 
         /** 开始自动播放 */
         function startAuto() {
             count += 1;
-            if (count < interval / 1000 * 60) return animationFrame(startAuto);
+            if (count < interval / 1000 * 60) return animation(startAuto);
             count = 0;
             autoMove();
             startAuto();
@@ -352,7 +365,7 @@ function swiper(params) {
         if (pagination) outputPagination();
         if (isLoop) outputLoop(moveWidth, moveHeight);
         layout(moveWidth, moveHeight);
-        onTouch(moveWidth, moveHeight);
+        touchStart(moveWidth, moveHeight);
     }
 
     /** 初始化参数 */
@@ -367,4 +380,58 @@ function swiper(params) {
         format();
     }
     init();
+}
+
+/** 页面容器节点 */
+const page = document.querySelector(".page");
+
+/** 颜色列表 */
+const colors = ["#2196f3", "#9c27b0", "#e91e63", "#f44336"];
+
+/**
+ * 动态生成组件html
+ * @param {string} className 
+ */
+function createList(className = "") {
+    let itemList = "";
+    for (let i = 0; i < colors.length; i++) {
+        itemList += `<div class="swiper_item" style="background-color: ${colors[i]}"><p>silder-${i+1}</p></div>`;
+    }
+    let component = `<div class="swiper ${className}">
+                        <div class="swiper_list">${itemList}</div>
+                    </div>`;
+    page.insertAdjacentHTML("beforeend", component);
+}
+
+createList();
+
+swiper({
+    el: ".swiper",
+    pagination: true,
+    autoPaly: true,
+    // interval: 5000,
+    // loop: true,
+    // moveTime: 400,
+    // vertical: true,
+    // slideCallback(index) {
+    //     console.log("当前索引 >>", index);
+    // }
+});
+
+/**
+ * 添加一个`swiper`组件
+ * @param {HTMLElement} el 
+ */
+function addSwiper(el) {
+    const className = "swiper_" + Date.now().toString();
+    createList(className);
+    swiper({
+        el: "." + className,
+        pagination: true,
+        loop: true,
+        vertical: true,
+        // slideCallback(index) {
+        //     console.log(className + "索引 >>", index);
+        // }
+    });
 }
