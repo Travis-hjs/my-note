@@ -346,6 +346,21 @@ class ModuleArray extends ModuleNumber {
     }
 
     /**
+     * 扁平化数组
+     * @description `Array.flat()`兼容写法
+     * @param {Array<T>} array 目标数组
+     * @param {number} d 层数
+     * @returns {Array<T>}
+     */
+    flatArray(array, d = 1) {
+        if (d > 0) {
+            return array.reduce((pre, val) => pre.concat(Array.isArray(val) ? this.flatArray(val, d - 1) : val), []);
+        } else {
+            return array.slice();
+        }
+    };
+
+    /**
      * 随机打乱数组
      * @param {Array<T>} array
      */
