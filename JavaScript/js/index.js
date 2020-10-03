@@ -799,6 +799,7 @@ function theToast() {
         }
         .the_toast_text{ 
             padding: 6px 15px; 
+            box-sizing: border-box;
             max-width: 300px; 
             font-size: 14px; 
             color: #fff; 
@@ -855,7 +856,7 @@ function theToast() {
          */
         showToast(value, duration = 1000) {
             const toast = createToast();
-            toast.nodeText.textContent = value;
+            toast.nodeText.innerHTML = value;
             toast.nodeText.addEventListener("animationend", function() {
                 setTimeout(function() {
                     toast.nodeText.classList.add("the_toast_text_hide");
@@ -875,12 +876,16 @@ function theToast() {
  * @param {() => void} options.callback 点击回调
  */
 function showAlert(options) {
-    /** 弹出层整体 */
-    let alertBox = document.querySelector(".alert_component");
+    const componentName = ".alert_component";
+    /** 
+     * 组件节点 
+     * @type {HTMLElement}
+    */
+    let alertBox = document.querySelector(componentName);
     if (!alertBox) {
         const time = `0.3s`;
         const cssText = `
-        .alert_component{ 
+        ${componentName} { 
             position: fixed; 
             top: 0; 
             left: 0; 
@@ -897,6 +902,8 @@ function showAlert(options) {
             max-width: 375px; 
             margin: auto; 
             background-color: #fff; 
+            border-radius: 2px;
+            overflow: hidden;
             text-align: center; 
             box-shadow: 1px 1px 40px rgba(0,0,0,.25); 
             transition: ${time} all; 
@@ -904,20 +911,23 @@ function showAlert(options) {
         }
         .alert_content{ 
             padding: 0 10px 16px; 
+            box-sizing: border-box;
             font-size: 16px; 
             color: #333; 
         }
         .alert_title{ 
             text-align: center; 
             font-size: 18px; 
+            font-weight: 500;
             color: #333; 
             line-height: 44px; 
             padding-top: 4px;
+            box-sizing: border-box;
         }
         .alert_btn{ 
             width: 100%; 
             background-color: #eee; 
-            height: 44px; 
+            height: 48px; 
             color: #1BBC9B; 
             font-size: 15px; 
             border: none; 
@@ -941,33 +951,30 @@ function showAlert(options) {
             100%{ transform: translateY(0px); }
         }
         `;
+        const template = `
+        <div class="alert_box">
+            <div class="alert_title"></div>
+            <div class="alert_content"></div>
+            <button class="alert_btn"></button>
+        </div>
+        `
         const style = document.createElement("style");
-        const box = document.createElement("div");
         style.textContent = cssText.replace(/(\n|\t|\s)*/ig, "$1").replace(/\n|\t|\s(\{|\}|\,|\:|\;)/ig, "$1").replace(/(\{|\}|\,|\:|\;)\s/ig, "$1");
         document.head.appendChild(style);
         // ====================== 创建节点 ======================
         alertBox = document.createElement("div");
-        alertBox.props = {
-            title: document.createElement("div"),
-            content: document.createElement("div"),
-            btn: document.createElement("button")
-        }
-        alertBox.className = "alert_component";
-        box.className = "alert_box";
-        alertBox.props.title.className = "alert_title";
-        alertBox.props.content.className = "alert_content";
-        alertBox.props.btn.className = "alert_btn";
-        box.append(alertBox.props.title, alertBox.props.content, alertBox.props.btn);
-        alertBox.appendChild(box);
+        alertBox.className = componentName.slice(1);
+        alertBox.innerHTML = template;
         document.body.appendChild(alertBox);
     }
     // ====================== 显示并设置内容 ======================
     alertBox.classList.remove("alert_hide");
-    alertBox.props.title.textContent = options.title || "提示";
-    alertBox.props.content.innerHTML = options.content || "无内容";
-    alertBox.props.btn.textContent = options.confirmText || "确定";
+    const box = alertBox.children[0];
+    box.children[0].innerHTML = options.title || "提示";
+    box.children[1].innerHTML = options.content || "未设置内容";
+    box.children[2].innerHTML = options.confirmText || "确定";
     // ====================== 重置点击事件 ======================
-    alertBox.props.btn.onclick = function () {
+    box.children[2].onclick = function () {
         alertBox.classList.add("alert_hide");
         typeof options.callback === "function" && options.callback();
     }
