@@ -2,7 +2,7 @@
  * 轮播组件
  * @author https://github.com/Hansen-hjs
  * @description 
- * 移动端`swiper`组件，如果需要兼容`pc`自行修改对应的`touch`到`mouse`事件即可。现成效果预览：https://hansen-hjs.github.io/cv/demo/face/
+ * 移动端`swiper`组件，如果需要兼容`pc`自行修改对应的`touch`到`mouse`事件即可。现成效果预览：https://huangjingsheng.gitee.io/hjs/face/
  * @param {object} params 配置传参
  * @param {string} params.el 组件节点 class|id|<label>
  * @param {number} params.moveTime 过渡时间（毫秒）默认 300
