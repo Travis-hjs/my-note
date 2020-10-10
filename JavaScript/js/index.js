@@ -979,3 +979,71 @@ function showAlert(options) {
         typeof options.callback === "function" && options.callback();
     }
 }
+
+function moduleEvent() {
+    /** 
+    * 事件集合对象
+    * @type {{[string]: Array<Function>}}
+    */
+    const eventInfo = {};
+
+    return {
+        /**
+         * 添加事件
+         * @param {string} name 事件名
+         * @param {Function} fn 事件执行的函数
+         */
+        on(name, fn) {
+            if (!eventInfo.hasOwnProperty(name)) {
+                eventInfo[name] = [];
+            }
+            if (!eventInfo[name].some(item => item === fn)) {
+                eventInfo[name].push(fn);
+            }
+        },
+
+        /**
+         * 解绑事件
+         * @param {string} name 事件名
+         * @param {Function} fn 事件绑定的函数
+         */
+        off(name, fn) {
+            /**
+             * 函数列表
+             * @type {Array<Function>}
+             */
+            const fns = eventInfo[name];
+            if (fns && fns.length > 0 && fn) {
+                for (let i = 0; i < fns.length; i++) {
+                    const item = fns[i];
+                    if (item === fn) {
+                        fns.splice(i, 1);
+                        break;
+                    }
+                }
+            } else {
+                console.log("[moduleEvent] => 没有要解绑的事件");
+            }
+        },
+
+        /**
+         * 调用事件
+         * @param {string} name 事件名
+         */
+        dispatch(name) {
+            /**
+             * 函数列表
+             * @type {Array<Function>}
+             */
+            const fns = eventInfo[name];
+            if (fns && fns.length > 0) {
+                for (let i = 0; i < fns.length; i++) {
+                    const fn = fns[i];
+                    fn();
+                }
+            } else {
+                console.log("[moduleEvent] => 没有要执行的事件");
+            }
+        },
+    }
+}
