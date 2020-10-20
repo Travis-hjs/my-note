@@ -1047,3 +1047,19 @@ function moduleEvent() {
         },
     }
 }
+
+/**
+ * 自定义样式打印
+ * @param {object} options
+ * @param {string} options.title
+ * @param {string} options.content
+ * @param {string?} options.backgroundColor
+ */
+function customizeConsole(options) {
+    const settings = [
+        `%c ${options.title} %c ${options.content} `, 
+        `padding: 1px; border-radius: 3px 0 0 3px; color: #fff; background: #606060 ;`, 
+        `padding: 1px; border-radius: 0 3px 3px 0; color: #fff; background: ${options.backgroundColor || "#42c02e"} ;`
+    ];
+    console.log.apply(console, settings);
+};
