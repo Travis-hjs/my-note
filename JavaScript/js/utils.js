@@ -499,6 +499,11 @@ class ModuleDate extends ModuleArray {
      * 格式化日期
      * @param {string | number | Date} value 指定日期
      * @param {string} format 格式化的规则
+     * @example
+     * formatDate();
+     * formatDate(1603264465956);
+     * formatDate(1603264465956, "h:m:s");
+     * formatDate(1603264465956, "Y年M月D日");
      */
     formatDate(value = Date.now(), format = "Y-M-D h:m:s") {
         const formatNumber = n => `0${n}`.slice(-2);
