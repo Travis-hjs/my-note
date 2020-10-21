@@ -510,7 +510,7 @@ class ModuleDate extends ModuleArray {
         const date = new Date(value);
         const formatList = ["Y", "M", "D", "h", "m", "s"];
         const resultList = [];
-        resultList.push(date.getFullYear());
+        resultList.push(date.getFullYear().toString());
         resultList.push(formatNumber(date.getMonth() + 1));
         resultList.push(formatNumber(date.getDate()));
         resultList.push(formatNumber(date.getHours()));
