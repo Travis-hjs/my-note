@@ -44,7 +44,9 @@ class ModuleString {
      * 数字带逗号分隔
      * @param {number} num
      * @example 
+     * ```js
      * stringToThousand(10000) => "10,000"
+     * ```
      */
     stringToThousand(num) {
         // return num.toLocaleString("en-US");
@@ -81,9 +83,11 @@ class ModuleString {
      * @param {string} value 要格式的字段，默认 location.search
      * @param {string} name 获取指定 key 值
      * @example 
+     * ```js
      * searchFormat();
      * const data = "?id=12&name=hjs&age=2018/12/12";
      * searchFormat(data, "age")
+     * ```
      * @returns {{}|string}
      */
     getQueryParam(value = location.search, name = null) {
@@ -154,9 +158,11 @@ class ModuleNumber extends ModuleString {
      * @param {"+"|"-"|"*"|"/"} type 计算方式
      * @param {number} b 后面的值
      * @example 
+     * ```js
      * // 可链式调用
      * const res = computeNumber(1.3, "-", 1.2).next("+", 1.5).next("*", 2.3).next("/", 0.2).result;
      * console.log(res);
+     * ```
      */
     computeNumber(a, type, b) {
         const THAT = this;
@@ -335,8 +341,10 @@ class ModuleArray extends ModuleNumber {
      * @param {Array<T>} array 
      * @param {(a: T, b: T) => void} compare 对比函数
      * @example 
+     * ```js
      * const list = [{ id: 10, code: "abc" }, {id: 12, code: "abc"}, {id: 12, code: "abc"}];
      * findIndex(list, (a, b) => a.id == b.id)
+     * ```
      */
     filterRepeat(array, compare) {
         return array.filter((element, index, self) => {
@@ -500,10 +508,12 @@ class ModuleDate extends ModuleArray {
      * @param {string | number | Date} value 指定日期
      * @param {string} format 格式化的规则
      * @example
+     * ```js
      * formatDate();
      * formatDate(1603264465956);
      * formatDate(1603264465956, "h:m:s");
      * formatDate(1603264465956, "Y年M月D日");
+     * ```
      */
     formatDate(value = Date.now(), format = "Y-M-D h:m:s") {
         const formatNumber = n => `0${n}`.slice(-2);
