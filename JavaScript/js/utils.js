@@ -496,19 +496,25 @@ class ModuleDate extends ModuleArray {
     }
 
     /**
-     * 时间戳生成 
-     * @param {number} num 1时为明天，-1为昨天天，以此类推
-     * @return {"yyyy/mm/dd hh:mm:ss"}
+     * 格式化日期
+     * @param {string | number | Date} value 指定日期
+     * @param {string} format 格式化的规则
      */
-    getDateFormat(num = 0) {
-        const date = new Date(Date.now() + (num * 24 * 3600 * 1000));
-        const year = date.getFullYear();
-        const month = `0${date.getMonth() + 1}`.slice(-2);
-        const day = `0${date.getDate()}`.slice(-2);
-        const hour = `0${date.getHours()}`.slice(-2);
-        const minute = `0${date.getMinutes()}`.slice(-2);
-        const second = `0${date.getSeconds()}`.slice(-2);
-        return `${year}/${month}/${day} ${hour}:${minute}:${second}`;
+    formatDate(value = Date.now(), format = "Y-M-D h:m:s") {
+        const formatNumber = n => `0${n}`.slice(-2);
+        const date = new Date(value);
+        const formatList = ["Y", "M", "D", "h", "m", "s"];
+        const resultList = [];
+        resultList.push(date.getFullYear());
+        resultList.push(formatNumber(date.getMonth() + 1));
+        resultList.push(formatNumber(date.getDate()));
+        resultList.push(formatNumber(date.getHours()));
+        resultList.push(formatNumber(date.getMinutes()));
+        resultList.push(formatNumber(date.getSeconds()));
+        for (let i = 0; i < resultList.length; i++) {
+            format = format.replace(formatList[i], resultList[i]);
+        }
+        return format;
     }
 
     /**
