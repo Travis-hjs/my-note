@@ -534,10 +534,10 @@ class ModuleDate extends ModuleArray {
 
     /**
      * 获取日期周几
-     * @param {string} date 日期 "2019/04/28" & "2019/04/28 12:12:12"
+     * @param {string | string | Date} value 指定日期
      */
-    getDateDayString(date) {
-        return "周" + "日一二三四五六".charAt(new Date(date).getDay());
+    getDateDayString(value) {
+        return "周" + "日一二三四五六".charAt(new Date(value).getDay());
     }
 
     /**
