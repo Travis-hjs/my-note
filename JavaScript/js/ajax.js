@@ -62,7 +62,7 @@ function clickFetchRequest() {
  * @param {object?} param.data 传参对象
  * @param {FormData?} param.file 上传图片`FormData`对象
  * @param {number?} param.overtime 超时检测毫秒数
- * @param {(result?: any) => void} param.success 成功回调 
+ * @param {(result?: any, response: XMLHttpRequest) => void} param.success 成功回调 
  * @param {(error?: XMLHttpRequest) => void} param.fail 失败回调 
  * @param {(info?: XMLHttpRequest) => void} param.timeout 超时回调
  * @param {(res?: ProgressEvent<XMLHttpRequestEventTarget>) => void} param.progress 进度回调 貌似没什么用 
@@ -73,7 +73,6 @@ function ajax(param) {
     if (!param.url) return console.error("ajax 缺少请求 url");
     if (typeof param.data !== "object") return console.error("请求参数类型必须为 object");
 
-    /** XMLHttpRequest */
     const XHR = new XMLHttpRequest();
     /** 请求方法 */
     const method = param.method;
@@ -83,7 +82,7 @@ function ajax(param) {
     let url = param.url;
     /** 非`GET`请求传参 */
     let payload = null;
-    /** GET请求传参 */
+    /** `GET`请求传参 */
     let query = "";
 
     // 传参处理
@@ -106,7 +105,7 @@ function ajax(param) {
     XHR.onreadystatechange = function () {
         if (XHR.readyState !== 4) return;
         if (XHR.status === 200 || XHR.status === 304) {
-            typeof param.success === "function" && param.success(JSON.parse(XHR.response));
+            typeof param.success === "function" && param.success(JSON.parse(XHR.response), XHR);
         } else {
             typeof param.fail === "function" && param.fail(XHR);
         }
@@ -114,7 +113,7 @@ function ajax(param) {
 
     // 判断请求进度
     if (param.progress) {
-        XHR.addEventListener("progress", param.progress, false);
+        XHR.addEventListener("progress", param.progress);
     }
 
     // XHR.responseType = "json";
@@ -125,12 +124,9 @@ function ajax(param) {
     // 判断是否上传文件通常用于上传图片，上传图片时不需要设置头信息
     if (param.file) {
         payload = param.file;
+        // XHR.setRequestHeader("Content-Type", "application/x-www-form-urlencoded"); // 默认就是这个，设置不设置都可以
     } else {
-        /**
-         * @example 
-         * XHR.setRequestHeader("Content-Type", "application/x-www-form-urlencoded")
-         * XHR.setRequestHeader("Content-Type", "application/json")
-         */
+        // XHR.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
         XHR.setRequestHeader("Content-Type", "application/json");
     }
 
@@ -166,8 +162,9 @@ function ajaxRequest() {
             order: "asc"
         },
         overtime: 5000,
-        success: function (res) {
+        success: function (res, response) {
             console.log("请求成功", res);
+            console.log("原始响应数据 >>", response);
         },
         fail: function (err) {
             error.message = "接口报错，请看 network";
