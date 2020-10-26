@@ -84,14 +84,16 @@ class ModuleString {
      * @param {string} name 获取指定 key 值
      * @example 
      * ```js
+     * // 当前网址为 www.https://hjs.com?id=99&age=123&key=sdasfdfr
      * searchFormat();
-     * const data = "?id=12&name=hjs&age=2018/12/12";
-     * searchFormat(data, "age")
+     * searchFormat("age")
+     * // 非 IE 下简便方法
+     * new URLSearchParams(location.search).get("age");
      * ```
      * @returns {{}|string}
      */
-    getQueryParam(value = location.search, name = null) {
-        const code = decodeURIComponent(value.slice(1));
+    getQueryParam(name = null) {
+        const code = location.search.slice(1); //decodeURIComponent(location.search.slice(1));
         if (!code) return null;
         const param = JSON.parse(`{"${code.replace(/"/g, '\\"').replace(/&/g, '","').replace(/=/g, '":"')}"}`);
         if (name) {
@@ -148,7 +150,8 @@ class ModuleNumber extends ModuleString {
      * @param {number} max 最大数
      */
     ranInt(min, max) {
-        return Math.floor(Math.random() * (max - min + 1)) + min;
+        return Math.round(Math.random() * (max - min) + min);       //不会保留小数
+        // return Math.floor(Math.random() * (max - min + 1)) + min; // 会保留小数
     }
 
     /**
