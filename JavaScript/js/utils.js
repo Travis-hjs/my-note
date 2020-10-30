@@ -79,28 +79,46 @@ class ModuleString {
     }
 
     /**
-     * 获取 url? 后面参数（JSON对象）
-     * @param {string} value 要格式的字段，默认 location.search
-     * @param {string} name 获取指定 key 值
+     * 获取`url?`后面参数（JSON对象）
+     * @param {string} name 获取指定参数名
+     * @param {string} target 目标字段，默认`location.search`
      * @example 
      * ```js
      * // 当前网址为 www.https://hjs.com?id=99&age=123&key=sdasfdfr
-     * searchFormat();
-     * searchFormat("age")
-     * // 非 IE 下简便方法
+     * const targetAge = searchFormat("age", "id=12&age=14&name=hjs");
+     * const params = searchFormat();
+     * const age = searchFormat("age");
+     * // 非IE浏览器下简便方法
      * new URLSearchParams(location.search).get("age");
      * ```
-     * @returns {{}|string}
+     * @returns {object|string}
      */
-    getQueryParam(name = null) {
-        const code = location.search.slice(1); //decodeURIComponent(location.search.slice(1));
-        if (!code) return null;
-        const param = JSON.parse(`{"${code.replace(/"/g, '\\"').replace(/&/g, '","').replace(/=/g, '":"')}"}`);
-        if (name) {
-            return param[name] || null;
-        } else {
-            return param
+    getQueryParam(name = null, target = null) {
+        const code = target || location.search.slice(1);
+        const list = code.split("&");
+        const params = {};
+        let hasValue = false;
+        for (let i = 0; i < list.length; i++) {
+            const item = list[i];
+            const items = item.split("=");
+            if (items.length > 1) {
+                params[items[0]] = item.replace(`${items[0]}=`, "");
+                hasValue = true;
+            }
         }
+        if (name) {
+            return params[name] || null;
+        } else {
+            return hasValue ? params : null;
+        }
+        // 下面这种方法只能在正确的路径下才能成功匹配，像`https://baidu.com?id=`这样的话就报错了，所以废弃掉
+        // if (!code) return null;
+        // const params = JSON.parse(`{"${code.replace(/"/g, '\\"').replace(/&/g, '","').replace(/=/g, '":"')}"}`);
+        // if (name) {
+        //     return params[name] || null;
+        // } else {
+        //     return params
+        // }
     }
 
     /**
