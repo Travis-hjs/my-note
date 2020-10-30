@@ -85,9 +85,9 @@ class ModuleString {
      * @example 
      * ```js
      * // 当前网址为 www.https://hjs.com?id=99&age=123&key=sdasfdfr
-     * const targetAge = searchFormat("age", "id=12&age=14&name=hjs");
-     * const params = searchFormat();
-     * const age = searchFormat("age");
+     * const targetAge = getQueryParam("age", "id=12&age=14&name=hjs");
+     * const params = getQueryParam();
+     * const age = getQueryParam("age");
      * // 非IE浏览器下简便方法
      * new URLSearchParams(location.search).get("age");
      * ```
