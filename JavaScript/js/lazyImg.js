@@ -70,7 +70,7 @@ function lazyLoadImage(params) {
  * @param {object} params 传参对象
  * @param {string?} params.lazyAttr 自定义加载的属性（可选）
  * @param {"src"|"background"} params.loadType 加载的类型（默认为`src`）
- * @param {string?} params.errorImage 加载失败时显示的图片路径，仅在`loadType`设置为`src`中可用（可选）
+ * @param {string?} params.errorPath 加载失败时显示的资源路径，仅在`loadType`设置为`src`中可用（可选）
  */
 function lazyLoad(params) {
     const attr = params.lazyAttr || "lazy";
@@ -93,7 +93,7 @@ function lazyLoad(params) {
         const cache = el.src; // 缓存当前`src`加载失败时候用
         el.src = el.getAttribute(attr);
         el.onerror = function () {
-            el.src = params.errorImage || cache;
+            el.src = params.errorPath || cache;
         }
     }
 
@@ -137,7 +137,7 @@ function lazyLoad(params) {
 
 // 懒加载图片src
 lazyLoad({
-    errorImage: "./img/big-1.jpg"
+    errorPath: "./img/big-1.jpg"
 })
 
 // 懒加载图片background
