@@ -1130,3 +1130,30 @@ function customizeConsole(options) {
     ];
     console.log.apply(console, settings);
 };
+
+/**
+ * 对比两组`json`，并找出不同值
+ * @param {object} a 
+ * @param {object} b 
+ */
+function compareJSON(a, b) {
+    const first = Object.keys(a);
+    const second = Object.keys(b);
+    const isFirst = first.length > second.length;
+    const max = {
+        info: isFirst ? a : b,
+        keys: isFirst ? first : second,
+    }
+    const min = {
+        info: isFirst ? b : a,
+        keys: isFirst ? second : first
+    }
+    const info = {}
+    for (let i = 0; i < max.keys.length; i++) {
+        const key = max.keys[i];
+        if (!min.info[key] || min.info[key] != max.info[key]) {
+            info[key] = max.info[key]
+        }
+    }
+    return info;
+}
