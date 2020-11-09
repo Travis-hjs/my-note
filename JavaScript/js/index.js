@@ -1084,16 +1084,14 @@ function globalTimer(time) {
         if (timerId !== null) clearInterval(timerId);
         timerId = null;
     }
-
-    /** 清空当前函数对象 */
-    function clear() {
-        data = {}
-    }
     
     return {
         start,
         stop,
-        clear,
+        /** 清空当前函数对象 */
+        clear() {
+            data = {}
+        },
         /**
          * 添加倒计时函数-有`this`的情况下要`bind(target)`
          * @param {Function} fn 
