@@ -983,7 +983,7 @@ function showAlert(options) {
 function moduleEvent() {
     /** 
     * 事件集合对象
-    * @type {{[string]: Array<Function>}}
+    * @type {{[key: string]: Array<Function>}}
     */
     const eventInfo = {};
 
@@ -1008,10 +1008,6 @@ function moduleEvent() {
          * @param {Function} fn 事件绑定的函数
          */
         off(name, fn) {
-            /**
-             * 函数列表
-             * @type {Array<Function>}
-             */
             const fns = eventInfo[name];
             if (fns && fns.length > 0 && fn) {
                 for (let i = 0; i < fns.length; i++) {
@@ -1031,10 +1027,6 @@ function moduleEvent() {
          * @param {string} name 事件名
          */
         dispatch(name) {
-            /**
-             * 函数列表
-             * @type {Array<Function>}
-             */
             const fns = eventInfo[name];
             if (fns && fns.length > 0) {
                 for (let i = 0; i < fns.length; i++) {
