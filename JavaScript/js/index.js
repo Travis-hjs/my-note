@@ -1041,52 +1041,75 @@ function moduleEvent() {
 }
 
 /**
- * 全局倒计时
+ * 全局计时器
  * @param {number} time 间隔-毫秒
  */
-function globalCountDown(time) {
+function globalTimer(time) {
     /**
-     * 函数列表
+     * 函数对象
      * @type {{[key: string]: Function}}
      */
-    const functions = {};
+    let data = {};
+    /** 
+     * 倒计时`id` 
+     * @type {number | null}
+    */
+    let timerId = null;
 
     /**
+     * 获取随机`id`
      * @returns {string}
      */
     function getId() {
         const id = Math.random().toString(36).substr(2);
-        if (Object.prototype.hasOwnProperty.call(functions, id)) {
+        if (Object.prototype.hasOwnProperty.call(data, id)) {
             return getId();
         }
         return id;
     }
 
-    setInterval(function() {
-        for (const key in functions) {
-            const fn = functions[key];
-            fn();
-        }
-    }, time);
+    /** 开始计时器 */
+    function start() {
+        stop();
+        timerId = setInterval(function() {
+            for (const key in data) {
+                const fn = data[key];
+                fn();
+            }
+        }, time);
+    }
+    
+    /** 停止计时器 */
+    function stop() {
+        if (timerId !== null) clearInterval(timerId);
+        timerId = null;
+    }
 
+    /** 清空当前函数对象 */
+    function clear() {
+        data = {}
+    }
+    
     return {
+        start,
+        stop,
+        clear,
         /**
          * 添加倒计时函数-有`this`的情况下要`bind(target)`
          * @param {Function} fn 
          */
         add(fn) {
             const id = getId();
-            functions[id] = fn;
+            data[id] = fn;
             return id;
         },
-
         /**
          * 移除倒计时函数
          * @param {string} id 添加时返回的`id`
          */
         remove(id) {
-            if (Object.prototype.hasOwnProperty.call(functions, id)) {
-                delete functions[id]
+            if (Object.prototype.hasOwnProperty.call(data, id)) {
+                delete data[id]
             }
         }
     }
