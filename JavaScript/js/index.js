@@ -1041,6 +1041,58 @@ function moduleEvent() {
 }
 
 /**
+ * 全局倒计时
+ * @param {number} time 间隔-毫秒
+ */
+function globalCountDown(time) {
+    /**
+     * 函数列表
+     * @type {{[key: string]: Function}}
+     */
+    const functions = {};
+
+    /**
+     * @returns {string}
+     */
+    function getId() {
+        const id = Math.random().toString(36).substr(2);
+        if (Object.prototype.hasOwnProperty.call(functions, id)) {
+            return getId();
+        }
+        return id;
+    }
+
+    setInterval(function() {
+        for (const key in functions) {
+            const fn = functions[key];
+            fn();
+        }
+    }, time);
+
+    return {
+        /**
+         * 添加倒计时函数-有`this`的情况下要`bind(target)`
+         * @param {Function} fn 
+         */
+        add(fn) {
+            const id = getId();
+            functions[id] = fn;
+            return id;
+        },
+
+        /**
+         * 移除倒计时函数
+         * @param {string} id 添加时返回的`id`
+         */
+        remove(id) {
+            if (Object.prototype.hasOwnProperty.call(functions, id)) {
+                delete functions[id]
+            }
+        }
+    }
+}
+
+/**
  * 自定义样式打印
  * @param {object} options
  * @param {string} options.title
