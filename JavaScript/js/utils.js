@@ -867,6 +867,7 @@ class ModuleDom extends ModuleBom {
      * `rem`适配
      * @param {HTMLElement} el 指定元素
      * @param {number} designWidth 设计稿的宽度：之后的单位直接`1:1`使用设计稿的大小，单位是`rem`
+     * @description [一行css适配rem](https://juejin.im/post/6844904066418491406/#heading-13)
      */
     remSetting(el, designWidth = 750) {
         const html = document.documentElement; // 注意这里不能使用 document.body
