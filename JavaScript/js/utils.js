@@ -864,21 +864,20 @@ class ModuleDom extends ModuleBom {
     }
 
     /**
-     * rem 适配
+     * `rem`适配
      * @param {HTMLElement} el 指定元素
+     * @param {number} designWidth 设计稿的宽度：之后的单位直接`1:1`使用设计稿的大小，单位是`rem`
      */
-    remSetting(el) {
+    remSetting(el, designWidth = 750) {
         const html = document.documentElement; // 注意这里不能使用 document.body
-        /** 比例值 */
-        const value = 375 / 50;
         /** 视口宽度 */
         let width = el.clientWidth;
         // 首次适配
-        html.style.fontSize = width / value + "px";
+        html.style.fontSize = width / designWidth + "px";
         // 窗口变动时更新适配
         window.addEventListener("resize", function () {
             width = el.clientWidth;
-            html.style.fontSize = width / value + "px";
+            html.style.fontSize = width / designWidth + "px";
         });
     }
 
