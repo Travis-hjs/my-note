@@ -1149,7 +1149,7 @@ function compareJSON(a, b) {
     const info = {}
     for (let i = 0; i < max.keys.length; i++) {
         const key = max.keys[i];
-        if (!min.info[key] || min.info[key] != max.info[key]) {
+        if (!Object.prototype.hasOwnProperty.call(min.info, key) || min.info[key] != max.info[key]) {
             info[key] = max.info[key]
         }
     }
