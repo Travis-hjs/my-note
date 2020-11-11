@@ -1135,23 +1135,30 @@ function customizeConsole(options) {
  * @param {object} b 
  */
 function compareJSON(a, b) {
-    const first = Object.keys(a);
-    const second = Object.keys(b);
-    const isFirst = first.length > second.length;
-    const max = {
-        info: isFirst ? a : b,
-        keys: isFirst ? first : second,
-    }
-    const min = {
-        info: isFirst ? b : a,
-        keys: isFirst ? second : first
-    }
+    /**
+     * 结果对象
+     * @type {{ [key: string]: { t1: string, t2: string} }}
+     */
     const info = {}
-    for (let i = 0; i < max.keys.length; i++) {
-        const key = max.keys[i];
-        if (!Object.prototype.hasOwnProperty.call(min.info, key) || min.info[key] != max.info[key]) {
-            info[key] = max.info[key]
+    for (const key in a) {
+        if (!Object.prototype.hasOwnProperty.call(b, key) || b[key] !== a[key]) {
+            info[key] = {
+                t1: a[key],
+                t2: ""
+            }
         }
     }
-    return info;
+    for (const key in b) {
+        if (!Object.prototype.hasOwnProperty.call(a, key) || a[key] !== b[key]) {
+            if (info[key]) {
+                info[key].t2 = b[key]
+            } else {
+                info[key] = {
+                    t1: "",
+                    t2: b[key]
+                }
+            }
+        }
+    }
+    return info
 }
