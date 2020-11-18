@@ -1131,31 +1131,31 @@ function customizeConsole(options) {
 
 /**
  * 对比两组`json`，并找出不同值
- * @param {object} a 
- * @param {object} b 
+ * @param {object} t1 
+ * @param {object} t2 
  */
-function compareJSON(a, b) {
+function compareJSON(t1, t2) {
     /**
      * 结果对象
-     * @type {{ [key: string]: { t1: string, t2: string} }}
+     * @type {{ [key: string]: { v1: string, v2: string} }}
      */
     const info = {}
-    for (const key in a) {
-        if (!Object.prototype.hasOwnProperty.call(b, key) || b[key] !== a[key]) {
+    for (const key in t1) {
+        if (!Object.prototype.hasOwnProperty.call(t2, key) || t2[key] !== t1[key]) {
             info[key] = {
-                t1: a[key],
-                t2: ""
+                v1: t1[key],
+                v2: ""
             }
         }
     }
-    for (const key in b) {
-        if (!Object.prototype.hasOwnProperty.call(a, key) || a[key] !== b[key]) {
+    for (const key in t2) {
+        if (!Object.prototype.hasOwnProperty.call(t1, key) || t1[key] !== t2[key]) {
             if (info[key]) {
-                info[key].t2 = b[key]
+                info[key].v2 = t2[key]
             } else {
                 info[key] = {
-                    t1: "",
-                    t2: b[key]
+                    v1: "",
+                    v2: t2[key]
                 }
             }
         }
