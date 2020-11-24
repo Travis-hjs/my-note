@@ -97,28 +97,22 @@ class ModuleString {
         const code = target || location.search.slice(1);
         const list = code.split("&");
         const params = {};
-        let hasValue = false;
         for (let i = 0; i < list.length; i++) {
             const item = list[i];
             const items = item.split("=");
             if (items.length > 1) {
                 params[items[0]] = item.replace(`${items[0]}=`, "");
-                hasValue = true;
             }
         }
         if (name) {
-            return params[name] || null;
+            return params[name] || "";
         } else {
-            return hasValue ? params : null;
+            return params;
         }
-        // 下面这种方法只能在正确的路径下才能成功匹配，像`https://baidu.com?id=`这样的话就报错了，所以废弃掉
-        // if (!code) return null;
-        // const params = JSON.parse(`{"${code.replace(/"/g, '\\"').replace(/&/g, '","').replace(/=/g, '":"')}"}`);
-        // if (name) {
-        //     return params[name] || null;
-        // } else {
-        //     return params
-        // }
+        // const reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+        // const results = location.search.substr(1).match(reg);
+        // if (results != null) return unescape(results[2]);
+        // return null;
     }
 
     /**
