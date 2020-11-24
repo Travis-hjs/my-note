@@ -94,7 +94,8 @@ class ModuleString {
      * @returns {object|string}
      */
     getQueryParam(name = null, target = null) {
-        const code = target || location.search.slice(1);
+        // const code = target || location.search.slice(1); // location.search 在 http://192.168.89.53:1080/#/page?id=10 这种情况下获取不到
+        const code = target || location.href.split("?")[1] || "";
         const list = code.split("&");
         const params = {};
         for (let i = 0; i < list.length; i++) {
