@@ -1,100 +1,30 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="utf-8">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>简单的路由</title>
-    <style media="screen">
-        *{ padding: 0; margin: 0; }
-        ul,li{ list-style: none; }
-        nav{ width: 200px; background: lightblue; margin: auto; }
-        nav li{ line-height: 28px; text-align: center; }
+    <link rel="stylesheet" href="./css/base.css">
+    <style>
+        .nav { width: 100%; margin-bottom: 14px; }
+        .nav .item { height: 40px; margin: 0 8px; background: tomato; color: #fff; font-size: 15px; cursor: pointer; }
         .content{ width: 300px; margin: auto; border: solid 2px orange; min-height: 200px; text-align: center; }
-        .ul{ width: 100%; }
-        .ul li{ background-color: #eee; line-height: 24px; }
-        .ul li:nth-child(odd){ background: #fff; }
+        .content .ul{ width: 100%; }
+        .content .ul li{ background-color: #eee; line-height: 24px; }
+        .content .ul li:nth-child(odd){ background: #fff; }
     </style>
 </head>
-
 <body>
-    <nav>
-        <li><a href="#/a">导航一</a></li>
-        <li><a href="#/b">导航二</a></li>
-        <li><a href="#/c">导航三</a></li>
-    </nav>
-    
-    <!-- 路由渲染的位置 -->
-    <div class="content"></div>
+    <div class="page">
+        <div class="nav flex fvertical">
+            <div class="item f1 flex fvertical fcenter" onclick="openRoute('/a?frist=true')">导航一</div>
+            <div class="item f1 flex fvertical fcenter" onclick="openRoute('/b')">导航二</div>
+            <div class="item f1 flex fvertical fcenter" onclick="openRoute('/c?last=true')">导航三</div>
+        </div>
+        <!-- 路由渲染的位置 -->
+        <div class="content"></div>
+    </div>
 
-    <script type="text/javascript">
-        /** 路由模块 */
-        class ModuleRouter {
-            constructor() {
-                /** 路由对象 */
-                this.routes = {};
-            }
-
-            /**
-             * 监听路由跳转
-             * @param {string} path 路由路径
-             * @param {Function} callback 路由回调
-             */
-            onchange(path, callback = null) {
-                this.routes[path] = callback;
-            }
-
-            /** 路由变动时做出处理 */
-            refresh() {
-                const currentUrl = location.hash.slice(1) || '/';
-                const callback = this.routes[currentUrl];
-                if (typeof callback === 'function') callback();
-            }
-            
-            /** 路由初始化 */
-            init() {
-                // 注意这里如果设置到 window.addEventListener('popstate' 的话会影响到路由跳转
-                window.addEventListener('load', this.refresh.bind(this), false);
-                window.addEventListener('hashchange', this.refresh.bind(this), false);
-            }
-        }
-
-        const Router = new ModuleRouter();
-
-        Router.init();
-
-        const content = document.querySelector('.content');
-
-        function setHtml(title, text) {
-            const template = `<ul class="ul">
-                <li>${ title }</li>
-                <li>${ text }</li>
-                <li>${ text }</li>
-                <li>${ text }</li>
-            </ul>
-            <strong>${ (new Date()).toString() }</strong>`;
-            content.innerHTML = template;
-        }
-        Router.onchange('/a', function () {
-            setHtml('首页', '首页内容');
-        });
-
-        Router.onchange('/b', function () {
-            setHtml('子页面', '第二个页面内容');
-        });
-
-        Router.onchange('/c', function () {
-            setHtml('最后的页面', '嘿嘿');
-        });
-
-        window.addEventListener('load', function () {
-            const hash = location.hash.slice(1);
-            // console.log(hash);
-            // 初始化路由重定向
-            if (!hash || hash == '/') {
-                location.href = '#/a';
-            }
-        });
-    </script>
+    <script src="./js/router.js"></script>
 </body>
-
 </html>
