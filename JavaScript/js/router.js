@@ -1,4 +1,43 @@
 (function () {
+    
+    // /**
+    //  * 获取处理过后的路劲名
+    //  */
+    // function getPathname() {
+    //     let result = location.pathname;
+    //     if (result && result.length > 1 && result[result.length - 1] == "/") {
+    //         result = result.slice(0, result.length - 1);
+    //     }
+    //     return result;
+    // }
+
+    // /**
+    //  * 获取`url?`后面参数（JSON对象）
+    //  * @param {string} name 获取指定参数名
+    //  * @param {string} target 目标字段，默认`location.search`
+    //  * @returns {object|string}
+    //  */
+    // function getQueryParam(name = null, target = null) {
+    //     const code = target || location.href.split("?")[1] || "";
+    //     const list = code.split("&");
+    //     const params = {};
+    //     for (let i = 0; i < list.length; i++) {
+    //         const item = list[i];
+    //         const items = item.split("=");
+    //         if (items.length > 1) {
+    //             params[items[0]] = item.replace(`${items[0]}=`, "");
+    //         }
+    //     }
+    //     if (name) {
+    //         return params[name] || "";
+    //     } else {
+    //         return params;
+    //     }
+    //     // const matcher = new RegExp("(\\\\?|#|&)" + name + "=(.*?)(#|&|$)");
+    //     // const result = (target || location.href).match(matcher);
+    //     // return result ? result[2] : "";
+    // }
+
     /**
      * 类型提示用，类似`TS`中的`interface`
      */
@@ -14,59 +53,6 @@
     }
 
     /**
-     * 获取处理过后的路劲名
-     */
-    function getPathname() {
-        let result = location.pathname;
-        if (result && result.length > 1 && result[result.length - 1] == "/") {
-            result = result.slice(0, result.length - 1);
-        }
-        return result;
-    }
-
-    /**
-     * 获取`url?`后面参数（JSON对象）
-     * @param {string} name 获取指定参数名
-     * @param {string} target 目标字段，默认`location.search`
-     * @returns {object|string}
-     */
-    function getQueryParam(name = null, target = null) {
-        const code = target || location.href.split("?")[1] || "";
-        const list = code.split("&");
-        const params = {};
-        for (let i = 0; i < list.length; i++) {
-            const item = list[i];
-            const items = item.split("=");
-            if (items.length > 1) {
-                params[items[0]] = item.replace(`${items[0]}=`, "");
-            }
-        }
-        if (name) {
-            return params[name] || "";
-        } else {
-            return params;
-        }
-        // const matcher = new RegExp("(\\\\?|#|&)" + name + "=(.*?)(#|&|$)");
-        // const result = (target || location.href).match(matcher);
-        // return result ? result[2] : "";
-    }
-
-    /**
-     * 格式化传参字段
-     * @param {object} params 
-     */
-    function formatParams(params) {
-        let result = "";
-        for (const key in params) {
-            result += `&${key}=${params[key]}`;
-        }
-        if (result) {
-            result = "?" + result.slice(1);
-        }
-        return result;
-    }
-
-    /**
      * 路由组件
      * @description `hash`模式，`history`模式使用的方式比较特殊，需要写多很多代码处理，所以没有写到同一个方法里面
      */
@@ -77,6 +63,18 @@
         /** 当前路由路径 */
         let currentPath = getHashPath();
         
+        /**
+         * 格式化传参字段
+         * @param {object} parmas 传参对象
+         */
+        function formatParams(parmas) {
+            let result = "";
+            for (const key in parmas) {
+                result += `&${key}=${parmas[key]}`;
+            }
+            return result ? `?${result.slice(1)}` : "";
+        }
+
         /** 获取`hash`模式下的路由路径，并设置当前路由参数 */
         function getHashPath() {
             const values = location.href.split("#");
