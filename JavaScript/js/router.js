@@ -88,10 +88,10 @@
         }
 
         /**
-         * 处理路径
+         * 获取处理过后的路径信息
          * @param {string} value 
          */
-        function handlePath(value) {
+        function getPathInfo(value) {
             const list = value.split("?");
             return {
                 path: list[0],
@@ -127,7 +127,7 @@
             let path = typeof options === "string" ? options : options.path;
             let params = options.params || {};
             // 判断处理一下路径带参数和
-            const pathInfo = handlePath(path);
+            const pathInfo = getPathInfo(path);
             path = pathInfo.path;
             params = {...params, ...pathInfo.params};
             if (currentPath == path && JSON.stringify(currentPathParams) == JSON.stringify(params)) return console.warn("重复的路由路径和参数，不作任何处理");
