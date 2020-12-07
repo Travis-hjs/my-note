@@ -590,8 +590,8 @@ class ModuleDate extends ModuleArray {
         minute = Math.floor(value / 60) - (day * 24 * 60) - (hour * 60);
         second = Math.floor(value) - (day * 24 * 3600) - (hour * 3600) - (minute * 60);
         // 格式化
-        day = ("0" + day).slice(-2);
-        hour = ("0" + hour).slice(-2);
+        day = day < 10 ? ("0" + day).slice(-2) : day.toString();
+        hour = hour < 10 ? ("0" + hour).slice(-2) : hour.toString();
         minute = ("0" + minute).slice(-2);
         second = ("0" + second).slice(-2);
         return { day, hour, minute, second }
