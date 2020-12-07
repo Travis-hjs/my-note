@@ -581,14 +581,13 @@ class ModuleDate extends ModuleArray {
      * @returns {{day: string, hour: string, minute: string, second: string}}
      */
     formatSecond(value, withDay = false) {
-        let day = 0, hour = 0, minute = 0, second = 0;
-        day = Math.floor(value / (24 * 3600));
-        hour = Math.floor(value / 3600);
-        if (withDay) {
-            hour = hour - day * 24;
+        let day = Math.floor(value / (24 * 3600));
+        let hour = Math.floor(value / 3600) - day * 24;
+        let minute = Math.floor(value / 60) - (day * 24 * 60) - (hour * 60);
+        let second = Math.floor(value) - (day * 24 * 3600) - (hour * 3600) - (minute * 60);
+        if (!withDay) {
+            hour = hour + day * 24;
         }
-        minute = Math.floor(value / 60) - (day * 24 * 60) - (hour * 60);
-        second = Math.floor(value) - (day * 24 * 3600) - (hour * 3600) - (minute * 60);
         // 格式化
         day = day < 10 ? ("0" + day).slice(-2) : day.toString();
         hour = hour < 10 ? ("0" + hour).slice(-2) : hour.toString();
