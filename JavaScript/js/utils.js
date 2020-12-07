@@ -577,12 +577,16 @@ class ModuleDate extends ModuleArray {
     /**
      * 将秒数换成时分秒格式
      * @param {number} value 秒数
+     * @param {boolean} withDay 是否带天数倒计
      * @returns {{day: string, hour: string, minute: string, second: string}}
      */
-    secondFormat(value) {
+    formatSecond(value, withDay = false) {
         let day = 0, hour = 0, minute = 0, second = 0;
         day = Math.floor(value / (24 * 3600));
-        hour = Math.floor(value / 3600) - (day * 24);
+        hour = Math.floor(value / 3600);
+        if (withDay) {
+            hour = hour - day * 24;
+        }
         minute = Math.floor(value / 60) - (day * 24 * 60) - (hour * 60);
         second = Math.floor(value) - (day * 24 * 3600) - (hour * 3600) - (minute * 60);
         // 格式化
@@ -590,7 +594,7 @@ class ModuleDate extends ModuleArray {
         hour = ("0" + hour).slice(-2);
         minute = ("0" + minute).slice(-2);
         second = ("0" + second).slice(-2);
-        return { day, hour, minute, second };
+        return { day, hour, minute, second }
     }
 
 }
