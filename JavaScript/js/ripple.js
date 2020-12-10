@@ -47,7 +47,7 @@ function rippleClick(el) {
 
     /**
      * 点击水波纹
-     * @param {Event} event 点击事件
+     * @param {TouchEvent | MouseEvent} event 点击事件
      * @param {HTMLElement} target 点击目标
      */
     function ripple(event, target) {
@@ -66,9 +66,9 @@ function rippleClick(el) {
         }
 
         /** 点击目标矩阵尺寸 */
-        let rect = target.getBoundingClientRect();
+        const rect = target.getBoundingClientRect();
         /** 当前自定义颜色值 */
-        let color = target.getAttribute("color");
+        const color = target.getAttribute("color");
         /** 波纹大小 */
         let size = Math.max(rect.width, rect.height);
         // 设置最大范围
@@ -80,10 +80,10 @@ function rippleClick(el) {
         // 这里必须输出节点后再设置位置，不然会有问题
         target.appendChild(node);
 
-        let y = event.touches ? event.touches[0].clientY : event.clientY;
-        let x = event.touches ? event.touches[0].clientX : event.clientX;
-        let top = y - rect.top - (node.offsetHeight / 2);
-        let left = x - rect.left - (node.offsetWidth / 2);
+        const y = event.touches ? event.touches[0].clientY : event.clientY;
+        const x = event.touches ? event.touches[0].clientX : event.clientX;
+        const top = y - rect.top - (node.offsetHeight / 2);
+        const left = x - rect.left - (node.offsetWidth / 2);
         // console.log(top, left);
         node.style.top = top + "px";
         node.style.left = left + "px";
@@ -103,21 +103,20 @@ function rippleClick(el) {
     /** 添加事件类型 */
     const eventType = isMobile ? "touchstart" : "mousedown";
 
-    // 这里我使用事件代理去完成方法操作，因为节点是动态生成的
-    // Vue项目中可以使用自定义指令的方式代替事假代理
+    // 1. 这里我使用事件代理去完成方法操作，因为节点是动态生成的
     document.body.addEventListener(eventType, function (e) {
         /** 事件类型 */
         const event = e || window.event || arguments.callee.caller.arguments[0];
         /** 循环的次数 */
-        let loop_count = 3; // 这里的 3 次是布局的子节点层数，可根据布局层数增加减少
+        let loopCount = 3; // 这里的 3 次是布局的子节点层数，可根据布局层数增加减少
         /** 
          * 定义目标变量 
          * @type {HTMLElement} 
          */
         let target = event.target;
         // 循环 3 次由里向外查找目标节点
-        while (loop_count > 0 && target && target != document.body) {
-            loop_count--;
+        while (loopCount > 0 && target && target != document.body) {
+            loopCount--;
             if (target.hasAttribute("ripple")) {
                 ripple(event, target);
                 break;
@@ -125,6 +124,17 @@ function rippleClick(el) {
             target = target.parentNode;
         }
     });
+
+    // 2. Vue项目中可以使用自定义指令的方式代替事件代理
+    // Vue.directive("ripple", {
+    //     inserted(el, binding) {
+    //         el.setAttribute("ripple", "");
+    //         el.addEventListener(eventType, function (e) {
+    //             ripple(e, el);
+    //         });
+    //     }
+    // })
+
 })();
 
 /** 创建按钮 */
