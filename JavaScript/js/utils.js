@@ -731,7 +731,7 @@ class ModuleBom extends ModuleDate {
         }
         clipboard.value = text;
         clipboard.select();
-        clipboard.setSelectionRange(0, clipboard.value.length);
+        clipboard.setSelectionRange(0, text.length);
         document.execCommand("copy");
         clipboard.blur();
         typeof success === "function" && success();
