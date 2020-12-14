@@ -726,6 +726,7 @@ class ModuleBom extends ModuleDate {
         if (!clipboard) {
             clipboard = document.createElement("textarea");
             clipboard.id = id;
+            clipboard.readOnly = "readonly";
             clipboard.style.cssText = "font-size: 15px; position: fixed; top: -1000%; left: -1000%;";
             document.body.appendChild(clipboard);
         }
@@ -733,7 +734,7 @@ class ModuleBom extends ModuleDate {
         clipboard.select();
         clipboard.setSelectionRange(0, text.length);
         document.execCommand("copy");
-        clipboard.blur();
+        // clipboard.blur();
         typeof success === "function" && success();
     }
 }
