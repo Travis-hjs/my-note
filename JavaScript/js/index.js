@@ -785,7 +785,10 @@ function theCode() {
 }
 // theCode();
 
-function theToast() {
+/**
+ * `toast`组件
+ */
+function toastComponent() {
     const styleId = "the_toast_style";
     function outputStyle() {
         const cssText = `
@@ -854,11 +857,11 @@ function theToast() {
          * @param {string} value 内容
          * @param {number} duration 提示的时间 
          */
-        showToast(value, duration = 1000) {
+        showToast(value, duration = 1500) {
             const toast = createToast();
             toast.nodeText.innerHTML = value;
-            toast.nodeText.addEventListener("animationend", function() {
-                setTimeout(function() {
+            toast.nodeText.addEventListener("animationend", function () {
+                setTimeout(function () {
                     toast.nodeText.classList.add("the_toast_text_hide");
                 }, duration);
             });
@@ -868,24 +871,25 @@ function theToast() {
 }
 
 /**
- * 显示提示框
+ * 显示动态弹框框
  * @param {object} options 传参信息
- * @param {string} options.title 标题内容
- * @param {string} options.content 提示内容
- * @param {string} options.confirmText 确认文字
- * @param {() => void} options.callback 点击回调
+ * @param {string} options.title 标题内容（可传`html`标签）
+ * @param {string} options.content 提示内容（可传`html`标签）
+ * @param {string} options.confirmText 确认文字（可传`html`标签）
+ * @param {string} options.cancelText 取消文字（可传`html`标签），设置该值才有取消按钮出现
+ * @param {() => void} options.confirm 确认点击回调
+ * @param {() => void} options.cancel 取消点击回调
  */
-function showAlert(options) {
-    const componentName = ".alert_component";
+export function showModal(options) {
     /** 
      * 组件节点 
      * @type {HTMLElement}
     */
-    let alertBox = document.querySelector(componentName);
-    if (!alertBox) {
+    let modalBox = document.querySelector(".modal_component");
+    if (!modalBox) {
         const time = `0.3s`;
         const cssText = `
-        ${componentName} { 
+        .modal_component { 
             position: fixed; 
             top: 0; 
             left: 0; 
@@ -895,9 +899,9 @@ function showAlert(options) {
             display: flex; 
             background-color: rgba(0,0,0,0.45); 
             z-index: 99; transition: ${time} all; 
-            animation: showAlert ${time} ease;
+            animation: showModal ${time} ease;
         }
-        .alert_box{ 
+        .modal_box { 
             width: 80%; 
             max-width: 375px; 
             margin: auto; 
@@ -905,78 +909,108 @@ function showAlert(options) {
             border-radius: 2px;
             overflow: hidden;
             text-align: center; 
-            box-shadow: 1px 1px 40px rgba(0,0,0,.25); 
+            box-shadow: 0 5px 5px -3px rgba(0,0,0,0.2), 0 8px 10px 1px rgba(0,0,0,0.14), 0 3px 14px 2px rgba(0,0,0,0.12);
             transition: ${time} all; 
-            animation: showAlertContent ${time} ease;
+            animation: showModalContent ${time} ease;
         }
-        .alert_content{ 
-            padding: 0 10px 16px; 
-            box-sizing: border-box;
-            font-size: 16px; 
-            color: #333; 
-        }
-        .alert_title{ 
+        .modal_title { 
             text-align: center; 
             font-size: 18px; 
             font-weight: 500;
-            color: #333; 
+            color: rgba(0,0,0,0.87);
             line-height: 44px; 
             padding-top: 4px;
             box-sizing: border-box;
         }
-        .alert_btn{ 
-            width: 100%; 
-            background-color: #eee; 
-            height: 48px; 
-            color: #1BBC9B; 
+        .modal_content { 
+            padding: 0 10px 16px; 
+            box-sizing: border-box;
             font-size: 15px; 
-            border: none; 
-            outline: none; 
-            line-height: 1; 
-            cursor: pointer; 
+            color: rgba(0,0,0,0.7);
         }
-        .alert_hide{ 
+        .modal_btn {
+            width: 100%;
+            background-color: #eee;
+            display: flex;
+            align-items: center;
+        }
+        .modal_btn button {
+            height: 48px;
+            font-size: 15px;
+            flex: 1;
+            border: none;
+            outline: none;
+            line-height: 1;
+            cursor: pointer;
+        }
+        .modal_btn button:nth-child(1) {
+            color: #999;
+        }
+        .modal_btn button:nth-child(2) {
+            color: #1BBC9B;
+        }
+        .modal_hide { 
             visibility: hidden; 
             opacity: 0; 
         }
-        .alert_hide .alert_box{ 
+        .modal_hide .modal_box { 
             transform: translateY(80px); 
         }
-        @keyframes showAlert {
-            0%{ opacity: 0;  }
-            100%{ opacity: 1;  }
+        @keyframes showModal {
+            0%{ opacity: 0; }
+            100%{ opacity: 1; }
         }
-        @keyframes showAlertContent {
+        @keyframes showModalContent {
             0%{ transform: translateY(80px); }
             100%{ transform: translateY(0px); }
         }
         `;
         const template = `
-        <div class="alert_box">
-            <div class="alert_title"></div>
-            <div class="alert_content"></div>
-            <button class="alert_btn"></button>
+        <div class="modal_box">
+            <div class="modal_title"></div>
+            <div class="modal_content"></div>
+            <div class="modal_btn">
+                <button></button>
+                <button></button>
+            </div>
         </div>
-        `
+        `;
         const style = document.createElement("style");
         style.textContent = cssText.replace(/(\n|\t|\s)*/ig, "$1").replace(/\n|\t|\s(\{|\}|\,|\:|\;)/ig, "$1").replace(/(\{|\}|\,|\:|\;)\s/ig, "$1");
         document.head.appendChild(style);
         // ====================== 创建节点 ======================
-        alertBox = document.createElement("div");
-        alertBox.className = componentName.slice(1);
-        alertBox.innerHTML = template;
-        document.body.appendChild(alertBox);
+        modalBox = document.createElement("div");
+        modalBox.className = "modal_component";
+        modalBox.innerHTML = template;
+        document.body.appendChild(modalBox);
+        // 弹出时阻止屏幕滚动
+        modalBox.addEventListener("touchmove", e => e.preventDefault());
     }
     // ====================== 显示并设置内容 ======================
-    alertBox.classList.remove("alert_hide");
-    const box = alertBox.children[0];
-    box.children[0].innerHTML = options.title || "提示";
-    box.children[1].innerHTML = options.content || "未设置内容";
-    box.children[2].innerHTML = options.confirmText || "确定";
-    // ====================== 重置点击事件 ======================
-    box.children[2].onclick = function () {
-        alertBox.classList.add("alert_hide");
-        typeof options.callback === "function" && options.callback();
+    modalBox.classList.remove("modal_hide");
+    const box = modalBox.children[0];
+    const titleEl = box.children[0];
+    const contentEl = box.children[1];
+    const confirmBtn = box.children[2].children[1];
+    const cancelBtn = box.children[2].children[0];
+    titleEl.innerHTML = options.title || "提示";
+    contentEl.innerHTML = options.content || "无";
+    // ====================== 重置确认点击事件 ======================
+    confirmBtn.innerHTML = options.confirmText || "确定";
+    confirmBtn.onclick = function () {
+        modalBox.classList.add("modal_hide");
+        typeof options.confirm === "function" && options.confirm();
+    }
+    // ================= 判断取消按钮和重置对应事件 =================
+    if (options.cancelText) {
+        cancelBtn.removeAttribute("style");
+        cancelBtn.innerHTML = options.cancelText;
+        cancelBtn.onclick = function () {
+            modalBox.classList.add("modal_hide");
+            typeof options.cancel === "function" && options.cancel();
+        }
+    } else {
+        cancelBtn.style.display = "none";
     }
 }
 
