@@ -733,9 +733,13 @@ class ModuleBom extends ModuleDate {
         clipboard.value = text;
         clipboard.select();
         clipboard.setSelectionRange(0, text.length);
-        document.execCommand("copy");
+        const state = document.execCommand("copy");
         // clipboard.blur();
-        typeof success === "function" && success();
+        if (state) {
+            typeof success === "function" && success();
+        } else {
+            typeof fail === "function" && fail("复制失败");
+        }
     }
 }
 
