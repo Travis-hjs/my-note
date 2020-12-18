@@ -56,30 +56,30 @@ function clickFetchRequest() {
 
 /**
  * `XMLHttpRequest`请求 [MDN文档](https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest)
- * @param {object} param 传参对象
- * @param {string} param.url 请求路径
- * @param {"GET"|"POST"|"PUT"|"DELETE"} param.method 请求方法
- * @param {object?} param.data 传参对象
- * @param {FormData?} param.file 上传图片`FormData`对象
- * @param {number?} param.overtime 超时检测毫秒数
- * @param {(result?: any, response: XMLHttpRequest) => void} param.success 成功回调 
- * @param {(error?: XMLHttpRequest) => void} param.fail 失败回调 
- * @param {(info?: XMLHttpRequest) => void} param.timeout 超时回调
- * @param {(res?: ProgressEvent<XMLHttpRequestEventTarget>) => void} param.progress 进度回调 貌似没什么用 
+ * @param {object} params 传参对象
+ * @param {string} params.url 请求路径
+ * @param {"GET"|"POST"|"PUT"|"DELETE"} params.method 请求方法
+ * @param {object?} params.data 传参对象
+ * @param {FormData?} params.file 上传图片`FormData`对象
+ * @param {number?} params.overtime 超时检测毫秒数
+ * @param {(result?: any, response: XMLHttpRequest) => void} params.success 成功回调 
+ * @param {(error?: XMLHttpRequest) => void} params.fail 失败回调 
+ * @param {(info?: XMLHttpRequest) => void} params.timeout 超时回调
+ * @param {(res?: ProgressEvent<XMLHttpRequestEventTarget>) => void} params.progress 进度回调 貌似没什么用 
  */
-function ajax(param) {
-    if (typeof param !== "object") return console.error("ajax 缺少请求传参");
-    if (!param.method) return console.error("ajax 缺少请求类型 GET 或者 POST");
-    if (!param.url) return console.error("ajax 缺少请求 url");
-    if (typeof param.data !== "object") return console.error("请求参数类型必须为 object");
+function ajax(params) {
+    if (typeof params !== "object") return console.error("ajax 缺少请求传参");
+    if (!params.method) return console.error("ajax 缺少请求类型 GET 或者 POST");
+    if (!params.url) return console.error("ajax 缺少请求 url");
+    if (typeof params.data !== "object") return console.error("请求参数类型必须为 object");
 
     const XHR = new XMLHttpRequest();
     /** 请求方法 */
-    const method = param.method;
+    const method = params.method;
     /** 超时检测 */
-    const overtime = typeof param.overtime === "number" ? param.overtime : 0;
+    const overtime = typeof params.overtime === "number" ? params.overtime : 0;
     /** 请求链接 */
-    let url = param.url;
+    let url = params.url;
     /** 非`GET`请求传参 */
     let payload = null;
     /** `GET`请求传参 */
@@ -88,8 +88,8 @@ function ajax(param) {
     // 传参处理
     if (method === "GET") {
         // 解析对象传参
-        for (const key in param.data) {
-            query += "&" + key + "=" + param.data[key];
+        for (const key in params.data) {
+            query += "&" + key + "=" + params.data[key];
         }
         if (query) {
             query = "?" + query.slice(1);
@@ -97,7 +97,7 @@ function ajax(param) {
         }
     } else {
         // 若后台没设置接收 JSON 则不行 需要跟 GET 一样的解析对象传参
-        payload = JSON.stringify(param.data);
+        payload = JSON.stringify(params.data);
     }
 
     // 监听请求变化
@@ -105,15 +105,15 @@ function ajax(param) {
     XHR.onreadystatechange = function () {
         if (XHR.readyState !== 4) return;
         if (XHR.status === 200 || XHR.status === 304) {
-            typeof param.success === "function" && param.success(JSON.parse(XHR.response), XHR);
+            typeof params.success === "function" && params.success(JSON.parse(XHR.response), XHR);
         } else {
-            typeof param.fail === "function" && param.fail(XHR);
+            typeof params.fail === "function" && params.fail(XHR);
         }
     }
 
     // 判断请求进度
-    if (param.progress) {
-        XHR.addEventListener("progress", param.progress);
+    if (params.progress) {
+        XHR.addEventListener("progress", params.progress);
     }
 
     // XHR.responseType = "json";
@@ -122,8 +122,8 @@ function ajax(param) {
     XHR.open(method, url, true);
 
     // 判断是否上传文件通常用于上传图片，上传图片时不需要设置头信息
-    if (param.file) {
-        payload = param.file;
+    if (params.file) {
+        payload = params.file;
         // XHR.setRequestHeader("Content-Type", "application/x-www-form-urlencoded"); // 默认就是这个，设置不设置都可以
     } else {
         // XHR.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
@@ -136,7 +136,7 @@ function ajax(param) {
         XHR.ontimeout = function () {
             console.warn("XMLHttpRequest 请求超时 !!!");
             XHR.abort();
-            typeof param.timeout === "function" && param.timeout(XHR);
+            typeof params.timeout === "function" && params.timeout(XHR);
         }
     }
 
