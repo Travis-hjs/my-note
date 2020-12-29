@@ -706,6 +706,30 @@ class ModuleBom extends ModuleDate {
     }
 
     /**
+     * 导出`Excel`表格
+     * @param {Array<any>} data 数据列表
+     * @param {string} fileName 文件名
+     */
+    exportExcel(data, fileName = Math.random().toString(36).slice(2)) {
+        fileName += ".xlsx";
+        const blob = new Blob([data], { type: "application/vnd.ms-excel,charset=utf-8" });
+        const label = document.createElement("a");
+        label.download = fileName;
+        label.style.display = "none";
+        label.href = window.URL.createObjectURL(blob);
+        document.body.appendChild(label);
+        if (document.createEvent) {
+            const event = document.createEvent("MouseEvents");
+            event.initEvent("click", true, true);
+            label.dispatchEvent(event);
+        } else {
+            label.click();
+        }
+        window.URL.revokeObjectURL(label.href);
+        document.body.removeChild(label);
+    }
+
+    /**
      * 复制文本
      * @param {string} text 复制的内容
      * @param {() => void} success 成功回调
