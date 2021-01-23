@@ -39,7 +39,7 @@ function pauseAudio() {
  * [资料参考](https://www.cnblogs.com/Wayou/p/html5_audio_api_visualizer.html)
  * @description 解决在移动端网页上标签播放音频延迟的方案 貌似`H5`游戏引擎也是使用这个实现
  */
-function audioContext() {
+function audioComponent() {
     /**
      * 音频上下文
      * @type {AudioContext}
@@ -185,11 +185,11 @@ function audioChart(canvas) {
  * @param {HTMLInputElement} el 
  */
 function uploadAudio(el) {
-    const audioComponent = audioContext();
+    const component = audioComponent();
     const box = el.parentNode;
     const item = document.createElement("div");
 
-    audioComponent.loadFile(el.files[0], function(analyser) {
+    component.loadFile(el.files[0], function(analyser) {
         const canvas = document.createElement("canvas");
         const btn = document.createElement("button");
         btn.innerHTML = "播放" + el.files[0].name;
@@ -199,14 +199,14 @@ function uploadAudio(el) {
         box.appendChild(item);
         const chart = audioChart(canvas);
         btn.onclick = function () {
-            audioComponent.play();
+            component.play();
             chart.setAnalyser(analyser);
         }
         el.value = null;
     });
 }
 
-const webAudio = audioContext();
+const webAudio = audioComponent();
 
 webAudio.loadPath("https://longgeniubi.oss-cn-shanghai.aliyuncs.com/audio/tip.mp3");
 
