@@ -4,7 +4,7 @@
 
 >>> [技术博客](https://hansen-hjs.github.io/blog/) （之后可能移步到掘金）
 
->>> [掘金主页](https://juejin.im/user/5d0754e4f265da1b95705770/posts) 
+>>> [掘金代码片段介绍](https://juejin.cn/post/6844904066418491406) 
 
 >>> 邮箱：1141752341@qq.com
 
