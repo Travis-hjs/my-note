@@ -603,7 +603,7 @@ class ModuleBom extends ModuleDate {
     constructor() {
         super();
         /** 缓存类型 */
-        this.cache = window.sessionStorage;
+        this.storage = localStorage;
     }
 
     /**
@@ -612,7 +612,7 @@ class ModuleBom extends ModuleDate {
      * @param {object} data 对应的数据
      */
     saveData(key, data) {
-        window.sessionStorage.setItem(key, JSON.stringify(data));
+        this.storage.setItem(key, JSON.stringify(data));
     }
 
     /**
@@ -620,14 +620,21 @@ class ModuleBom extends ModuleDate {
      * @param {string} key 对应的 key 值
      */
     fetchData(key) {
-        let data = window.sessionStorage.getItem(key) ? JSON.parse(window.sessionStorage.getItem(key)) : null;
+        let data = this.storage.getItem(key)
+        data = data ? JSON.parse(data) : null;
         return data;
     }
 
-    /** 清除本地数据 */
-    removeData() {
-        window.sessionStorage.clear();
-        // window.sessionStorage.removeItem("key");　// 删除键值对
+    /**
+     * 清除本地数据
+     * @param {string} key 删除键值对，不传则全部删除
+    */
+    removeData(key) {
+        if (key) {
+            this.storage.removeItem("key");
+        } else {
+            this.storage.clear();
+        }
     }
 
     /** 长震动 */
