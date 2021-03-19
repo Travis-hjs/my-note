@@ -15,16 +15,21 @@ class ModuleString {
     }
 
     /**
-     * 输入只能是数字(包括小数点)
-     * @param {string} value 字符串
+     * 输入只能是数字
+     * @param {string|number} value 
+     * @param {boolean} decimal 是否要保留小数
      */
-    inputOnlyNumber(value) {
+    inputOnlyNumber(value, decimal) {
         let result = value.trim();
         if (result.length == 0) return "";
-        result = result.replace(/[^0-9.]+/ig, "");
-        let array = result.split(".");
-        if (array.length > 1) {
-            result = array[0] + "." + array[1];
+        if (decimal) {
+            result = result.replace(/[^0-9.]+/ig, "");
+            let array = result.split(".");
+            if (array.length > 1) {
+                result = array[0] + "." + array[1];
+            }
+        } else {
+            result = result.replace(/[^0-9]+/ig, "");
         }
         return result;
     }
