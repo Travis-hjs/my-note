@@ -20,7 +20,7 @@ class ModuleString {
      * @param {boolean} decimal 是否要保留小数
      */
     inputOnlyNumber(value, decimal) {
-        let result = value.trim();
+        let result = value.toString().trim();
         if (result.length == 0) return "";
         if (decimal) {
             result = result.replace(/[^0-9.]+/ig, "");
