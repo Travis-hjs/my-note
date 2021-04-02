@@ -1,27 +1,18 @@
-/** 字符串模块 */
 class ModuleString {
-    /**
-     * 过滤只保留数字及小数点
-     * @param {string} string 字符串
-     */
-    filterOnlyNumber(string) {
-        // 去空格
-        let value = string.trim();
-        // 默认返回 0
-        if (value.length === 0) return 0;
-        // 正则过滤剩下数字和小数点
-        value = value.replace(/[^0-9.]+/g, "");
-        return parseFloat(value);
+    constructor() {
+        console.log("%c 字符串模块 >>", "color: #4caf50");
     }
 
     /**
      * 输入只能是数字
-     * @param {string|number} value 
+     * @param {string | number} value 输入值
      * @param {boolean} decimal 是否要保留小数
+     * @param {boolean} negative 是否可以为负数
      */
-    inputOnlyNumber(value, decimal) {
+    inputOnlyNumber(value, decimal, negative) {
         let result = value.toString().trim();
-        if (result.length == 0) return "";
+        if (result.length === 0) return "";
+        const minus = (negative && result[0] == "-") ? "-" : "";
         if (decimal) {
             result = result.replace(/[^0-9.]+/ig, "");
             let array = result.split(".");
@@ -31,7 +22,7 @@ class ModuleString {
         } else {
             result = result.replace(/[^0-9]+/ig, "");
         }
-        return result;
+        return minus + result;
     }
 
     /**
@@ -160,8 +151,12 @@ class ModuleString {
     }
 }
 
-/** 数字模块 */
 class ModuleNumber extends ModuleString {
+    constructor() {
+        super();
+        console.log("%c 数字模块 >>", "color: #409eff");
+    }
+
     /**
      * 范围随机整数
      * @param {number} min 最小数
@@ -328,8 +323,12 @@ class ModuleNumber extends ModuleString {
     }
 }
 
-/** 数组类处理模块 */
 class ModuleArray extends ModuleNumber {
+    constructor() {
+        super();
+        console.log("%c 数组模块 >>", "color: #9e019e");
+    }
+
     /**
      * es5兼容es6 "Array.find"
      * @param {Array<T>} array
@@ -473,6 +472,7 @@ class ModuleDate extends ModuleArray {
      */
     constructor() {
         super();
+        console.log("%c 时间日期类型日期模块 >>", "color: orange");
     }
 
     /** 日期列表生成 */
@@ -610,9 +610,9 @@ class ModuleDate extends ModuleArray {
 }
 
 class ModuleBom extends ModuleDate {
-    /** 浏览器模块 */
     constructor() {
         super();
+        console.log("%c BOM 模块 >>", "color: pink");
         /** 缓存类型 */
         this.storage = localStorage;
     }
@@ -674,7 +674,7 @@ class ModuleBom extends ModuleDate {
 
     /**
      * 创建浏览器指纹
-     * @param {string} domain window.location.host
+     * @param {string} domain `location.host`
      */
     createFingerprint(domain) {
         /**
@@ -759,10 +759,22 @@ class ModuleBom extends ModuleDate {
             typeof fail === "function" && fail("复制失败");
         }
     }
+
+    /** 自定义 log */
+    log() {
+        const args = [].slice.call(arguments);
+        args.unshift("%c the-log >>", "color: #4fc08d");
+        console.log.apply(console, args);
+    }
+
 }
 
-/** dom 模块 */
 class ModuleDom extends ModuleBom {
+    constructor() {
+        super();
+        console.log("%c DOM 模块 >>", "color: yellow");
+    }
+
     /**
      * 单个元素查找
      * @param {string} name class | id | label <div> <p>
@@ -861,16 +873,8 @@ class ModuleDom extends ModuleBom {
     }
 
     /**
-     * 获取元素的的矩阵坐标
-     * @param {HTMLElement} el 当前元素
-     */
-    getRect(el) {
-        return el.getBoundingClientRect();
-    }
-
-    /**
      * 动画帧更新
-     * @param {Function} callback 动画帧函数
+     * @param {() => void} callback 动画帧函数
      */
     update(callback = null) {
         if (typeof callback !== "function") return console.log("缺少动画函数");
@@ -879,7 +883,8 @@ class ModuleDom extends ModuleBom {
         /** 动画开始 */
         function move() {
             callback();
-            AnimationFrame(move);
+            // 判断当前函数销毁或者类型更变之后停止刷帧操作
+            typeof callback === "function" && AnimationFrame(move);
         }
         move();
     }
@@ -910,7 +915,7 @@ class ModuleDom extends ModuleBom {
      * @param {number} options.number 最终显示的数字
      * @param {number} options.decimals 小数位（传`0`则为整数）
      * @param {number} options.time （可选）多少毫秒内完成，默认1秒
-     * @param {Function} options.callback （可选）完成回调
+     * @param {() => void} options.callback （可选）完成回调
      */
     setNumberAnimation(options) {
         const animation = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame || window.msRequestAnimationFrame;
@@ -934,6 +939,7 @@ class ModuleDom extends ModuleBom {
         el.textContent = count;
         move();
     }
+
     /** 
      * 获取 body 标签中的所有内容 
      * @param {string} value 
@@ -967,12 +973,6 @@ class ModuleDom extends ModuleBom {
         return result.replace(start, "").replace(end, ";");
     }
 
-    /** 自定义 log */
-    log() {
-        const args = [].slice.call(arguments);
-        args.unshift("%c the-log >>", "color: #4fc08d");
-        console.log.apply(console, args);
-    }
 }
 
 const utils = new ModuleDom();
