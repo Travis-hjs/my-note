@@ -128,21 +128,22 @@
     }
 
     /**
-     * 初始化鼠标事件
-     * @param {HTMLElement} wrapEl 拖拽的整体节点
-     * @param {HTMLElement} dragEl 拖拽的节点
+     * 初始化拖拽事件
+     * @param {HTMLElement} wrapEl 拖拽的整体节点（必需是`css`设置了定位才可以）
+     * @param {HTMLElement} dragEl 点击拖拽的节点
      */
-    function initMouse(wrapEl, dragEl) {
+    function initDragEvent(wrapEl, dragEl) {
         const beforeTransition = wrapEl.style.transition;
-        let start = false;
-        let left = 0;
-        let top = 0;
-        let dragPosition = {
+        const dragPosition = {
             x: 0,
             left: 0,
             y: 0,
             top: 0
         }
+        let start = false;
+        let left = 0;
+        let top = 0;
+
         // 当鼠标在指定元素按下时
         dragEl.addEventListener("mousedown", function(ev) {
             // console.log(left, top);
@@ -359,9 +360,9 @@
 
     outputContactList(userData);
 
-    initMouse(messageWindow, messageWindow.querySelector(".top"));
+    initDragEvent(messageWindow, messageWindow.querySelector(".top"));
 
-    initMouse(contactBox, contactBox.querySelector(".contact_header"));
+    initDragEvent(contactBox, contactBox.querySelector(".contact_header"));
 
     // 联系人列表关闭按钮点击事件
     contactBox.querySelector(".icon_close").addEventListener("click", closeMessageList);
