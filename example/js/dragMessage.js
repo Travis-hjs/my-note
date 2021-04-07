@@ -35,37 +35,43 @@
     }
 
     /**
+     * 图片前缀
+     * [图片来源](https://lol.qq.com/data/info-heros.shtml)
+     */
+    const photoPrefix = "https://game.gtimg.cn/images/lol/act/img/champion";
+
+    /**
      * 用户数据列表
      * @type {Array<userInfo>}
      */
-    const userData = [
+    const userList = [
         {
             name: "刀锋之影-泰隆",
-            image: "https://game.gtimg.cn/images/lol/act/img/champion/Talon.png",
+            image: photoPrefix + "/Talon.png",
             label: "刀下生，刀下死"
         }, {
             name: "德玛西亚之翼-奎因",
-            image: "https://game.gtimg.cn/images/lol/act/img/champion/Quinn.png",
+            image: photoPrefix + "/Quinn.png",
             label: "遮住ta的眼睛！"
         }, {
             name: "猩红收割者-弗拉基米尔",
-            image: "https://game.gtimg.cn/images/lol/act/img/champion/Vladimir.png",
+            image: photoPrefix + "/Vladimir.png",
             label: "嘶~呼~"
         }, {
             name: "琴瑟仙女-娑娜",
-            image: "https://game.gtimg.cn/images/lol/act/img/champion/Sona.png",
+            image: photoPrefix + "/Sona.png",
             label: "奏乐模式开始了"
         }, {
             name: "影流之主-劫",
-            image: "https://game.gtimg.cn/images/lol/act/img/champion/Zed.png",
+            image: photoPrefix + "/Zed.png",
             label: "无知者，在劫难逃"
         }, {
             name: "赏金猎人-厄运小姐",
-            image: "https://game.gtimg.cn/images/lol/act/img/champion/MissFortune.png",
+            image: photoPrefix + "/MissFortune.png",
             label: "好运，不会眷顾傻瓜"
         }, {
             name: "光辉女郎-拉克丝",
-            image: "https://game.gtimg.cn/images/lol/act/img/champion/Lux.png",
+            image: photoPrefix + "/Lux.png",
             label: "照亮你的未来"
         }
     ];
@@ -129,11 +135,11 @@
 
     /**
      * 初始化拖拽事件
-     * @param {HTMLElement} wrapEl 拖拽的整体节点（必需是`css`设置了定位才可以）
-     * @param {HTMLElement} dragEl 点击拖拽的节点
+     * @param {HTMLElement} el 拖拽的整体节点（必需是`css`设置了定位才可以）
+     * @param {HTMLElement} dragTarget 点击拖拽的节点
      */
-    function initDragEvent(wrapEl, dragEl) {
-        const beforeTransition = wrapEl.style.transition;
+    function initDragEvent(el, dragTarget) {
+        const beforeTransition = el.style.transition;
         const dragPosition = {
             x: 0,
             left: 0,
@@ -143,44 +149,47 @@
         let start = false;
         let left = 0;
         let top = 0;
+        
+        const wrapRect = () => el.getBoundingClientRect();
 
         // 当鼠标在指定元素按下时
-        dragEl.addEventListener("mousedown", function(ev) {
+        dragTarget.addEventListener("mousedown", function(ev) {
             // console.log(left, top);
             dragPosition.x = ev.clientX;
             dragPosition.y = ev.clientY;
-            left = dragPosition.x - wrapEl.getBoundingClientRect().left;
-            top = dragPosition.y - wrapEl.getBoundingClientRect().top;
+            left = dragPosition.x - wrapRect().left;
+            top = dragPosition.y - wrapRect().top;
             start = true;
         });
 
         // 当鼠标在任意地方移动时
         document.addEventListener("mousemove", function(ev) {
             if (!start) return;
+            const container = document.documentElement;
             dragPosition.left = ev.clientX - left;
             dragPosition.top = ev.clientY - top;
-            wrapEl.style.top = dragPosition.top + "px";
-            wrapEl.style.left = dragPosition.left + "px";
-            wrapEl.style.margin = 0;
-            wrapEl.style.transition = "0s all";
-            if (wrapEl.getBoundingClientRect().left <= 0) {
-                wrapEl.style.left = "0px";
+            el.style.top = dragPosition.top + "px";
+            el.style.left = dragPosition.left + "px";
+            el.style.margin = 0;
+            el.style.transition = "0s all";
+            if (wrapRect().left <= 0) {
+                el.style.left = "0px";
             }
-            if (wrapEl.getBoundingClientRect().left >= document.documentElement.clientWidth - wrapEl.offsetWidth) {
-                wrapEl.style.left = document.documentElement.clientWidth - wrapEl.offsetWidth + "px";
+            if (wrapRect().left >= container.clientWidth - el.offsetWidth) {
+                el.style.left = container.clientWidth - el.offsetWidth + "px";
             }
-            if (wrapEl.getBoundingClientRect().top <= 0) {
-                wrapEl.style.top = "0px";
+            if (wrapRect().top <= 0) {
+                el.style.top = "0px";
             }
-            if (wrapEl.getBoundingClientRect().top >= document.documentElement.clientHeight - wrapEl.offsetHeight) {
-                wrapEl.style.top = document.documentElement.clientHeight - wrapEl.offsetHeight + "px";
+            if (wrapRect().top >= container.clientHeight - el.offsetHeight) {
+                el.style.top = container.clientHeight - el.offsetHeight + "px";
             }
         });
 
         // 当鼠标在任意地方松开时
         document.addEventListener("mouseup", function() {
             start = false;
-            wrapEl.style.transition = beforeTransition;
+            el.style.transition = beforeTransition;
         });
     }
 
@@ -253,8 +262,8 @@
         currentMessageUser.head.src = info.image;
         currentMessageUser.name.textContent = info.name;
         currentMessageUser.label.textContent = info.label;
-        for (let i = 0; i < userData.length; i++) {
-            const item = userData[i];
+        for (let i = 0; i < userList.length; i++) {
+            const item = userList[i];
             if (item.id == info.id) {
                 currentMessageIndex = i;
                 break;
@@ -266,8 +275,8 @@
     /** 更新聊天记录 */
     function updateRecord() {
         messageContent.innerHTML = "";
-        for (let i = 0; i < userData[currentMessageIndex].messages.length; i++) {
-            const record = userData[currentMessageIndex].messages[i];
+        for (let i = 0; i < userList[currentMessageIndex].messages.length; i++) {
+            const record = userList[currentMessageIndex].messages[i];
             outputRecordItem(record);
         }
         messageContentToBottom(true);
@@ -289,7 +298,7 @@
             <img class="user_head" src="${selfHead}" alt="">`
         } else {
             el.className = "message flex message_left";
-            el.innerHTML = `<img class="user_head" src="${userData[currentMessageIndex].image}" alt="">
+            el.innerHTML = `<img class="user_head" src="${userList[currentMessageIndex].image}" alt="">
             <div class="f1">
                 <div class="state">${data.date}</div>
                 <div class="text">${data.content}</div>
@@ -301,32 +310,41 @@
 
     /** 自己发送一条信息 */
     function sendSelfMessage() {
-        if (inputValue.trim() == "") return alert("输入的内容不能为空");
+        if (inputValue.trim() == "") {
+            inputBox.value = "";
+            return alert("输入的内容不能为空");
+        }
         const data = {
             self: true,
             content: inputValue.trim(),
             date: new Date().toLocaleString()
         }
-        userData[currentMessageIndex].messages.push(data);
+        userList[currentMessageIndex].messages.push(data);
         inputValue = "";
         inputBox.value = "";
         outputRecordItem(data);
         messageContentToBottom();
         clearTimeout(autoReplyTimer);
-        autoReplyTimer = setTimeout(sendAutoMessage, 1000);
+        autoReplyTimer = setTimeout(sendAutoMessage, 1000, currentMessageIndex);
     }
 
-    /** 机器人自动回复信息 */
-    function sendAutoMessage() {
+    /**
+     * 机器人自动回复信息
+     * @param {number} index 列表索引
+     */
+    function sendAutoMessage(index) {
         const value = randomText(2, 30);
         const data = {
             self: false,
             content: "【自动回复】" + value,
             date: new Date().toLocaleString()
         }
-        userData[currentMessageIndex].messages.push(data);
-        outputRecordItem(data);
-        messageContentToBottom();
+        userList[index].messages.push(data);
+        // 防止自动回复前切换其他操作
+        if (index == currentMessageIndex) {
+            outputRecordItem(data);
+            messageContentToBottom();
+        }
     }
 
     /** 
@@ -351,14 +369,14 @@
         contactBox.classList.add("contact_box_hide");
     }
 
-    userData.forEach((item, index) => {
+    userList.forEach((item, index) => {
         item.id = index * 2;
         item.messages = [];
     });
 
-    outputUserList(userData);
+    outputUserList(userList);
 
-    outputContactList(userData);
+    outputContactList(userList);
 
     initDragEvent(messageWindow, messageWindow.querySelector(".top"));
 
@@ -377,9 +395,9 @@
     });
 
     // 监听输入框输入事件
-    inputBox.addEventListener("keydown", function(event) {
-        // console.log(this.value, event);
-        if (event.keyCode == 13) {
+    inputBox.addEventListener("keydown", function(ev) {
+        // console.log("value >>", this.value, "code >>", ev.code, "keyCode >>", ev.keyCode, "key >>", ev.key);
+        if (ev.key == "Enter") {
             sendSelfMessage();
         }
     });
@@ -389,7 +407,5 @@
     });
 
     find(".message_window .send_btn").addEventListener("click", sendSelfMessage);
-
-    // https://lol.qq.com/data/info-heros.shtml
     
 })();
