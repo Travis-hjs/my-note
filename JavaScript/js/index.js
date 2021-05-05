@@ -998,6 +998,7 @@ export function showModal(options) {
     // ====================== 重置确认点击事件 ======================
     confirmBtn.innerHTML = options.confirmText || "确定";
     confirmBtn.onclick = function () {
+        this.onclick = null;
         modalBox.classList.add("modal_hide");
         typeof options.confirm === "function" && options.confirm();
     }
@@ -1006,6 +1007,7 @@ export function showModal(options) {
         cancelBtn.removeAttribute("style");
         cancelBtn.innerHTML = options.cancelText;
         cancelBtn.onclick = function () {
+            this.onclick = null;
             modalBox.classList.add("modal_hide");
             typeof options.cancel === "function" && options.cancel();
         }
