@@ -27,8 +27,8 @@ function fetchRequest(method, url, data = {}, timeout = 5000) {
             // mode: "cors",            // 貌似也是配合后台设置用的跨域模式
             method: method,
             headers: {
-                // "Content-Type": "application/json"
-                "Content-Type": "application/x-www-form-urlencoded" 
+                "Content-Type": "application/json"
+                // "Content-Type": "application/x-www-form-urlencoded"
             },
             body: body
         }).then(response => {
@@ -122,8 +122,8 @@ function ajax(params) {
     // 判断传参类型，`json`或者`form`表单
     if (params.formData) {
         body = params.formData;
-        XHR.setRequestHeader("Content-Type", "application/x-www-form-urlencoded"); // 默认就是这个，设置不设置都可以
     } else {
+        // 设置一个默认为 json 请求的头配置
         XHR.setRequestHeader("Content-Type", "application/json");
     }
 
