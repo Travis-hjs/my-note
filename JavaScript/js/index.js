@@ -1198,3 +1198,18 @@ function compareJSON(t1, t2) {
     }
     return info
 }
+
+/**
+ * 只执行一次函数
+ * @param {Function} fn 
+ */
+function once(fn) {
+    let called = false;
+    return function _once() {
+        if (called) {
+            return _once.value;
+        }
+        called = true;
+        _once.value = fn.apply(this, arguments);
+    }
+}
