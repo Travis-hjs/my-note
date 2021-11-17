@@ -1,3 +1,7 @@
+// 类型提示用（运行时不会引用）
+/// <reference path="../utils/bom.js" />
+/// <reference path="../utils/dom.js" />
+
 /** 旧版的做法 canvas 绘画 效果不好 */
 function rippleClick(el) {
     let canvas = {},
@@ -34,16 +38,14 @@ function rippleClick(el) {
     draw();
 }
 
-/**
- * 新的做法，效果最好
- * 这里只是防止和其他全局变量重名而添加的立即执行函数包裹，`webpack` 环境下可以不需要
- */
+// 最终版，效果最好
+// 这里只是防止和其他全局变量重名而添加的立即执行函数包裹`webpack`环境下可以不需要
 (function () {
     /**
      * 水波纹节点对象池
      * @type {Array<HTMLElement>}
      */
-    const RIPPLE_POOL = [];
+    const ripplePool = [];
 
     /**
      * 点击水波纹
@@ -58,8 +60,8 @@ function rippleClick(el) {
         let node = null;
 
         // 从对象池里面拿取节点
-        if (RIPPLE_POOL.length > 1) {
-            node = RIPPLE_POOL.shift();
+        if (ripplePool.length > 1) {
+            node = ripplePool.shift();
         } else {
             node = document.createElement("div");
             node.className = "ripple";
@@ -92,16 +94,15 @@ function rippleClick(el) {
             node.removeEventListener("animationend", end);
             // console.log("动画结束", node);
             target.removeChild(node);
-            RIPPLE_POOL.push(node);
+            ripplePool.push(node);
         }
         node.addEventListener("animationend", end);
     }
 
-    /** 是否移动端 */
-    const isMobile = utils.isMobile();
+    const mobile = isMobile();
 
     /** 添加事件类型 */
-    const eventType = isMobile ? "touchstart" : "mousedown";
+    const eventType = mobile ? "touchstart" : "mousedown";
 
     // 1. 这里我使用事件代理去完成方法操作，因为节点是动态生成的
     document.body.addEventListener(eventType, function (e) {
@@ -140,7 +141,7 @@ function rippleClick(el) {
 /** 创建按钮 */
 function createButton() {
     /** 按钮列表 */
-    let listNode = utils.find(".button-list");
+    let listNode = find(".button-list");
 
     for (let i = 0; i < 11; i++) {
         const button = document.createElement("button");

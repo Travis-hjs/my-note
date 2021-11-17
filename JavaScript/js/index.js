@@ -1,4 +1,6 @@
-import utils from "./utils.js";
+// 类型提示用（运行时不会引用）
+/// <reference path="../utils/dom.js" />
+/// <reference path="../utils/array.js" />
 
 // 阻止事件冒泡
 // event.cancelBubble = true;
@@ -21,7 +23,7 @@ function clickTest() {
     /** 总数 */
     const total = 5;
     /** 按钮列表容器 */
-    const buttonListEl = utils.find(".button_list");
+    const buttonListEl = find(".button_list");
 
     for (let i = 0; i < total; i++) {
         const btn = document.createElement("button");
@@ -40,7 +42,7 @@ function clickTest() {
         // console.dir(btn);
         if (btn.tagName.toLowerCase() == "button") {
             console.log("按钮id", btn.dataset.id);
-            utils.toggleClass(btn, "button_green");
+            toggleClass(btn, "button_green");
         }
     });
 
@@ -647,7 +649,7 @@ function loadImages(imgList, complete, loading) {
 
 // });
 
-const mousemoveEl = utils.find('.mousemove');
+const mousemoveEl = find('.mousemove');
 
 /**
  * 
@@ -709,7 +711,7 @@ mousemoveEl.addEventListener('mousemove', throttleMove);
 /**
  * @type {HTMLElement}
  */
-const contentEl = utils.find('.content');
+const contentEl = find('.content');
 
 console.log(contentEl.previousSibling, contentEl.previousElementSibling);
 
@@ -728,7 +730,7 @@ function theCode() {
             code = code.replace(item, "");
         }
         const time = "_" + (Date.now() / 2 + 3) / 4 + 5  
-        return utils.shuffleArray((value + code).split("")).join("") + time;
+        return shuffleArray((value + code).split("")).join("") + time;
     }
 
     const code = encode();

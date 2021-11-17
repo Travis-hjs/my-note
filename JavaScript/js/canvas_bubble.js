@@ -1,3 +1,5 @@
+// 类型提示用（运行时不会引用）
+/// <reference path="../utils/dom.js" />
 
 class NodeModule {
     /**
@@ -29,23 +31,23 @@ class NodeModule {
     /** 节点半径 */
     radius = 50;
     /** 最大半径 */
-    max_radius = 80;
+    maxRadius = 80;
     /** 节点 x 位置 */
     x = 0;
     /** 节点 y 位置 */
     y = 0;
     /** 节点颜色 */
-    color = 'orange';
+    color = "orange";
     /** 透明 */
     opacity = 0.5;
     /** 左右移动的范围 */
-    move_range = 100;
+    moveRange = 100;
     /** 范围 */
     range = 80;
     /** 水平方向 */
     direction = Math.floor(2 * Math.random()) > 0 ? 1 : -1; 
     /** 移动速度 */
-    speed = {
+    speedInfo = {
         /** 水平速度 */
         horizontal: 1,
         /** 垂直速度 */
@@ -53,17 +55,17 @@ class NodeModule {
     }
 
     /** 颜色列表 */
-    colorList = ['orange', 'purple', '#0ae004', '#00c9d0', '#fcff00', '#ff006c', '#0036ff'];
+    colorList = ["orange", "purple", "#0ae004", "#00c9d0", "#fcff00", "#ff006c", "#0036ff"];
 
     /** 初始化节点参数 */
     init() {
         this.radius = 15;
         this.opacity = 0.15;
-        this.move_range = this.range;
+        this.moveRange = this.range;
         this.x = Math.floor((this.canvas.width - this.radius * 2) * Math.random()) + this.radius;
         this.y = this.canvas.height + this.radius;
         this.color = this.colorList[Math.floor(this.colorList.length * Math.random())];
-        this.speed.vertical = 2.2 * Math.random() + 0.8;
+        this.speedInfo.vertical = 2.2 * Math.random() + 0.8;
     }
 
     /** 绘画圆 */
@@ -78,7 +80,7 @@ class NodeModule {
         this.context.globalAlpha = this.opacity;
         
         // 描边色
-        // this.context.strokeStyle = '#ccc';
+        // this.context.strokeStyle = "#ccc";
         // 填充描边
         // this.context.stroke();
 
@@ -91,35 +93,35 @@ class NodeModule {
     /** 圆运动 */
     move() {
         this.x += this.direction;
-        this.y -= this.speed.vertical;
+        this.y -= this.speedInfo.vertical;
 
         // 透明度
         if (this.opacity < 0.6) {
-            this.opacity += 0.002 * this.speed.vertical;
+            this.opacity += 0.002 * this.speedInfo.vertical;
             if (this.opacity >= 0.6) this.opacity = 0.6;
         }
 
         // 扩大
-        if (this.radius < this.max_radius) {
-            this.radius += 0.1 * this.speed.vertical;
-            if (this.radius >= this.max_radius) this.radius = this.max_radius;
+        if (this.radius < this.maxRadius) {
+            this.radius += 0.1 * this.speedInfo.vertical;
+            if (this.radius >= this.maxRadius) this.radius = this.maxRadius;
         }
 
         // 左右移动
-        this.move_range -= 1;
-        if (this.move_range == 0) {
-            this.move_range = this.range;
+        this.moveRange -= 1;
+        if (this.moveRange == 0) {
+            this.moveRange = this.range;
             this.direction = this.direction > 0 ? -1 : 1;
         }
 
         // 判断正负水平移动范围
         if (this.x >= this.canvas.width - this.radius) {
             this.direction = -1;
-            this.move_range = this.range;
+            this.moveRange = this.range;
         }
         if (this.x <= this.radius) {
             this.direction = 1;
-            this.move_range = this.range;
+            this.moveRange = this.range;
         }
 
         // 判断垂直移动范围
@@ -143,10 +145,10 @@ class Main {
      * @param {number} total 气泡总数
      */
     constructor(el, total) {
-        if (!el) return console.warn('没有指定输出容器节点');
-        if (typeof total === 'number') this.bubble_total = total;
-        this.canvas = document.createElement('canvas');
-        this.context = this.canvas.getContext('2d');
+        if (!el) return console.warn("没有指定输出容器节点");
+        if (typeof total === "number") this.bubbleTotal = total;
+        this.canvas = document.createElement("canvas");
+        this.context = this.canvas.getContext("2d");
         this.size = el.getBoundingClientRect();
         // 初始化 canvas 尺寸
         this.canvas.width = this.size.width;
@@ -181,7 +183,7 @@ class Main {
      * 气泡总数
      * @private
      */
-    bubble_total = 30;
+    bubbleTotal = 30;
 
     /**
      * 节点列表
@@ -193,18 +195,18 @@ class Main {
     /** 清空绘画 */
     remove() {
         this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
-        // console.log('清空 canvas 所有绘画');
+        // console.log("清空 canvas 所有绘画");
     }
 
     start() {
-        for (let i = 0; i < this.bubble_total; i++) {
+        for (let i = 0; i < this.bubbleTotal; i++) {
             setTimeout(() => {
                 const node = new NodeModule(this.canvas, this.context);
                 this.nodeList.push(node);
             }, i * 300);
         }
         
-        utils.update(() => {
+        update(() => {
             if (this.nodeList.length > 0) {
                 // 这里一定要清空再重新绘画
                 this.remove();
@@ -219,7 +221,7 @@ class Main {
     }
 }
 
-let page = utils.find('.page');
+let page = find(".page");
 
 const bubble = new Main(page);
 
