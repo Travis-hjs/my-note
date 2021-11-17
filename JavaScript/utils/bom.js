@@ -151,3 +151,67 @@ function log() {
     args.unshift("%c the-log >>", "color: #4fc08d");
     console.log.apply(console, args);
 }
+
+/**
+ * `file`转`base64`
+ * @param {File} file 文件对象
+ * @returns {Promise<string | ArrayBuffer>}
+ */
+function fileToBase64(file) {
+    return new Promise(function(resolve, reject) {
+        const reader = new FileReader();
+        reader.onload = function() {
+            resolve(reader.result);
+        }
+        reader.onerror = function() {
+            reject(reader.error);
+        }
+        reader.readAsDataURL(file);
+    })
+}
+
+/**
+ * `blob`转`file`
+ * @param {Blob} blob 
+ * @param {string} fileName 文件名
+ */
+function blobToFile(blob, fileName) {
+    blob.lastModifiedDate = new Date();
+    blob.name = fileName;
+    return blob;
+}
+
+
+/**
+ * `base64`转`file`
+ * @param {string} base64
+ * @param {string} filename 转换后的文件名
+ */
+function base64ToFile(base64, filename) {
+    const arr = base64.split(",");
+    const mime = arr[0].match(/:(.*?);/)[1];
+    const suffix = mime.split("/")[1] ; 
+    const bstr = atob(arr[1]);
+    let n = bstr.length;
+    const u8arr = new Uint8Array(n);
+    while (n--) {
+        u8arr[n] = bstr.charCodeAt(n);
+    }
+    return new File([u8arr], `${filename}.${suffix}`, { type: mime })
+}
+
+/**
+ * `base64`转`blob`
+ * @param {string} base64
+ */
+function base64ToBlob(base64) {
+    const arr = base64.split(",");
+    const mime = arr[0].match(/:(.*?);/)[1];
+    const bstr = atob(arr[1]);
+    let n = bstr.length;
+    const u8arr = new Uint8Array(n);
+    while (n--) {
+        u8arr[n] = bstr.charCodeAt(n);
+    }
+    return new Blob([u8arr], { type: mime || "image/png" });
+}
