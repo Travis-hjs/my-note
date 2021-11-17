@@ -181,7 +181,6 @@ function blobToFile(blob, fileName) {
     return blob;
 }
 
-
 /**
  * `base64`转`file`
  * @param {string} base64
