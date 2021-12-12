@@ -882,7 +882,7 @@ function toastComponent() {
  * @param {() => void} options.confirm 确认点击回调
  * @param {() => void} options.cancel 取消点击回调
  */
-export function showModal(options) {
+function showModal(options) {
     /** 
      * 组件节点 
      * @type {HTMLElement}
@@ -1215,3 +1215,39 @@ function once(fn) {
         _once.value = fn.apply(this, arguments);
     }
 }
+
+class Singleton {
+    /**
+     * 私有单例对象
+     * @type {Singleton}
+     */
+    static #instance;
+
+    /**
+     * 当前单例对象
+     */
+    static get instance() {
+        if (!this.#instance) {
+            this.#instance = new Singleton();
+        }
+        return this.#instance;
+    }
+
+    /**
+     * @private
+     * 
+     * `typescript`中，可以添加`private`关键字来私有化构造函数
+     * 这样就不能在外部调用`new Singleton`了，仅此只有一个`Singleton.instance`
+     */
+    constructor() {
+        this.time = `Singleton 实例化时间 ${new Date().toLocaleString()}`;
+    }
+
+    log() {
+        console.log(this.time);
+    }
+
+    time = "";
+
+}
+
