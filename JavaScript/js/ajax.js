@@ -1,4 +1,7 @@
 
+// 类型提示用（运行时不会引用）
+/// <reference path="../utils/string.js" />
+
 /**
  * 基于`fetch`请求 [MDN文档](https://developer.mozilla.org/zh-CN/docs/Web/API/Fetch_API)
  * @param {"GET"|"POST"|"PUT"|"DELETE"} method 请求方法
@@ -43,10 +46,18 @@ function fetchRequest(method, url, data = {}, timeout = 5000) {
     });
 }
 
+const apiUrl = "http://wthrcdn.etouch.cn/weather_mini";
+
+const cityList = ["北京","上海","广州","深圳"];
+
+function getCity() {
+    const city = cityList[Math.floor(Math.random() * cityList.length)];
+    return encodeURIComponent(city);
+}
+
 function clickFetchRequest() {
-    fetchRequest("GET", "http://192.168.10.220:8000/bg/common/pm/category/", {
-        page: 1,
-        per_page: 10
+    fetchRequest("GET", apiUrl, {
+        city: getCity()
     }).then(res => {
         console.log("Fetch success", res);
     }).catch(err => {
@@ -59,8 +70,7 @@ function clickFetchRequest() {
  * @param {object} params 传参对象
  * @param {string} params.url 请求路径
  * @param {"GET"|"POST"|"PUT"|"DELETE"} params.method 请求方法
- * @param {object} params.data 传参对象（json）
- * @param {FormData|string} params.formData `form`表单式传参：上传图片就是使用这种传参方式；使用`formData`时将覆盖`data`
+ * @param {object|FormData|string} params.data 传参对象，json、formdata、普通表单字符串
  * @param {{ [key: string]: string }} params.headers `XMLHttpRequest.header`设置对象
  * @param {number?} params.overtime 超时检测毫秒数
  * @param {(result?: any, response: XMLHttpRequest) => void} params.success 成功回调 
@@ -69,35 +79,40 @@ function clickFetchRequest() {
  * @param {(res?: ProgressEvent<XMLHttpRequestEventTarget>) => void} params.progress 进度回调（暂时没用到）
  */
 function ajax(params) {
-    if (typeof params !== "object") return console.error("ajax 缺少请求传参");
-    if (!params.method) return console.error("ajax 缺少请求类型 GET 或者 POST");
+    if (checkType(params) !== "object") return console.error("ajax 请求参数类型有误");
+    if (!params.method) return console.error("ajax 缺少请求方法");
     if (!params.url) return console.error("ajax 缺少请求 url");
-    if (typeof params.data !== "object") return console.error("请求参数类型必须为 object");
-
+    
     const XHR = new XMLHttpRequest();
     /** 请求方法 */
     const method = params.method;
     /** 超时检测 */
-    const overtime = typeof params.overtime === "number" ? params.overtime : 0;
+    const overtime = checkType(params.overtime) === "number" ? params.overtime : 0;
     /** 请求链接 */
     let url = params.url;
     /** 非`GET`请求传参 */
     let body = null;
     /** `GET`请求传参 */
     let query = "";
+    /** 传参数据类型 */
+    const dataType = checkType(params.data);
 
     // 传参处理
     if (method === "GET") {
         // 解析对象传参
-        for (const key in params.data) {
-            query += "&" + key + "=" + params.data[key];
+        if (dataType === "object") {
+            for (const key in params.data) {
+                query += "&" + key + "=" + params.data[key];
+            }
+        } else {
+            console.warn("ajax 传参处理 GET 传参有误，需要的请求参数应为 object 类型");
         }
         if (query) {
             query = "?" + query.slice(1);
             url += query;
         }
     } else {
-        body = JSON.stringify(params.data); // 若后台没设置接收 JSON 则不行，需要使用`params.formData`方式传参
+        body = dataType === "object" ? JSON.stringify(params.data) : params.data;
     }
 
     // 监听请求变化；XHR.status learn: http://tool.oschina.net/commons?type=5
@@ -119,12 +134,20 @@ function ajax(params) {
     // XHR.withCredentials = true;	// 是否Access-Control应使用cookie或授权标头等凭据进行跨站点请求。
     XHR.open(method, url, true);
 
-    // 判断传参类型，`json`或者`form`表单
-    if (params.formData) {
-        body = params.formData;
-    } else {
-        // 设置一个默认为 json 请求的头配置
-        XHR.setRequestHeader("Content-Type", "application/json");
+    // 设置对应的传参请求头，GET 方法不需要
+    if (params.method !== "GET") {
+        switch (dataType) {
+            case "object":
+                XHR.setRequestHeader("Content-Type", "application/json"); // `json`请求
+                break;
+            
+            case "string":
+                XHR.setRequestHeader("Content-Type", "application/x-www-form-urlencoded"); // 表单请求，非`new FormData`
+                break;
+    
+            default:
+                break;
+        }
     }
 
     // 判断设置配置头信息
@@ -154,22 +177,15 @@ function ajaxRequest() {
         info: null
     }
     ajax({
-        url: "http://che.qihao.lzei.com/api/app/parking",
-        method: "POST",
+        url: apiUrl,
+        method: "GET",
         data: {
-            appkey: "e2fb20ea3f3df33310788a4247834c93",
-            token: "2a11d6d67a8b8196afbcefbac3e0a573",
-            page: "1",
-            limit: "7",
-            longitude: "113.30764968",
-            latitude: "23.1200491",
-            sort: "distance",
-            order: "asc"
+            city: getCity()
         },
         overtime: 5000,
         success: function (res, response) {
-            console.log("请求成功", res);
-            console.log("原始响应数据 >>", response);
+            console.log("xhr success >>", res);
+            console.log("XMLHttpRequest 对象 >>", response);
         },
         fail: function (err) {
             error.message = "接口报错，请看 network";
@@ -177,63 +193,19 @@ function ajaxRequest() {
             if (err.response.charAt(0) == "{") {
                 error.info = JSON.parse(err.response);
             }
-            console.log("请求失败", error);
+            console.log("xhr fail >>", error);
         },
         timeout: function (info) {
             error.message = "请求超时";
             error.info = info;
-            console.log(error);
+            console.log("xhr timeout >>", error);
         },
         progress: function (e) {
             if (e.lengthComputable) {
-                let percentComplete = e.loaded / e.total
-                console.log("请求进度", percentComplete, e.loaded, e.total);
+                let percentComplete = e.loaded / e.total;
+                console.log("请求进度 >>", percentComplete, e.loaded, e.total);
             }
-            console.log(e);
+            console.log("xhr progress >>", e);
         }
     });
 }
-
-(function () {
-    /**
-    * `http`请求
-    * @dec 适用`GET`和`POST`一样的拼接参数传参
-    * @param {"GET"|"POST"} method 请求方法
-    * @param {string} url 请求地址
-    * @param {object} data 请求参数
-    * @param {(result: any) => void} success 成功回调
-    * @param {(error: XMLHttpRequest) => void} fail 失败回调
-    */
-    function ajax(method, url, data, success, fail) {
-        const XHR = new XMLHttpRequest();
-        /** 请求参数 */
-        let sendData = "";
-        // 解析对象传参
-        for (const key in data) {
-            sendData += "&" + key + "=" + data[key];
-        }
-        switch (method) {
-            case "GET":
-                url = sendData ? `${url}?${sendData}` : url;
-                sendData = null;
-                break;
-
-            case "POST":
-                if (sendData) {
-                    sendData = sendData.slice(1);
-                }
-                break;
-        }
-        XHR.onreadystatechange = function () {
-            if (XHR.readyState !== 4) return;
-            if (XHR.status === 200 || XHR.status === 304) {
-                typeof success === "function" && success(XHR.response);
-            } else {
-                typeof fail === "function" && fail(XHR);
-            }
-        }
-        XHR.open(method, url, true);
-        XHR.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-        XHR.send(sendData);
-    }
-})();
