@@ -6,7 +6,7 @@
  * @param {number} max 最大数
  */
 function ranInt(min, max) {
-    return Math.round(Math.random() * (max - min) + min);       //不会保留小数
+    return Math.round(Math.random() * (max - min) + min); // 不会保留小数
     // return Math.floor(Math.random() * (max - min + 1)) + min; // 会保留小数
 }
 

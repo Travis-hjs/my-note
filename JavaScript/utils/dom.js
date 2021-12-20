@@ -166,7 +166,7 @@ function setNumberAnimation(options) {
 }
 
 /** 
- * 获取 body 标签中的所有内容 
+ * 获取`<body></body>`标签中的所有内容 
  * @param {string} value 
  */
 function getBodyLabelContent(value) {
@@ -174,14 +174,14 @@ function getBodyLabelContent(value) {
     const rule = /<[^>]*?body[^>]*?>([\s\S]*)<\/\s*body\s*>/;
     // console.log(rule.exec(value));
     const result = rule.exec(value);
-    if(result && result.length === 2) {
+    if (result && result.length === 2) {
         return result[1];
     }
     return value;
 }
 
 /**
- * 获取所有 script 标签的内容
+ * 获取所有`<script></script>`标签的内容
  * @param {string} value 
  */
 function getAllScriptContent(value) {
@@ -191,9 +191,29 @@ function getAllScriptContent(value) {
     const code = rule.exec(value);
     let result = "";
     // console.log(code);
-    if(code && code.length === 1) {
+    if (code && code.length === 1) {
         result = code[0];
-    } 
+    }
     // console.log(result.replace(start, ""));
     return result.replace(start, "").replace(end, ";");
+}
+
+/**
+ * 标签过滤器，只过滤标签，保留内容
+ * @param {string} val 要过滤的内容
+ * @param {string} label 是否过滤指定标签，不指定时则过滤掉所有`html`标签、空格、换行符
+ */
+function htmlLabelFilter(val, label) {
+    let result = "";
+    if (!val) return result;
+    if (label) {
+        const start = new RegExp(`<(${label})[^>]*>`, "gi");
+        const end = new RegExp(`</(${label})[^>]*>`, "gi");
+        result = val.replace(start, "").replace(end, "");
+    } else {
+        result = val.replace(/<[^>]+>|&[^>]+;/g, "");
+        result = result.replace(/[|]*\n/g, "");
+        result = result.replace(/&npsp;/ig, "");
+    }
+    return result;
 }

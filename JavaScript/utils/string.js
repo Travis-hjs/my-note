@@ -138,7 +138,7 @@ function randomHex() {
 /**
  * 检测类型
  * @param {any} target 检测的目标
- * @returns {"string"|"number"|"array"|"object"|"function"|"null"|"undefined"|"arraybuffer"|"regexp"|"blob"} 只枚举一些常用的类型
+ * @returns {"string"|"number"|"array"|"object"|"function"|"null"|"undefined"|"formdata"|"arraybuffer"|"regexp"|"blob"} 只枚举一些常用的类型
  */
 function checkType(target) {
     /** @type {string} */
