@@ -7,13 +7,13 @@
     <title>点击水波纹</title>
     <link rel="stylesheet" href="./css/base.css">
     <style>
-        .page{ min-height: 100vh; text-align: center; vertical-align: middle; }
-        .button-list{ width: 140px; text-align: center; }
-        .button{ margin-bottom: 16px; }
-        /* 水波纹主要css */
-        [ripple]{ position: relative; overflow: hidden; }
-        [ripple] .ripple{ position: absolute; border-radius: 100%; transform: scale(0); pointer-events: none; animation: ripple .4s ease-out; }
-        @keyframes ripple {to {transform: scale(2); opacity: 0; } }
+        .page { min-height: 100vh; text-align: center; vertical-align: middle; }
+        .button-list { width: 140px; text-align: center; }
+        .button { margin-bottom: 16px; color: #fff; }
+        /* 水波纹主要 css */
+        [ripple] { position: relative; overflow: hidden; }
+        [ripple] .ripple { position: absolute; border-radius: 100%; transform: scale(0); pointer-events: none; animation: ripple .4s ease-out; }
+        @keyframes ripple { to {transform: scale(2); opacity: 0; } }
 
         .button:nth-child(1) { background:#4285f4; }
         .button:nth-child(2) { background:#00bad2; }
