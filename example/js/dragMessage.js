@@ -134,62 +134,116 @@
     }
 
     /**
-     * 初始化拖拽事件
-     * @param {HTMLElement} el 拖拽的整体节点（必需是`css`设置了定位才可以）
-     * @param {HTMLElement} dragTarget 点击拖拽的节点
+     * 拖拽节点
+     * @param {object} option 
+     * @param {HTMLElement} option.el 拖拽的整体节点
+     * @param {HTMLElement} option.dragTarget 指定拖拽的目标节点，不指定则点击整体均可拖拽
+     * @param {"fixed"|"absolute"} option.position 定位模式，默认`"fixed"`，设置为`"absolute"`时，根据父容器的尺寸来设置拖拽区域
      */
-    function initDragEvent(el, dragTarget) {
+    function elementDraggable(option) {
+        const el = option.el;
+        const target = option.dragTarget || el;
+        const position = option.position || "fixed";
         const beforeTransition = el.style.transition;
-        const dragPosition = {
+        const coordinate = {
+            /** 记录的坐标位置`pageX` */
             x: 0,
+            /** 使用的定位值`X */
             left: 0,
+            /** 记录的坐标位置`pageY` */
             y: 0,
+            /** 使用的定位值`Y` */
             top: 0
         }
+
+        let wrap = document.documentElement;
         let start = false;
-        let left = 0;
-        let top = 0;
         
-        const wrapRect = () => el.getBoundingClientRect();
+        target.style.cursor = "move";
+        el.style.position = position;
+        if (position === "absolute") {
+            el.parentNode.style.position = "relative";
+            wrap = el.parentNode;
+        }
+
+        const rect = () => el.getBoundingClientRect();
+
+        /**
+         * 鼠标移动
+         * @param {MouseEvent} e 
+         */
+        function move(e) {
+            if (!start) return;
+            if (el.style.margin != "0px") {
+                el.style.margin = "0px";
+            }
+            switch (position) {
+                case "absolute":
+                    el.style.left = coordinate.left + (e.pageX - coordinate.x) + "px";
+                    el.style.top = coordinate.top + (e.pageY - coordinate.y) + "px";
+                    if (el.offsetLeft <= 0) {
+                        el.style.left = "0px";
+                    }
+                    if (el.offsetLeft + el.clientWidth >= wrap.clientWidth) {
+                        el.style.left = wrap.clientWidth - el.clientWidth + "px";
+                    }
+                    if (el.offsetTop <= 0) {
+                        el.style.top = "0px";
+                    }
+                    if (el.offsetTop + el.clientHeight >= wrap.clientHeight) {
+                        el.style.top = wrap.clientHeight - el.clientHeight + "px";
+                    }
+                    break;
+                
+                case "fixed":
+                    el.style.left = e.pageX - coordinate.left + "px";
+                    el.style.top = e.pageY - coordinate.top + "px";
+                    if (rect().left <= 0) {
+                        el.style.left = "0px";
+                    }
+                    if (rect().left >= wrap.clientWidth - el.clientWidth) {
+                        el.style.left = wrap.clientWidth - el.clientWidth + "px";
+                    }
+                    if (rect().top <= 0) {
+                        el.style.top = "0px";
+                    }
+                    if (rect().top >= wrap.clientHeight - el.clientHeight) {
+                        el.style.top = wrap.clientHeight - el.clientHeight + "px";
+                    }
+                    break;
+            }
+        }
+
+        /** 鼠标抬起 */
+        function up() {
+            document.removeEventListener("mousemove", move);
+            document.removeEventListener("mouseup", up);
+            el.style.transition = beforeTransition;
+            start = false;
+        }
 
         // 当鼠标在指定元素按下时
-        dragTarget.addEventListener("mousedown", function(ev) {
-            // console.log(left, top);
-            dragPosition.x = ev.clientX;
-            dragPosition.y = ev.clientY;
-            left = dragPosition.x - wrapRect().left;
-            top = dragPosition.y - wrapRect().top;
-            start = true;
-        });
-
-        // 当鼠标在任意地方移动时
-        document.addEventListener("mousemove", function(ev) {
-            if (!start) return;
-            const container = document.documentElement;
-            dragPosition.left = ev.clientX - left;
-            dragPosition.top = ev.clientY - top;
-            el.style.top = dragPosition.top + "px";
-            el.style.left = dragPosition.left + "px";
-            el.style.margin = 0;
+        target.addEventListener("mousedown", function(e) {
             el.style.transition = "0s all";
-            if (wrapRect().left <= 0) {
-                el.style.left = "0px";
+            switch (position) {
+                case "absolute":
+                    coordinate.x = e.pageX;
+                    coordinate.y = e.pageY;
+                    coordinate.left = el.offsetLeft;
+                    coordinate.top = el.offsetTop;
+                    break;
+            
+                case "fixed":
+                    const size = rect();
+                    coordinate.left = e.pageX - size.left;
+                    coordinate.top = e.pageY - size.top;
+                    break;
             }
-            if (wrapRect().left >= container.clientWidth - el.offsetWidth) {
-                el.style.left = container.clientWidth - el.offsetWidth + "px";
-            }
-            if (wrapRect().top <= 0) {
-                el.style.top = "0px";
-            }
-            if (wrapRect().top >= container.clientHeight - el.offsetHeight) {
-                el.style.top = container.clientHeight - el.offsetHeight + "px";
-            }
-        });
-
-        // 当鼠标在任意地方松开时
-        document.addEventListener("mouseup", function() {
-            start = false;
-            el.style.transition = beforeTransition;
+            start = true;
+            // 当鼠标在任意地方移动时
+            document.addEventListener("mousemove", move);
+            // 当鼠标在任意地方松开时
+            document.addEventListener("mouseup", up);
         });
     }
 
@@ -378,9 +432,15 @@
 
     outputContactList(userList);
 
-    initDragEvent(messageWindow, messageWindow.querySelector(".top"));
+    elementDraggable({
+        el: messageWindow,
+        dragTarget: messageWindow.querySelector(".top")
+    });
 
-    initDragEvent(contactBox, contactBox.querySelector(".contact_header"));
+    elementDraggable({
+        el: contactBox,
+        dragTarget: contactBox.querySelector(".contact_header")
+    });
 
     // 联系人列表关闭按钮点击事件
     contactBox.querySelector(".icon_close").addEventListener("click", closeMessageList);
