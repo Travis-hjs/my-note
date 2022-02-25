@@ -256,7 +256,7 @@
             const item = list[i];
             const el = document.createElement("div");
             el["the-id"] = item.id;
-            el.className = "user_item flex fvertical";
+            el.className = "user_item fvertical";
             el.innerHTML = `<img class="user_head" src="${item.image}" alt=""><div class="user_name f1">${item.name}</div>`;
             el.addEventListener("click", function() {
                 switchUserItemState(item.id);
@@ -275,7 +275,7 @@
             const item = list[i];
             const el = document.createElement("div");
             el["the-id"] = item.id;
-            el.className = "contact_item flex fvertical";
+            el.className = "contact_item fvertical";
             el.innerHTML = `<img class="contact_head" src="${item.image}" alt="">
             <div class="f1">
                 <div class="contact_name">${item.name}</div>

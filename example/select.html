@@ -28,19 +28,19 @@
 <body>
     <button class="button button_blue" onclick="popBox.show();">打开</button>
     <!-- 选择弹出层 -->
-    <div class="mask flex fvertical fcenter" style="visibility: hidden">
+    <div class="mask fvc" style="visibility: hidden">
         <div class="content card">
             <!-- 选项区 -->
-            <div class="menu flex fvertical">
-                <div class="menu-item f1 flex fvertical">
+            <div class="menu fvertical">
+                <div class="menu-item f1 fvertical">
                     <div class="checkbox"></div>
                     <div class="title">全部</div>
                 </div>
-                <div class="menu-item f1 flex fvertical">
+                <div class="menu-item f1 fvertical">
                     <div class="checkbox"></div>
                     <div class="title">广告主</div>
                 </div>
-                <div class="menu-item f1 flex fvertical">
+                <div class="menu-item f1 fvertical">
                     <div class="checkbox"></div>
                     <div class="title">流量主</div>
                 </div>
@@ -50,7 +50,7 @@
                 <div class="box f1"></div>
                 <!-- 广告主item选择列表 -->
                 <div class="box f1">
-                    <!-- <div class="select-item flex fvertical" data-id="">
+                    <!-- <div class="select-item fvertical" data-id="">
                         <div class="checkbox"></div>
                         <div class="text">选项一</div>
                     </div> -->
@@ -61,7 +61,7 @@
                 </div>
             </div>
             <!-- 按钮提交区 -->
-            <div class="flex fcenter">
+            <div class="fcenter">
                 <button class="button button_red" style="margin-right: 20px;" onclick="popBox.hide()">取消</button>
                 <button class="button button_blue" onclick="popBox.submit()">确定</button>
             </div>
