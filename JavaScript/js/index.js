@@ -28,12 +28,13 @@ function clickTest() {
     for (let i = 0; i < total; i++) {
         const btn = document.createElement("button");
         btn.textContent = `测试按钮-${i + 1}`;
-        btn.className = "button button_blue";
+        btn.setAttribute("btn", "");
+        btn.setAttribute("blue", "");
         btn.dataset.id = i + 1;
         buttonListEl.appendChild(btn);
     }
 
-    // 使用事假代理 添加点击事件 (事件委托就是利用事件冒泡，只指定一个事件处理程序，就可以管理某一类型的所有事件)
+    // 使用事件代理 添加点击事件 (事件委托就是利用事件冒泡，只指定一个事件处理程序，就可以管理某一类型的所有事件)
     buttonListEl.addEventListener("click", function (e) {
         /**
          * @type {HTMLElement}
@@ -41,8 +42,14 @@ function clickTest() {
         const btn = e.target;
         // console.dir(btn);
         if (btn.tagName.toLowerCase() == "button") {
-            console.log("按钮id", btn.dataset.id);
-            toggleClass(btn, "button_green");
+            console.log("按钮id", btn.dataset.id, btn.hasAttribute("blue"));
+            if (btn.hasAttribute("blue")) {
+                btn.removeAttribute("blue");
+                btn.setAttribute("green", "");
+            } else {
+                btn.removeAttribute("green");
+                btn.setAttribute("blue", "");
+            }
         }
     });
 

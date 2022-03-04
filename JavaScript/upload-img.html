@@ -30,7 +30,7 @@
                 <img class="image" src="">
                 <div onclick="removeImg(this)" class="remove"></div>
             </div>
-            <div class="upload flex fvertical fcenter">
+            <div class="upload fvc">
                 <div class="add-icon"></div>
                 <input class="upload-input" type="file" name="picture" onchange="upLoad(this)">
             </div>
@@ -70,7 +70,7 @@
                 el.value = null;
             });
 
-            let url = getObjectURL(file);
+            const url = getObjectURL(file);
             console.log("二进制路径", url);
         }
 
@@ -80,7 +80,7 @@
          * @param {(value: string) => void} callback 回调
          */
         function getBase64(file, callback) {
-            let reader = new FileReader();
+            const reader = new FileReader();
             reader.onload = function () {
                 /** base64 路径 */
                 let src = reader.result;

@@ -145,7 +145,7 @@ function createButton() {
 
     for (let i = 0; i < 11; i++) {
         const button = document.createElement("button");
-        button.className = "button";
+        button.setAttribute("btn", "");
         button.setAttribute("ripple", "");
         button.textContent = "BUTTON-" + (i + 1);
         listNode.appendChild(button);
