@@ -57,7 +57,7 @@ function rippleClick(el) {
          * 水波纹动画节点
          * @type {HTMLElement}
          */
-        let node = null;
+        let node;
 
         // 从对象池里面拿取节点
         if (ripplePool.length > 1) {
@@ -69,16 +69,16 @@ function rippleClick(el) {
 
         /** 点击目标矩阵尺寸 */
         const rect = target.getBoundingClientRect();
-        /** 当前自定义颜色值 */
-        const color = target.getAttribute("color");
+        /** 当前自定义颜色值，默认是白色透明 */
+        const color = target.getAttribute("ripple") || "rgba(255, 255, 255, .45)";
         /** 波纹大小 */
         let size = Math.max(rect.width, rect.height);
         // 设置最大范围
         if (size > 200) size = 200;
         // 设置大小
         node.style.height = node.style.width = size + "px";
-        // 默认是白色透明
-        node.style.backgroundColor = color || "rgba(255, 255, 255, .45)";
+        // 设置波纹颜色
+        node.style.backgroundColor = color;
         // 这里必须输出节点后再设置位置，不然会有问题
         target.appendChild(node);
 
@@ -99,10 +99,8 @@ function rippleClick(el) {
         node.addEventListener("animationend", end);
     }
 
-    const mobile = isMobile();
-
     /** 添加事件类型 */
-    const eventType = mobile ? "touchstart" : "mousedown";
+    const eventType = isMobile() ? "touchstart" : "mousedown";
 
     // 1. 这里我使用事件代理去完成方法操作，因为节点是动态生成的
     document.body.addEventListener(eventType, function (e) {
@@ -129,7 +127,7 @@ function rippleClick(el) {
     // 2. Vue项目中可以使用自定义指令的方式代替事件代理
     // Vue.directive("ripple", {
     //     inserted(el, binding) {
-    //         el.setAttribute("ripple", "");
+    //         el.setAttribute("ripple", binding.value);
     //         el.addEventListener(eventType, function (e) {
     //             ripple(e, el);
     //         });
