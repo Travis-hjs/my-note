@@ -8,7 +8,7 @@
 >
 > [掘金代码片段介绍](https://juejin.cn/post/6844904066418491406)
 >
-> [技术博客](https://hansen-hjs.github.io/blog/)（远古时期写的玩意）
+> [技术博客](http://huangjingsheng.gitee.io/hjs/blog)（远古时期写的东西）
 
 ## 目录说明
 
