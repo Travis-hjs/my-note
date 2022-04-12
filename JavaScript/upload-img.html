@@ -36,6 +36,7 @@
             </div>
         </div>
     </div>
+    <script src="./utils/bom.js"></script>
     <script>
         /**
          * input上传图片
@@ -61,51 +62,17 @@
             // const formData = new FormData();
             // formData.append("img", file);
             // console.log(formData, file);
-
-            getBase64(file, res => {
-                console.log("base64 >> ", res);
+            blobOrFlieToBase64(file).then(base64 => {
+                console.log("base64 >> ", base64);
                 el.parentNode.classList.add("hide");
                 el.parentNode.parentNode.querySelector(".img-box").classList.remove("hide");
-                el.parentNode.parentNode.querySelector(".img-box .image").src = res;
+                el.parentNode.parentNode.querySelector(".img-box .image").src = base64;
                 el.value = null;
             });
 
-            const url = getObjectURL(file);
+            const url = blobOrFlieToUrl(file);
             console.log("二进制路径", url);
-        }
-
-        /** 
-         * 获取 base64
-         * @param {File} file 文件
-         * @param {(value: string) => void} callback 回调
-         */
-        function getBase64(file, callback) {
-            const reader = new FileReader();
-            reader.onload = function () {
-                /** base64 路径 */
-                let src = reader.result;
-                // 转义base64: 
-                // src = src.split("+").join("%2B").split("&").join("%26");
-                typeof callback === "function" && callback(src);
-            }
-            reader.readAsDataURL(file);
-        }
-
-        /**
-         * 获取二进制路径（需要打开服务器调试）
-         * @param {File} file 文件
-         * @description `URL.createObjectURL(new Blob([blodObject]))`可以将`blod`对象转换成本地路径
-         */
-        function getObjectURL(file) {
-            let url = null;
-            if (window.createObjectURL) {
-                url = window.createObjectURL(file);
-            } else if (window.URL) {
-                url = window.URL.createObjectURL(file);
-            } else if (window.webkitURL) {
-                url = window.webkitURL.createObjectURL(file);
-            }
-            return url;
+            
         }
 
         /**

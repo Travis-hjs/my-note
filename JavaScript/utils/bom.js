@@ -153,25 +153,7 @@ function log() {
 }
 
 /**
- * `file`转`base64`
- * @param {File} file 文件对象
- * @returns {Promise<string | ArrayBuffer>}
- */
-function fileToBase64(file) {
-    return new Promise(function(resolve, reject) {
-        const reader = new FileReader();
-        reader.onload = function() {
-            resolve(reader.result);
-        }
-        reader.onerror = function() {
-            reject(reader.error);
-        }
-        reader.readAsDataURL(file);
-    })
-}
-
-/**
- * `blob`转`file`
+ * `blob`转`file`（这个两个对象实际上是相同的）
  * @param {Blob} blob 
  * @param {string} fileName 文件名
  */
@@ -182,11 +164,31 @@ function blobToFile(blob, fileName) {
 }
 
 /**
- * `base64`转`file`
- * @param {string} base64
- * @param {string} filename 转换后的文件名
+ * `blob`或者`file`转`base64`
+ * @param {File | Blob} target 目标对象
+ * @returns {Promise<string>}
  */
-function base64ToFile(base64, filename) {
+function blobOrFlieToBase64(target) {
+    return new Promise(function(resolve, reject) {
+        const reader = new FileReader();
+        reader.onload = function() {
+            resolve(reader.result);
+        }
+        reader.onerror = function() {
+            console.warn("blobToBase64 error >>", reader.error);
+            reject(new Error("blobToBase64 error"));
+        }
+        reader.readAsDataURL(target);
+    })
+}
+
+/**
+ * `base64`转`file`或者`blob`对象
+ * @param {string} base64
+ * @param {"blob"|"file"} type 转换的类型，默认`"blob"`
+ * @param {string} filename 转换后的文件名，`type: "file"`时生效
+ */
+function base64ToBlobOrFile(base64, type, filename) {
     const arr = base64.split(",");
     const mime = arr[0].match(/:(.*?);/)[1];
     const suffix = mime.split("/")[1] ; 
@@ -196,21 +198,25 @@ function base64ToFile(base64, filename) {
     while (n--) {
         u8arr[n] = bstr.charCodeAt(n);
     }
-    return new File([u8arr], `${filename}.${suffix}`, { type: mime })
+    if (type === "file") {
+        return new File([u8arr], `${filename}.${suffix}`, { type: mime });
+    } else {
+        return new Blob([u8arr], { type: mime });
+    }
 }
 
 /**
- * `base64`转`blob`
- * @param {string} base64
+ * `blob`或者`file`转读取路径
+ * @param {File | Blob} target 目标对象 
  */
-function base64ToBlob(base64) {
-    const arr = base64.split(",");
-    const mime = arr[0].match(/:(.*?);/)[1];
-    const bstr = atob(arr[1]);
-    let n = bstr.length;
-    const u8arr = new Uint8Array(n);
-    while (n--) {
-        u8arr[n] = bstr.charCodeAt(n);
+function blobOrFlieToUrl(target) {
+    let url;
+    if (window.createObjectURL) {
+        url = window.createObjectURL(target);
+    } else if (window.URL) {
+        url = window.URL.createObjectURL(target);
+    } else if (window.webkitURL) {
+        url = window.webkitURL.createObjectURL(target);
     }
-    return new Blob([u8arr], { type: mime || "image/png" });
+    return url;
 }
