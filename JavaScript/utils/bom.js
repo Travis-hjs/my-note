@@ -175,8 +175,8 @@ function blobOrFlieToBase64(target) {
             resolve(reader.result);
         }
         reader.onerror = function() {
-            console.warn("blobToBase64 error >>", reader.error);
-            reject(new Error("blobToBase64 error"));
+            console.warn("reader error >>", reader.error);
+            reject(new Error("blobOrFlieToBase64 error"));
         }
         reader.readAsDataURL(target);
     })
