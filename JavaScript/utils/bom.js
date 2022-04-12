@@ -208,6 +208,7 @@ function base64ToBlobOrFile(base64, type, filename) {
 /**
  * `blob`或者`file`转读取路径
  * @param {File | Blob} target 目标对象 
+ * @returns {string}
  */
 function blobOrFlieToUrl(target) {
     let url;
