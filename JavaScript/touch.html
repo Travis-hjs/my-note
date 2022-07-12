@@ -2,137 +2,149 @@
 <html>
 
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="maximum-scale=1.0, minimum-scale=1.0, user-scalable=0, initial-scale=1.0, width=device-width" />
-    <meta name="format-detection" content="telephone=no, email=no, date=no, address=no">
-    <title>触摸事件</title>
-    <style>
-        *{ padding: 0; margin: 0; }
-		.wrap{ width: 100%; height: 15em; background-color: #333; line-height: 15em; text-align: center; color: #fff; }
-    </style>
+  <meta charset="utf-8">
+  <meta name="viewport"
+    content="maximum-scale=1.0, minimum-scale=1.0, user-scalable=0, initial-scale=1.0, width=device-width" />
+  <meta name="format-detection" content="telephone=no, email=no, date=no, address=no">
+  <title>触摸事件</title>
+  <style>
+    * {
+      padding: 0;
+      margin: 0;
+    }
+
+    .wrap {
+      width: 100%;
+      height: 15em;
+      background-color: #333;
+      line-height: 15em;
+      text-align: center;
+      color: #fff;
+    }
+  </style>
 </head>
 
 <body>
-    <div class="wrap">
-        <p>slider</p>
-    </div>
-    <script type="text/javascript">
-        /**
-         * 监听触摸事件模拟常规操作
-         * @param {HTMLElement} el 监听的元素
-         * @param {'click'|'long'|'top'|'left'|'down'|'right'|'start'|'move'|'end'} type 事件类型
-         * @param {Function} callback 事件触发回调
-         */
-        function onTouch(el, type, callback) {
-            /** 动画帧 */
-            const animationFrame = requestAnimationFrame;
-            /** 滑动范围在 50 x 50 内则做点击处理，s是开始，e是结束 */
-            const init = {
-                x: 50,
-                y: 50,
-                sx: 0,
-                sy: 0,
-                ex: 0,
-                ey: 0
-            }
-            let startTime = 0, endTime = 0, start = false;
+  <div class="wrap">
+    <p>slider</p>
+  </div>
+  <script type="text/javascript">
+    /**
+     * 监听触摸事件模拟常规操作
+     * @param {HTMLElement} el 监听的元素
+     * @param {'click'|'long'|'top'|'left'|'down'|'right'|'start'|'move'|'end'} type 事件类型
+     * @param {Function} callback 事件触发回调
+     */
+    function onTouch(el, type, callback) {
+      /** 动画帧 */
+      const animationFrame = requestAnimationFrame;
+      /** 滑动范围在 50 x 50 内则做点击处理，s是开始，e是结束 */
+      const init = {
+        x: 50,
+        y: 50,
+        sx: 0,
+        sy: 0,
+        ex: 0,
+        ey: 0
+      }
+      let startTime = 0, endTime = 0, start = false;
 
-            /** 监听长摁事件 */
-            function onLong() {
-                const now = Date.now();
-                if ((now - startTime) < 600 && start) {
-                    return animationFrame(onLong);
-                }
-                // 长按
-                if (type === 'long' && start) callback(); 
-                start = false;
-            }
-
-            el.addEventListener('touchstart', function () {
-                start = true;
-                startTime = Date.now();
-                init.sx = event.targetTouches[0].pageX;
-                init.sy = event.targetTouches[0].pageY;
-                init.ex = init.sx;
-                init.ey = init.sy;
-                if (type === 'start') callback();
-                onLong();
-            });
-
-            el.addEventListener('touchmove', function (e) {
-                // 阻止触摸时浏览器的缩放、滚动条滚动
-                e.preventDefault();
-                init.ex = event.targetTouches[0].pageX;
-                init.ey = event.targetTouches[0].pageY;
-                if (type === 'move') callback();
-                const changeX = init.sx - init.ex;
-                const changeY = init.sy - init.ey;
-                const slideX = Math.abs(changeX) > init.x;
-                const slideY = Math.abs(changeY) > init.y;
-                if (slideX || slideY) start = false;
-            });
-
-            el.addEventListener('touchend', function () {
-                endTime = Date.now();
-                start = false;
-                const changeX = init.sx - init.ex;
-                const changeY = init.sy - init.ey;
-                const slideX = Math.abs(changeX) > init.x;
-                const slideY = Math.abs(changeY) > init.y;
-                const isClick = (endTime - startTime) < 300;
-
-                if (slideX) {
-                    if (changeX > 0) {
-                        if (type === 'left') callback();
-                    } else {
-                        if (type === 'right') callback();
-                    }
-                } 
-
-                if (slideY) {
-                    if (changeY > 0) {
-                        if (type === 'top') callback();
-                    } else {
-                        if (type === 'down') callback();
-                    }
-                } 
-
-                if ((!slideX || !slideY) && isClick) {
-                    if (type === 'click') callback();
-                }
-
-                if (type === 'end') callback();
-
-                // console.log(endTime - startTime);
-            });
-            
+      /** 监听长摁事件 */
+      function onLong() {
+        const now = Date.now();
+        if ((now - startTime) < 600 && start) {
+          return animationFrame(onLong);
         }
-        var el = document.querySelector('.wrap');
-        // onTouch(el, 'start', () => {
-        // 	console.log('触摸开始');
-        // })
-        // onTouch(el, 'move', () => {
-        // 	console.log('触摸移动');
-        // })
-        onTouch(el, 'left', () => {
-            console.log('往左滑动');
-        })
-        onTouch(el, 'right', () => {
-            console.log('往右滑动');
-        })
-        onTouch(el, 'top', () => {
-            console.log('往上滑动');
-        })
-        onTouch(el, 'down', () => {
-            console.log('往下滑动');
-        })
-        onTouch(el, 'long', () => {
-            console.log('长摁');
-        })
-        onTouch(el, 'click', () => {
-            console.log('点击');
-        })
-    </script>
+        // 长按
+        if (type === 'long' && start) callback();
+        start = false;
+      }
+
+      el.addEventListener('touchstart', function () {
+        start = true;
+        startTime = Date.now();
+        init.sx = event.targetTouches[0].pageX;
+        init.sy = event.targetTouches[0].pageY;
+        init.ex = init.sx;
+        init.ey = init.sy;
+        if (type === 'start') callback();
+        onLong();
+      });
+
+      el.addEventListener('touchmove', function (e) {
+        // 阻止触摸时浏览器的缩放、滚动条滚动
+        e.preventDefault();
+        init.ex = event.targetTouches[0].pageX;
+        init.ey = event.targetTouches[0].pageY;
+        if (type === 'move') callback();
+        const changeX = init.sx - init.ex;
+        const changeY = init.sy - init.ey;
+        const slideX = Math.abs(changeX) > init.x;
+        const slideY = Math.abs(changeY) > init.y;
+        if (slideX || slideY) start = false;
+      });
+
+      el.addEventListener('touchend', function () {
+        endTime = Date.now();
+        start = false;
+        const changeX = init.sx - init.ex;
+        const changeY = init.sy - init.ey;
+        const slideX = Math.abs(changeX) > init.x;
+        const slideY = Math.abs(changeY) > init.y;
+        const isClick = (endTime - startTime) < 300;
+
+        if (slideX) {
+          if (changeX > 0) {
+            if (type === 'left') callback();
+          } else {
+            if (type === 'right') callback();
+          }
+        }
+
+        if (slideY) {
+          if (changeY > 0) {
+            if (type === 'top') callback();
+          } else {
+            if (type === 'down') callback();
+          }
+        }
+
+        if ((!slideX || !slideY) && isClick) {
+          if (type === 'click') callback();
+        }
+
+        if (type === 'end') callback();
+
+        // console.log(endTime - startTime);
+      });
+
+    }
+    var el = document.querySelector('.wrap');
+    // onTouch(el, 'start', () => {
+    // 	console.log('触摸开始');
+    // })
+    // onTouch(el, 'move', () => {
+    // 	console.log('触摸移动');
+    // })
+    onTouch(el, 'left', () => {
+      console.log('往左滑动');
+    })
+    onTouch(el, 'right', () => {
+      console.log('往右滑动');
+    })
+    onTouch(el, 'top', () => {
+      console.log('往上滑动');
+    })
+    onTouch(el, 'down', () => {
+      console.log('往下滑动');
+    })
+    onTouch(el, 'long', () => {
+      console.log('长摁');
+    })
+    onTouch(el, 'click', () => {
+      console.log('点击');
+    })
+  </script>
 </body>
 
 </html>

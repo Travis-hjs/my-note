@@ -1,31 +1,75 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>音频播放</title>
-    <style>
-        *{ padding: 0; margin: 0; }
-        div { box-sizing: border-box; }
-        .page{ width: 100%; padding: 50px; box-sizing: border-box; text-align: center; }
-        .page button{ min-width: 140px; height: 40px; text-align: center; }
-        .webAudio{ width: 100%; margin: 0 auto; padding: 10px; }
-        .webAudio .file{ padding: 5px; margin-bottom: 10px; }
-        .webAudio .audio-item{ width: 100%; border: dashed 1px coral; padding: 10px; text-align: center; margin-bottom: 10px; }
-        .webAudio button{ padding: 0 10px; margin-bottom: 10px; }
-        .webAudio canvas{ display: block; margin: 0 auto; }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>音频播放</title>
+  <style>
+    * {
+      padding: 0;
+      margin: 0;
+    }
+
+    div {
+      box-sizing: border-box;
+    }
+
+    .page {
+      width: 100%;
+      padding: 50px;
+      box-sizing: border-box;
+      text-align: center;
+    }
+
+    .page button {
+      min-width: 140px;
+      height: 40px;
+      text-align: center;
+    }
+
+    .webAudio {
+      width: 100%;
+      margin: 0 auto;
+      padding: 10px;
+    }
+
+    .webAudio .file {
+      padding: 5px;
+      margin-bottom: 10px;
+    }
+
+    .webAudio .audio-item {
+      width: 100%;
+      border: dashed 1px coral;
+      padding: 10px;
+      text-align: center;
+      margin-bottom: 10px;
+    }
+
+    .webAudio button {
+      padding: 0 10px;
+      margin-bottom: 10px;
+    }
+
+    .webAudio canvas {
+      display: block;
+      margin: 0 auto;
+    }
+  </style>
 </head>
+
 <body>
-    <div class="page">
-        <button onclick="playAudio()">播放标签音效</button>
-        <button onclick="pauseAudio()">停止标签音效</button>
-        <div class="webAudio">
-            <input class="file" type="file" onchange="uploadAudio(this)">
-        </div>
-        <button onclick="playWebAudio()">播放加载好的音频</button>
+  <div class="page">
+    <button onclick="playAudio()">播放标签音效</button>
+    <button onclick="pauseAudio()">停止标签音效</button>
+    <div class="webAudio">
+      <input class="file" type="file" onchange="uploadAudio(this)">
     </div>
-    <script src="./js/audio.js"></script>
+    <button onclick="playWebAudio()">播放加载好的音频</button>
+  </div>
+  <script src="./js/audio.js"></script>
 </body>
+
 </html>

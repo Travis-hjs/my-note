@@ -6,8 +6,8 @@
  * @param {number} max 最大数
  */
 function ranInt(min, max) {
-    return Math.round(Math.random() * (max - min) + min); // 不会保留小数
-    // return Math.floor(Math.random() * (max - min + 1)) + min; // 会保留小数
+  return Math.round(Math.random() * (max - min) + min); // 不会保留小数
+  // return Math.floor(Math.random() * (max - min + 1)) + min; // 会保留小数
 }
 
 /**
@@ -24,69 +24,69 @@ function ranInt(min, max) {
  * ```
  */
 function computeNumber(a, type, b) {
+  /**
+   * 获取数字小数点的长度
+   * @param {number} n 数字
+   */
+  function getDecimalLength(n) {
+    const decimal = n.toString().split(".")[1];
+    return decimal ? decimal.length : 0;
+  }
+  /**
+   * 修正小数点
+   * @description 防止出现 `33.33333*100000 = 3333332.9999999995` && `33.33*10 = 333.29999999999995` 这类情况做的处理
+   * @param {number} n
+   */
+  const amend = (n, precision = 15) => parseFloat(Number(n).toPrecision(precision));
+  const power = Math.pow(10, Math.max(getDecimalLength(a), getDecimalLength(b)));
+  let result = 0;
+
+  a = amend(a * power);
+  b = amend(b * power);
+
+  switch (type) {
+    case "+":
+      result = (a + b) / power;
+      break;
+    case "-":
+      result = (a - b) / power;
+      break;
+    case "*":
+      result = (a * b) / (power * power);
+      break;
+    case "/":
+      result = a / b;
+      break;
+  }
+
+  result = amend(result);
+
+  return {
+    /** 计算结果 */
+    result,
     /**
-     * 获取数字小数点的长度
-     * @param {number} n 数字
+     * 继续计算
+     * @param {"+"|"-"|"*"|"/"} nextType 继续计算方式
+     * @param {number} nextValue 继续计算的值
      */
-    function getDecimalLength(n) {
-        const decimal = n.toString().split(".")[1];
-        return decimal ? decimal.length : 0;
+    next(nextType, nextValue) {
+      return computeNumber(result, nextType, nextValue);
+    },
+    /** 
+     * 小数点进位 
+     * @param {number} n 小数点后的位数
+    */
+    toHex(n) {
+      const strings = result.toString().split(".");
+      if (n > 0 && strings[1] && strings[1].length > n) {
+        const decimal = strings[1].slice(0, n);
+        const value = Number(`${strings[0]}.${decimal}`);
+        const difference = 1 / Math.pow(10, decimal.length);
+        result = computeNumber(value, "+", difference).result;
+      }
+      return result;
     }
-    /**
-     * 修正小数点
-     * @description 防止出现 `33.33333*100000 = 3333332.9999999995` && `33.33*10 = 333.29999999999995` 这类情况做的处理
-     * @param {number} n
-     */
-    const amend = (n, precision = 15) => parseFloat(Number(n).toPrecision(precision));
-    const power = Math.pow(10, Math.max(getDecimalLength(a), getDecimalLength(b)));
-    let result = 0;
-
-    a = amend(a * power);
-    b = amend(b * power);
-
-    switch (type) {
-        case "+":
-            result = (a + b) / power;
-            break;
-        case "-":
-            result = (a - b) / power;
-            break;
-        case "*":
-            result = (a * b) / (power * power);
-            break;
-        case "/":
-            result = a / b;
-            break;
-    }
-
-    result = amend(result);
-
-    return {
-        /** 计算结果 */
-        result,
-        /**
-         * 继续计算
-         * @param {"+"|"-"|"*"|"/"} nextType 继续计算方式
-         * @param {number} nextValue 继续计算的值
-         */
-        next(nextType, nextValue) {
-            return computeNumber(result, nextType, nextValue);
-        },
-        /** 
-         * 小数点进位 
-         * @param {number} n 小数点后的位数
-        */
-        toHex(n) {
-            const strings = result.toString().split(".");
-            if (n > 0 && strings[1] && strings[1].length > n) {
-                const decimal = strings[1].slice(0, n);
-                const value = Number(`${strings[0]}.${decimal}`);
-                const difference = 1 / Math.pow(10, decimal.length);
-                result = computeNumber(value, "+", difference).result;
-            }
-            return result;
-        }
-    };
+  };
 }
 
 /**
@@ -94,15 +94,15 @@ function computeNumber(a, type, b) {
  * @param {Array<number>} values 
  */
 function hypot(...values) {
-    const length = values.length;
-    let result = 0;
-    for (let i = 0; i < length; i++) {
-        if (values[i] === Infinity || values[i] === -Infinity) {
-            return Infinity;
-        }
-        result += values[i] * values[i];
+  const length = values.length;
+  let result = 0;
+  for (let i = 0; i < length; i++) {
+    if (values[i] === Infinity || values[i] === -Infinity) {
+      return Infinity;
     }
-    return Math.sqrt(result);
+    result += values[i] * values[i];
+  }
+  return Math.sqrt(result);
 }
 
 /**
@@ -111,10 +111,10 @@ function hypot(...values) {
  * @param {{x: number, y: number}} size2 坐标二
  */
 function getSizeDistance(size1, size2) {
-    const dx = size2.x - size1.x;
-    const dy = size2.y - size1.y;
-    return Math.sqrt(Math.pow(dx, 2) + Math.pow(dy, 2));  
-    // return hypot(size2.x - size1.x, size2.y - size1.y);
+  const dx = size2.x - size1.x;
+  const dy = size2.y - size1.y;
+  return Math.sqrt(Math.pow(dx, 2) + Math.pow(dy, 2));
+  // return hypot(size2.x - size1.x, size2.y - size1.y);
 }
 
 /**
@@ -123,9 +123,9 @@ function getSizeDistance(size1, size2) {
  * @param {number} radius 范围半径
  */
 function computeCircularPosition(deg = 0, radius = 100) {
-    const x = Math.round(radius * Math.sin(deg * Math.PI / 180));
-    const y = Math.round(radius * Math.cos(deg * Math.PI / 180));
-    return { x, y }
+  const x = Math.round(radius * Math.sin(deg * Math.PI / 180));
+  const y = Math.round(radius * Math.cos(deg * Math.PI / 180));
+  return { x, y }
 }
 
 /**
@@ -138,13 +138,13 @@ function computeCircularPosition(deg = 0, radius = 100) {
  * @param {number} location2.lat 维度
  */
 function getLocationDistance(location1, location2) {
-    const toRad = d => d * Math.PI / 180;
-    const radLat1 = toRad(location1.lat);
-    const radLat2 = toRad(location2.lat);
-    const deltaLat = radLat1 - radLat2;
-    const deltaLng = toRad(location1.lng) - toRad(location2.lng);
-    const dis = 2 * Math.asin(Math.sqrt(Math.pow(Math.sin(deltaLat / 2), 2) + Math.cos(radLat1) * Math.cos(radLat2) * Math.pow(Math.sin(deltaLng / 2), 2)));
-    return dis * 6378137;
+  const toRad = d => d * Math.PI / 180;
+  const radLat1 = toRad(location1.lat);
+  const radLat2 = toRad(location2.lat);
+  const deltaLat = radLat1 - radLat2;
+  const deltaLng = toRad(location1.lng) - toRad(location2.lng);
+  const dis = 2 * Math.asin(Math.sqrt(Math.pow(Math.sin(deltaLat / 2), 2) + Math.cos(radLat1) * Math.cos(radLat2) * Math.pow(Math.sin(deltaLng / 2), 2)));
+  return dis * 6378137;
 }
 
 /**
@@ -153,13 +153,13 @@ function getLocationDistance(location1, location2) {
  * @param {{left: number, top: number, width: number, height: number}} b 
  */
 function isCollision(a, b) {
-    const ax = a.left;
-    const ay = a.top;
-    const aw = a.width;
-    const ah = a.height;
-    const bx = b.left;
-    const by = b.top;
-    const bw = b.width;
-    const bh = b.height;
-    return (ax + aw > bx && ax < bx + bw && ay + ah > by && ay < by + bh);
+  const ax = a.left;
+  const ay = a.top;
+  const aw = a.width;
+  const ah = a.height;
+  const bx = b.left;
+  const by = b.top;
+  const bw = b.width;
+  const bh = b.height;
+  return (ax + aw > bx && ax < bx + bw && ay + ah > by && ay < by + bh);
 }

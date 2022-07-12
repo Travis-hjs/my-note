@@ -1,81 +1,85 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="maximum-scale=1.0, minimum-scale=1.0, user-scalable=0, initial-scale=1.0, width=device-width"/>
-    <meta name="format-detection" content="telephone=no, email=no, date=no, address=no">
-    <title>css-grid-布局</title>
-    <style>
-        *{ margin: 0; padding: 0; box-sizing: border-box; }
-        .page {
-            width: 100%;
-            max-width: 680px;
-            min-height: 100vh;
-            margin: 0 auto;
-            background-color: #eeeeee;
-            font-size: 15px;
-            color: #555;
-        }
-        .grid_box {
-            padding: 16px;
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            grid-gap: 10px;
-            /* grid-column-gap: 10px;
-            grid-row-gap: 20px; */
-        }
-        .grid_box .item { padding: 8px; background-color: #fff; border-radius: 2px; }
-        .grid_box .item img { display: block; width: 100%; height: 120px; margin-bottom: 14px; object-fit: cover; background-color: #eee; border-radius: 4px; }
-        .grid_box .item .text { line-height: 22px; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden; }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+    content="maximum-scale=1.0, minimum-scale=1.0, user-scalable=0, initial-scale=1.0, width=device-width" />
+  <meta name="format-detection" content="telephone=no, email=no, date=no, address=no">
+  <title>css-grid-布局</title>
+  <style>
+    *{ margin: 0; padding: 0; box-sizing: border-box; }
+    .page {
+      width: 100%;
+      max-width: 680px;
+      min-height: 100vh;
+      margin: 0 auto;
+      background-color: #eeeeee;
+      font-size: 15px;
+      color: #555;
+    }
+    .grid_box {
+      padding: 16px;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      grid-gap: 10px;
+      /* grid-column-gap: 10px;
+      grid-row-gap: 20px; */
+    }
+    .grid_box .item { padding: 8px; background-color: #fff; border-radius: 2px; }
+    .grid_box .item img { display: block; width: 100%; height: 120px; margin-bottom: 14px; object-fit: cover; background-color: #eee; border-radius: 4px; }
+    .grid_box .item .text { line-height: 22px; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden; }
+  </style>
 </head>
+
 <body>
-    <!-- learn: https://developer.mozilla.org/zh-CN/docs/Web/CSS/CSS_Grid_Layout -->
-    <div class="page">
-        <div class="grid_box">
-            <div class="item">
-                <img src="https://muse-ui.org/img/breakfast.f1098290.jpg" alt="">
-                <div class="text"></div>
-            </div>
-        </div>
+  <!-- learn: https://developer.mozilla.org/zh-CN/docs/Web/CSS/CSS_Grid_Layout -->
+  <div class="page">
+    <div class="grid_box">
+      <div class="item">
+        <img src="https://muse-ui.org/img/breakfast.f1098290.jpg" alt="">
+        <div class="text"></div>
+      </div>
     </div>
+  </div>
 
-    <script>
-        /**
-         * @param {string} name
-         * @returns {HTMLElement}
-        */
-        const $ = name => document.querySelector(name);
-        /**
-         * 随机生成中文
-         * @param {number} min 
-         * @param {number} max 
-         */
-        function randomText(min, max) {
-            const len = parseInt(Math.random() * max) + min;
-            const base = 20000;
-            const range = 1000;
-            let str = '';
-            let i = 0;
-            while (i < len) {
-                i++;
-                const lower = parseInt(Math.random() * range);
-                str += String.fromCharCode(base + lower);
-            }
-            return str;
-        }
+  <script>
+    /**
+     * @param {string} name
+     * @returns {HTMLElement}
+    */
+    const $ = name => document.querySelector(name);
+    /**
+     * 随机生成中文
+     * @param {number} min 
+     * @param {number} max 
+     */
+    function randomText(min, max) {
+      const len = parseInt(Math.random() * max) + min;
+      const base = 20000;
+      const range = 1000;
+      let str = '';
+      let i = 0;
+      while (i < len) {
+        i++;
+        const lower = parseInt(Math.random() * range);
+        str += String.fromCharCode(base + lower);
+      }
+      return str;
+    }
 
-        const itemNode = $(".grid_box .item");
+    const itemNode = $(".grid_box .item");
 
-        const gridBox = $(".grid_box");
+    const gridBox = $(".grid_box");
 
-        itemNode.remove()
+    itemNode.remove()
 
-        for (let i = 0; i < 8; i++) {
-            const node = itemNode.cloneNode(true);
-            node.querySelector(".text").innerHTML = randomText(4, 40);
-            gridBox.appendChild(node);
-        }
-    </script>
+    for (let i = 0; i < 8; i++) {
+      const node = itemNode.cloneNode(true);
+      node.querySelector(".text").innerHTML = randomText(4, 40);
+      gridBox.appendChild(node);
+    }
+  </script>
 </body>
+
 </html>

@@ -1,37 +1,57 @@
 <!DOCTYPE html>
 <html>
-	<head>
-		<meta charset="utf-8">
-		<meta name="viewport" content="maximum-scale=1.0, minimum-scale=1.0, user-scalable=0, initial-scale=1.0, width=device-width"/>
-		<meta name="format-detection" content="telephone=no, email=no, date=no, address=no">
-		<title>下拉刷新</title>
-		<link rel="stylesheet" href="./css/base.css">
-		<link rel="stylesheet" href="./css/loading.css">
-		<style>
-            html { font-size: calc(100vw / 7.5) }
-            body { background-color: #fff; }
-            .preloader{ width: 48px; height: 48px; }
-			.page .item { background-color: #333; height: 5rem; }
-            .page .item:nth-child(even) { background-color: #666; }
-		</style>
-	</head>
-	<body>
-        <div class="page"></div>
-        
-        <script type="text/template" id="loading-icon">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport"
+    content="maximum-scale=1.0, minimum-scale=1.0, user-scalable=0, initial-scale=1.0, width=device-width" />
+  <meta name="format-detection" content="telephone=no, email=no, date=no, address=no">
+  <title>下拉刷新</title>
+  <link rel="stylesheet" href="./css/base.css">
+  <link rel="stylesheet" href="./css/loading.css">
+  <style>
+    html {
+      font-size: calc(100vw / 7.5)
+    }
+
+    body {
+      background-color: #fff;
+    }
+
+    .preloader {
+      width: 48px;
+      height: 48px;
+    }
+
+    .page .item {
+      background-color: #333;
+      height: 5rem;
+    }
+
+    .page .item:nth-child(even) {
+      background-color: #666;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="page"></div>
+
+  <script type="text/template" id="loading-icon">
             <!-- loading 圈圈 -->
-            <div class="preloader">
-                <div class="preloader-inner">
-                    <div class="preloader-inner-gap"></div>
-                    <div class="preloader-inner-left">
-                        <div class="preloader-inner-half-circle"></div>
-                    </div>
-                    <div class="preloader-inner-right">
-                        <div class="preloader-inner-half-circle"></div>
-                    </div>
-                </div>
-            </div>
-        </script>
-		<script src="./js/dropDownRefresh.js"></script>
-	</body>
+  <div class="preloader">
+    <div class="preloader-inner">
+      <div class="preloader-inner-gap"></div>
+      <div class="preloader-inner-left">
+        <div class="preloader-inner-half-circle"></div>
+      </div>
+      <div class="preloader-inner-right">
+        <div class="preloader-inner-half-circle"></div>
+      </div>
+    </div>
+  </div>
+  </script>
+  <script src="./js/dropDownRefresh.js"></script>
+</body>
+
 </html>

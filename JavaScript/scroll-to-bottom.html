@@ -1,39 +1,43 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="maximum-scale=1.0, minimum-scale=1.0, user-scalable=0, initial-scale=1.0, width=device-width"/>
-        <meta name="format-detection" content="telephone=no, email=no, date=no, address=no">
-        <title>监听滚动到底部</title>
-        <link rel="stylesheet" href="./css/base.css">
-        <style>
-            .page{ padding-top: 10px; }
-            .list li{ background-color: gold; height: 150px; position: relative; z-index: 10; }
-            .list li:nth-child(even){ background-color: #212121; }
-            .scroll_view{ width: 100%; height: 375px; overflow-y: auto; padding: 0 10px; margin-bottom: 20px; }
-            .scroll_view .item{ width: 100%; height: 100px; background-color: lightseagreen; color: #fff; text-align: center; line-height: 100px; }
-            .scroll_view .item:nth-child(even){ background-color: lightsalmon; }
-        </style>
-    </head>
-    <body>
-        <div class="page">
-            <div class="scroll_view">
-                <div class="item">节点滚动</div>
-                <div class="item">节点滚动</div>
-                <div class="item">节点滚动</div>
-                <div class="item">节点滚动</div>
-                <div class="item">节点滚动</div>
-                <div class="item">节点滚动</div>
-            </div>
-            <ul class="list">
-                <li></li>
-                <li></li>
-                <li></li>
-                <li></li>
-                <li></li>
-                <li></li>
-            </ul>
-        </div>
-        <script src="./js/scrollToBottom.js"></script>
-    </body>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+    content="maximum-scale=1.0, minimum-scale=1.0, user-scalable=0, initial-scale=1.0, width=device-width" />
+  <meta name="format-detection" content="telephone=no, email=no, date=no, address=no">
+  <title>监听滚动到底部</title>
+  <link rel="stylesheet" href="./css/base.css">
+  <style>
+    .page{ padding-top: 10px; }
+    .list li{ background-color: gold; height: 150px; position: relative; z-index: 10; }
+    .list li:nth-child(even){ background-color: #212121; }
+    .scroll_view{ width: 100%; height: 375px; overflow-y: auto; padding: 0 10px; margin-bottom: 20px; }
+    .scroll_view .item{ width: 100%; height: 100px; background-color: lightseagreen; color: #fff; text-align: center; line-height: 100px; }
+    .scroll_view .item:nth-child(even){ background-color: lightsalmon; }
+  </style>
+</head>
+
+<body>
+  <div class="page">
+    <div class="scroll_view">
+      <div class="item">节点滚动</div>
+      <div class="item">节点滚动</div>
+      <div class="item">节点滚动</div>
+      <div class="item">节点滚动</div>
+      <div class="item">节点滚动</div>
+      <div class="item">节点滚动</div>
+    </div>
+    <ul class="list">
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+    </ul>
+  </div>
+  <script src="./js/scrollToBottom.js"></script>
+</body>
+
 </html>

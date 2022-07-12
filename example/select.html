@@ -1,72 +1,75 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>选择弹出层</title>
-    <link rel="stylesheet" href="./css/base.css">
-    <style>
-        /* 遮罩层 */
-        .mask{ width: 100%; height: 100vh; background-color: rgba(0,0,0,0.45); position: fixed; top: 0; left: 0; }
-        .mask .checkbox{ width: 24px; height: 24px; margin-right: 10px; border-radius: 100%; box-sizing: border-box; border: solid 1px #dcdfe6; }
-        .mask .checkbox_on{ border-color: #409eff; background-color: #409eff; }
-        .mask .content{ width: 640px; min-height: 300px; border-radius: 5px; background-color: #fff; padding: 10px; box-sizing: border-box; }
-        .mask .menu{ width: 100%; height: 44px; margin-bottom: 20px; }
-        .mask .menu .menu-item { line-height: 30px; cursor: pointer; padding-left: 10px; }
-        .mask .menu .title{ font-size: 16px; }
-        .mask .select-list { margin-bottom: 40px; }
-        .mask .select-list .box{ height: 300px; overflow-y: auto; box-sizing: border-box; padding-left: 10px; }
-        .mask .select-list .box::-webkit-scrollbar{ width: 4px; }
-        .mask .select-list .box::-webkit-scrollbar-track { border-radius: 2px; background: rgba(0,0,0,0.25); }
-        .mask .select-list .box::-webkit-scrollbar-thumb{ border-radius: 2px; background-color: #60b0ff; } 
-        .mask .select-list .box:nth-child(2){ border-right: solid 1px #dcdfe6; border-left: solid 1px #dcdfe6; }
-        .mask .select-list .box .select-item{ width: 100%; height: 40px; overflow: hidden; cursor: pointer; }
-        .mask .select-list .box .select-item .text{ font-size: 14px; }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>选择弹出层</title>
+  <link rel="stylesheet" href="./css/base.css">
+  <style>
+    /* 遮罩层 */
+    .mask{ width: 100%; height: 100vh; background-color: rgba(0,0,0,0.45); position: fixed; top: 0; left: 0; }
+    .mask .checkbox{ width: 24px; height: 24px; margin-right: 10px; border-radius: 100%; box-sizing: border-box; border: solid 1px #dcdfe6; }
+    .mask .checkbox_on{ border-color: #409eff; background-color: #409eff; }
+    .mask .content{ width: 640px; min-height: 300px; border-radius: 5px; background-color: #fff; padding: 10px; box-sizing: border-box; }
+    .mask .menu{ width: 100%; height: 44px; margin-bottom: 20px; }
+    .mask .menu .menu-item { line-height: 30px; cursor: pointer; padding-left: 10px; }
+    .mask .menu .title{ font-size: 16px; }
+    .mask .select-list { margin-bottom: 40px; }
+    .mask .select-list .box{ height: 300px; overflow-y: auto; box-sizing: border-box; padding-left: 10px; }
+    .mask .select-list .box::-webkit-scrollbar{ width: 4px; }
+    .mask .select-list .box::-webkit-scrollbar-track { border-radius: 2px; background: rgba(0,0,0,0.25); }
+    .mask .select-list .box::-webkit-scrollbar-thumb{ border-radius: 2px; background-color: #60b0ff; } 
+    .mask .select-list .box:nth-child(2){ border-right: solid 1px #dcdfe6; border-left: solid 1px #dcdfe6; }
+    .mask .select-list .box .select-item{ width: 100%; height: 40px; overflow: hidden; cursor: pointer; }
+    .mask .select-list .box .select-item .text{ font-size: 14px; }
+  </style>
 </head>
+
 <body>
-    <button class="button button_blue" onclick="popBox.show();">打开</button>
-    <!-- 选择弹出层 -->
-    <div class="mask fvc" style="visibility: hidden">
-        <div class="content card">
-            <!-- 选项区 -->
-            <div class="menu fvertical">
-                <div class="menu-item f1 fvertical">
-                    <div class="checkbox"></div>
-                    <div class="title">全部</div>
-                </div>
-                <div class="menu-item f1 fvertical">
-                    <div class="checkbox"></div>
-                    <div class="title">广告主</div>
-                </div>
-                <div class="menu-item f1 fvertical">
-                    <div class="checkbox"></div>
-                    <div class="title">流量主</div>
-                </div>
-            </div>
-            <!-- 选项列表区 -->
-            <div class="select-list flex">
-                <div class="box f1"></div>
-                <!-- 广告主item选择列表 -->
-                <div class="box f1">
-                    <!-- <div class="select-item fvertical" data-id="">
-                        <div class="checkbox"></div>
-                        <div class="text">选项一</div>
-                    </div> -->
-                </div>
-                <!-- 流量主tem选择列表 -->
-                <div class="box f1">
-                    
-                </div>
-            </div>
-            <!-- 按钮提交区 -->
-            <div class="fcenter">
-                <button class="button button_red" style="margin-right: 20px;" onclick="popBox.hide()">取消</button>
-                <button class="button button_blue" onclick="popBox.submit()">确定</button>
-            </div>
+  <button class="button button_blue" onclick="popBox.show();">打开</button>
+  <!-- 选择弹出层 -->
+  <div class="mask fvc" style="visibility: hidden">
+    <div class="content card">
+      <!-- 选项区 -->
+      <div class="menu fvertical">
+        <div class="menu-item f1 fvertical">
+          <div class="checkbox"></div>
+          <div class="title">全部</div>
         </div>
+        <div class="menu-item f1 fvertical">
+          <div class="checkbox"></div>
+          <div class="title">广告主</div>
+        </div>
+        <div class="menu-item f1 fvertical">
+          <div class="checkbox"></div>
+          <div class="title">流量主</div>
+        </div>
+      </div>
+      <!-- 选项列表区 -->
+      <div class="select-list flex">
+        <div class="box f1"></div>
+        <!-- 广告主item选择列表 -->
+        <div class="box f1">
+        <!-- <div class="select-item fvertical" data-id="">
+          <div class="checkbox"></div>
+          <div class="text">选项一</div>
+        </div> -->
+        </div>
+        <!-- 流量主tem选择列表 -->
+        <div class="box f1">
+
+        </div>
+      </div>
+      <!-- 按钮提交区 -->
+      <div class="fcenter">
+        <button class="button button_red" style="margin-right: 20px;" onclick="popBox.hide()">取消</button>
+        <button class="button button_blue" onclick="popBox.submit()">确定</button>
+      </div>
     </div>
-    <script src="./js/select.js"></script>
+  </div>
+  <script src="./js/select.js"></script>
 </body>
+
 </html>

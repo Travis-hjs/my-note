@@ -1,27 +1,62 @@
 <!DOCTYPE html>
 <html lang="en">
-	<head>
-		<meta charset="UTF-8">
-		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<meta http-equiv="X-UA-Compatible" content="ie=edge">
-		<title>Ajax</title>
-		<style>
-			*{ padding: 0; margin: 0; }
-			.wrap{ width: 100%; max-width: 680px; margin: 0 auto; text-align: center; box-sizing: border-box; padding: 20px; font-size: 15px; font-family: '微软雅黑'; }
-			.wrap li{ margin-bottom: 30px; list-style: none; }
-			.wrap h2{ font-size: 18px; font-weight: 400; margin-bottom: 15px; }
-			.wrap img{ display: block; width: 100%; }
-			.wrap button{ width: 140px; padding: 10px 0; cursor: pointer; margin-bottom: 5px; }
-		</style>
-	</head>
-	<body>
-		<div class="wrap">
-            <button onclick="clickFetchRequest()">fetch 获取数据</button>
-            <button onclick="ajaxRequest()">xhr 获取数据</button>
-        </div>
 
-		<!-- <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script> -->
-        <script src="./utils/string.js"></script>
-		<script src="./js/ajax.js"></script>
-	</body>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Ajax</title>
+  <style>
+    * {
+      padding: 0;
+      margin: 0;
+    }
+
+    .wrap {
+      width: 100%;
+      max-width: 680px;
+      margin: 0 auto;
+      text-align: center;
+      box-sizing: border-box;
+      padding: 20px;
+      font-size: 15px;
+      font-family: '微软雅黑';
+    }
+
+    .wrap li {
+      margin-bottom: 30px;
+      list-style: none;
+    }
+
+    .wrap h2 {
+      font-size: 18px;
+      font-weight: 400;
+      margin-bottom: 15px;
+    }
+
+    .wrap img {
+      display: block;
+      width: 100%;
+    }
+
+    .wrap button {
+      width: 140px;
+      padding: 10px 0;
+      cursor: pointer;
+      margin-bottom: 5px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="wrap">
+    <button onclick="clickFetchRequest()">fetch 获取数据</button>
+    <button onclick="ajaxRequest()">xhr 获取数据</button>
+  </div>
+
+  <!-- <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script> -->
+  <script src="./utils/string.js"></script>
+  <script src="./js/ajax.js"></script>
+</body>
+
 </html>

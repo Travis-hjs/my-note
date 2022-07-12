@@ -1,7 +1,7 @@
 *, *:before, *:after {
-    box-sizing: border-box;
-    padding: 0;
-    margin: 0;
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
 }
 
 html, body{
@@ -13,24 +13,24 @@ html, body{
 	/* 禁用字体大小自动调整 */
 	-webkit-text-size-adjust: none !important;
 	/* 去掉点击高亮 */
-    -webkit-tap-highlight-color: transparent;
-    /* ios滚动设置 */
-    -webkit-overflow-scrolling: touch;
+  -webkit-tap-highlight-color: transparent;
+  /* ios滚动设置 */
+  -webkit-overflow-scrolling: touch;
 }
 
 a, a:visited, a:focus, a:hover, a:link, a:active { color: inherit; outline: none; text-decoration: none; }
 
 button, input, textarea {
-    border: none;
-    background-color: transparent;
-    outline: none;
-    border-radius: 0;
-    font-size: inherit;
-    font-family: "Helvetica Neue", "Helvetica", "sans-serif", "微软雅黑";
+  border: none;
+  background-color: transparent;
+  outline: none;
+  border-radius: 0;
+  font-size: inherit;
+  font-family: "Helvetica Neue", "Helvetica", "sans-serif", "微软雅黑";
 }
 
 a, button {
-    cursor: pointer;
+  cursor: pointer;
 }
 
 h1,h2,h3,h4,h5,h6,b,i { font-weight: normal; font-style: normal; }
@@ -66,38 +66,38 @@ img { width: 100%; border: none; display: block; object-fit: cover; }
 .ellipsis { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
 .ellipsis_1, .ellipsis_2, .ellipsis_3 {
-    display: -webkit-box;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
 /* 卡片 */
 .card { 
-    border-radius: 2px; 
-    box-shadow: 0px 1px 5px 0px rgba(0, 0, 0, 0.2), 0px 2px 2px 0px rgba(0, 0, 0, 0.14), 0px 3px 1px -2px rgba(0, 0, 0, 0.12); 
-    background-color: #fff;
-    overflow: hidden;
+  border-radius: 2px; 
+  box-shadow: 0px 1px 5px 0px rgba(0, 0, 0, 0.2), 0px 2px 2px 0px rgba(0, 0, 0, 0.14), 0px 3px 1px -2px rgba(0, 0, 0, 0.12); 
+  background-color: #fff;
+  overflow: hidden;
 }
 
 /* 按钮 */
 .button {
-    padding: 0 16px; 
-    font-size: 14px;
-    border-radius: 2px;
-    min-width: 88px;
-    height: 36px;
-    line-height: 1;
-    overflow: hidden;
-    outline: none;
-    border: none;
-    text-align: center;
-    /* vertical-align: middle; */
-    cursor: pointer;
-    user-select: none;
-    background-color: #fff;
-    color: #333;
-    transition: .2s all;
-    box-shadow: 0 3px 1px -2px rgba(0,0,0,.2), 0 2px 2px 0 rgba(0,0,0,.14), 0 1px 5px 0 rgba(0,0,0,.12);
+  padding: 0 16px; 
+  font-size: 14px;
+  border-radius: 2px;
+  min-width: 88px;
+  height: 36px;
+  line-height: 1;
+  overflow: hidden;
+  outline: none;
+  border: none;
+  text-align: center;
+  /* vertical-align: middle; */
+  cursor: pointer;
+  user-select: none;
+  background-color: #fff;
+  color: #333;
+  transition: .2s all;
+  box-shadow: 0 3px 1px -2px rgba(0,0,0,.2), 0 2px 2px 0 rgba(0,0,0,.14), 0 1px 5px 0 rgba(0,0,0,.12);
 }
 
 .button:active { box-shadow: 0 5px 5px -3px rgba(0,0,0,.2), 0 8px 10px 1px rgba(0,0,0,.14), 0 3px 14px 2px rgba(0,0,0,.12); }

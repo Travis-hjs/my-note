@@ -1,25 +1,62 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>canvas-圆环</title>
-    <style>
-        *{ padding: 0; margin: 0; }
-        .page{ box-sizing: border-box; width: 100%; max-width: 680px; margin: 0 auto; padding: 4px; }
-        .ring_box{ width: 100%; height: 200px; margin-bottom: 16px; }
-        .input{ display: block; width: 100%; box-sizing: border-box; padding: 5px; border: solid 1px #dadada; margin-bottom: 10px; }
-        .progress{ width: 100%; height: 20px; border-radius: 10px; background: linear-gradient(90deg, orange, hotpink); border: 1px solid #000; box-sizing: border-box; background-repeat: no-repeat; transition: .8s all; background-size: 0%; }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>canvas-圆环</title>
+  <style>
+    * {
+      padding: 0;
+      margin: 0;
+    }
+
+    .page {
+      box-sizing: border-box;
+      width: 100%;
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 4px;
+    }
+
+    .ring_box {
+      width: 100%;
+      height: 200px;
+      margin-bottom: 16px;
+    }
+
+    .input {
+      display: block;
+      width: 100%;
+      box-sizing: border-box;
+      padding: 5px;
+      border: solid 1px #dadada;
+      margin-bottom: 10px;
+    }
+
+    .progress {
+      width: 100%;
+      height: 20px;
+      border-radius: 10px;
+      background: linear-gradient(90deg, orange, hotpink);
+      border: 1px solid #000;
+      box-sizing: border-box;
+      background-repeat: no-repeat;
+      transition: .8s all;
+      background-size: 0%;
+    }
+  </style>
 </head>
+
 <body>
-    <div class="page">
-        <input type="number" class="input" placeholder="输入1-100" oninput="inputNumber(this)">
-        <div class="ring_box"></div>
-        <div class="progress"></div>
-    </div>
-    
-    <script src="./js/canvas_ring.js"></script>
+  <div class="page">
+    <input type="number" class="input" placeholder="输入1-100" oninput="inputNumber(this)">
+    <div class="ring_box"></div>
+    <div class="progress"></div>
+  </div>
+
+  <script src="./js/canvas_ring.js"></script>
 </body>
+
 </html>

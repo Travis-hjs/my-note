@@ -5,8 +5,8 @@
 .user_list .item .value{ margin-left: 10px; font-size: 15px; color: #fa5e4d; }
 
 @keyframes itemMove {
-    0% { height: 0px; transform: translateX(100px); opacity: 0; }
-    40% { height: 60px; transform: translateX(100px); opacity: 0; }
-    100% { transform: translateX(0px); opacity: 1; }
+  0% { height: 0px; transform: translateX(100px); opacity: 0; }
+  40% { height: 60px; transform: translateX(100px); opacity: 0; }
+  100% { transform: translateX(0px); opacity: 1; }
 }
 

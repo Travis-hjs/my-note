@@ -1,41 +1,40 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="maximum-scale=1.0, minimum-scale=1.0, user-scalable=0, initial-scale=1.0, width=device-width"/>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="maximum-scale=1.0, minimum-scale=1.0, user-scalable=0, initial-scale=1.0, width=device-width"/>
 	<meta name="format-detection" content="telephone=no, email=no, date=no, address=no">
-    <title>点击水波纹</title>
-    <link rel="stylesheet" href="./css/base.css">
-    <style>
-        .page { min-height: 100vh; text-align: center; vertical-align: middle; }
-        .button-list { width: 140px; text-align: center; }
-        .button-list button { margin-bottom: 16px; color: #fff; }
-        /* 水波纹主要 css */
-        [ripple] { position: relative; overflow: hidden; }
-        [ripple] .ripple { position: absolute; border-radius: 100%; transform: scale(0); pointer-events: none; animation: ripple .4s ease-out; }
-        @keyframes ripple { to {transform: scale(2); opacity: 0; } }
+  <title>点击水波纹</title>
+  <link rel="stylesheet" href="./css/base.css">
+  <style>
+    .page { min-height: 100vh; text-align: center; vertical-align: middle; }
+    .button-list { width: 140px; text-align: center; }
+    .button-list button { margin-bottom: 16px; color: #fff; }
+    /* 水波纹主要 css */
+    [ripple] { position: relative; overflow: hidden; }
+    [ripple] .ripple { position: absolute; border-radius: 100%; transform: scale(0); pointer-events: none; animation: ripple .4s ease-out; }
+    @keyframes ripple { to {transform: scale(2); opacity: 0; } }
 
-        .button-list button:nth-child(1) { background:#4285f4; }
-        .button-list button:nth-child(2) { background:#00bad2; }
-        .button-list button:nth-child(3) { background:#ff8a80; }
-        .button-list button:nth-child(4) { background:#ffae00; }
-        .button-list button:nth-child(5) { background:#aec156; }
-        .button-list button:nth-child(6) { background:#a060a8; }
-        .button-list button:nth-child(7) { background:#a78660; }
-        .button-list button:nth-child(8) { background:#5da065; }
-        .button-list button:nth-child(9) { background:#5e6b9a; }
-        .button-list button:nth-child(10) { background:#9a5e5e; }
-        .button-list button:nth-child(11) { background:#666666; }
-        
-    </style>
+    .button-list button:nth-child(1) { background:#4285f4; }
+    .button-list button:nth-child(2) { background:#00bad2; }
+    .button-list button:nth-child(3) { background:#ff8a80; }
+    .button-list button:nth-child(4) { background:#ffae00; }
+    .button-list button:nth-child(5) { background:#aec156; }
+    .button-list button:nth-child(6) { background:#a060a8; }
+    .button-list button:nth-child(7) { background:#a78660; }
+    .button-list button:nth-child(8) { background:#5da065; }
+    .button-list button:nth-child(9) { background:#5e6b9a; }
+    .button-list button:nth-child(10) { background:#9a5e5e; }
+    .button-list button:nth-child(11) { background:#666666; }
+  </style>
 </head>
 <body>
-    <div class="page flex fvertical fcenter">
-        <div class="button-list"></div>
-    </div>
+  <div class="page flex fvertical fcenter">
+    <div class="button-list"></div>
+  </div>
 
-    <script src="./utils/dom.js"></script>
-    <script src="./utils/bom.js"></script>
-    <script src="./js/ripple.js"></script>
+  <script src="./utils/dom.js"></script>
+  <script src="./utils/bom.js"></script>
+  <script src="./js/ripple.js"></script>
 </body>
 </html>

@@ -1,41 +1,50 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="maximum-scale=1.0, minimum-scale=1.0, user-scalable=0, initial-scale=1.0, width=device-width" />
-    <meta name="format-detection" content="telephone=no, email=no, date=no, address=no">
-    <title>web-component</title>
-    <link rel="stylesheet" href="./css/base.css">
-    <style>
-        .page {
-            min-height: 100vh;
-            width: 100%;
-            box-sizing: border-box;
-        }
-        .input{ width: 100%; height: 40px; padding: 4px 16px; font-size: 15px; border-radius: 4px; border: 1px solid orangered; }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+    content="maximum-scale=1.0, minimum-scale=1.0, user-scalable=0, initial-scale=1.0, width=device-width" />
+  <meta name="format-detection" content="telephone=no, email=no, date=no, address=no">
+  <title>web-component</title>
+  <link rel="stylesheet" href="./css/base.css">
+  <style>
+    .page {
+      min-height: 100vh;
+      width: 100%;
+      box-sizing: border-box;
+    }
+
+    .input {
+      width: 100%;
+      height: 40px;
+      padding: 4px 16px;
+      font-size: 15px;
+      border-radius: 4px;
+      border: 1px solid orangered;
+    }
+  </style>
 </head>
+
 <body>
-    <div class="page">
-        <user-card 
-            image="https://mirror-gold-cdn.xitu.io/16b64a3a3b2baec66af?imageView2/1/w/100/h/100/q/85/format/webp/interlace/1"
-            name="用户名"
-            description="用户邮箱 1141752341@qq.com"
-            link="https://github.com/Hansen-hjs">
-        </user-card>
-        <user-list></user-list>
-        <the-input input-mode="capitalizeEveryWord"></the-input>
+  <div class="page">
+    <user-card
+      image="https://mirror-gold-cdn.xitu.io/16b64a3a3b2baec66af?imageView2/1/w/100/h/100/q/85/format/webp/interlace/1"
+      name="用户名" description="用户邮箱 1141752341@qq.com" link="https://github.com/Hansen-hjs">
+    </user-card>
+    <user-list></user-list>
+    <the-input input-mode="capitalizeEveryWord"></the-input>
 
-        <user-card 
-            image="https://user-gold-cdn.xitu.io/2019/10/14/16dc98fe049055b2?imageView2/1/w/180/h/180/q/85/format/webp/interlace/1"
-            name="前端开发lead"
-            link="https://juejin.im/user/57c7cb8a0a2b58006b1b8666">
-        </user-card>
+    <user-card
+      image="https://user-gold-cdn.xitu.io/2019/10/14/16dc98fe049055b2?imageView2/1/w/180/h/180/q/85/format/webp/interlace/1"
+      name="前端开发lead" link="https://juejin.im/user/57c7cb8a0a2b58006b1b8666">
+    </user-card>
 
-        <user-list total="10"></user-list>
+    <user-list total="10"></user-list>
 
-    </div>
+  </div>
 
-    <script src="./js/component.js"></script>
+  <script src="./js/component.js"></script>
 </body>
+
 </html>

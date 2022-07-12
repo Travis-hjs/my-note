@@ -1,86 +1,89 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <meta http-equiv="X-UA-Compatible" content="ie=edge">
-        <title>switch-btn</title>
-        <style>
-            *{ padding: 0; margin: 0; }
-            .page{ width: 100%; max-width: 680px; margin: 0 auto; padding: 20px 10px; box-sizing: border-box; text-align: center;}
-            .btn{ padding: 4px 14px; font-size: 15px; }
-            .box{ margin-bottom: 20px; }
-            /* 去掉默认样式 */
-            input {
-                -webkit-appearance: none;
-                border: none;
-                outline: none;
-                cursor: pointer;
-            }
-            .rate_box{ width: 100%; display: flex; flex-flow: row-reverse; justify-content: center; }
-            
-            /* input-rate */
-            input[name="rate"]{ width: 28px; height: 28px; margin-right: 16px; position: relative; }
-            input[name="rate"]::after{ position: absolute; top: 0; left: 0; content: ""; background-color: #dadada; transition: .2s all; width: 100%; height: 100%; border-radius: 100%; }
-            /* input[name="rate"]:checked::after{ background-color: #5dcb61; } */
-            input[name="rate"]:hover::after{ transform: scale(1.2); }
-            input[name="rate"]:checked::after, input[name="rate"]:hover::after { background-color: #5dcb61; }
-            input[name="rate"]:checked ~ input[name="rate"]::after, input[name="rate"]:hover ~ input[name="rate"]::after { background-color: #5dcb61; }
-            
-            /* input-select */
-            input[name="select"]{ width: 28px; height: 28px; background-color: transparent; border: solid 1px #5dcb61; position: relative; transition: .2s all; }
-            input[name="select"]::after{ content: ""; position: absolute; top: 40%; left: 50%; transform: translate(-50%, -50%) rotate(45deg); width: 30%; height: 60%; border: solid 2px transparent; border-top: none; border-left: none; transition: .2s all; }
-            input[name="select"]:checked{ background-color: #5dcb61; }
-            input[name="select"]:checked::after{ border-color: #fff; }
 
-            /* input-switch */
-            input[name="switch"] { position: relative; width: 60px; height: 30px; background-color: #dadada; border-radius: 30px; border: none; outline: none; -webkit-appearance: none; transition: .2s all;}
-            input[name="switch"]::after { content: ''; position: absolute; top: 1px; left: 1px; width: calc(50% - 2px); height: calc(100% - 2px); background-color: #fff; border-radius: 50%; transition: .2s all; box-shadow: 1px 1px 1px 1px rgba(0, 0, 0, 0.08);}
-            input[name="switch"]:checked { background-color: #5dcb61; }
-            input[name="switch"]:checked::after { left: calc(50% + 1px); }
-        </style>
-    </head>
-    <body>
-        <div class="page">
-            <div class="box">
-                <input type="checkbox" name="switch" value="switch">
-            </div>
-            <div class="box">
-                <input type="checkbox" name="select" value="select1">
-                <input type="checkbox" name="select" value="select2">
-                <input type="checkbox" name="select" value="select3" checked>
-            </div>
-            <div class="rate_box box">
-                <input type="radio" name="rate" value="1">
-                <input type="radio" name="rate" value="2">
-                <input type="radio" name="rate" value="3">
-                <input type="radio" name="rate" value="4">
-                <input type="radio" name="rate" value="5">
-            </div>
-            <div class="box">
-                <button class="btn" onclick="getInfo()">获取选中元素信息</button>
-            </div>
-        </div>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>switch-btn</title>
+  <style>
+    *{ padding: 0; margin: 0; }
+    .page{ width: 100%; max-width: 680px; margin: 0 auto; padding: 20px 10px; box-sizing: border-box; text-align: center;}
+    .btn{ padding: 4px 14px; font-size: 15px; }
+    .box{ margin-bottom: 20px; }
+    /* 去掉默认样式 */
+    input {
+      -webkit-appearance: none;
+      border: none;
+      outline: none;
+      cursor: pointer;
+    }
+    .rate_box{ width: 100%; display: flex; flex-flow: row-reverse; justify-content: center; }
+    
+    /* input-rate */
+    input[name="rate"]{ width: 28px; height: 28px; margin-right: 16px; position: relative; }
+    input[name="rate"]::after{ position: absolute; top: 0; left: 0; content: ""; background-color: #dadada; transition: .2s all; width: 100%; height: 100%; border-radius: 100%; }
+    /* input[name="rate"]:checked::after{ background-color: #5dcb61; } */
+    input[name="rate"]:hover::after{ transform: scale(1.2); }
+    input[name="rate"]:checked::after, input[name="rate"]:hover::after { background-color: #5dcb61; }
+    input[name="rate"]:checked ~ input[name="rate"]::after, input[name="rate"]:hover ~ input[name="rate"]::after { background-color: #5dcb61; }
+    
+    /* input-select */
+    input[name="select"]{ width: 28px; height: 28px; background-color: transparent; border: solid 1px #5dcb61; position: relative; transition: .2s all; }
+    input[name="select"]::after{ content: ""; position: absolute; top: 40%; left: 50%; transform: translate(-50%, -50%) rotate(45deg); width: 30%; height: 60%; border: solid 2px transparent; border-top: none; border-left: none; transition: .2s all; }
+    input[name="select"]:checked{ background-color: #5dcb61; }
+    input[name="select"]:checked::after{ border-color: #fff; }
 
-        <script>
-            function getInfo() {
-                const info = [];
-                const inputs = document.querySelectorAll('input');
-                for (let i = 0; i < inputs.length; i++) {
-                    const input = inputs[i];
-                    if (input.checked) {
-                        let value = input.value;
-                        if (input.name == 'rate') {
-                            value = 5 - Number(value) + 1;
-                        }
-                        info.push({
-                            el: input,
-                            value: value,
-                        })
-                    }   
-                }
-                console.log(info);
-            }
-        </script>
-    </body>
+    /* input-switch */
+    input[name="switch"] { position: relative; width: 60px; height: 30px; background-color: #dadada; border-radius: 30px; border: none; outline: none; -webkit-appearance: none; transition: .2s all;}
+    input[name="switch"]::after { content: ''; position: absolute; top: 1px; left: 1px; width: calc(50% - 2px); height: calc(100% - 2px); background-color: #fff; border-radius: 50%; transition: .2s all; box-shadow: 1px 1px 1px 1px rgba(0, 0, 0, 0.08);}
+    input[name="switch"]:checked { background-color: #5dcb61; }
+    input[name="switch"]:checked::after { left: calc(50% + 1px); }
+  </style>
+</head>
+
+<body>
+  <div class="page">
+    <div class="box">
+      <input type="checkbox" name="switch" value="switch">
+    </div>
+    <div class="box">
+      <input type="checkbox" name="select" value="select1">
+      <input type="checkbox" name="select" value="select2">
+      <input type="checkbox" name="select" value="select3" checked>
+    </div>
+    <div class="rate_box box">
+      <input type="radio" name="rate" value="1">
+      <input type="radio" name="rate" value="2">
+      <input type="radio" name="rate" value="3">
+      <input type="radio" name="rate" value="4">
+      <input type="radio" name="rate" value="5">
+    </div>
+    <div class="box">
+      <button class="btn" onclick="getInfo()">获取选中元素信息</button>
+    </div>
+  </div>
+
+  <script>
+    function getInfo() {
+      const info = [];
+      const inputs = document.querySelectorAll('input');
+      for (let i = 0; i < inputs.length; i++) {
+        const input = inputs[i];
+        if (input.checked) {
+          let value = input.value;
+          if (input.name == 'rate') {
+            value = 5 - Number(value) + 1;
+          }
+          info.push({
+            el: input,
+            value: value,
+          })
+        }
+      }
+      console.log(info);
+    }
+  </script>
+</body>
+
 </html>

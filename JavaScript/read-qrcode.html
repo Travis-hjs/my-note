@@ -1,65 +1,73 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="maximum-scale=1.0, minimum-scale=1.0, user-scalable=0, initial-scale=1.0, width=device-width"/>
-	<meta name="format-detection" content="telephone=no, email=no, date=no, address=no">
-    <title>js读取二维码信息</title>
-    <link rel="stylesheet" href="./css/base.css">
-    <style>
-        .tip{ text-align: center; font-size: 28px; color: deeppink; }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+    content="maximum-scale=1.0, minimum-scale=1.0, user-scalable=0, initial-scale=1.0, width=device-width" />
+  <meta name="format-detection" content="telephone=no, email=no, date=no, address=no">
+  <title>js读取二维码信息</title>
+  <link rel="stylesheet" href="./css/base.css">
+  <style>
+    .tip {
+      text-align: center;
+      font-size: 28px;
+      color: deeppink;
+    }
+  </style>
 </head>
+
 <body>
-    <div class="page">
-        <h2 class="tip"></h2>
-        <img class="qrcode" src="./img/qrcode.png" alt="">
-    </div>
+  <div class="page">
+    <h2 class="tip"></h2>
+    <img class="qrcode" src="./img/qrcode.png" alt="">
+  </div>
 
-    <script src="./js/readQrcode.min.js"></script>
-    <script>
+  <script src="./js/readQrcode.min.js"></script>
+  <script>
 
-        if (!location.host) {
-            const text = '请用端口打开页面调试';
-            document.querySelector('.tip').textContent = text;
-            console.log(text);
-        }
+    if (!location.host) {
+      const text = '请用端口打开页面调试';
+      document.querySelector('.tip').textContent = text;
+      console.log(text);
+    }
 
-        /**
-         * 获取图片base64
-         * @param {string} url 图片路径
-         * @param {(base64: string) => void} callback 回调
-         * @param {'jpg'|'png'} type 图片格式（可选）
-         */
-         function getBase64(url, callback, type = 'jpg') {
-            const doc = document;
-            const canvas = doc.createElement("canvas");
-            const ctx = canvas.getContext("2d");
-            const img = new Image();
-            img.crossOrigin = 'Anonymous';
-            img.src = url;
-            img.onload = function () {
-                canvas.width = img.width;
-                canvas.height = img.height;
-                ctx.drawImage(img, 0, 0);
-                const base64 = canvas.toDataURL('image/' + type);
-                if (typeof callback === 'function') callback(base64);
-            }
-            // doc.body.innerHTML = null;
-            // doc.body.appendChild(canvas);
-        }
+    /**
+     * 获取图片base64
+     * @param {string} url 图片路径
+     * @param {(base64: string) => void} callback 回调
+     * @param {'jpg'|'png'} type 图片格式（可选）
+     */
+    function getBase64(url, callback, type = 'jpg') {
+      const doc = document;
+      const canvas = doc.createElement("canvas");
+      const ctx = canvas.getContext("2d");
+      const img = new Image();
+      img.crossOrigin = 'Anonymous';
+      img.src = url;
+      img.onload = function () {
+        canvas.width = img.width;
+        canvas.height = img.height;
+        ctx.drawImage(img, 0, 0);
+        const base64 = canvas.toDataURL('image/' + type);
+        if (typeof callback === 'function') callback(base64);
+      }
+      // doc.body.innerHTML = null;
+      // doc.body.appendChild(canvas);
+    }
 
-        const url = document.querySelector('.qrcode').src;
-        
-        getBase64(url, base64 => {
-            qrcode.decode(base64);
-            qrcode.callback = function (res) {
-                // 这里二维码信息是加密过的，所以要解一下
-                console.log('二维码信息：', JSON.parse(atob(res)));
-                
-            }
-        });
+    const url = document.querySelector('.qrcode').src;
 
-    </script>
+    getBase64(url, base64 => {
+      qrcode.decode(base64);
+      qrcode.callback = function (res) {
+        // 这里二维码信息是加密过的，所以要解一下
+        console.log('二维码信息：', JSON.parse(atob(res)));
+
+      }
+    });
+
+  </script>
 </body>
+
 </html>
