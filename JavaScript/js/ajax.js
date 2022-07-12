@@ -77,6 +77,7 @@ function clickFetchRequest() {
  * @param {(error?: XMLHttpRequest) => void} params.fail 失败回调 
  * @param {(info?: XMLHttpRequest) => void} params.timeout 超时回调
  * @param {(res?: ProgressEvent<XMLHttpRequestEventTarget>) => void} params.progress 进度回调（暂时没用到）
+ * @param {"arraybuffer"|"blob"|"document"|"json"|"text"} params.responseType 响应结果类型，默认`json`
  */
 function ajax(params) {
   if (checkType(params) !== "object") return console.error("ajax 请求参数类型有误");
@@ -91,7 +92,7 @@ function ajax(params) {
   /** 请求链接 */
   let url = params.url;
   /** 非`GET`请求传参 */
-  let body = null;
+  let body = "";
   /** `GET`请求传参 */
   let query = "";
   /** 传参数据类型 */
@@ -129,8 +130,8 @@ function ajax(params) {
   if (params.progress) {
     XHR.addEventListener("progress", params.progress);
   }
-
-  // XHR.responseType = "json"; // 设置响应结果为`json`这个一般由后台返回指定格式，前端无配置
+  
+  XHR.responseType = params.responseType || "json"; // TODO: 设置响应结果为`json`这个一般由后台返回指定格式，前端无配置
   // XHR.withCredentials = true;	// 是否Access-Control应使用cookie或授权标头等凭据进行跨站点请求。
   XHR.open(method, url, true);
 
