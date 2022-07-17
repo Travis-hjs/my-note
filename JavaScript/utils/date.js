@@ -74,6 +74,11 @@ function timeInterval(minInterval) {
  * ```
  */
 function formatDate(value = Date.now(), format = "Y-M-D h:m:s") {
+  if (["null", null, "undefined", undefined, ""].includes(value)) return "";
+  // ios 和 mac 系统中，带横杆的字符串日期是格式不了的，这里做一下判断处理
+  if (typeof value === "string" && new Date(value).toString() === "Invalid Date") {
+    value = value.replace(/-/g, "/");
+  }
   const formatNumber = n => `0${n}`.slice(-2);
   const date = new Date(value);
   const formatList = ["Y", "M", "D", "h", "m", "s"];
