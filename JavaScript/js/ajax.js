@@ -120,7 +120,7 @@ function ajax(params) {
   XHR.onreadystatechange = function () {
     if (XHR.readyState !== 4) return;
     if (XHR.status === 200 || XHR.status === 304) {
-      typeof params.success === "function" && params.success(JSON.parse(XHR.response), XHR);
+      typeof params.success === "function" && params.success(XHR.response, XHR);
     } else {
       typeof params.fail === "function" && params.fail(XHR);
     }
