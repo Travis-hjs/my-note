@@ -10,7 +10,7 @@
 function dateJson() {
   /**
    * 日历数组
-   * @type {Array<{name: string, sub: Array<{name: string, sub: Array<{name: string}>}>}>}
+   * @type {Array<{label: string, children: Array<{label: string, children: Array<{label: string}>}>}>}
    */
   const calendar = [];
   const date = new Date();
@@ -19,27 +19,27 @@ function dateJson() {
   let dayCount = 1;
   for (let i = minYear; i <= maxYear; i++) {
     const year = {
-      name: i.toString(),
-      sub: []
+      label: i.toString(),
+      children: []
     }
     for (let j = 1; j <= 12; j++) {
       const month = {
-        name: ("0" + j.toString()).slice(-2),
-        sub: []
+        label: ("0" + j.toString()).slice(-2),
+        children: []
       }
-      year.sub.push(month);
+      year.children.push(month);
       dayCount = new Date(i, j, 0).getDate();
       for (let k = 1; k <= dayCount; k++) {
-        month.sub.push({
-          name: ("0" + k.toString()).slice(-2)
+        month.children.push({
+          label: ("0" + k.toString()).slice(-2)
         });
       }
     }
     calendar.push(year);
   }
   // 这里是限制不能选小于之前的日期
-  calendar[0].sub.splice(0, date.getMonth());
-  calendar[0].sub[0].sub.splice(0, date.getDate());
+  calendar[0].children.splice(0, date.getMonth());
+  calendar[0].children[0].children.splice(0, date.getDate());
   return calendar;
 }
 
@@ -109,11 +109,12 @@ function getDateSlotSecond(now, before) {
 
 /**
  * 获取两个日期之间的天数
- * @param {Date} now 现在时间
- * @param {Date} before 之前时间
+ * @param {Date|string|number} date1 
+ * @param {Date|string|number} date2 
+ * @returns 
  */
-function getDateSlotDays(now, before) {
-  return Math.floor((now.getTime() - before.getTime()) / 86400000);
+function daysBetween(date1, date2) {
+  return Math.ceil(Math.abs(new Date(date1) - new Date(date2)) / (1000 * 60 * 60 * 24));
 }
 
 /**
