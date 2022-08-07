@@ -188,6 +188,7 @@ function canvasAutograph(option) {
     // 如果节点被销毁了，那就取消`document`的绑定事件
     if (!document.body.contains(canvas)) {
       document.removeEventListener("mouseup", documentUp);
+      document.removeEventListener("touchend", documentUp);
     }
   }
 
