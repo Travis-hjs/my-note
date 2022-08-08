@@ -6,15 +6,15 @@
  * `canvas`签名工具
  * @param {object} option 
  * @param {HTMLElement} option.el 挂载的节点元素
- * @param {number} option.lineSize 画笔线条的厚度（像素）
- * @param {string} option.lineColor 画笔线条的颜色
- * @param {string} option.backgroundColor 背景颜色
- * @param {number} option.ratio 缩放比率
+ * @param {number} option.lineSize （可选）画笔线条的厚度：像素
+ * @param {string} option.lineColor （可选）画笔线条的颜色
+ * @param {string} option.backgroundColor （可选）背景颜色
+ * @param {number} option.ratio （可选）缩放比率
  */
 function canvasAutograph(option) {
   const canvas = document.createElement("canvas");
   const context = canvas.getContext("2d");
-  const ratio =  window.devicePixelRatio;
+  const ratio = option.ratio || window.devicePixelRatio;
 
   /** 更新`canvas`尺寸 */
   function updateSize() {
