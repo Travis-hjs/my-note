@@ -1070,13 +1070,14 @@ function moduleEvent() {
     /**
      * 调用事件
      * @param {string} name 事件名
+     * @param {any} params 事件参数
      */
-    dispatch(name) {
+    dispatch(name, params) {
       const fns = eventInfo[name];
       if (fns && fns.length > 0) {
         for (let i = 0; i < fns.length; i++) {
           const fn = fns[i];
-          fn();
+          fn(params);
         }
       } else {
         console.log("[moduleEvent] => 没有要执行的事件");
