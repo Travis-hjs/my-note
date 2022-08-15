@@ -1026,11 +1026,11 @@ function showModal(options) {
 }
 
 function moduleEvent() {
-  /** 
-  * 事件集合对象
-  * @type {{[key: string]: Array<Function>}}
-  */
-  const eventInfo = {};
+  /**
+   * 事件集合对象
+   * @type {{[key: string]: Array<Function>}}
+   */
+  const eventMap = {};
 
   return {
     /**
@@ -1039,11 +1039,11 @@ function moduleEvent() {
      * @param {Function} fn 事件执行的函数
      */
     on(name, fn) {
-      if (!eventInfo.hasOwnProperty(name)) {
-        eventInfo[name] = [];
+      if (!eventMap.hasOwnProperty(name)) {
+        eventMap[name] = [];
       }
-      if (!eventInfo[name].some(item => item === fn)) {
-        eventInfo[name].push(fn);
+      if (!eventMap[name].some(item => item === fn)) {
+        eventMap[name].push(fn);
       }
     },
 
@@ -1053,7 +1053,7 @@ function moduleEvent() {
      * @param {Function} fn 事件绑定的函数
      */
     off(name, fn) {
-      const fns = eventInfo[name];
+      const fns = eventMap[name];
       if (fns && fns.length > 0 && fn) {
         for (let i = 0; i < fns.length; i++) {
           const item = fns[i];
@@ -1073,7 +1073,7 @@ function moduleEvent() {
      * @param {any} params 事件参数
      */
     dispatch(name, params) {
-      const fns = eventInfo[name];
+      const fns = eventMap[name];
       if (fns && fns.length > 0) {
         for (let i = 0; i < fns.length; i++) {
           const fn = fns[i];
@@ -1082,7 +1082,7 @@ function moduleEvent() {
       } else {
         console.log("[moduleEvent] => 没有要执行的事件");
       }
-    },
+    }
   }
 }
 
