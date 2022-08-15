@@ -681,11 +681,11 @@ function tmove(e) {
  * @param {number} wait 执行间隔毫秒
  */
 function debounce(fn, wait) {
-  let timer = null;
+  let timer;
   return function () {
     const args = arguments;
     const THAT = this;
-    clearTimeout(timer);
+    timer && clearTimeout(timer);
     timer = setTimeout(function () {
       fn.apply(THAT, args);
     }, wait);
