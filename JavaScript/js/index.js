@@ -1025,6 +1025,10 @@ function showModal(options) {
   }
 }
 
+/**
+ * 自定义事件
+ * - 事件监听、解绑、派发
+ */
 function moduleEvent() {
   /**
    * 事件集合对象
@@ -1088,72 +1092,62 @@ function moduleEvent() {
 
 /**
  * 全局计时器
- * @param {number} time 间隔-毫秒
+ * @param {number} interval 间隔-毫秒
  */
-function globalTimer(time) {
+function moduleInterval(interval) {
   /**
    * 函数对象
-   * @type {{[key: string]: Function}}
+   * @type {{[key: number]: Function}}
    */
-  let data = {};
+  let timerMap = {};
   /** 
    * 倒计时`id` 
-   * @type {number | null}
-  */
-  let timerId = null;
-
-  /**
-   * 获取随机`id`
-   * @returns {string}
+   * @type {number}
    */
-  function getId() {
-    const id = Math.random().toString(36).substr(2);
-    if (Object.prototype.hasOwnProperty.call(data, id)) {
-      return getId();
-    }
-    return id;
-  }
+  let timerId;
+  /** 一直累加的`id` */
+  let id = 0;
 
   /** 开始计时器 */
   function start() {
     stop();
     timerId = setInterval(function () {
-      for (const key in data) {
-        const fn = data[key];
+      for (const key in timerMap) {
+        const fn = timerMap[key];
         fn();
       }
-    }, time);
+    }, interval);
   }
 
   /** 停止计时器 */
   function stop() {
-    if (timerId !== null) clearInterval(timerId);
-    timerId = null;
+    if (timerId) clearInterval(timerId);
+    timerId = undefined;
   }
 
   return {
     start,
     stop,
-    /** 清空当前函数对象 */
+    /** 清空所有计时器 */
     clear() {
-      data = {}
+      timerMap = {}
     },
     /**
      * 添加倒计时函数-有`this`的情况下要`bind(target)`
      * @param {Function} fn 
      */
     add(fn) {
-      const id = getId();
-      data[id] = fn;
+      id++;
+      timerMap[id] = fn;
       return id;
     },
     /**
      * 移除倒计时函数
-     * @param {string} id 添加时返回的`id`
+     * @param {number} id 添加时返回的`id`
      */
     remove(id) {
-      if (Object.prototype.hasOwnProperty.call(data, id)) {
-        delete data[id]
+      if (Object.prototype.hasOwnProperty.call(timerMap, id)) {
+        delete timerMap[id]
       }
     }
   }
