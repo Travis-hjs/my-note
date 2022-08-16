@@ -11,6 +11,15 @@ function ranInt(min, max) {
 }
 
 /**
+ * 不会四舍五入的小数点取舍
+ * @param {number} value
+ * @param {number} fixed 小数位
+ */
+function toFixed(value, fixed) {
+  return ~~(Math.pow(10, fixed) * value) / Math.pow(10, fixed);
+}
+
+/**
  * 数字运算（主要用于小数点精度问题）
  * [see](https://juejin.im/post/6844904066418491406#heading-12)
  * @param {number} a 前面的值
