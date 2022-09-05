@@ -114,7 +114,7 @@ function download(filename, content) {
  * @param {() => void} success 成功回调
  * @param {(error: string) => void} fail 出错回调
  */
-function copyText(text, success = null, fail = null) {
+function copyText(text, success = undefined, fail = undefined) {
   text = text.replace(/(^\s*)|(\s*$)/g, "");
   if (!text) {
     typeof fail === "function" && fail("复制的内容不能为空！");

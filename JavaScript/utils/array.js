@@ -2,6 +2,7 @@
 
 /**
  * es5兼容es6 "Array.find"
+ * @template T
  * @param {Array<T>} array
  * @param {(value: T, index: number) => boolean} compare 对比函数
  */
@@ -19,6 +20,7 @@ function findItem(array, compare) {
 
 /**
  * es5兼容es6 "Array.findIndex"
+ * @template T
  * @param {Array<T>} array 
  * @param {(value: T, index: number) => boolean} compare 对比函数
  */
@@ -35,6 +37,7 @@ function findIndex(array, compare) {
 
 /**
  * 自定义对象数组去重
+ * @template T
  * @param {Array<T>} array 
  * @param {(a: T, b: T) => void} compare 对比函数
  * @example 
@@ -52,7 +55,8 @@ function filterRepeat(array, compare) {
 
 /**
  * 扁平化数组
- * @description `Array.flat()`兼容写法
+ * - `Array.flat()`兼容写法
+ * @template T
  * @param {Array<T>} array 目标数组
  * @param {number} d 层数
  * @returns {Array<T>}
@@ -63,10 +67,11 @@ function flatArray(array, d = 1) {
   } else {
     return array.slice();
   }
-};
+}
 
 /**
  * 随机打乱数组
+ * @template T
  * @param {Array<T>} array
  */
 function shuffleArray(array) {
@@ -83,6 +88,7 @@ function shuffleArray(array) {
 
 /**
  * 数组中随机取几个元素
+ * @template T
  * @param {Array<T>} array 数组
  * @param {number} count 元素个数
  */
@@ -102,6 +108,7 @@ function getRandomArrayElements(array, count) {
 
 /**
  * 将指定位置的元素置顶
+ * @template T
  * @param {Array<T>} array 改数组
  * @param {number} index 元素索引
  */
@@ -117,6 +124,7 @@ function zIndexToTop(array, index) {
 
 /**
  * 将指定位置的元素置底
+ * @template T
  * @param {Array<T>} array 改数组
  * @param {number} index 元素索引
  */

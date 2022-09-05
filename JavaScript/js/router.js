@@ -54,9 +54,9 @@
 
   /**
    * 路由组件
-   * @description `hash`模式，`history`模式使用的方式比较特殊，需要写多很多代码处理，所以没有写到同一个方法里面
+   * - `hash`模式，`history`模式使用的方式比较特殊，需要写多很多代码处理，所以没有写到同一个方法里面
    */
-  function routerComponent() {
+  function moduleRouter() {
     const routeInfo = {};
     /** 当前路径传参对象 */
     let currentPathParams = {};
@@ -176,13 +176,13 @@
        * @param {string} path 路由路径
        * @param {Function} callback 路由回调
        */
-      onchange(path, callback = null) {
+      onchange(path, callback = undefined) {
         routeInfo[path] = callback;
       }
     }
   }
 
-  const router = routerComponent();
+  const router = moduleRouter();
 
   router.onchange("/a", function () {
     setHtml("首页", "首页内容");

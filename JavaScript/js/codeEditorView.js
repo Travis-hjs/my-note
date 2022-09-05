@@ -13,12 +13,12 @@
    * @param {number} size.width 宽度
    * @param {number} size.height 高度
    */
-  function createViewFrame(parent, size = null) {
-    const scriptId = 'the-iframe-script';
-    const frame = document.createElement('iframe');
+  function createViewFrame(parent, size) {
+    const scriptId = "the-iframe-script";
+    const frame = document.createElement("iframe");
     frame.width = size ? size.width : parent.clientWidth;
     frame.height = size ? size.height : parent.clientHeight;
-    frame.frameBorder = '0';
+    frame.frameBorder = "0";
     parent.appendChild(frame);
 
     /**
@@ -26,7 +26,7 @@
      * @param {string} value 脚本代码
      */
     function outputScript(value) {
-      const script = frame.contentDocument.createElement('script');
+      const script = frame.contentDocument.createElement("script");
       script.id = scriptId;
       script.innerHTML = value;
       frame.contentDocument.body.appendChild(script);
@@ -37,17 +37,17 @@
      * @param {string} code 页面内容
      */
     function getHTML(code) {
-      let head = '';
-      let body = '';
-      let script = '';
+      let head = "";
+      let body = "";
+      let script = "";
 
       // 一个页面可能有多个`script`标签，所以递归把所有的抽出来
       function getScript() {
         const result = code.match(/<script>([\s\S]*?)<\/script>/);
         if (result) {
           const value = result[1];
-          script += value.charAt(value.length - 1) === ';' ? value : `;${value}`;
-          code = code.replace(result[0], '');
+          script += value.charAt(value.length - 1) === ";" ? value : `;${value}`;
+          code = code.replace(result[0], "");
           getScript();
         }
       }
@@ -58,7 +58,7 @@
 
       if (headResult) {
         head = headResult[1];
-        code = code.replace(headResult[0], '');
+        code = code.replace(headResult[0], "");
       }
 
       const bodyResult = code.match(/<body>([\s\S]*?)<\/body>/);
@@ -102,20 +102,36 @@
       }
     }
   }
-  const codeBox = $('.code-box');
-  const viewBox = $('.view-box');
+  const codeBox = $(".code-box");
+  const viewBox = $(".view-box");
   const viewFrame = createViewFrame(viewBox);
-  /** 节流定时器 */
-  let timer = null;
+
+  /** 
+   * 节流定时器
+   * @type {number}
+   */
+  let timer;
 
   codeBox.oninput = function () {
     // console.log(this.value);
     clearTimeout(timer);
     timer = setTimeout(function () {
       viewFrame.updateContent(codeBox.value);
-    }, 100);
+    }, 300);
   }
 
-  let template = '<html><body><div style="color: orange; font-size: 15px;">内容</div><script>var n1= 15;</script></body><script>var n2= 16;</script></html>';
+  let template = `<html>
+  <body>
+    <div style="color: orange; font-size: 15px;">内容</div>
+    <button onclick="alert1()">提示n1</button>
+    <button onclick="alert2()">提示n2</button>
+    <script>var n1= 15;</script>
+  </body>
+  <script>
+    var n2= 16;
+    function alert1() { alert(n1); }
+    function alert2() { alert(n2); }
+  </script>
+  </html>`;
 
 })();
