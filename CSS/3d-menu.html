@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>3D 菜单</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-size: sans-serif;
+    }
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      background: #424345;
+      font-size: 0;
+    }
+    .menu-list {
+      position: relative;
+      transform: skewY(-15deg);
+    }
+    .menu-list .menu-item {
+      position: relative;
+      list-style: none;
+      width: 200px;
+      background: #3e3f46;
+      padding: 15px;
+      z-index: var(--i);
+      transition: .4s;
+      cursor: pointer;
+    }
+    .menu-list .menu-item::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -40px;
+      width: 40px;
+      height: 100%;
+      background: #35383e;
+      transform-origin: right;
+      transform: skewY(45deg);
+      transition: .4s;
+    }
+    .menu-list .menu-item::after {
+      content: '';
+      position: absolute;
+      top: -40px;
+      left: 0;
+      width: 100%;
+      height: 40px;
+      background: #35383e;
+      transform-origin: bottom;
+      transform: skewX(45deg);
+      transition: .4s;
+    }
+    .menu-list .menu-item:hover {
+      background: #33a3ee;
+      transform: translateX(50px);
+    }
+    .menu-list .menu-item:hover::before {
+      background: #2982b9;
+    }
+    .menu-list .menu-item:hover::after {
+      background: #1f5378;
+    }
+    .menu-list .menu-item a {
+      text-decoration: none;
+      color: #eee;
+      display: block;
+      /* text-transform: uppercase; */
+      transition: .4s all;
+      font-size: 16px;
+    }
+    .menu-list .menu-item a:hover {
+      color: #fff;
+    }
+    .menu-list .menu-item:last-child::after {
+      box-shadow: -100px 100px 20px rgba(0,0,0,0.25);
+    }
+  </style>
+</head>
+<body>
+  <ul class="menu-list">
+    <!-- <li class="menu-item" style="--i:6;"><a href="#">Menu</a></li> -->
+  </ul>
+  <script>
+    const list = document.querySelector(".menu-list");
+    let items = "";
+    for (let i = 10; i > 0; i--) {
+      items += `<li class="menu-item" style="--i:${i};"><a href="#">菜单-${i + 1}</a></li>`;
+    }
+    list.innerHTML = items;
+  </script>
+</body>
+</html>
