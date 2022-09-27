@@ -1,13 +1,13 @@
 (function () {
-  const webUrl = 'https://img12.360buyimg.com/img/';
+  const webUrl = "https://img12.360buyimg.com/img/";
 
   let images = [
-    'jfs/t1/93992/8/9049/4680/5e0aea04Ec9dd2be8/608efd890fd61486.png',
-    'jfs/t1/108305/14/2849/4908/5e0aea04Efb54912c/bfa59f27e654e29c.png',
-    'jfs/t1/98805/29/8975/5106/5e0aea05Ed970e2b4/98803f8ad07147b9.png',
-    'jfs/t1/94291/26/9105/4344/5e0aea05Ed64b9187/5165fdf5621d5bbf.png',
-    'jfs/t1/102753/34/8504/5522/5e0aea05E0b9ef0b4/74a73178e31bd021.png',
-    'jfs/t1/102954/26/9241/5069/5e0aea05E7dde8bda/720fcec8bc5be9d4.png'
+    "jfs/t1/93992/8/9049/4680/5e0aea04Ec9dd2be8/608efd890fd61486.png",
+    "jfs/t1/108305/14/2849/4908/5e0aea04Efb54912c/bfa59f27e654e29c.png",
+    "jfs/t1/98805/29/8975/5106/5e0aea05Ed970e2b4/98803f8ad07147b9.png",
+    "jfs/t1/94291/26/9105/4344/5e0aea05Ed64b9187/5165fdf5621d5bbf.png",
+    "jfs/t1/102753/34/8504/5522/5e0aea05E0b9ef0b4/74a73178e31bd021.png",
+    "jfs/t1/102954/26/9241/5069/5e0aea05E7dde8bda/720fcec8bc5be9d4.png"
   ];
 
   images = images.map(item => webUrl + item);
@@ -19,8 +19,8 @@
    * @param {Array<string>} option.imgList 点赞图片列表
    */
   function canvasLikeAnimation(option) {
-    // if (!option.el) return console.warn('缺少输出节点');
-    // if (!option.imgList.length) return console.warn('图片列表不能为空');
+    // if (!option.el) return console.warn("缺少输出节点");
+    // if (!option.imgList.length) return console.warn("图片列表不能为空");
     // const a = new Image();
     const animationFrame = requestAnimationFrame;
     /**
@@ -28,8 +28,8 @@
      * @type {Array<HTMLImageElement>}
      */
     const images = [];
-    const canvas = document.createElement('canvas');
-    const context = canvas.getContext('2d');
+    const canvas = document.createElement("canvas");
+    const context = canvas.getContext("2d");
     canvas.width = option.el.clientWidth;
     canvas.height = option.el.clientHeight;
     option.el.appendChild(canvas);
@@ -37,7 +37,7 @@
     /** 
      * 节点列表对象 
      * @type {Array<{id: string, node: {render(): void}}>}
-    */
+     */
     const nodeList = [];
     /** 节点数量，默认10个 */
     let nodeTotal = 10;
@@ -74,13 +74,13 @@
     /** 
      * 单个节点函数 
      * @param {number} id 节点id
-    */
+     */
     function node(id) {
       const addY = 4;
       const addX = 1.5;
       const centerX = canvas.width / 2;
       /** @type {HTMLImageElement} */
-      let image = null;
+      let image;
       let y = 0;
       let x = 0;
       let direction = 1;
@@ -90,6 +90,7 @@
       let maxScale = 0;
       let initX = 0;
       let offsetX = 0;
+
       /** 初始化运动参数 */
       function init() {
         image = images[ranInt(0, images.length - 1)];
@@ -141,7 +142,7 @@
             for (let i = 0; i < nodeList.length; i++) {
               const item = nodeList[i];
               if (item.id == id) {
-                item.node = null;       // 释放内存
+                item.node = undefined;  // 释放内存
                 nodeList.splice(i, 1);  // 从列表中删除自己
                 break;
               }
@@ -151,7 +152,9 @@
           }
         }
       }
+
       init();
+      
       return {
         render() {
           context.save();
@@ -166,33 +169,30 @@
     }
 
     /** 每一帧渲染函数 */
-    function render() {
+    function update() {
       // console.log(images);
       // 没有加载出图片的时候阻止渲染
-      if (images.length == 0) return;
-      // 判断总数是否足够，不够则添加进去
-      if (nodeList.length < nodeTotal) {
-        nodeId++;
-        const id = 'node-' + nodeId;
-        nodeList.push({
-          id: id,
-          node: node(id)
-        });
+      if (images.length > 0) {
+        // 判断总数是否足够，不够则添加进去
+        if (nodeList.length < nodeTotal) {
+          nodeId++;
+          const id = "node-" + nodeId;
+          nodeList.push({
+            id: id,
+            node: node(id)
+          });
+        }
+        // 这里要先清除当前画布
+        context.clearRect(0, 0, canvas.width, canvas.height);
+        // 逐个节点渲染
+        for (let i = 0; i < nodeList.length; i++) {
+          const item = nodeList[i];
+          item.node.render();
+        }
       }
-      // 这里要先清除当前画布
-      context.clearRect(0, 0, canvas.width, canvas.height);
-      // 逐个节点渲染
-      for (let i = 0; i < nodeList.length; i++) {
-        const item = nodeList[i];
-        item.node.render();
-      }
-    }
-
-
-    function update() {
-      render();
       animationFrame(update);
     }
+
     update();
 
     return {
@@ -202,26 +202,29 @@
        */
       setNumber(n) {
         nodeTotal = n;
-        console.log('点赞总数：', nodeTotal);
+        console.log("点赞总数：", nodeTotal);
 
       }
     }
   }
 
-  let number = 10;
+  let number = 20;
 
   const like = canvasLikeAnimation({
-    el: document.querySelector('.box'),
+    el: document.querySelector(".box"),
     imgList: images
   });
 
+  // 初始化先设置数量
+  like.setNumber(number);
+
   // console.log(images);
-  document.querySelector('.add').addEventListener('click', function () {
+  document.querySelector(".add").addEventListener("click", function () {
     number++;
     like.setNumber(number);
   });
 
-  document.querySelector('.remove').addEventListener('click', function () {
+  document.querySelector(".remove").addEventListener("click", function () {
     if (number == 1) return;
     number--;
     like.setNumber(number);
