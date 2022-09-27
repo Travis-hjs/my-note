@@ -19,14 +19,14 @@ class NodeModule {
    * @private 
    * @type {HTMLCanvasElement}
    */
-  canvas = null;
+  canvas;
 
   /**
    * 上下文
    * @private 
    * @type {CanvasRenderingContext2D}
    */
-  context = null;
+  context;
 
   /** 节点半径 */
   radius = 50;
