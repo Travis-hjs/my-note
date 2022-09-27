@@ -13,21 +13,18 @@ class NodeModule {
     this.context = context;
     this.init();
   }
-
   /**
    * canvas容器
    * @private 
    * @type {HTMLCanvasElement}
    */
   canvas;
-
   /**
    * 上下文
    * @private 
    * @type {CanvasRenderingContext2D}
    */
   context;
-
   /** 节点半径 */
   radius = 50;
   /** 最大半径 */
@@ -53,7 +50,6 @@ class NodeModule {
     /** 垂直速度 */
     vertical: 1
   }
-
   /** 颜色列表 */
   colorList = ["orange", "purple", "#0ae004", "#00c9d0", "#fcff00", "#ff006c", "#0036ff"];
 
@@ -131,7 +127,7 @@ class NodeModule {
     this.draw();
   }
 
-  /** 每一帧更新 */
+  /** 每一帧更新函数 */
   update() {
     this.move();
   }
@@ -142,11 +138,11 @@ class Main {
    * 主函数
    * @author hjs
    * @param {HTMLElement} el canvas 输出节点
-   * @param {number} total 气泡总数
+   * @param {number=} total 气泡总数
    */
   constructor(el, total) {
     if (!el) return console.warn("没有指定输出容器节点");
-    if (typeof total === "number") this.bubbleTotal = total;
+    this.bubbleTotal = total || 30;
     this.canvas = document.createElement("canvas");
     this.context = this.canvas.getContext("2d");
     this.size = el.getBoundingClientRect();
@@ -157,34 +153,29 @@ class Main {
     el.appendChild(this.canvas);
     this.start();
   }
-
   /**
    * canvas容器
    * @private 
    * @type {HTMLCanvasElement}
    */
-  canvas = null;
-
+  canvas;
   /**
    * 上下文
    * @private 
    * @type {CanvasRenderingContext2D}
    */
-  context = null;
-
+  context;
   /**
    * 最外层容器尺寸
    * @private
-   * @type {ClientRect | DOMRect}
+   * @type {DOMRect}
    */
-  size = null;
-
+  size;
   /**
    * 气泡总数
    * @private
    */
-  bubbleTotal = 30;
-
+  bubbleTotal = 0;
   /**
    * 节点列表
    * @private
