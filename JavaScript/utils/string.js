@@ -146,3 +146,36 @@ function checkType(target) {
   const result = value.match(/\[object (\S*)\]/)[1];
   return result.toLocaleLowerCase();
 }
+
+/**
+ * 数字转中文大写
+ * @param {number} value 
+ * @param {boolean} needUnit 是否需要带人民币单位
+ */
+function toChinesNumber(value, needUnit = false) {
+  const changeNum = ["零", "一", "二", "三", "四", "五", "六", "七", "八", "九"];
+  const unit = ["", "十", "百", "千", "万"];
+  const decimal = value.toString().split(".")[1];
+  const integer = parseInt(value);
+  function getWan(number = 0) {
+    const strArr = number.toString().split("").reverse();
+    let newNum = "";
+    for (let i = 0; i < strArr.length; i++) {
+      newNum = (i == 0 && strArr[i] == 0 ? "" : (i > 0 && strArr[i] == 0 && strArr[i - 1] == 0 ? "" : changeNum[strArr[i]] + (strArr[i] == 0 ? unit[0] : unit[i]))) + newNum;
+    }
+    return newNum;
+  }
+  function getDecimal(str = "") {
+    let result = "";
+    for (let i = 0; i < str.length; i++) {
+      const key = str[i];
+      result += changeNum[key];
+    }
+    return result;
+  }
+  const overWan = Math.floor(integer / 10000);
+  let noWan = integer % 10000;
+  if (noWan.toString().length < 4) noWan = `0${noWan}`;
+  const result = overWan ? `${getWan(overWan)}万${getWan(noWan)}` : getWan(integer);
+  return decimal ? `${result}点${getDecimal(decimal)}${needUnit ? "圆" : ""}` : `${result}${needUnit ? "圆整" : ""}`;
+}
