@@ -176,6 +176,8 @@ function toChinesNumber(value, needUnit = false) {
   const overWan = Math.floor(integer / 10000);
   let noWan = integer % 10000;
   if (noWan.toString().length < 4) noWan = `0${noWan}`;
-  const result = overWan ? `${getWan(overWan)}万${getWan(noWan)}` : getWan(integer);
-  return decimal ? `${result}点${getDecimal(decimal)}${needUnit ? "圆" : ""}` : `${result}${needUnit ? "圆整" : ""}`;
+  let result = overWan ? `${getWan(overWan)}万${getWan(noWan)}` : getWan(integer);
+  const unitStr = (decimal || !result) ? "圆" : "圆整";
+  if (!result) result = changeNum[0];
+  return decimal ? `${result}点${getDecimal(decimal)}${needUnit ? unitStr : ""}` : `${result}${needUnit ? unitStr : ""}`;
 }
