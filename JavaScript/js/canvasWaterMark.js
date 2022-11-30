@@ -67,6 +67,7 @@ function getWaterMarkImage(params) {
 }
 
 getWaterMarkImage({
+  // img: "./img/big-2.jpg",
   img: "http://street-statistics.oss-cn-guangzhou.aliyuncs.com/images/group-14/41-1668504089464-2022-11-15_17.21.22.jpg",
   title: "测试测试测试",
   desc: new Date().toLocaleString(),
@@ -96,17 +97,17 @@ function rotateTest() {
   let angle = 0;
 
   function run() {
-    ctx.clearRect(0, 0, size, size);//清屏
+    ctx.clearRect(0, 0, size, size);
     ctx.save();
     ctx.beginPath();
     ctx.fillStyle = "orange";
     // ctx.setTransform(1, 0, 0, 1, 0, 0);
-    ctx.translate(radius, radius);//围绕矩形的中心点旋转
-    ctx.rotate(angle * Math.PI / 180)//设置矩形旋转
-    ctx.translate(-radius, -radius);
+    ctx.translate(radius, radius); // 先偏移至矩阵中心
+    ctx.rotate(angle * Math.PI / 180);
+    ctx.translate(-radius, -radius); // 旋转完之后复原位置
     ctx.fillText("content", radius, radius);
     ctx.strokeRect(0, 0, size, size);
-    // ctx.fillRect(0, 0, size, size);//fillrect(矩形宽度的一半，矩形高度的一半，矩形长度，矩形宽度)
+    // ctx.fillRect(0, 0, size, size);
     ctx.restore();
     angle++;
     requestAnimationFrame(run);
