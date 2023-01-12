@@ -4,6 +4,14 @@
   margin: 0;
 }
 
+:root {
+  --blue: #409eff;
+  --green: #4caf50;
+  --red: #f44336;
+  --orange: orange;
+  --purple: #9e019e;
+}
+
 html, body{
 	background-color: #fff;
 	color: #333;
@@ -98,7 +106,6 @@ img { width: 100%; border: none; display: block; object-fit: cover; }
   color: #333;
   transition: .2s all;
   box-shadow: 0 3px 1px -2px rgba(0,0,0,.2), 0 2px 2px 0 rgba(0,0,0,.14), 0 1px 5px 0 rgba(0,0,0,.12);
-  -webkit-appearance: none;
   background-color: #eee;
   color: #555;
 }
@@ -107,17 +114,17 @@ img { width: 100%; border: none; display: block; object-fit: cover; }
 
 [btn] a { height: 100%; display: flex; flex-wrap: wrap; align-items: center; justify-content: center; }
 
-[btn][blue] { background-color: #409eff; color: #fff; }
-[btn][green] { background-color: #4caf50; color: #fff; }
-[btn][red] { background-color: #f44336; color: #fff; }
-[btn][orange] { background-color: orange; color: #fff; }
-[btn][purple] { background-color: #9e019e; color: #fff; }
+[btn][blue] { background-color: var(--blue); color: #fff; }
+[btn][green] { background-color: var(--green); color: #fff; }
+[btn][red] { background-color: var(--red); color: #fff; }
+[btn][orange] { background-color: var(--orange); color: #fff; }
+[btn][purple] { background-color: var(--purple); color: #fff; }
 
-.text_blue { color: #409eff; }
-.text_green { color: #4caf50; }
-.text_red { color: #f44336; }
-.text_orange { color: orange; }
-.text_purple { color: #9e019e; }
+.text_blue { color: var(--blue); }
+.text_green { color: var(--green); }
+.text_red { color: var(--red); }
+.text_orange { color: var(--orange); }
+.text_purple { color: var(--purple); }
 .text_grey { color: grey; }
 
 /* 页面结构处理 */
