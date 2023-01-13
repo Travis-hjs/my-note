@@ -1,5 +1,6 @@
 // 类型提示用（运行时不会引用）
 /// <reference path="../utils/dom.js" />
+/// <reference path="../utils/number.js" />
 
 (function() {
   /** `item`父节点 */
@@ -43,11 +44,14 @@
     const car = target.getBoundingClientRect();
     const x = car.left + car.width / 2 - ballWidth / 2 - left;
     const y = car.top - ballHeight - top;
+    const distance = getSizeDistance(size, car);
+    const time = distance * 0.8; // 0.8 这个值根据想要的运动速度给，越小，运动速度越快
     // 设置位置及移动变量
     ballBox.style.left = left + "px";
     ballBox.style.top = top + "px";
     ballBox.style.setProperty("--x", x + "px");
     ballBox.style.setProperty("--y", y + "px");
+    ballBox.style.setProperty("--time", time + "ms");
     function end() {
       ballBox.removeEventListener("animationend", end);
       ballBox.remove();

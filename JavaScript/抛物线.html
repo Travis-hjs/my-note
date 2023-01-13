@@ -46,14 +46,15 @@
       position: fixed;
       top: 0px;
       left: 0px;
-      animation: ball-move-y .5s cubic-bezier(0.5, -0.5, 1, 1);
+      --time: .5s;
+      animation: ball-move-y var(--time) cubic-bezier(0.5, -0.5, 1, 1);
     }
     .ball-box .ball {
       width: 100%;
       height: 100%;
       border-radius: 50%;
       background-color: var(--blue);
-      animation: ball-move-x .5s linear;
+      animation: ball-move-x var(--time) linear;
     }
     @keyframes ball-move-y {
       to {
@@ -83,6 +84,7 @@
       <div class="ball"></div>
     </div> -->
   </main>
+  <script src="./utils/number.js"></script>
   <script src="./utils/dom.js"></script>
   <script src="./js/parabola.js"></script>
 </body>
