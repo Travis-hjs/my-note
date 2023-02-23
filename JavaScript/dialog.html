@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="maximum-scale=1.0, minimum-scale=1.0, user-scalable=0, initial-scale=1.0, width=device-width, viewport-fit=cover" />
+  <meta name="format-detection" content="telephone=no, email=no, date=no, address=no">
+  <title>dialog</title>
+  <link rel="stylesheet" href="./css/base.css">
+  <style>
+    .page{
+      padding: 10px;
+    }
+  </style>
+</head>
+<body>
+  <template>
+    <style>
+      .dialog-mask {
+        --time: .3s;
+        --transition: .3s all;
+        --black: #333;
+        --text-color: #555;
+        --confirm-bg: #2ec1cb;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0,0,0,0.45);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: var(--transition);
+        animation: fade var(--time);
+      }
+      .dialog-mask * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      .dialog-popup {
+        width: 74%;
+        max-width: 375px;
+        padding: 16px;
+        border-radius: 10px;
+        background-color: #fff;
+        transition: var(--transition);
+        animation: show var(--time);
+      }
+      .dialog-title {
+        font-size: 18px;
+        color: var(--black);
+        text-align: center;
+      }
+      .dialog-content {
+        padding: 16px 0;
+        font-size: 15px;
+        color: var(--text-color);
+        text-align: center;
+      }
+      .dialog-footer {
+        width: 100%;
+        padding-top: 8px;
+        display: flex;
+        justify-content: center;
+      }
+      .dialog-footer button {
+        font-size: 15px;
+        line-height: 1;
+        height: 36px;
+        border-radius: 20px;
+        padding: 0 20px;
+        background-color: #f8f8f8;
+        color: var(--black);
+        margin: auto;
+      }
+      .dialog-footer .confirm {
+        color: #fff;
+        background-color: var(--confirm-bg);
+      }
+      @keyframes fade {
+        0% { opacity: 0; }
+        100% { opacity: 1; }
+      }
+      @keyframes show {
+        0% { transform: scale(0); }
+        100% { transform: scale(1); }
+      }
+      .dialog-mask.hide {
+        opacity: 0;
+      }
+      .dialog-mask.hide .dialog-popup {
+        transform: scale(0);
+      }
+    </style>
+    <section class="dialog-mask">
+      <div class="dialog-popup">
+        <h2 class="dialog-title">标题</h2>
+        <div class="dialog-content">内容内容</div>
+        <div class="dialog-footer">
+          <button>关闭</button>
+          <button class="confirm">确认</button>
+        </div>
+      </div>
+    </section>
+  </template>
+  <div class="page">
+    <button btn blue onclick="openAlert()">alert</button>
+    <button btn green onclick="openConfirm()">confirm</button>
+    <div style="height: 150vh;"></div>
+    <button btn blue onclick="openAlert()">alert</button>
+    <button btn green onclick="openConfirm()">confirm</button>
+  </div>
+  <script src="./js/dialog.js"></script>
+</body>
+</html>
