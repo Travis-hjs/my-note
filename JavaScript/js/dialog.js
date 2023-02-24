@@ -174,9 +174,8 @@ function useDialog(option = {}) {
 const dialog = useDialog();
 
 function openAlert() {
-  const { clientWidth, clientHeight } = document.body;
   dialog.show({
-    content: `<p>当前时间为：${new Date().toLocaleDateString()}</p><p>body：${clientWidth}/${clientHeight}</p><p>window：${window.innerWidth}/${window.innerHeight}</p>`,
+    content: "对话内容对话内容对话内容对话内容对话内容对话内容对话内容",
     confirm() {
       console.log("点击确认");
     }
@@ -184,9 +183,15 @@ function openAlert() {
 }
 
 function openConfirm() {
+  const { clientWidth, clientHeight } = document.body;
+  const { innerWidth, innerHeight } = window;
   dialog.show({
     title: "确认弹框",
-    content: `<div>html文本<b style="color: red">加重红色字</b>html文本html文本html文本</div>`,
+    content: `
+    <p style="margin-bottom: 4px">当前时间为：${new Date().toLocaleString()}</p>
+    <p style="margin-bottom: 4px"><b style="padding-right: 8px">body</b>width: ${clientWidth} height: ${clientHeight}</p>
+    <p><b style="padding-right: 8px">window</b>width: ${innerWidth} height: ${innerHeight}</p>
+    `,
     cancelText: "关闭",
     confirm() {
       console.log("点击确认");
