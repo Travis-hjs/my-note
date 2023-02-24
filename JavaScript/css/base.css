@@ -41,7 +41,6 @@ a, button {
   cursor: pointer;
 }
 
-h1,h2,h3,h4,h5,h6,b,i { font-weight: normal; font-style: normal; }
 input::-webkit-input-placeholder { color: #999; }
 button::after, input::after { border: none; }
 textarea { resize: none; display: block; }
