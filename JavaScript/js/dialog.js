@@ -70,13 +70,14 @@ function useDialog(option = {}) {
   }
   .${className.footer} button {
     font-size: 15px;
-    line-height: 1;
-    height: 36px;
+    height: 40px;
     border-radius: 20px;
     padding: 0 20px;
     background-color: #f8f8f8;
     color: var(--black);
-    margin: auto;
+    line-height: 1;
+    letter-spacing: 1px;
+    margin: auto; border: none; outline: none;
   }
   .${className.footer} .${className.confirm} {
     color: #fff;
