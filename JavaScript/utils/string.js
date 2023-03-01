@@ -181,3 +181,18 @@ function toChinesNumber(value, needUnit = false) {
   if (!result) result = changeNum[0];
   return decimal ? `${result}点${getDecimal(decimal)}${needUnit ? unitStr : ""}` : `${result}${needUnit ? unitStr : ""}`;
 }
+
+/**
+ * 获取处理要标记的`html`文本
+ * @param {string} content 
+ * @param {Array<string>} keywords 
+ */
+function getMarkHtml(content, keywords) {
+  if (keywords.length === 0) return;
+  new Set(keywords).forEach(keyword => {
+    if (keyword && content.indexOf(keyword) > -1) {
+      content = content.replace(new RegExp(keyword, "g"), `<mark>${keyword}</mark>`);
+    }
+  });
+  return content;
+}
