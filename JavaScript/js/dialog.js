@@ -158,12 +158,12 @@ function useDialog(option = {}) {
     if (option.cancelText) {
       el.querySelector(`.${className.footer} button`).onclick = function() {
         hide();
-        option.cancel() && option.cancel();
+        option.cancel && option.cancel();
       }
     }
     el.querySelector(`.${className.confirm}`).onclick = function() {
       hide();
-      option.confirm() && option.confirm();
+      option.confirm && option.confirm();
     }
   }
 
