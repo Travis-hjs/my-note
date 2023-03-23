@@ -196,3 +196,79 @@ function getMarkHtml(content, keywords) {
   });
   return content;
 }
+
+/**
+ * 数字转中文
+ * @param {number} target 
+ */
+function numberToChinese(target) {
+  if (typeof target !== "number" || isNaN(target)) return "";
+  const cnNums = ["零", "一", "二", "三", "四", "五", "六", "七", "八", "九"];
+  const cnIntRadice = ["", "十", "百", "千"];
+  const cnIntUnits = ["", "万", "亿", "兆"];
+  const cnDecUnits = ["角", "分", "毫", "厘"];
+  const cnInteger = "整";
+  const cnIntLast = "元";
+  const maxNum = 999999999999999.9999;
+  let IntegerNum = "";
+  let DecimalNum = "";
+  let result = "";
+  /** @type {Array<string>} */
+  let parts;
+  if (target >= maxNum) {
+    console.warn("超出最大处理数字");
+    return "";
+  }
+  if (target == 0) {
+    result = cnNums[0] + cnIntLast + cnInteger;
+    return result;
+  }
+  const numStr = target.toString();
+  if (numStr.indexOf(".") == -1) {
+    IntegerNum = numStr;
+  } else {
+    parts = numStr.split(".");
+    IntegerNum = parts[0];
+    DecimalNum = parts[1].substr(0, 4);
+  }
+  // 获取整型部分转换
+  if (parseInt(IntegerNum, 10) > 0) {
+    let zeroCount = 0;
+    const IntLen = IntegerNum.length;
+    for (let i = 0; i < IntLen; i++) {
+      const n = IntegerNum.substr(i, 1);
+      const p = IntLen - i - 1;
+      const q = p / 4;
+      const m = p % 4;
+      if (n == "0") {
+        zeroCount++;
+      } else {
+        if (zeroCount > 0) {
+          result += cnNums[0];
+        }
+        zeroCount = 0; // 归零
+        result += cnNums[parseInt(n)] + cnIntRadice[m];
+      }
+      if (m == 0 && zeroCount < 4) {
+        result += cnIntUnits[q];
+      }
+    }
+    result += cnIntLast;
+  }
+  // 小数部分
+  if (DecimalNum != "") {
+    const decLen = DecimalNum.length;
+    for (let i = 0; i < decLen; i++) {
+      const n = DecimalNum.substr(i, 1);
+      if (n != "0") {
+        result += cnNums[Number(n)] + cnDecUnits[i];
+      }
+    }
+  }
+  if (result == "") {
+    result += cnNums[0] + cnIntLast + cnInteger;
+  } else if (DecimalNum == "") {
+    result += cnInteger;
+  }
+  return result;
+}
