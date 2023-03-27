@@ -255,10 +255,10 @@ function numberToChinese(target) {
   // 获取整型部分转换
   if (parseInt(integerNum, 10) > 0) {
     let zeroCount = 0;
-    const IntLen = integerNum.length;
-    for (let i = 0; i < IntLen; i++) {
+    const intLength = integerNum.length;
+    for (let i = 0; i < intLength; i++) {
       const n = substr(integerNum, i, 1);
-      const p = IntLen - i - 1;
+      const p = intLength - i - 1;
       const q = p / 4;
       const m = p % 4;
       if (n == "0") {
@@ -278,8 +278,8 @@ function numberToChinese(target) {
   }
   // 小数部分
   if (decimalNum != "") {
-    const decLen = decimalNum.length;
-    for (let i = 0; i < decLen; i++) {
+    const decLength = decimalNum.length;
+    for (let i = 0; i < decLength; i++) {
       const n = substr(decimalNum, i, 1);
       if (n != "0") {
         result += cnNums[Number(n)] + cnDecUnits[i];
