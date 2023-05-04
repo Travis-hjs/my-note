@@ -78,6 +78,10 @@ function useDialog(option = {}) {
     line-height: 1;
     letter-spacing: 1px;
     margin: auto; border: none; outline: none;
+    transition: .2s all;
+  }
+  .${className.footer} button:active {
+    opacity: 0.8;
   }
   .${className.footer} .${className.confirm} {
     color: #fff;
@@ -149,8 +153,8 @@ function useDialog(option = {}) {
     </div>
     `;
     doc.body.appendChild(el);
-    el.addEventListener("transitionend", function() {
-      el.remove();
+    el.addEventListener("transitionend", function(e) {
+      e.target === el && el.classList.contains(className.hide) && el.remove(); // button 设置的 :active 伪类动画会触发监听回调，所以这里做个判断
     });
     function hide() {
       el.classList.add(className.hide);
