@@ -10,12 +10,13 @@
   --red: #f44336;
   --orange: orange;
   --purple: #9e019e;
+  --font: "Helvetica Neue", "Helvetica", "sans-serif", "微软雅黑";
 }
 
 html, body{
 	background-color: #fff;
 	color: #333;
-	font-family: "Helvetica Neue", "Helvetica", "sans-serif";
+	font-family: var(--font);
 	/* 禁用系统长按菜单 */
 	-webkit-touch-callout: none; 
 	/* 禁用字体大小自动调整 */
@@ -34,7 +35,7 @@ button, input, textarea {
   outline: none;
   border-radius: 0;
   font-size: inherit;
-  font-family: "Helvetica Neue", "Helvetica", "sans-serif", "微软雅黑";
+  font-family: var(--font);
 }
 
 a, button {
@@ -45,10 +46,6 @@ input::-webkit-input-placeholder { color: #999; }
 button::after, input::after { border: none; }
 textarea { resize: none; display: block; }
 textarea::-webkit-input-placeholder { color: #999; }
-
-ul, li, ol { list-style: none; }
-
-img { width: 100%; border: none; display: block; object-fit: cover; }
 
 /* flex布局 */
 .flex { display: flex; flex-wrap: nowrap; }
