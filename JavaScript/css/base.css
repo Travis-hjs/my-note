@@ -78,6 +78,11 @@ img { width: 100%; border: none; display: block; object-fit: cover; }
   overflow: hidden;
 }
 
+/* 溢出...显示 子节点生效 */
+.ellipsis_1 { -webkit-line-clamp: 1; }
+.ellipsis_2 { -webkit-line-clamp: 2; }
+.ellipsis_3 { -webkit-line-clamp: 3; }
+
 /* 卡片 */
 .card { 
   border-radius: 2px; 
