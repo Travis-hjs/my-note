@@ -157,6 +157,10 @@
       get params() {
         return currentPathParams;
       },
+      /** 当前路由路径 */
+      get path() {
+        return currentPath;
+      },
       /**
        * 路由重定向
        * @param {RouterChangeOptions} options 可以传字符串：`/home`
