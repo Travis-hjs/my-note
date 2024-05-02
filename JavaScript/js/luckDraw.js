@@ -89,11 +89,12 @@
 (function () {
   /**
    * 九宫抽奖
-   * @param {object} info 
-   * @param {number} info.rangeIndex 概率索引`0-7` 
-   * @param {(index: number, last: boolean) => void} info.callback 间隔回调
+   * @param {object} option 
+   * @param {number} option.rangeIndex 概率索引`0-7` 
+   * @param {number} option.startIndex 开始索引
+   * @param {(index: number, last: boolean) => void} option.callback 间隔回调
    */
-  function luckDrawGrid(info) {
+  function luckDrawGrid(option) {
     /**
      * 动画帧
      * @type {requestAnimationFrame}
@@ -108,13 +109,13 @@
     /** 最大索引数 */
     const maxTotal = 8;
     /** 一共要跑的格子总数 */
-    let totalGrid = (circleTotal + 2) * maxTotal - (maxTotal - (info.rangeIndex + 1));
+    let totalGrid = (circleTotal + 2) * maxTotal - (maxTotal - (option.rangeIndex + 1));
     /** 计数间隔 */
     let countInterval = maxInterval;
     /** 计数帧 */
     let countFrame = 0;
     /** 当前索引 */
-    let index = 0;
+    let index = option.startIndex || 0;
     /** 每次增加&减少值 */
     const value = (maxInterval - minInterval) / maxTotal;
 
@@ -123,7 +124,7 @@
 
       if (countFrame >= countInterval) {
         countFrame = 0;
-        typeof info.callback === "function" && info.callback(index, totalGrid === 1);
+        typeof option.callback === "function" && option.callback(index, totalGrid === 1);
 
         index++;
         if (index == maxTotal) index = 0;
@@ -145,7 +146,7 @@
     }
     update();
     // 先执行一次
-    typeof info.callback === "function" && info.callback(index, false);
+    typeof option.callback === "function" && option.callback(index, false);
   }
 
   const content = document.querySelector(".box");
@@ -191,13 +192,16 @@
 
   let isMove = false;
 
+  let start = 0;
+
   content.children[4].addEventListener('click', function () {
     if (isMove) return console.log("动画进行中");
     isMove = true;
     luckDrawGrid({
       rangeIndex: getRangeIndex(),
+      startIndex: start,
       callback(index, last) {
-        // console.log(index);
+        start = index;
         switchItem(index);
         if (last) {
           // console.log(index);
