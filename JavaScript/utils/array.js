@@ -137,3 +137,20 @@ function zIndexToBottom(array, index) {
     console.log("已经处于置底");
   }
 }
+
+/**
+ * 数组去重
+ * @template T
+ * @param {Array<T>} array
+ * @param {(a: T, b: T) => boolean} compare 对比函数
+ * @example
+ * ```js
+ * const list = [{ id: 10, code: "abc" }, {id: 12, code: "abc"}, {id: 12, code: "abc"}];
+ * filterRepeat(list, (a, b) => a.id === b.id)
+ * ```
+ */
+export function filterRepeat(array, compare) {
+  return array.filter((element, index, self) => {
+    return findIndex(self, el => compare(el, element)) === index;
+  })
+}
