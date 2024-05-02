@@ -149,7 +149,7 @@ function zIndexToBottom(array, index) {
  * filterRepeat(list, (a, b) => a.id === b.id)
  * ```
  */
-export function filterRepeat(array, compare) {
+function filterRepeat(array, compare) {
   return array.filter((element, index, self) => {
     return findIndex(self, el => compare(el, element)) === index;
   })
