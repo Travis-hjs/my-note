@@ -1022,3 +1022,46 @@ class Singleton {
 
 }
 
+const obj = {
+  list: [],
+  value: 3
+}
+
+obj.sub = obj;
+
+obj.list.push(obj);
+
+console.log(obj);
+
+/**
+ * 深度克隆对象或数组
+ * @template T
+ * @param {T} target 
+ * @returns {T}
+ */
+function deepClone(target) {
+  const cache = new Map();
+  function clone(value) {
+    if (!value || typeof value !== "object") return value;
+    if (cache.has(value)) {
+      return cache.get(value);
+    }
+    const result = Array.isArray(value) ? [] : {};
+    cache.set(value, result);
+    for (const key in value) {
+      result[key] = clone(value[key]);
+    }
+    return result;
+  }
+  return clone(target);
+}
+
+const newObj = deepClone(obj);
+
+console.log("obj >>", obj);
+console.log("newObj >>", newObj);
+console.log(newObj.list === obj.list);
+console.log(newObj.sub === obj.sub);
+console.log(newObj.list[0] === obj);
+console.log(newObj.list[0] === newObj);
+

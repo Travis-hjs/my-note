@@ -168,7 +168,7 @@ function blobToFile(blob, fileName) {
  * @param {File | Blob} target 目标对象
  * @returns {Promise<string>}
  */
-function blobOrFlieToBase64(target) {
+function blobOrFileToBase64(target) {
   return new Promise(function (resolve, reject) {
     const reader = new FileReader();
     reader.onload = function () {
@@ -176,7 +176,7 @@ function blobOrFlieToBase64(target) {
     }
     reader.onerror = function () {
       console.warn("reader error >>", reader.error);
-      reject(new Error("blobOrFlieToBase64 error"));
+      reject(new Error("blobOrFileToBase64 error"));
     }
     reader.readAsDataURL(target);
   })
@@ -210,7 +210,7 @@ function base64ToBlobOrFile(base64, type, filename) {
  * @param {File | Blob} target 目标对象 
  * @returns {string}
  */
-function blobOrFlieToUrl(target) {
+function blobOrFileToUrl(target) {
   let url;
   if (window.createObjectURL) {
     url = window.createObjectURL(target);

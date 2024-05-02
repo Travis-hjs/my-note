@@ -36,7 +36,7 @@ function setStyle(el, styles) {
 }
 
 /**
- * 检测元素是否存在指定 calss
+ * 检测元素是否存在指定 class
  * @param {HTMLElement} el 当前元素
  * @param {string} className class name
  */
@@ -49,7 +49,7 @@ function hasClass(el, className) {
 }
 
 /**
- * 给元素添加 calss
+ * 给元素添加 class
  * @param {HTMLElement} el 当前元素
  * @param {string} className class name
  */
@@ -65,7 +65,7 @@ function addClass(el, className) {
 }
 
 /**
- * 给元素移除指定 calss
+ * 给元素移除指定 class
  * @param {HTMLElement} el 当前元素
  * @param {string} className class name
  */
@@ -81,7 +81,7 @@ function removeClass(el, className) {
 }
 
 /**
- * 切换 calss name
+ * 切换 class name
  * @param {HTMLElement} el 当前元素
  * @param {string} className class name
  */
