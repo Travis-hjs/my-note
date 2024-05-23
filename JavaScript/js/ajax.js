@@ -113,34 +113,62 @@ function ajax(params) {
  * 基于`fetch`请求 [MDN文档](https://developer.mozilla.org/zh-CN/docs/Web/API/Fetch_API)
  * @param {"GET"|"POST"|"PUT"|"DELETE"} method 请求方法
  * @param {string} url 请求路径
- * @param {object} data 请求参数对象
- * @param {number} timeout 超时毫秒
+ * @param {object|FormData|string=} data 传参对象，json、formdata、普通表单字符串
+ * @param {RequestInit & { timeout: number }} option 其他配置
  */
-function fetchRequest(method, url, data = {}, timeout = 5000) {
-  let body = null;
+function fetchRequest(method, url, data = {}, option = {}) {
+  /** 非`GET`请求传参 */
+  let body = undefined;
+  /** `GET`请求传参 */
   let query = "";
+  /** 默认请求头 */
+  const headers = {};
+  /** 超时毫秒 */
+  const timeout = option.timeout || 8000;
+  /** 传参数据类型 */
+  const dataType = checkType(data);
+  // 传参处理
   if (method === "GET") {
     // 解析对象传参
-    for (const key in data) {
-      query += `&${key}=${data[key]}`;
+    if (dataType === "object") {
+      for (const key in data) {
+        query += "&" + key + "=" + data[key];
+      }
+    } else {
+      console.warn("fetch 传参处理 GET 传参有误，需要的请求参数应为 object 类型");
     }
     if (query) {
       query = "?" + query.slice(1);
+      url += query;
     }
   } else {
-    // 若后台没设置接收 JSON 则不行 需要跟 GET 一样的解析对象传参
-    body = JSON.stringify(data);
+    body = dataType === "object" ? JSON.stringify(data) : data;
   }
-  return new Promise((resolve, reject) => {
+  // 设置对应的传参请求头，GET 方法不需要
+  if (method !== "GET") {
+    switch (dataType) {
+      case "object":
+        headers["Content-Type"] = "application/json";
+        break;
+
+      case "string":
+        headers["Content-Type"] = "application/x-www-form-urlencoded"; // 表单请求，`id=1&type=2` 非`new FormData()`
+        break;
+
+      default:
+        break;
+    }
+  }
+  const controller = new AbortController();
+  return new Promise(function(resolve, reject) {
     fetch(url + query, {
+      method,
+      body,
+      headers,
+      signal: controller.signal,
       // credentials: "include",  // 携带cookie配合后台用
-      // mode: "cors",            // 貌似也是配合后台设置用的跨域模式
-      method: method,
-      headers: {
-        "Content-Type": "application/json"
-        // "Content-Type": "application/x-www-form-urlencoded"
-      },
-      body: body
+      // mode: "cors",            // 配合后台设置用的跨域模式
+      ...option,
     }).then(response => {
       // 把响应的信息转为`json`
       return response.json();
@@ -149,7 +177,10 @@ function fetchRequest(method, url, data = {}, timeout = 5000) {
     }).catch(error => {
       reject(error);
     });
-    setTimeout(reject.bind(this, "fetch is timeout"), timeout);
+    setTimeout(function() {
+      reject("fetch is timeout");
+      controller.abort();
+    }, timeout);
   });
 }
 
