@@ -160,6 +160,7 @@ function fetchRequest(method, url, data = {}, option = {}) {
     }
   }
   const controller = new AbortController();
+  let timer;
   return new Promise(function(resolve, reject) {
     fetch(url + query, {
       method,
@@ -173,11 +174,13 @@ function fetchRequest(method, url, data = {}, option = {}) {
       // 把响应的信息转为`json`
       return response.json();
     }).then(res => {
+      clearTimeout(timer);
       resolve(res);
     }).catch(error => {
+      clearTimeout(timer);
       reject(error);
     });
-    setTimeout(function() {
+    timer = setTimeout(function() {
       reject("fetch is timeout");
       controller.abort();
     }, timeout);
