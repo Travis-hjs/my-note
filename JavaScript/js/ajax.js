@@ -162,7 +162,7 @@ function fetchRequest(method, url, data = {}, option = {}) {
   const controller = new AbortController();
   let timer;
   return new Promise(function(resolve, reject) {
-    fetch(url + query, {
+    fetch(url, {
       method,
       body,
       headers,
