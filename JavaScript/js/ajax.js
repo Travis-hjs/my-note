@@ -13,7 +13,7 @@
  * @param {(result: any, response: XMLHttpRequest) => void=} params.success 成功回调 
  * @param {(error: XMLHttpRequest) => void=} params.fail 失败回调 
  * @param {(info: XMLHttpRequest) => void=} params.onTimeout 超时回调
- * @param {(res: ProgressEvent<XMLHttpRequestEventTarget>) => void=} params.onProgress 请求进度回调
+ * @param {(res: ProgressEvent<XMLHttpRequestEventTarget>) => void=} params.onProgress 请求进度回调（上传文件）
  * @param {"arraybuffer"|"blob"|"document"|"json"|"text"=} params.responseType 响应结果类型，默认`json`
  */
 function ajax(params) {
@@ -65,7 +65,7 @@ function ajax(params) {
 
   // 判断请求进度
   if (params.onProgress) {
-    XHR.addEventListener("progress", params.onProgress);
+    XHR.upload.addEventListener("progress", params.onProgress);
   }
   
   XHR.responseType = params.responseType || "json"; // TODO: 设置响应结果为`json`这个一般由后台返回指定格式，前端无需配置
