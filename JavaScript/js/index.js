@@ -1065,3 +1065,38 @@ console.log(newObj.sub === obj.sub);
 console.log(newObj.list[0] === obj);
 console.log(newObj.list[0] === newObj);
 
+/**
+ * 执行任务到微队列里面，不阻塞页面渲染
+ * @param {() => void} fn 
+ */
+function runTask(fn) {
+  /**
+   * 
+   * @param {typeof fn} task 
+   * @param {(value: any) => void} callback 
+   */
+  function run(task, callback) {
+    /**
+     * 
+     * @param {boolean} condition 
+     */
+    function handler(condition) {
+      if (condition) {
+        task();
+        callback();
+      } else {
+        run(task, callback);
+      }
+    }
+    if (window.requestIdleCallback) {
+      requestIdleCallback((deadline) => handler(deadline.timeRemaining() > 0));
+    } else {
+      const start = Date.now();
+      const t = 1000 / 60;
+      requestAnimationFrame(() => handler(Date.now() - start < t));
+    }
+  }
+  return new Promise(function(resolve) {
+    run(fn, resolve);
+  });
+}
