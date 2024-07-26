@@ -95,9 +95,9 @@
       box.innerHTML = `
       <img class="head" src="${img || ''}">
       <div class="info">
-          <p class="name">${name || ''}</p>
-          <p class="email">${desc || ''}</p>
-          <button class="button button_blue"><a href="${link || '###'}">open link</a></button>
+        <p class="name">${name || ''}</p>
+        <p class="email">${desc || ''}</p>
+        <button class="the-btn blue"><a href="${link || '###'}">open link</a></button>
       </div>`;
       this.shadow.appendChild(box);
       // this.insertAdjacentHTML('beforeend', template);
@@ -129,7 +129,7 @@
       input.placeholder = 'Please input English words';
       input.addEventListener('input', function (e) {
         // console.log(e.target.value);
-        input.value = THAT.filtInput(e.target.value);
+        input.value = THAT.inputFilter(e.target.value);
       });
       this.appendChild(input);
     }
@@ -138,7 +138,7 @@
      * 过滤输入
      * @param {string} value 输入的内容
      */
-    filtInput(value) {
+    inputFilter(value) {
       let result = value;
       /**
        * 每个单词首字母大写

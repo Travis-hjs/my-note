@@ -1,6 +1,6 @@
 // 类型提示用（运行时不会引用）
-/// <reference path="../utils/dom.js" />
-/// <reference path="../utils/array.js" />
+/// <reference path="../../utils/dom.js" />
+/// <reference path="../../utils/array.js" />
 
 // 阻止事件冒泡
 // event.cancelBubble = true;
