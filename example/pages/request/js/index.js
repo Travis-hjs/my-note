@@ -1,6 +1,6 @@
 
 // 类型提示用（运行时不会引用）
-/// <reference path="../utils/string.js" />
+/// <reference path="../../../utils/string.js" />
 
 /**
  * `XMLHttpRequest`请求 [MDN文档](https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest)
@@ -225,7 +225,7 @@ function ajaxRequest() {
     fail: function (err) {
       error.message = "接口报错，请看 network";
       error.info = err;
-      if (err.response.charAt(0) == "{") {
+      if (err.response && err.response.charAt(0) == "{") {
         error.info = JSON.parse(err.response);
       }
       console.log("xhr fail >>", error);

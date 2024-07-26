@@ -49,22 +49,27 @@ textarea::-webkit-input-placeholder { color: #999; }
 
 /* flex布局 */
 .flex { display: flex; flex-wrap: nowrap; }
-.fwrap { display: flex; flex-wrap: wrap; }
+.f-wrap { display: flex; flex-wrap: wrap; }
 .f1 { flex: 1; }
 .f2 { flex: 2; }
 .f3 { flex: 3; }
 /* 垂直居中 */
-.fvertical { display: flex; align-items: center; }
+.f-v,
+.f-vertical { display: flex; align-items: center; }
 /* 水平居中 */
-.fcenter { display: flex; justify-content: center; }
+.f-c,
+.f-center { display: flex; justify-content: center; }
 /* 水平+垂直居中 */
 .fvc { display: flex; align-items: center; justify-content: center; }
 /* 右对齐 */
-.fright { display: flex; justify-content: flex-end; }
+.f-r,
+.f-right { display: flex; justify-content: flex-end; }
 /* 两端对齐 */
-.fbetween { display: flex; justify-content: space-between; }
+.f-b,
+.f-between { display: flex; justify-content: space-between; }
 /* 靠底部对齐 */
-.fbottom { display: flex; align-items: flex-end; }
+.f-e,
+.f-end { display: flex; align-items: flex-end; }
 
 /* 溢出...显示 当前节点生效 */
 .ellipsis { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }

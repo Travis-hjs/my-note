@@ -68,9 +68,9 @@ function lazyLoadImage(params) {
 /**
  * 懒加载（完美版）可加载`<img>`、`<video>`、`<audio>`等一些引用资源路径的标签
  * @param {object} params 传参对象
- * @param {string?} params.lazyAttr 自定义加载的属性（可选）
- * @param {"src"|"background"} params.loadType 加载的类型（默认为`src`）
- * @param {string?} params.errorPath 加载失败时显示的资源路径，仅在`loadType`设置为`src`中可用（可选）
+ * @param {string=} params.lazyAttr 自定义加载的属性（可选）
+ * @param {"src"|"background"=} params.loadType 加载的类型（默认为`src`）
+ * @param {string=} params.errorPath 加载失败时显示的资源路径，仅在`loadType`设置为`src`中可用（可选）
  */
 function lazyLoad(params) {
   const attr = params.lazyAttr || "lazy";

@@ -157,7 +157,7 @@ function createList() {
     if (index > 0) {
       let html = ''
       for (let i = 0; i < 10; i++) {
-        html += `<div class="select-item fvertical" data-id="${index * 100 + i}">
+        html += `<div class="select-item f-vertical" data-id="${index * 100 + i}">
                   <div class="checkbox"></div>
                   <div class="text">选项${i + 1}</div>
                 </div>`

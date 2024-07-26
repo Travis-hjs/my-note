@@ -1,6 +1,6 @@
 // 类型提示用（运行时不会引用）
-/// <reference path="../utils/bom.js" />
-/// <reference path="../utils/dom.js" />
+/// <reference path="../../../utils/bom.js" />
+/// <reference path="../../../utils/dom.js" />
 
 /** 旧版的做法 canvas 绘画 效果不好 */
 function rippleClick(el) {
@@ -143,9 +143,9 @@ function createButton() {
 
   for (let i = 0; i < 11; i++) {
     const button = document.createElement("button");
-    button.setAttribute("btn", "");
     button.setAttribute("ripple", "");
     button.textContent = "BUTTON-" + (i + 1);
+    button.className = "the-btn"
     listNode.appendChild(button);
   }
 }

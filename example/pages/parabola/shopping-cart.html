@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="maximum-scale=1.0, minimum-scale=1.0, user-scalable=0, initial-scale=1.0, width=device-width" />
   <meta name="format-detection" content="telephone=no, email=no, date=no, address=no">
-  <link rel="stylesheet" type="text/css" href="./css/base.css" />
+  <link rel="stylesheet" type="text/css" href="../../css/base.css" />
   <title>css + js 实现抛物线动画</title>
   <style>
     .page {
@@ -63,7 +63,7 @@
     }
     @keyframes ball-move-x {
       to {
-        transform: translatex(var(--x));
+        transform: translateX(var(--x));
       }
     }
   </style>
@@ -71,12 +71,12 @@
 <body>
   <main class="page">
     <div class="list">
-      <!-- <div class="item fvertical fright">
+      <!-- <div class="item f-vertical f-right">
         <button btn blue>添加至购物车</button>
       </div> -->
     </div>
     <footer>
-      <section class="btn-box fvertical">
+      <section class="btn-box f-v">
         <div class="cart-box fvc">购物车</div>
       </section>
     </footer>
@@ -84,8 +84,8 @@
       <div class="ball"></div>
     </div> -->
   </main>
-  <script src="./utils/number.js"></script>
-  <script src="./utils/dom.js"></script>
-  <script src="./js/parabola.js"></script>
+  <script src="../../utils/number.js"></script>
+  <script src="../../utils/dom.js"></script>
+  <script src="./js/shoppingCart.js"></script>
 </body>
 </html>

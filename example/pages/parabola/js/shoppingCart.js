@@ -1,6 +1,6 @@
 // 类型提示用（运行时不会引用）
-/// <reference path="../utils/dom.js" />
-/// <reference path="../utils/number.js" />
+/// <reference path="../../../utils/dom.js" />
+/// <reference path="../../../utils/number.js" />
 
 (function() {
   /** `item`父节点 */
@@ -14,10 +14,9 @@
 
   for (let i = 0; i < 20; i++) {
     const item = document.createElement("div");
-    item.className = "item fvertical fright";
+    item.className = "item f-v f-right";
     const btn = document.createElement("button");
-    btn.setAttribute("btn", "");
-    btn.setAttribute("blue", "");
+    btn.className = "the-btn blue";
     btn.textContent = "添加至购物车";
     item.appendChild(btn);
     btn.addEventListener("click", () => onAdd(btn))

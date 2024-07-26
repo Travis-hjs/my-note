@@ -6,7 +6,7 @@
   <meta name="viewport"
     content="maximum-scale=1.0, minimum-scale=1.0, user-scalable=0, initial-scale=1.0, width=device-width" />
   <meta name="format-detection" content="telephone=no, email=no, date=no, address=no">
-  <link rel="stylesheet" href="./css/base.css">
+  <link rel="stylesheet" href="../../css/base.css">
   <title>裁剪图片</title>
   <style>
     .page{ padding: 10px; }
@@ -47,7 +47,7 @@
           </svg>
         </div>
       </div>
-      <div class="upload flex fvertical fcenter">
+      <div class="upload fvc">
         <div class="add-icon"></div>
         <input class="upload-input" type="file" multiple="false" accept="image/*" name="picture">
       </div>
@@ -56,12 +56,12 @@
     <div class="cut-img cut-hide">
       <div class="cut-box">
         <canvas class="cut-canvas"></canvas>
-        <button btn red class="cancel">取消</button>
-        <button btn green class="save">保存</button>
+        <button class="the-btn red cancel">取消</button>
+        <button class="the-btn green save">保存</button>
       </div>
     </div>
   </div>
-  <script src="./js/cutImg.js"></script>
+  <script src="./js/index.js"></script>
 </body>
 
 </html>
