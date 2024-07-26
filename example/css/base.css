@@ -4,10 +4,19 @@
   margin: 0;
 }
 
+:root {
+  --blue: #409eff;
+  --green: #4caf50;
+  --red: #f44336;
+  --orange: orange;
+  --purple: #9e019e;
+  --font: "Helvetica Neue", "Helvetica", "sans-serif", "微软雅黑";
+}
+
 html, body{
 	background-color: #fff;
 	color: #333;
-	font-family: "Helvetica Neue", "Helvetica", "sans-serif", "微软雅黑";
+	font-family: var(--font);
 	/* 禁用系统长按菜单 */
 	-webkit-touch-callout: none; 
 	/* 禁用字体大小自动调整 */
@@ -26,22 +35,17 @@ button, input, textarea {
   outline: none;
   border-radius: 0;
   font-size: inherit;
-  font-family: "Helvetica Neue", "Helvetica", "sans-serif", "微软雅黑";
+  font-family: var(--font);
 }
 
 a, button {
   cursor: pointer;
 }
 
-h1,h2,h3,h4,h5,h6,b,i { font-weight: normal; font-style: normal; }
 input::-webkit-input-placeholder { color: #999; }
 button::after, input::after { border: none; }
 textarea { resize: none; display: block; }
 textarea::-webkit-input-placeholder { color: #999; }
-
-ul, li, ol { list-style: none; }
-
-img { width: 100%; border: none; display: block; object-fit: cover; }
 
 /* flex布局 */
 .flex { display: flex; flex-wrap: nowrap; }
@@ -71,6 +75,11 @@ img { width: 100%; border: none; display: block; object-fit: cover; }
   overflow: hidden;
 }
 
+/* 溢出...显示 子节点生效 */
+.ellipsis_1 { -webkit-line-clamp: 1; }
+.ellipsis_2 { -webkit-line-clamp: 2; }
+.ellipsis_3 { -webkit-line-clamp: 3; }
+
 /* 卡片 */
 .card { 
   border-radius: 2px; 
@@ -80,7 +89,7 @@ img { width: 100%; border: none; display: block; object-fit: cover; }
 }
 
 /* 按钮 */
-.button {
+[btn] {
   padding: 0 16px; 
   font-size: 14px;
   border-radius: 2px;
@@ -98,12 +107,26 @@ img { width: 100%; border: none; display: block; object-fit: cover; }
   color: #333;
   transition: .2s all;
   box-shadow: 0 3px 1px -2px rgba(0,0,0,.2), 0 2px 2px 0 rgba(0,0,0,.14), 0 1px 5px 0 rgba(0,0,0,.12);
+  background-color: #eee;
+  color: #555;
 }
 
-.button:active { box-shadow: 0 5px 5px -3px rgba(0,0,0,.2), 0 8px 10px 1px rgba(0,0,0,.14), 0 3px 14px 2px rgba(0,0,0,.12); }
-.button_blue { background-color: #409eff; color: #fff; }
-.button_green { background-color: #4caf50; color: #fff; }
-.button_red { background-color: #f44336; color: #fff; }
+[btn]:active { box-shadow: 0 5px 5px -3px rgba(0,0,0,.2), 0 8px 10px 1px rgba(0,0,0,.14), 0 3px 14px 2px rgba(0,0,0,.12); }
+
+[btn] a { height: 100%; display: flex; flex-wrap: wrap; align-items: center; justify-content: center; }
+
+[btn][blue] { background-color: var(--blue); color: #fff; }
+[btn][green] { background-color: var(--green); color: #fff; }
+[btn][red] { background-color: var(--red); color: #fff; }
+[btn][orange] { background-color: var(--orange); color: #fff; }
+[btn][purple] { background-color: var(--purple); color: #fff; }
+
+.text_blue { color: var(--blue); }
+.text_green { color: var(--green); }
+.text_red { color: var(--red); }
+.text_orange { color: var(--orange); }
+.text_purple { color: var(--purple); }
+.text_grey { color: grey; }
 
 /* 页面结构处理 */
 .page { width: 100%; min-height: 100vh; overflow: hidden; margin: 0 auto; max-width: 680px; }
