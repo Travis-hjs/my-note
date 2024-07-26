@@ -64,7 +64,7 @@
       // const formData = new FormData();
       // formData.append("img", file);
       // console.log(formData, file);
-      blobOrFlieToBase64(file).then(base64 => {
+      blobOrFileToBase64(file).then(base64 => {
         console.log("base64 >> ", base64);
         el.parentNode.classList.add("hide");
         el.parentNode.parentNode.querySelector(".img-box").classList.remove("hide");
@@ -72,7 +72,7 @@
         el.value = null;
       });
 
-      const url = blobOrFlieToUrl(file);
+      const url = blobOrFileToUrl(file);
       console.log("二进制路径", url);
 
     }
