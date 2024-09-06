@@ -20,6 +20,27 @@ function toFixed(value, fixed) {
 }
 
 /**
+ * 格式化数据
+ * - 千分位 + 保留小数点`N`位
+ * @param {number | string} value
+ * @param {number?} fixed 保留小数位，默认`2`，注意不会四舍五入
+ */
+function formatNumber(value, fixed = 2) {
+  const target = Number(value);
+  let str = target.toString();
+  if (Number.isNaN(target)) {
+    str = "0";
+  }
+  const list = str.split(".");
+  const integer = Number(list[0]).toLocaleString("en-US");
+  let suffix = "";
+  if (list[1] && fixed > 0) {
+    suffix = `.${(list[1] + Array.from({ length: fixed }).fill(0).join("")).slice(0, fixed)}`;
+  }
+  return `${integer}${suffix}`;
+}
+
+/**
  * 数字运算（主要用于小数点精度问题）
  * [see](https://juejin.im/post/6844904066418491406#heading-12)
  * @param {number} a 前面的值
