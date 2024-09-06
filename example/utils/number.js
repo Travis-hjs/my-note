@@ -34,8 +34,9 @@ function formatNumber(value, fixed = 2) {
   const list = str.split(".");
   const integer = Number(list[0]).toLocaleString("en-US");
   let suffix = "";
-  if (list[1] && fixed > 0) {
-    suffix = `.${(list[1] + Array.from({ length: fixed }).fill(0).join("")).slice(0, fixed)}`;
+  if (fixed > 0) {
+    const temp = list[1] || "";
+    suffix = `.${(temp + Array.from({ length: fixed }).fill(0).join("")).slice(0, fixed)}`;
   }
   return `${integer}${suffix}`;
 }
