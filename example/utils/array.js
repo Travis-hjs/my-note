@@ -39,11 +39,12 @@ function findIndex(array, compare) {
  * 自定义对象数组去重
  * @template T
  * @param {Array<T>} array 
- * @param {(a: T, b: T) => void} compare 对比函数
+ * @param {(a: T, b: T) => boolean} compare 对比函数
  * @example 
  * ```js
  * const list = [{ id: 10, code: "abc" }, {id: 12, code: "abc"}, {id: 12, code: "abc"}];
- * findIndex(list, (a, b) => a.id == b.id)
+ * // 去重后的列表
+ * const newList = filterRepeat(list, (a, b) => a.id == b.id)
  * ```
  */
 function filterRepeat(array, compare) {
