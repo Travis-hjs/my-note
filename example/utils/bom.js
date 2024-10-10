@@ -221,3 +221,19 @@ function blobOrFileToUrl(target) {
   }
   return url;
 }
+
+/**
+ * 下载文件
+ * @param {Blob} blob 
+ * @param {string} filename 
+ */
+function downloadFile(blob, filename) {
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = filename;
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+  URL.revokeObjectURL(url);
+}
