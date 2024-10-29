@@ -50,7 +50,7 @@ function ajax(params) {
       url += query;
     }
   } else {
-    body = dataType === "object" ? JSON.stringify(params.data) : params.data;
+    body = ["object", "array"].includes(dataType) ? JSON.stringify(params.data) : params.data;
   }
 
   // 监听请求变化；XHR.status learn: http://tool.oschina.net/commons?type=5
@@ -76,6 +76,7 @@ function ajax(params) {
   if (params.method !== "GET") {
     switch (dataType) {
       case "object":
+      case "array":
         XHR.setRequestHeader("Content-Type", "application/json"); // `json`请求
         break;
 
