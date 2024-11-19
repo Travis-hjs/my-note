@@ -1042,10 +1042,26 @@ console.log(obj);
 function deepClone(target) {
   const cache = new Map();
   function clone(value) {
+    // 处理空和非对象类型
     if (!value || typeof value !== "object") return value;
+    // 处理其他特殊类型
+    if (value instanceof Date) {
+      return new Date(value);
+    }
+    if (value instanceof RegExp) {
+      return new RegExp(value);
+    }
+    if (value instanceof Map) {
+      return new Map(Array.from(value, ([key, val]) => [clone(key), clone(val)]));
+    }
+    if (value instanceof Set) {
+      return new Set(Array.from(value, val => clone(val)));
+    }
+    // 处理循环引用
     if (cache.has(value)) {
       return cache.get(value);
     }
+    // 最后才到基础类型
     const result = Array.isArray(value) ? [] : {};
     cache.set(value, result);
     for (const key in value) {
