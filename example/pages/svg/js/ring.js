@@ -58,3 +58,53 @@ createRing({
     { color: "#9e019e", percentage: 38 },
   ],
 });
+
+// /**
+//  * 圆环 svg 组件
+//  * @param {object} props
+//  * @param {number} props.size 整体大小
+//  * @param {number=} props.strokeWidth 绘制的线宽，不传则使用`size * 0.2`
+//  * @param {Array<{ color: string; percentage: number; }>} props.configs 配置项列表，请确保`percentage`的和加起来要等于`100`
+//  */
+// function RingSvg(props) {
+//   /** @type {typeof props.configs} */
+//   const list = JSON.parse(JSON.stringify(props.configs));
+//   const size = props.size;
+//   const strokeWidth = props.strokeWidth || size * 0.2;
+//   /** 半径 */
+//   const radius = (size - strokeWidth) / 2;
+//   /** 圆周长 */
+//   const circumference = 2 * Math.PI * radius;
+//   /** 每段的起始位置偏移 */
+//   let dashOffset = circumference * 0.75; // 将起始点设置为 12 点钟方向
+//   // 处理只有一条数据的情况
+//   if (list.length === 1) {
+//     list.push({ color: "#f0f0f0", percentage: 100 - list[0].percentage });
+//   }
+//   return (
+//     <svg>
+//       {list.map((segment, index) => {
+//         const { color, percentage } = segment;
+//         /** 当前段的长度 */
+//         const segmentLength = (percentage / 100) * circumference;
+//         /** 间隙部分 */
+//         const gap = circumference - segmentLength;
+//         const circle = (
+//           <circle
+//             key={index}
+//             cx={size / 2}
+//             cy={size / 2}
+//             r={radius}
+//             fill="none"
+//             stroke={color}
+//             strokeWidth={strokeWidth}
+//             strokeDasharray={`${segmentLength} ${gap}`}
+//             strokeDashoffset={-dashOffset}
+//           />
+//         );
+//         dashOffset += segmentLength; // 更新下一段的偏移量
+//         return circle;
+//       })}
+//     </svg>
+//   );
+// }
