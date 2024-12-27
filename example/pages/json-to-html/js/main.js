@@ -66,7 +66,8 @@ function jsonToHtml(json, indent = 2) {
     }
     html += `<p style="text-indent: ${n * indentValue}px;">${content}</p>`;
   });
-  return `<section style="--black: #555; --orange: orange; --green: green; --empty: #ff4949">${html}</section>`;
+  const cssText = "--black: #555; --orange: orange; --green: green; --empty: #ff4949; padding: 10px; background-color: #f8f8f8;";
+  return `<section style="${cssText}">${html}</section>`;
 }
 
 const html = jsonToHtml(JSON.stringify(obj));
