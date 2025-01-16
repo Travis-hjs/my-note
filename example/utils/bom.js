@@ -237,3 +237,51 @@ function downloadFile(blob, filename) {
   document.body.removeChild(link);
   URL.revokeObjectURL(url);
 }
+
+/**
+ * 获取`cookie`
+ * @param {string} key 目标对象`key`值
+ * @returns {string}
+ */
+function getCookie(key) {
+  const value = `; ${document.cookie}`;
+  const parts = value.split(`; ${key}=`);
+  if (parts.length === 2) return parts.pop().split(";").shift();
+  return "";
+}
+
+/**
+ * 设置`cookie`
+ * @param {string} key 目标对象`key`值
+ * @param {string} value 对应键值
+ * @param {{ expires: Date; domain: string; }=} options 配置项
+ */
+function setCookie(key, value, options) {
+  let cookieString = `${key}=${value}; path=/`; // 默认路径为根路径
+
+  if (options) {
+    if (options.expires) {
+      const expires = options.expires.toUTCString();
+      cookieString += `; expires=${expires}`;
+    }
+    if (options.domain) {
+      cookieString += `; domain=${options.domain}`;
+    }
+  }
+
+  document.cookie = cookieString;
+}
+
+/**
+ * 移除指定`cookie`
+ * @param {string} key 目标对象`key`值
+ * @param {{ domain: string; }=} options 配置项
+ */
+function removeCookie(key, options) {
+  const time = "Thu, 01 Jan 1970 00:00:00 GMT";
+  if (options && options.domain) {
+    document.cookie = `${key}=; domain=${options.domain}; path=/; expires=${time}`;
+  } else {
+    document.cookie = `${key}=; path=/; expires=${time}`;
+  }
+}
