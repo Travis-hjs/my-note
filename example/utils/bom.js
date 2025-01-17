@@ -261,8 +261,7 @@ function setCookie(key, value, options) {
 
   if (options) {
     if (options.expires) {
-      const expires = options.expires.toUTCString();
-      cookieString += `; expires=${expires}`;
+      cookieString += `; expires=${options.expires.toUTCString()}`;
     }
     if (options.domain) {
       cookieString += `; domain=${options.domain}`;
@@ -278,10 +277,10 @@ function setCookie(key, value, options) {
  * @param {{ domain: string; }=} options 配置项
  */
 function removeCookie(key, options) {
-  const time = "Thu, 01 Jan 1970 00:00:00 GMT";
+  const time = `expires=Thu, 01 Jan 1970 00:00:00 GMT`;
   if (options && options.domain) {
-    document.cookie = `${key}=; domain=${options.domain}; path=/; expires=${time}`;
+    document.cookie = `${key}=; domain=${options.domain}; path=/; ${time}`;
   } else {
-    document.cookie = `${key}=; path=/; expires=${time}`;
+    document.cookie = `${key}=; path=/; ${time}`;
   }
 }
