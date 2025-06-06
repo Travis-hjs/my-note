@@ -284,3 +284,38 @@ function removeCookie(key, options) {
     document.cookie = `${key}=; path=/; ${time}`;
   }
 }
+
+/**
+ * 禁用用户打开控制台操作
+ * @param {string} host 指定的域名下生效
+ */
+function checkDebugger(host = location.host) {
+  function start() {
+    const time = new Date();
+    
+    if (location.href.includes(host)) {
+      debugger;
+    }
+    
+    if (new Date() - time > 10) {
+      document.body.innerHTML = `<div>不给看！</div>`;
+      return true;
+    }
+
+    return false;
+  }
+
+  function run() {
+    while (start()) {
+      start();
+    }
+  }
+
+  if (!start()) {
+    window.addEventListener("blur", function() {
+      setTimeout(run, 500);
+    });
+  } else {
+    run();
+  }
+}
