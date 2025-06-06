@@ -290,7 +290,7 @@ function removeCookie(key, options) {
  * @param {string} host 指定的域名下生效
  */
 function checkDebugger(host = location.host) {
-  function start() {
+  function check() {
     const time = new Date();
     
     if (location.href.includes(host)) {
@@ -305,17 +305,17 @@ function checkDebugger(host = location.host) {
     return false;
   }
 
-  function run() {
-    while (start()) {
-      start();
+  function start() {
+    while (check()) {
+      check();
     }
   }
 
-  if (!start()) {
+  if (!check()) {
     window.addEventListener("blur", function() {
-      setTimeout(run, 500);
+      setTimeout(start, 500);
     });
   } else {
-    run();
+    start();
   }
 }
