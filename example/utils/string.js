@@ -87,8 +87,8 @@ function unitsNumber(value) {
  * @returns {object|string}
  */
 function getQueryParam(name = null, target = null) {
-  // const code = target || location.search.slice(1); // location.search 在 http://192.168.89.53:1080/#/page?id=10 这种情况下获取不到
-  const code = target || location.href.split("?")[1] || "";
+  const strings = location.href.split("?");
+  const code = target || strings[strings.length - 1] || ""; // 默认获取最后一个`?`的参数
   const list = code.split("&");
   const params = {};
   for (let i = 0; i < list.length; i++) {
