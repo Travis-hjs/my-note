@@ -23,22 +23,42 @@
       border-radius: 4px;
       border: 1px solid orangered;
     }
+
+    .collapse-content {
+      width: 100%;
+      height: 500px;
+      border: 1px solid orangered;
+      padding: 10px;
+    }
   </style>
 </head>
 
 <body>
   <div class="page">
-    <user-card
-      image="https://mirror-gold-cdn.xitu.io/16b64a3a3b2baec66af?imageView2/1/w/100/h/100/q/85/format/webp/interlace/1"
-      name="用户名" description="用户邮箱 1141752341@qq.com" link="https://github.com/Hansen-hjs">
-    </user-card>
-    <user-list></user-list>
-    <the-input input-mode="capitalizeEveryWord"></the-input>
+    <div>
+      <button onclick="onSwitch()">折叠/收起</button>
+    </div>
+
+    <collapse-box class="el-collapse" show="false">
+      <div class="collapse-content">折叠容器</div>
+    </collapse-box>
 
     <user-card
-      image="https://user-gold-cdn.xitu.io/2019/10/14/16dc98fe049055b2?imageView2/1/w/180/h/180/q/85/format/webp/interlace/1"
-      name="前端开发lead" link="https://juejin.im/user/57c7cb8a0a2b58006b1b8666">
-    </user-card>
+      image="https://game.gtimg.cn/images/lol/act/img/champion/Sett.png"
+      name="腕豪"
+      description="用户邮箱 1141752341@qq.com"
+      link="https://github.com/Travis-hjs"
+    ></user-card>
+    
+    <user-list></user-list>
+
+    <the-input input-mode="capitalizeEveryWord"></the-input>
+    
+    <user-card
+      image="https://game.gtimg.cn/images/lol/act/img/champion/Sylas.png"
+      name="塞拉斯"
+      link="https://juejin.cn/user/958429871213256"
+    ></user-card>
 
     <user-list total="10"></user-list>
 
