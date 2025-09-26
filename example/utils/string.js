@@ -122,12 +122,19 @@ function rgbToHex(string) {
   return hex;
 }
 
-/** 
-* hex16 进制颜色转 rgb(rgba)
-* @param {string} hex "#23ff45" 
-*/
-function hexToRgb(hex) {
-  return "rgb(" + parseInt("0x" + hex.slice(1, 3)) + "," + parseInt("0x" + hex.slice(3, 5)) + "," + parseInt("0x" + hex.slice(5, 7)) + ")";
+/**
+ * `hex16`进制颜色转`rgb`或`rgba`
+ * @param {string} hex 
+ * @param {number=} alpha 0-1
+ */
+function hexToRgb(hex, alpha) {
+  const r = parseInt("0x" + hex.slice(1, 3));
+  const g = parseInt("0x" + hex.slice(3, 5));
+  const b = parseInt("0x" + hex.slice(5, 7));
+  if (typeof alpha === "number") {
+    return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+  }
+  return `rgba(${r}, ${g}, ${b})`;
 }
 
 /** 随机16进制颜色 */
