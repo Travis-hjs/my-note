@@ -105,20 +105,23 @@ function computeNumber(a, type, b) {
     },
     /**
      * 小数点进位
-     * @param {number} n 小数点后的位数
      * - 应用场景：商品价格`100`，用了优惠券结算价格为`33.333333...`，取小数点两位则是`33.33`；
      * - 如果有`1000`个人都以`33.33`去结算的话，那么最终就会损失`3`块钱，以此类推；
      * - 所以该方法就是在小数取位后面补`1`，像这样：
+     * @param n 小数点后的位数
+     * @example
      * ```js
-     * const price1 = 33.333;
-     * price1.toHex(2); // 输出 33.34
-     * const price2 = 33.33;
-     * price2.toHex(2); // 输出 33.33
-     * const price3 = 12.1212
-     * price3.toHex(1); // 输出 12.2
+     * const res1 = computeNumber(100, "/", 3).toUp(2);
+     * console.log(res1); // 33.34
+     * 
+     * const res2 = computeNumber(166, "/", 100).toUp(2);
+     * console.log(res2); // 1.66
+     * 
+     * const res3 = computeNumber(1212, "/", 100).toUp(1);
+     * console.log(res3); // 12.2
      * ```
      */
-    toHex(n) {
+    toUp(n) {
       const strings = result.toString().split(".");
       if (n > 0 && strings[1] && strings[1].length > n) {
         const decimal = strings[1].slice(0, n);
