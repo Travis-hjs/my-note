@@ -117,74 +117,117 @@ function ajax(params) {
  * @param {object|FormData|string=} data 传参对象，json、formdata、普通表单字符串
  * @param {RequestInit & { timeout: number }} option 其他配置
  */
-function fetchRequest(method, url, data = {}, option = {}) {
-  /** 非`GET`请求传参 */
+/**
+ * @template T
+ * @param {object} option 
+ * @param {string} option.url 请求路径
+ * @param {"GET"|"POST"|"PUT"|"DELETE"} option.method 请求方法
+ * @param {string | object | FormData=} option.params 请求参数
+ * @param {Record<string, string>=} option.headers 请求头配置
+ * @param {"json" | "blob" | "arraybuffer" | "text"=} option.responseType 接口响应类型，默认为`json`
+ * @param {number=} option.timeout 请求超时毫秒数，不传则永不超时
+ * @returns {Promise<{ code: number, data: T, msg: string }>}
+ */
+function fetchRequest(option) {
+  const { url, method, params, headers = {}, responseType, timeout } = option;
+  const result = {
+    code: -1,
+    data: null,
+    msg: "",
+  }
+  const dataType = checkType(params);
+  let fetchUrl = url;
   let body = undefined;
-  /** `GET`请求传参 */
-  let query = "";
-  /** 默认请求头 */
-  const headers = {};
-  /** 超时毫秒 */
-  const timeout = option.timeout || 8000;
-  /** 传参数据类型 */
-  const dataType = checkType(data);
-  // 传参处理
   if (method === "GET") {
-    // 解析对象传参
+    let query = "";
     if (dataType === "object") {
-      for (const key in data) {
-        query += "&" + key + "=" + data[key];
+      for (const key in params) {
+        query += `&${key}=${params[key]}`;
       }
     } else {
       console.warn("fetch 传参处理 GET 传参有误，需要的请求参数应为 object 类型");
     }
     if (query) {
       query = "?" + query.slice(1);
-      url += query;
+      fetchUrl += query;
+    }
+    if (!headers["Content-Type"]) {
+      headers["Content-Type"] = "application/json";
     }
   } else {
-    body = dataType === "object" ? JSON.stringify(data) : data;
-  }
-  // 设置对应的传参请求头，GET 方法不需要
-  if (method !== "GET") {
+    body = params;
     switch (dataType) {
       case "object":
-        headers["Content-Type"] = "application/json";
+        body = JSON.stringify(params);
+        if (!headers["Content-Type"]) {
+          headers["Content-Type"] = "application/json";
+        }
         break;
-
+      
       case "string":
-        headers["Content-Type"] = "application/x-www-form-urlencoded"; // 表单请求，`id=1&type=2` 非`new FormData()`
+        if (!headers["Content-Type"]) {
+          headers["Content-Type"] = "application/x-www-form-urlencoded";
+        }
         break;
-
+    
       default:
         break;
     }
   }
-  const controller = new AbortController();
-  let timer;
-  return new Promise(function(resolve, reject) {
-    fetch(url, {
+  return new Promise(function(resolve) {
+    /** @type {RequestInit} */
+    const init = {
       method,
-      body,
       headers,
-      signal: controller.signal,
-      // credentials: "include",  // 携带cookie配合后台用
-      // mode: "cors",            // 配合后台设置用的跨域模式
-      ...option,
-    }).then(response => {
-      // 把响应的信息转为`json`
-      return response.json();
+      body,
+    }
+    /** @type {AbortController} */
+    let controller;
+    /** @type {number} */
+    let timer;
+    if (timeout) {
+      controller = new AbortController();
+      init.signal = controller.signal;
+    }
+    fetch(fetchUrl, init).then(response => {
+      if (response.ok) {
+        if (responseType === "blob") {
+          return response.blob();
+        }
+        if (responseType === "arraybuffer") {
+          return response.arrayBuffer();
+        }
+        if (responseType === "text") {
+          return response.text();
+        }
+        return response.json();
+      } else {
+        result.msg = `请求出错：${response.status}`;
+        resolve(result);
+      }
     }).then(res => {
-      clearTimeout(timer);
-      resolve(res);
+      if (res.code === 200) {
+        result.code = 1;
+        result.data = res.data;
+        result.msg = res.message || "ok";
+      } else {
+        result.code = res.code;
+        result.msg = res.message;
+      }
+      timer && clearTimeout(timer);
+      resolve(result);
     }).catch(error => {
-      clearTimeout(timer);
-      reject(error);
+      timer && clearTimeout(timer);
+      result.msg = `error: ${error}`;
+      resolve(result);
     });
-    timer = setTimeout(function() {
-      reject("fetch is timeout");
-      controller.abort();
-    }, timeout);
+    if (timeout) {
+      timer = setTimeout(function() {
+        result.msg = "请求超时";
+        resolve(result);
+        controller.abort();
+      }, timeout);
+    }
   });
 }
 
@@ -197,14 +240,16 @@ function getCity() {
   return encodeURIComponent(city);
 }
 
-function clickFetchRequest() {
-  fetchRequest("GET", apiUrl, {
-    city: getCity()
-  }).then(res => {
-    console.log("Fetch success", res);
-  }).catch(err => {
-    console.warn("Fetch fail", err);
-  })
+async function clickFetchRequest() {
+  const res = await fetchRequest({
+    url: apiUrl,
+    method: "GET",
+    params: {
+      city: getCity()
+    },
+    timeout: 5000,
+  });
+  console.log("响应结果", res);
 }
 
 function ajaxRequest() {
@@ -219,11 +264,11 @@ function ajaxRequest() {
       city: getCity()
     },
     timeout: 5000,
-    success: function (res, response) {
+    success(res, response) {
       console.log("xhr success >>", res);
       console.log("XMLHttpRequest 对象 >>", response);
     },
-    fail: function (err) {
+    fail(err) {
       error.message = "接口报错，请看 network";
       error.info = err;
       if (err.response && err.response.charAt(0) == "{") {
@@ -231,12 +276,12 @@ function ajaxRequest() {
       }
       console.log("xhr fail >>", error);
     },
-    onTimeout: function (info) {
+    onTimeout(info) {
       error.message = "请求超时";
       error.info = info;
       console.log("xhr timeout >>", error);
     },
-    progress: function (e) {
+    progress(e) {
       if (e.lengthComputable) {
         let percentComplete = e.loaded / e.total;
         console.log("请求进度 >>", percentComplete, e.loaded, e.total);
