@@ -1,0 +1,53 @@
+.page {
+  padding: 20px 14px 0;
+
+  .title {
+    font-size: 20px;
+    color: #444;
+    font-weight: 500;
+    margin-bottom: 20px;
+  }
+
+  .icon {
+    display: block;
+    width: 40px;
+    margin-right: 10px;
+  }
+
+  .content {
+    width: 100%;
+
+    .tag {
+      background-color: #ffe6a2;
+      font-size: 12px;
+      padding: 1px 4px;
+    }
+
+    .item {
+      color: #555;
+      padding: 16px 10px;
+      position: relative;
+
+      &::after {
+        position: absolute;
+        content: "";
+      }
+
+      &+.item {
+        &::after {
+          left: 60px;
+          top: 0;
+          width: calc(100% - 60px);
+          border-top: dashed 1px #ddd;
+        }
+      }
+
+      // p {
+      //   text-indent: 24px;
+      // }
+      p+p {
+        margin-top: 8px;
+      }
+    }
+  }
+}

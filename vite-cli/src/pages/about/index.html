@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="maximum-scale=1.0, minimum-scale=1.0, user-scalable=0, initial-scale=1.0, width=device-width" />
+  <meta name="format-detection" content="telephone=no, email=no, date=no, address=no">
+  <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+  <title>关于</title>
+</head>
+<body>
+  <main class="page">
+    <h2 class="title">项目工程说明</h2>
+    <div class="content">
+      <div class="item f-v">
+        <img class="icon" src="./assets/txt.svg" alt="">
+        <div class="f1">
+          <p>当前工程项目将替代原本<span class="tag">/example</span>目录下的所有示例笔记，<span class="tag">/example</span>目录依然保留，后续内容新增将在该项目目录下进行。</p>
+        </div>
+      </div>
+      <div class="item f-v">
+        <img class="icon" src="./assets/file.svg" alt="">
+        <div class="f1">
+          <p>工程目录依然保持传统<span class="tag">html + js + css</span>多页目录模式。</p>
+        </div>
+      </div>
+      <div class="item f-v">
+        <img class="icon" src="./assets/code.svg" alt="">
+        <div class="f1">
+          <p>区别原来<span class="tag">/example</span>目录下的代码，js 换为 ts，css 换为 scss，方便复制到其他主流前端项目工程中使用。</p>
+        </div>
+      </div>
+      <div class="item f-v">
+        <img class="icon" src="./assets/folder.svg" alt="">
+        <div class="f1">
+          <p>页面目录配置为<span class="tag">src/pages/</span>下，新建页面目录时，需要修改以下<b> 3 </b>处：</p>
+          <p>1. <b>vite.config.mts </b>中的<b> getBuildConfig </b>方法，添加对应的页面目录构建工程。</p>
+          <p>2. <b>package.json </b>中的构建命令，参照已有的复制修改即可。</p>
+          <p>3. <b>src/main.ts </b>中的页面入口导航。</p>
+        </div>
+      </div>
+      <div class="item f-v">
+        <img class="icon" src="./assets/js.svg" alt="">
+        <div class="f1">
+          <p>项目构建在<b> package.json </b>中预设了指定构建某个页面目录的命令方式，其结构输入依然保持传统的<span class="tag">html + js + css</span>。</p>
+        </div>
+      </div>
+    </div>
+  </main>
+  <script type="module" src="./main.ts"></script>
+</body>
+</html>

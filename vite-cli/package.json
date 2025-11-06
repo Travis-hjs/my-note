@@ -1,0 +1,22 @@
+{
+  "name": "vite-cli",
+  "private": true,
+  "version": "0.0.1",
+  "type": "module",
+  "scripts": {
+    "dev": "tsc && vite",
+    "build": "vite build",
+    "build:home": "vite build --mode home",
+    "build:about": "vite build --mode about",
+    "preview": "vite preview"
+  },
+  "devDependencies": {
+    "@types/node": "24.10.0",
+    "sass": "1.93.3",
+    "typescript": "5.9.3",
+    "vite": "npm:rolldown-vite@7.1.14"
+  },
+  "overrides": {
+    "vite": "npm:rolldown-vite@7.1.14"
+  }
+}
