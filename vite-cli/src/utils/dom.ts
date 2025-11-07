@@ -6,8 +6,8 @@ import { message } from "./message";
  * @param name
  * @param target 指定目标节点查找
  */
-export function find(name: string, target?: HTMLElement) {
-  return (target || document).querySelector(name) as HTMLElement;
+export function find<T = HTMLElement>(name: string, target?: HTMLElement) {
+  return (target || document).querySelector(name) as T;
 }
 
 /**
@@ -15,9 +15,9 @@ export function find(name: string, target?: HTMLElement) {
  * @param name
  * @param target 指定目标节点查找
  */
-export function findAll(name: string, target?: HTMLElement) {
+export function findAll<T = HTMLElement>(name: string, target?: HTMLElement) {
   const els = (target || document).querySelectorAll(name);
-  return Array.from(els) as Array<HTMLElement>;
+  return Array.from(els) as Array<T>;
 }
 
 /**
