@@ -114,11 +114,11 @@ export function jsonToPath<T extends object>(params: T) {
  * // 输出: { id: "12", version: "1.4.3", name: "hjs" }
  * ```
  */
-export function getLinkQuery(target?: string) {
+export function getLinkQuery<T extends object>(target?: string): T {
   const strings = location.href.split("?");
   const code = target || strings[strings.length - 1] || "";
   const list = code.split("&");
-  const params: Record<string, string> | string = {};
+  const params: any = {};
   for (let i = 0; i < list.length; i++) {
     const item = list[i];
     const items = item.split("=");
