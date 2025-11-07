@@ -4,16 +4,16 @@ import viteLogo from "/vite.svg";
 
 const pages = [
   {
-    path: "home",
-    title: "首页"
+    page: "home",
+    name: "首页"
   },
   {
-    path: "about",
-    title: "项目工程说明"
+    page: "about",
+    name: "项目工程说明"
   }
 ];
 
-const navList = pages.map(page => (`<li><a href="./src/pages/${page.path}/">${page.title}</a></li>`)).join("");
+const navList = pages.map(page => (`<li><a href="/src/pages/${page.page}/">${page.name}</a></li>`)).join("");
 
 document.querySelector<HTMLDivElement>("#app")!.innerHTML = `
   <div>
