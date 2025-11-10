@@ -1,6 +1,6 @@
-import "./style.css";
 import typescriptLogo from "./typescript.svg";
 import viteLogo from "/vite.svg";
+import "./index.css";
 
 const pages = [
   {
@@ -24,7 +24,7 @@ document.querySelector<HTMLDivElement>("#app")!.innerHTML = `
       <img src="${typescriptLogo}" class="logo vanilla" alt="TypeScript logo" />
     </a>
     <h1>Vite + TypeScript 工程</h1>
-    <p class="read-the-docs">
+    <p class="read-the-docs ellipsis_1">
       点击进入对应页面目录
     </p>
     <ul>${navList}</ul>

@@ -16,7 +16,7 @@ interface RequestOption {
   url: string;
   method: "GET" | "POST";
   params?: string | object | FormData;
-  headers?: any;
+  headers?: Record<string, string>;
   /**
    * 接口响应类型
    * - 默认为`json`
@@ -69,18 +69,18 @@ export function request<T = any>(option: RequestOption) {
           headers["Content-Type"] = "application/json";
         }
         break;
-      
+
       case "string":
         if (!headers["Content-Type"]) {
           headers["Content-Type"] = "application/x-www-form-urlencoded";
         }
         break;
-    
+
       default:
         break;
     }
   }
-  return new Promise<Api.Result<T>>(function(resolve) {
+  return new Promise<Api.Result<T>>(function (resolve) {
     const init: RequestInit = {
       method,
       headers,
@@ -143,7 +143,7 @@ export function request<T = any>(option: RequestOption) {
       resolve(result);
     });
     if (timeout) {
-      timer = setTimeout(function() {
+      timer = setTimeout(function () {
         result.msg = "请求超时";
         message.warning(result.msg);
         resolve(result);

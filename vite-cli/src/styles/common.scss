@@ -1,4 +1,6 @@
-*, *:before, *:after {
+*,
+*:before,
+*:after {
   box-sizing: border-box;
   padding: 0;
   margin: 0;
@@ -10,42 +12,73 @@
   --red: #f44336;
   --orange: orange;
   --purple: #9e019e;
-  --font: "Helvetica Neue", "Helvetica", "sans-serif", "微软雅黑";
+  --font-family: "Helvetica Neue", "Helvetica", "sans-serif", "微软雅黑";
 }
 
-html, body{
-	background-color: #fff;
-	color: #333;
-	font-family: var(--font);
-	/* 禁用系统长按菜单 */
-	-webkit-touch-callout: none; 
-	/* 禁用字体大小自动调整 */
-	-webkit-text-size-adjust: none !important;
-	/* 去掉点击高亮 */
+html,
+body {
+  background-color: #fff;
+  color: #333;
+  font-family: var(--font-family);
+  /* 禁用系统长按菜单 */
+  -webkit-touch-callout: none;
+  /* 禁用字体大小自动调整 */
+  -webkit-text-size-adjust: none !important;
+  /* 去掉点击高亮 */
   -webkit-tap-highlight-color: transparent;
   /* ios滚动设置 */
   -webkit-overflow-scrolling: touch;
 }
 
-a, a:visited, a:focus, a:hover, a:link, a:active { color: inherit; outline: none; text-decoration: none; }
+a,
+a:visited,
+a:focus,
+a:hover,
+a:link,
+a:active {
+  color: inherit;
+  outline: none;
+  text-decoration: none;
+}
 
-button, input, textarea {
+button,
+input,
+textarea {
   border: none;
   background-color: transparent;
   outline: none;
   border-radius: 0;
   font-size: inherit;
-  font-family: var(--font);
+  font-family: var(--font-family);
 }
 
-a, button {
+a,
+button {
   cursor: pointer;
 }
 
-input::-webkit-input-placeholder { color: #999; }
-button::after, input::after { border: none; }
-textarea { resize: none; display: block; }
-textarea::-webkit-input-placeholder { color: #999; }
+input::-webkit-input-placeholder {
+  color: #999;
+}
+
+button::after,
+input::after {
+  border: none;
+}
+
+textarea {
+  resize: none;
+  display: block;
+}
+
+textarea::-webkit-input-placeholder {
+  color: #999;
+}
+
+ul,
+li {
+  list-style: none;
+}
 
 /* flex布局 */
 .flex { display: flex; flex-wrap: nowrap; }
@@ -81,9 +114,9 @@ textarea::-webkit-input-placeholder { color: #999; }
 }
 
 /* 溢出...显示 子节点生效 */
-.ellipsis_1 { line-clamp: 1; }
-.ellipsis_2 { line-clamp: 2; }
-.ellipsis_3 { line-clamp: 3; }
+.ellipsis_1 { line-clamp: 1; -webkit-line-clamp: 1; }
+.ellipsis_2 { line-clamp: 2; -webkit-line-clamp: 2; }
+.ellipsis_3 { line-clamp: 3; -webkit-line-clamp: 3; }
 
 /* 卡片 */
 .card { 
