@@ -14,7 +14,7 @@ export namespace Api {
 
 interface RequestOption {
   url: string;
-  method: "GET" | "POST";
+  method: "GET" | "POST" | "PUT" | "DELETE";
   params?: string | object | FormData;
   headers?: Record<string, string>;
   /**
