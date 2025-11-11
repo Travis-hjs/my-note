@@ -156,7 +156,7 @@ export function computeNumber(a: number, type: NumberSymbols, b: number) {
   }
   /**
    * 修正小数点
-   * @description 防止出现 `33.33333*100000 = 3333332.9999999995` && `33.33*10 = 333.29999999999995` 这类情况做的处理
+   * - 防止出现 `33.33333*100000 = 3333332.9999999995` && `33.33*10 = 333.29999999999995` 这类情况做的处理
    * @param n 数字
    */
   const amend = (n: number, precision = 15) => Number.parseFloat(Number(n).toPrecision(precision));
