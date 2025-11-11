@@ -66,6 +66,75 @@ export function exportToWindow<T extends object>(target: T) {
   }
 }
 
+/**
+ * `json`转`html`结构
+ * @param json `json`字符串
+ * @param indent 缩进数量，默认`2`
+ */
+export function jsonToHtml(json: string, indent = 2) {
+  function format(target: any): any {
+    if (target === null || target === undefined) {
+      return `<code style='color: var(--red)'>${target}</code>`;
+    }
+    if (typeof target === "number") {
+      return `<code style='color: var(--orange)'>${target}</code>`;
+    }
+    if (typeof target === "string") {
+      return `<code style='color: var(--green)'>${target}</code>`;
+    }
+    if (typeof target === "boolean") {
+      return `<code style='color: var(--purple)'>${target}</code>`;
+    }
+    if (Array.isArray(target)) {
+      return target.map(el => format(el));
+    }
+    if (typeof target === "object") {
+      const formattedObj: Record<string, any> = {};
+      for (const key in target) {
+        formattedObj[key] = format(target[key]);
+      }
+      return formattedObj;
+    }
+    return target;
+  }
+  const obj = format(JSON.parse(json));
+  const text = JSON.stringify(obj, null, 4);
+  const list = text.split("\n");
+  const indentValue = indent * 2 || 4;
+  /**
+   * 获取字符串前面空格数量
+   * @param str
+   */
+  function getPrefixLength(str: string) {
+    const match = str.match(/^\s*/)![0];
+    return match.length;
+  }
+  let html = "";
+  list.forEach(paragraph => {
+    const n = getPrefixLength(paragraph);
+    let content = paragraph.trim();
+    if (content.includes(`color: var(--orange)`) || content.includes(`color: var(--red)`) || content.includes(`color: var(--purple)`)) {
+      content = content.replace(`"<code`, `<code`).replace(`</code>"`, `</code>`);
+    }
+    html += `<p style="text-indent: ${n * indentValue}px;">${content}</p>`;
+  });
+  const cssText = `
+  --black: #555;
+  --orange: orange;
+  --green: green;
+  --red: #FF4D5C;
+  --purple: #9e019e;
+  padding: 10px;
+  background-color: #f8f8f8;
+  word-wrap: break-word;
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--black);
+  border-radius: 4px;
+  `;
+  return `<section style="${cssText}">${html}</section>`;
+}
+
 export function outputVersion() {
   const version = document.createElement("div");
   version.style.cssText = `
