@@ -7,25 +7,33 @@ import {
 
 const version = Date.now();
 
+const getPageInput = (page: string) => path.resolve(__dirname, `src/pages/${page}/index.html`);
+
 /**
  * 获取构建配置
  * - 新增页面时，需要和`package.json`同步添加构建命令
  * @param mode 
  */
 function getBuildConfig(mode: string) {
-  if (["home", "about"].includes(mode)) {
+  const pages = ["home", "about"];
+
+  if (pages.includes(mode)) {
     return getBuildByMode(mode);
   }
 
-  return {
-    rollupOptions: {
+  const config: BuildEnvironmentOptions = {
+    rolldownOptions: {
       input: {
-        main: path.resolve(__dirname, "index.html"),
-        home: path.resolve(__dirname, "src/pages/home/index.html"),
-        about: path.resolve(__dirname, "src/pages/about/index.html"),
+        main: path.resolve(__dirname, "index.html")
       }
     }
-  } as BuildEnvironmentOptions;
+  }
+
+  pages.forEach(page => {
+    config.rolldownOptions!.input![page] = getPageInput(page);
+  });
+  
+  return config;
 }
 
 /**
@@ -36,8 +44,9 @@ function getBuildByMode(mode: string): BuildEnvironmentOptions {
   return {
     outDir: `dist/${mode}`,
     // outDir: `../static/${mode}`,
+    // emptyOutDir: true,
     rollupOptions: {
-      input: path.resolve(__dirname, `src/pages/${mode}/index.html`),
+      input: getPageInput(mode),
       output: {
         entryFileNames: "js/[name]-[hash].js",
         chunkFileNames: "js/[name]-[hash].js",
