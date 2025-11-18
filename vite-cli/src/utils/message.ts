@@ -1,3 +1,4 @@
+import { compressCss } from "./dom";
 import { isType, useZIndex } from "./index";
 
 export namespace Message {
@@ -24,7 +25,7 @@ function useMessage(params: Message.Option = {}) {
     icon: `msg-icon${cssModule}`
   }
   const style = doc.createElement("style");
-  style.textContent = `
+  const cssText = `
   .${className.box}, .${className.icon}, .${className.text} {
     padding: 0;
     margin: 0;
@@ -146,7 +147,8 @@ function useMessage(params: Message.Option = {}) {
     width: 20%;
     transform-origin: center;
   }
-  `.replace(/(\n|\t|\s)*/ig, "$1").replace(/\n|\t|\s(\{|\}|\,|\:|\;)/ig, "$1").replace(/(\{|\}|\,|\:|\;)\s/ig, "$1");
+  `;
+  style.textContent = compressCss(cssText);
   doc.head.appendChild(style);
   /** 消息队列 */
   const messageList: Array<HTMLElement> = [];
@@ -348,7 +350,7 @@ function useDialog() {
   }
   `;
   const style = doc.createElement("style");
-  style.textContent = cssText.replace(/(\n|\t|\s)*/ig, "$1").replace(/\n|\t|\s(\{|\}|\,|\:|\;)/ig, "$1").replace(/(\{|\}|\,|\:|\;)\s/ig, "$1");
+  style.textContent = compressCss(cssText);
   doc.head.appendChild(style);
   /** 点击记录坐标 */
   const clickSize = {

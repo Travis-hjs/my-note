@@ -67,6 +67,17 @@ export function exportToWindow<T extends object>(target: T) {
 }
 
 /**
+ * 压缩`css`
+ * @param css 
+ */
+export function compressCss(css: string) {
+  let text = css.replace(/(\n|\t|\s)*/ig, "$1");
+  text = text.replace(/\n|\t|\s(\{|\}|\,|\:|\;)/ig, "$1");
+  text = text.replace(/(\{|\}|\,|\:|\;)\s/ig, "$1");
+  return text;
+}
+
+/**
  * `json`转`html`结构
  * @param json `json`字符串
  * @param indent 缩进数量，默认`2`
@@ -132,7 +143,7 @@ export function jsonToHtml(json: string, indent = 2) {
   color: var(--black);
   border-radius: 4px;
   `;
-  return `<section style="${cssText}">${html}</section>`;
+  return `<section style="${compressCss(cssText)}">${html}</section>`;
 }
 
 export function outputVersion() {
