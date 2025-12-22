@@ -15,7 +15,7 @@ const getPageInput = (page: string) => path.resolve(__dirname, `src/pages/${page
  * @param mode 
  */
 function getBuildConfig(mode: string) {
-  const pages = ["home", "about"];
+  const pages = ["home", "about", "download-image"];
 
   if (pages.includes(mode)) {
     return getBuildByMode(mode);
@@ -137,7 +137,14 @@ export default defineConfig(config => {
       //     changeOrigin: true,
       //     rewrite: path => path.replace(/^\//, "")
       //   }
-      // }
+      // },
+      // https: {
+      //   key: fs.readFileSync("./localhost-key.pem"),
+      //   cert: fs.readFileSync("./localhost.pem"),
+      //   open: true,
+      //   // strictPort: true,
+      //   // port: 3000,
+      // },
     },
   }
 })
