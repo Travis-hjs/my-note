@@ -10,10 +10,9 @@ import "./styles/index.scss";
 
 const app = find(".app");
 
-function onDownLoad(box: HTMLElement) {
-  const btn = box.children[1] as HTMLButtonElement;
+function onDownLoad(el: HTMLElement, btn: HTMLButtonElement) {
   btn.classList.add("hide");
-  snapdom.download(box, {
+  snapdom.download(el, {
     scale: 2,
     type: "png"
   }).then(() => {
@@ -30,8 +29,8 @@ const items = [Logo1, Logo2, Logo3].map(icon => {
   svg.className = "svg-box";
   svg.src = icon;
   btn.className = "the-btn blue";
-  btn.textContent = "转成PNG图片";
-  btn.addEventListener("click", () => onDownLoad(box));
+  btn.textContent = "下载PNG图片";
+  btn.addEventListener("click", () => onDownLoad(box, btn));
   box.append(svg, btn);
   return box;
 });
