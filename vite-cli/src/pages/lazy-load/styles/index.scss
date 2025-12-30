@@ -1,0 +1,43 @@
+.app {
+  h2 {
+    font-size: 28px;
+    line-height: 50px;
+    font-weight: 400;
+    text-align: center;
+  }
+
+  .photos {
+    display: block;
+    width: 100%;
+
+    li {
+      margin-bottom: 20px;
+    }
+
+    img {
+      display: block;
+      width: 100%;
+    }
+  }
+
+  .scroll-box {
+    width: 100%;
+    overflow-x: auto;
+
+    .scroll-list {
+      height: 100%;
+      width: 100%;
+      overflow: auto;
+    }
+
+    .scroll-item {
+      float: left;
+      width: calc(300px * 1.96);
+      min-width: calc(300px * 1.96);
+      height: 300px;
+      background-size: cover;
+      background-position: center center;
+      background-image: url("../assets/loading.svg");
+    }
+  }
+}

@@ -14,6 +14,10 @@ const pages = [
   {
     page: "download-image",
     name: "页面元素转换为图片并下载"
+  },
+  {
+    page: "lazy-load",
+    name: "懒加载"
   }
 ];
 

@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="maximum-scale=1.0, minimum-scale=1.0, user-scalable=0, initial-scale=1.0, width=device-width" />
+  <meta name="format-detection" content="telephone=no, email=no, date=no, address=no">
+  <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+  <title>懒加载</title>
+</head>
+<body>
+  <div class="app page">
+    <h2>背景懒加载</h2>
+    <div class="scroll-box">
+      <div class="scroll-list">
+        <div class="flex" style="gap: 10px">
+          <div class="scroll-item" lazy-bg="https://game.gtimg.cn/images/lol/act/img/skin/big_65880cdc-1af0-41e5-9c22-ab1518702402.jpg"></div>
+          <div class="scroll-item" lazy-bg="https://game.gtimg.cn/images/lol/act/img/skin/big_0d45ca44-f198-492b-a1ac-7bb23476ace5.jpg"></div>
+          <div class="scroll-item" lazy-bg="https://game.gtimg.cn/images/lol/act/img/skin/big_6c500efd-5569-4d03-af61-aae1e920b9de.jpg"></div>
+          <div class="scroll-item" lazy-bg="https://game.gtimg.cn/images/lol/act/img/skin/big_aefc3964-ba99-4eca-843e-c76a364e1f6b.jpg"></div>
+          <div class="scroll-item" lazy-bg="https://game.gtimg.cn/images/lol/act/img/skin/big_de361d2f-2595-494d-af5f-07289b9d3fb3.jpg"></div>
+          <div class="scroll-item" lazy-bg="https://game.gtimg.cn/images/lol/act/img/skin/big_16579aba-1623-4bb3-9d9b-cccb320f99fb.jpg"></div>
+          <div class="scroll-item" lazy-bg="https://game.gtimg.cn/images/lol/act/img/skin/big_64ab9f2d-a4e4-4d56-bab0-3dfe680b567e.jpg"></div>
+          <div class="scroll-item" lazy-bg="https://game.gtimg.cn/images/lol/act/img/skin/big_eadae842-ce72-4dff-8d72-4a5a856b5812.jpg"></div>
+        </div>
+      </div>
+    </div>
+    <h2>src 懒加载</h2>
+    <ul class="photos">
+      <li title="腕豪">
+        <img
+          src="./assets/loading.svg"
+          lazy="https://game.gtimg.cn/images/lol/act/img/skin/big_5ad11bec-22d6-45e6-8dc3-70776b19e951.jpg"
+          alt="腕豪"
+        />
+      </li>
+      <li title="机神苍狼 瑟提">
+        <img
+          src="./assets/loading.svg"
+          lazy="https://game.gtimg.cn/images/lol/act/img/skin/big_fca20a4b-1e3d-402b-8831-1c29da49d6a0.jpg"
+          alt="机神苍狼 瑟提"
+        />
+      </li>
+      <li title="神龙尊者 炎龙瑟提">
+        <img
+          src="./assets/loading.svg"
+          lazy="https://game.gtimg.cn/images/lol/act/img/skin/big_2e69931b-5686-417c-b21e-50ae1d31b478.jpg"
+          alt="神龙尊者 炎龙瑟提"
+        />
+      </li>
+      <li title="至臻 神龙尊者 炎龙瑟提">
+        <img
+          src="./assets/loading.svg"
+          lazy="https://game.gtimg.cn/images/lol/act/img/skin/big_f0c4e310-bba7-4f4b-b7db-6e1aaaa5e59b.jpg"
+          alt="至臻 神龙尊者 炎龙瑟提"
+        />
+      </li>
+      <li title="泳池派对 瑟提">
+        <img
+          src="./assets/loading.svg"
+          lazy="https://game.gtimg.cn/images/lol/act/img/skin/big_c6484256-4726-4d5c-a111-7acd2ef09ce5.jpg"
+          alt="泳池派对 瑟提"
+        />
+      </li>
+      <li title="龙腾虎跃 瑟提">
+        <img
+          src="./assets/loading.svg"
+          lazy="https://game.gtimg.cn/images/lol/act/img/skin/big_c49ec444-0bd1-471c-9c38-4f63b388960a.jpg"
+          alt="龙腾虎跃 瑟提"
+        />
+      </li>
+      <li title="灵魂莲华 瑟提">
+        <img
+          src="./assets/loading.svg"
+          lazy="https://game.gtimg.cn/images/lol/act/img/skin/big_d847b231-ea80-4855-8886-ba1ab643dff8.jpg"
+          alt="灵魂莲华 瑟提"
+        />
+      </li>
+      <li title="斗魂觉醒 瑟提">
+        <img
+          src="./assets/loading.svg"
+          lazy="https://game.gtimg.cn/images/lol/act/img/skin/big_bd1e1362-94a8-42f8-918b-32d4acd53518.jpg"
+          alt="斗魂觉醒 瑟提"
+        />
+      </li>
+      <li title="心之钢 瑟提">
+        <img
+          src="./assets/loading.svg"
+          lazy="https://game.gtimg.cn/images/lol/act/img/skin/big_ce930179-6511-42de-8648-9b6f7d64b622.jpg"
+          alt="心之钢 瑟提"
+        />
+      </li>
+      <li title="金蛇巨星 瑟提">
+        <img
+          src="./assets/loading.svg"
+          lazy="https://game.gtimg.cn/images/lol/act/img/skin/big_5b638156-e7f9-4f3c-82bd-2a8e8df894ed.jpg"
+          alt="金蛇巨星 瑟提"
+        />
+      </li>
+      <li title="莲华温泉 瑟提">
+        <img
+          src="./assets/loading.svg"
+          lazy="https://game.gtimg.cn/images/lol/act/img/skin/big_249c2d55-d3e3-49cf-adad-a91f5434c3d1.jpg"
+          alt="莲华温泉 瑟提"
+        />
+      </li>
+    </ul>
+  </div>
+  <script type="module" src="./main.ts"></script>
+</body>
+</html>
