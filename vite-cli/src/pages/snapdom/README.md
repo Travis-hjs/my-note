@@ -1,4 +1,4 @@
-# 页面元素转换为图片并下载
+# 页面元素转换为图片
 
 - [snapdom使用文档](https://github.com/zumerlab/snapdom/blob/main/README_CN.md)
 

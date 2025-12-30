@@ -8,7 +8,8 @@
     "build": "vite build",
     "build:home": "vite build --mode home",
     "build:about": "vite build --mode about",
-    "build:download-image": "vite build --mode download-image",
+    "build:snapdom": "vite build --mode snapdom",
+    "build:lazy-load": "vite build --mode lazy-load",
     "preview": "vite preview"
   },
   "devDependencies": {
