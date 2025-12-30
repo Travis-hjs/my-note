@@ -84,7 +84,7 @@ export function compressCss(css: string) {
  */
 export function jsonToHtml(json: string, indent = 2) {
   function format(target: any): any {
-    if (target === null || target === undefined) {
+    if ([null, undefined].includes(target)) {
       return `<code style='color: var(--red)'>${target}</code>`;
     }
     if (typeof target === "number") {
@@ -124,7 +124,11 @@ export function jsonToHtml(json: string, indent = 2) {
   list.forEach(paragraph => {
     const n = getPrefixLength(paragraph);
     let content = paragraph.trim();
-    if (content.includes(`color: var(--orange)`) || content.includes(`color: var(--red)`) || content.includes(`color: var(--purple)`)) {
+    if (
+      content.includes(`color: var(--orange)`) ||
+      content.includes(`color: var(--red)`) ||
+      content.includes(`color: var(--purple)`)
+    ) {
       content = content.replace(`"<code`, `<code`).replace(`</code>"`, `</code>`);
     }
     html += `<p style="text-indent: ${n * indentValue}px;">${content}</p>`;
@@ -143,7 +147,7 @@ export function jsonToHtml(json: string, indent = 2) {
   color: var(--black);
   border-radius: 4px;
   `;
-  return `<section style="${compressCss(cssText)}">${html}</section>`;
+  return `<section style="${cssText}">${html}</section>`;
 }
 
 export function outputVersion() {

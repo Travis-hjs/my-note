@@ -18,6 +18,10 @@ const pages = [
   {
     page: "lazy-load",
     name: "懒加载"
+  },
+  {
+    page: "json-to-html",
+    name: "json转html结构"
   }
 ];
 
