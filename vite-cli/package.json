@@ -10,6 +10,7 @@
     "build:about": "vite build --mode about",
     "build:snapdom": "vite build --mode snapdom",
     "build:lazy-load": "vite build --mode lazy-load",
+    "build:parabola": "vite build --mode parabola",
     "preview": "vite preview"
   },
   "devDependencies": {

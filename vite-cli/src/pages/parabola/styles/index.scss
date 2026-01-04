@@ -1,0 +1,70 @@
+.page {
+  padding-bottom: 60px;
+}
+
+.list {
+  padding: 0 10px;
+
+  .item {
+    width: 100%;
+    height: 100px;
+  }
+
+  .item+.item {
+    border-top: solid 1px #eee;
+  }
+}
+
+
+footer {
+  width: 100%;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+
+  .btn-box {
+    width: 100%;
+    height: 50px;
+    max-width: 680px;
+    margin: 0 auto;
+    background-color: #eee;
+  }
+
+  .cart-box {
+    width: 120px;
+    height: 100%;
+    background-color: var(--blue);
+    color: #fff;
+    font-size: 15px;
+  }
+}
+
+.ball-box {
+  width: 20px;
+  height: 20px;
+  position: fixed;
+  top: 0px;
+  left: 0px;
+  --time: .5s;
+  animation: ball-move-y var(--time) cubic-bezier(0.5, -0.5, 1, 1);
+}
+
+.ball-box .ball {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background-color: var(--blue);
+  animation: ball-move-x var(--time) linear;
+}
+
+@keyframes ball-move-y {
+  to {
+    transform: translateY(var(--y));
+  }
+}
+
+@keyframes ball-move-x {
+  to {
+    transform: translateX(var(--x));
+  }
+}

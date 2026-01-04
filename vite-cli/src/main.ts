@@ -22,7 +22,11 @@ const pages = [
   {
     page: "json-to-html",
     name: "json转html结构"
-  }
+  },
+  {
+    page: "parabola",
+    name: "抛物线运动"
+  },
 ];
 
 const navList = pages.map(page => (`<li><a href="/src/pages/${page.page}/">${page.name}</a></li>`)).join("");
