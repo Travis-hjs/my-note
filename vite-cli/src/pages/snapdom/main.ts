@@ -1,12 +1,11 @@
+import "@/styles/common.scss";
+import "./styles/index.scss";
 import { snapdom } from "@zumer/snapdom";
 import { message } from "@/utils/message";
 import { find } from "@/utils/dom";
 import Logo1 from "./assets/logo-1.svg";
 import Logo2 from "./assets/logo-2.svg";
 import Logo3 from "./assets/logo-3.svg";
-
-import "@/styles/common.scss";
-import "./styles/index.scss";
 
 const app = find(".app");
 

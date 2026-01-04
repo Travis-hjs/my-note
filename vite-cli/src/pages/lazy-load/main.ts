@@ -1,7 +1,6 @@
-import ErrorIcon from "./assets/error.svg";
-
 import "@/styles/common.scss";
 import "./styles/index.scss";
+import ErrorIcon from "./assets/error.svg";
 
 interface LazyLoadOption {
   /** 懒加载的属性 */

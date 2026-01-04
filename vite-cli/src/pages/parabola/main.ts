@@ -1,7 +1,6 @@
-import { find } from "@/utils/dom";
-
 import "@/styles/common.scss";
 import "./styles/index.scss";
+import { find } from "@/utils/dom";
 import { getSizeDistance } from "@/utils/number";
 
 /** `item`父节点 */

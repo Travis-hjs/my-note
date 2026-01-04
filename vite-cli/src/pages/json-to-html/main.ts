@@ -1,6 +1,5 @@
-import { find, jsonToHtml } from "@/utils/dom";
-
 import "@/styles/common.scss";
+import { find, jsonToHtml } from "@/utils/dom";
 
 const obj = {
   id: 12,
