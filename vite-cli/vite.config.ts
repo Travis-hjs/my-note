@@ -1,13 +1,14 @@
-import fs from "node:fs";
-import path from "path";
+import { writeFileSync } from "node:fs";
+import { dirname, resolve, join } from "node:path";
+import { fileURLToPath } from "node:url";
 import {
   type BuildEnvironmentOptions,
-  defineConfig
+  defineConfig,
 } from "vite";
 
-const version = Date.now();
+const [version, __dirname] = [Date.now(), dirname(fileURLToPath(import.meta.url))];
 
-const getPageInput = (page: string) => path.resolve(__dirname, `src/pages/${page}/index.html`);
+const getPageInput = (page: string) => resolve(__dirname, `src/pages/${page}/index.html`);
 
 /**
  * 获取构建配置
@@ -24,7 +25,7 @@ function getBuildConfig(mode: string) {
   const config: BuildEnvironmentOptions = {
     rolldownOptions: {
       input: {
-        main: path.resolve(__dirname, "index.html")
+        main: resolve(__dirname, "index.html")
       }
     }
   }
@@ -108,8 +109,8 @@ export default defineConfig(config => {
     plugins: [
       {
         buildEnd() {
-          const versionFilePath = path.join(__dirname, "./public/version.json");
-          fs.writeFileSync(versionFilePath, JSON.stringify({ version }, null, 2));
+          const versionFilePath = join(__dirname, "./public/version.json");
+          writeFileSync(versionFilePath, JSON.stringify({ version }, null, 2));
         },
         name: "inject-version",
         transformIndexHtml(html) {
@@ -125,7 +126,7 @@ export default defineConfig(config => {
     base: "./",
     resolve: {
       alias: {
-        "@": path.resolve(__dirname, "src")
+        "@": resolve(__dirname, "src")
       }
     },
     server: {
