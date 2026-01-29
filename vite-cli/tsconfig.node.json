@@ -1,0 +1,28 @@
+{
+  "compilerOptions": {
+    "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.node.tsbuildinfo",
+    "incremental": true,
+    "target": "ES2023",
+    "lib": ["ES2023"],
+    "module": "ESNext",
+    "types": ["node"],
+    "skipLibCheck": true,
+
+    /* Bundler mode */
+    "moduleResolution": "bundler",
+    "allowImportingTsExtensions": true,
+    "verbatimModuleSyntax": true,
+    "moduleDetection": "force",
+    "noEmit": true,
+
+    /* Linting */
+    // "strict": true,
+    // "strictNullChecks": true,    // 严格的空值检查
+    // "noUnusedLocals": true,      // 报告未使用的局部变量错误
+    // "noUnusedParameters": true,  // 报告未使用的参数错误
+    // "erasableSyntaxOnly": true,
+    "noFallthroughCasesInSwitch": true,
+    // "noUncheckedSideEffectImports": true
+  },
+  "include": ["vite.config.ts"]
+}

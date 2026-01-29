@@ -12,7 +12,7 @@ const pages = [
     name: "项目工程说明"
   },
   {
-    page: "download-image",
+    page: "snapdom",
     name: "页面元素转换为图片并下载"
   },
   {

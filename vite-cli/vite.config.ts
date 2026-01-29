@@ -31,7 +31,7 @@ function getBuildConfig(mode: string) {
   }
 
   pages.forEach(page => {
-    config.rolldownOptions!.input![page] = getPageInput(page);
+    config.rolldownOptions.input[page] = getPageInput(page);
   });
   
   return config;
