@@ -4,4 +4,56 @@
   .hide {
     display: none;
   }
+
+  .action {
+    padding: 10px;
+    background-color: #fff;
+    text-align: center;
+  }
+
+  .demo {
+    --gap: 12px;
+    --height: 40px;
+
+    width: 100%;
+    background-color: #fff;
+    padding: var(--gap);
+
+    .list {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      grid-gap: var(--gap);
+      height: fit-content;
+
+      .item {
+        background-color: #eee;
+        height: var(--height);
+        border-radius: 4px;
+      }
+    }
+
+    .search {
+      width: 120px;
+      height: var(--height);
+      background-color: #409eff;
+      border-radius: 4px;
+      margin-left: var(--gap);
+      padding: 0 var(--gap);
+      line-height: 1;
+      color: #fff;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      
+      i {
+        font-size: 20px;
+      }
+
+      span {
+        font-size: 18px;
+        letter-spacing: 1px;
+        margin-left: 5px;
+      }
+    }
+  }
 }

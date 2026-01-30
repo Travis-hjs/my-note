@@ -24,14 +24,28 @@ const items = [Logo1, Logo2, Logo3].map(icon => {
   const box = document.createElement("div");
   const svg = document.createElement("img");
   const btn = document.createElement("button");
+  const action = document.createElement("div");
+
   box.className = "svg-item";
   svg.className = "svg-box";
   svg.src = icon;
   btn.className = "the-btn blue";
   btn.textContent = "下载PNG图片";
   btn.addEventListener("click", () => onDownLoad(box, btn));
-  box.append(svg, btn);
+  action.className = "action";
+  action.append(btn);
+  box.append(svg, action);
   return box;
 });
 
 app.append(...items);
+
+find(".the-btn.green").addEventListener("click", function () {
+  const el = find(".demo");
+  snapdom.download(el, {
+    scale: 2,
+    type: "png"
+  }).then(() => {
+    message.success("下载成功!");
+  });
+})
