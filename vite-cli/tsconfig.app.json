@@ -16,9 +16,13 @@
     "noFallthroughCasesInSwitch": true,
     // "noUncheckedSideEffectImports": true
 
+    "moduleResolution": "bundler",
+    "allowImportingTsExtensions": true,
+    "noEmit": true,
+    
     "baseUrl": "./",
     "paths": {
-      "@/*": ["src/*"]
+      "@/*": ["src/*", "node_modules/*"]
     }
   },
   "include": ["src/**/*.ts", "src/**/*.tsx", "src/**/*.vue"],

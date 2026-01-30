@@ -17,9 +17,9 @@
 
     /* Linting */
     // "strict": true,
-    // "strictNullChecks": true,    // 严格的空值检查
-    // "noUnusedLocals": true,      // 报告未使用的局部变量错误
-    // "noUnusedParameters": true,  // 报告未使用的参数错误
+    // "strictNullChecks": true,
+    // "noUnusedLocals": true,
+    // "noUnusedParameters": true,
     // "erasableSyntaxOnly": true,
     "noFallthroughCasesInSwitch": true,
     // "noUncheckedSideEffectImports": true
