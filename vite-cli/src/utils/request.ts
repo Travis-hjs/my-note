@@ -58,7 +58,7 @@ export function request<T = any>(option: RequestOption) {
       fetchUrl = `${url}?${query}`;
     }
     if (!headers["Content-Type"]) {
-      headers["Content-Type"] = "application/json";
+      headers["Content-Type"] = "application/json;charset=UTF-8";
     }
   } else {
     body = params;
@@ -66,7 +66,7 @@ export function request<T = any>(option: RequestOption) {
       case "object":
         body = JSON.stringify(params);
         if (!headers["Content-Type"]) {
-          headers["Content-Type"] = "application/json";
+          headers["Content-Type"] = "application/json;charset=UTF-8";
         }
         break;
 
