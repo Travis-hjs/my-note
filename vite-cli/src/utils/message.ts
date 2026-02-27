@@ -328,11 +328,32 @@ function useDialog() {
     width: 100%;
     text-align: right;
     border-top: solid 1px #eee;
-    padding: 12px 15px;
+    padding: 10px 15px;
     font-size: 0;
   }
   .${className.footer} button {
-    padding: 8px 15px;
+    height: 34px;
+    font-size: 14px;
+    border-radius: var(--border-radius);
+    border: solid 1px #1a1a1a;
+    color: #1a1a1a;
+    padding: 0 14px;
+    min-width: 70px;
+    cursor: pointer;
+  }
+  .${className.footer} button:active {
+    opacity: 0.8;
+  }
+  .${className.footer} button:disabled {
+    cursor: no-drop;
+    opacity: 0.8;
+  }
+  .${className.footer} button + button {
+    margin-left: 10px;
+  }
+  .${className.footer} .${className.confirm} {
+    background-color: #1a1a1a;
+    color: #fff;
   }
   @keyframes ${className.fade} {
     0% { opacity: 0; }
@@ -381,14 +402,14 @@ function useDialog() {
     // 设置完之后还原坐标位置
     clickSize.x = "0vw";
     clickSize.y = "0vh";
-    const cancelBtn = option.cancelText ? `<button class="el-button ${className.cancel}">${option.cancelText}</button>` : "";
+    const cancelBtn = option.cancelText ? `<button class="${className.cancel}">${option.cancelText}</button>` : "";
     el.innerHTML = `
     <div class="${className.popup}">
       <h2 class="${className.title}">${ typeof option.title === "string" ? option.title : "提示"}</h2>
       <div class="${className.content}">${option.content}</div>
       <div class="${className.footer}">
         ${cancelBtn}
-        <button class="el-button el-button--primary ${className.confirm}">${option.confirmText || "确认"}</button>
+        <button class="${className.confirm}">${option.confirmText || "确认"}</button>
       </div>
     </div>
     `;
@@ -406,21 +427,20 @@ function useDialog() {
 
     function showLoading() {
       pending = true;
-      const icon = `<i class="el-icon-loading el-icon--left"></i>`;
-      confirm.innerHTML = icon + confirm.innerHTML;
-      confirm.classList.add("is-loading");
+      confirm.setAttribute("data-text", confirm.textContent!);
+      confirm.disabled = true;
+      confirm.textContent = "loading.."
       if (cancel) {
-        // cancel.innerHTML = icon + cancel.innerHTML;
-        cancel.classList.add("is-disabled");
+        confirm.disabled = true;
       }
     }
 
     function hideLoading() {
       pending = false;
-      confirm.querySelector(".el-icon-loading")?.remove();
-      confirm.classList.remove("is-loading");
+      confirm.textContent = confirm.getAttribute("data-text");
+      confirm.disabled = false;
       if (cancel) {
-        cancel.classList.remove("is-disabled");
+        cancel.disabled = false;
       }
     }
 
