@@ -103,20 +103,19 @@ export function jsonToPath<T extends object>(params: T) {
 
 /**
  * 获取`url?`后面参数（JSON对象）
- * @param name 获取指定参数名
- * @param target 目标字段，默认`location.href`最后一个问号后面字符串
+ * @param link 目标链接，默认`location.href`
  * ```js
  * // 当前网址为 www.https://hjs.com?id=99&age=123&key=abc
  * const current = getLinkQuery();
  * // 输出: { id: "99", age: "12", key: "abc" }
- * 
- * const params = getLinkQuery("id=12&version=1.4.3&name=hjs");
+ *
+ * const params = getLinkQuery("?id=12&version=1.4.3&name=hjs");
  * // 输出: { id: "12", version: "1.4.3", name: "hjs" }
  * ```
  */
-export function getLinkQuery<T extends object>(target?: string): T {
-  const strings = location.href.split("?");
-  const code = target || strings[strings.length - 1] || "";
+export function getLinkQuery<T extends object>(link?: string): T {
+  const strings = (link || location.href).split("?");
+  const code = strings[strings.length - 1] || "";
   const list = code.split("&");
   const params: any = {};
   for (let i = 0; i < list.length; i++) {
