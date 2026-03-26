@@ -75,7 +75,20 @@ function getBuildByMode(mode: string): BuildEnvironmentOptions {
           }
 
           return "assets/[name]-[hash].[ext]";
-        }
+        },
+        manualChunks(id, meta) {
+          // vite-browser-external 默认会被构建成下划线开头的文件，在一些浏览器中会404
+          if (id.includes("vite-browser-external")) {
+            return "vite-browser-external";
+          }
+          // // 处理第三方库
+          // if (id.includes("node_modules")) {
+          //   if (id.includes("element-plus")) {
+          //     return "ui";
+          //   }
+          //   return "vendor";
+          // }
+        },
       },
       plugins: [
         {

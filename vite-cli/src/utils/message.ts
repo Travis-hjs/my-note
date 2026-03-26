@@ -299,6 +299,7 @@ function useDialog() {
     --black: #333;
     --text-color: #555;
     --confirm-bg: #2ec1cb;
+    --border-radius: 2px;
     position: fixed;
     top: 0;
     left: 0;
