@@ -483,7 +483,8 @@ function useDialog() {
         });
         return;
       }
-      cb(() => {});
+      // @ts-ignore
+      cb();
       hide();
     }
     if (option.cancelText) {
