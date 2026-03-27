@@ -258,7 +258,7 @@ namespace Dialog {
    * - close 为`true`时为关闭
    * - `Promise`返回值为`true`时亦是如此
    */
-  export type Callback = ((callback?: (close: boolean) => void) => void) | (() => Promise<boolean>);
+  export type Callback = ((callback: (close: boolean) => void) => void) | (() => Promise<boolean>);
 
   export interface Show {
     /** 弹框标题，传`""`则不显示标题，默认为`"提示"`（可传html） */
@@ -298,7 +298,7 @@ function useDialog() {
     --transition: .3s all;
     --black: #333;
     --text-color: #555;
-    --confirm-bg: #2ec1cb;
+    --confirm-bg: #409eff;
     --border-radius: 2px;
     position: fixed;
     top: 0;
@@ -350,8 +350,8 @@ function useDialog() {
     height: 34px;
     font-size: 14px;
     border-radius: var(--border-radius);
-    border: solid 1px #1a1a1a;
-    color: #1a1a1a;
+    border: 1px var(--confirm-bg) solid;
+    color: var(--confirm-bg);
     padding: 0 14px;
     min-width: 70px;
     cursor: pointer;
@@ -367,7 +367,7 @@ function useDialog() {
     margin-left: 10px;
   }
   .${className.footer} .${className.confirm} {
-    background-color: #1a1a1a;
+    background-color: var(--confirm-bg);
     color: #fff;
   }
   @keyframes ${className.fade} {
@@ -483,7 +483,7 @@ function useDialog() {
         });
         return;
       }
-      cb();
+      cb(() => {});
       hide();
     }
     if (option.cancelText) {
