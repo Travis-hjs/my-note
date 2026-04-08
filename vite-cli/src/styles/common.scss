@@ -132,39 +132,6 @@ li {
   overflow: hidden;
 }
 
-/* 按钮 */
-.the-btn {
-  padding: 0 16px; 
-  font-size: 14px;
-  border-radius: 2px;
-  min-width: 88px;
-  height: 36px;
-  line-height: 1;
-  overflow: hidden;
-  outline: none;
-  border: none;
-  text-align: center;
-  /* vertical-align: middle; */
-  cursor: pointer;
-  user-select: none;
-  background-color: #fff;
-  color: #333;
-  transition: .2s all;
-  box-shadow: 0 3px 1px -2px rgba(0,0,0,.2), 0 2px 2px 0 rgba(0,0,0,.14), 0 1px 5px 0 rgba(0,0,0,.12);
-  background-color: #eee;
-  color: #555;
-}
-
-.the-btn:active { box-shadow: 0 5px 5px -3px rgba(0,0,0,.2), 0 8px 10px 1px rgba(0,0,0,.14), 0 3px 14px 2px rgba(0,0,0,.12); }
-
-.the-btn a { height: 100%; display: flex; flex-wrap: wrap; align-items: center; justify-content: center; }
-
-.the-btn.blue { background-color: var(--blue); color: #fff; }
-.the-btn.green { background-color: var(--green); color: #fff; }
-.the-btn.red { background-color: var(--red); color: #fff; }
-.the-btn.orange { background-color: var(--orange); color: #fff; }
-.the-btn.purple { background-color: var(--purple); color: #fff; }
-
 .text_blue { color: var(--blue); }
 .text_green { color: var(--green); }
 .text_red { color: var(--red); }

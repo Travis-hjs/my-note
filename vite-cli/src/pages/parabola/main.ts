@@ -1,4 +1,5 @@
 import "@/styles/common.scss";
+import "@/styles/custom-button.scss";
 import "./styles/index.scss";
 import { find } from "@/utils/dom";
 import { getSizeDistance } from "@/utils/number";
@@ -16,7 +17,7 @@ for (let i = 0; i < 20; i++) {
   const item = document.createElement("div");
   item.className = "item f-v f-right";
   const btn = document.createElement("button");
-  btn.className = "the-btn blue";
+  btn.className = "the-custom-btn blue";
   btn.textContent = "添加至购物车";
   item.appendChild(btn);
   btn.addEventListener("click", () => onAdd(btn))

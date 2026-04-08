@@ -1,4 +1,5 @@
 import "@/styles/common.scss";
+import "@/styles/custom-button.scss";
 import "./styles/index.scss";
 import { message, messageBox } from "@/utils/message";
 import { find } from "@/utils/dom";
@@ -25,10 +26,9 @@ function toast(text: string, msg: string, type: "info" | "success" | "warning" |
     success: "green",
     warning: "orange",
     error: "red"
-
   }
 
-  btn.className = `the-btn ${color[type]}`;
+  btn.className = `the-custom-btn ${color[type]}`;
 
   btn.textContent = text;
 
@@ -41,7 +41,7 @@ function toast(text: string, msg: string, type: "info" | "success" | "warning" |
 
 function popupBase() {
   const btn = document.createElement("button");
-  btn.className = `the-btn blue`;
+  btn.className = `the-custom-btn blue`;
   btn.textContent = "基础确认取消";
   btn.onclick = function () {
     let count = 1;
@@ -71,7 +71,7 @@ function wait() {
 
 function popupAsync() {
   const btn = document.createElement("button");
-  btn.className = `the-btn green`;
+  btn.className = `the-custom-btn green`;
   btn.textContent = "异步关闭对话框";
   btn.onclick = function () {
     messageBox({

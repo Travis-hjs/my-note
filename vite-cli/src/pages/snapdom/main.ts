@@ -1,4 +1,5 @@
 import "@/styles/common.scss";
+import "@/styles/custom-button.scss";
 import "./styles/index.scss";
 import { snapdom } from "@zumer/snapdom";
 import { message } from "@/utils/message";
@@ -25,11 +26,10 @@ const items = [Logo1, Logo2, Logo3].map(icon => {
   const svg = document.createElement("img");
   const btn = document.createElement("button");
   const action = document.createElement("div");
-
   box.className = "svg-item";
   svg.className = "svg-box";
   svg.src = icon;
-  btn.className = "the-btn blue";
+  btn.className = "the-custom-btn blue";
   btn.textContent = "下载PNG图片";
   btn.addEventListener("click", () => onDownLoad(box, btn));
   action.className = "action";
@@ -40,7 +40,7 @@ const items = [Logo1, Logo2, Logo3].map(icon => {
 
 app.append(...items);
 
-find(".the-btn.green").addEventListener("click", function () {
+find(".the-custom-btn.green").addEventListener("click", function () {
   const el = find(".demo");
   snapdom.download(el, {
     scale: 2,
