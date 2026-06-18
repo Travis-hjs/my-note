@@ -100,7 +100,7 @@ export function request<T = any>(option: RequestOption) {
         return message.error(tips);
       }
     }
-    fetch(fetchUrl, init).then(response => {
+    fetch(fetchUrl, init).then(async response => {
       if (response.ok) {
         if (responseType === "blob") {
           return response.blob();
@@ -114,7 +114,7 @@ export function request<T = any>(option: RequestOption) {
         return response.json();
       }
       try {
-        return response.json();
+        return await response.json();
       } catch (error) {
         console.warn(`请求响应解析 JSON 出错: ${error}`);
         const code = response.status;
