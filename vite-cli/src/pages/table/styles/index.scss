@@ -1,0 +1,28 @@
+.btn {
+  background-color: var(--blue);
+  color: #fff;
+  font-size: 14px;
+  height: 32px;
+  padding: 0 10px;
+  border-radius: 2px;
+  line-height: 1;
+  transition: 0.2s all;
+}
+
+.btn+.btn {
+  margin-left: 14px;
+}
+
+.btn:active {
+  opacity: 0.8;
+}
+
+.btn.green {
+  background-color: var(--green);
+}
+
+.top {
+  text-align: center;
+  padding: 10px;
+  font-size: 0;
+}

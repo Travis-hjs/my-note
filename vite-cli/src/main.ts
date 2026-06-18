@@ -27,6 +27,10 @@ const pages = [
     page: "parabola",
     name: "抛物线运动"
   },
+  {
+    page: "table",
+    name: "表格相关"
+  },
 ];
 
 const navList = pages.map(page => (`<li><a href="/src/pages/${page.page}/">${page.name}</a></li>`)).join("");

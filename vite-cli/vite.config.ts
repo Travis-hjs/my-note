@@ -16,7 +16,7 @@ const getPageInput = (page: string) => resolve(__dirname, `src/pages/${page}/ind
  * @param mode 
  */
 function getBuildConfig(mode: string) {
-  const pages = ["home", "about", "snapdom", "lazy-load", "parabola"];
+  const pages = ["home", "about", "snapdom", "lazy-load", "parabola", "table"];
 
   if (pages.includes(mode)) {
     return getBuildByMode(mode);
@@ -31,6 +31,7 @@ function getBuildConfig(mode: string) {
   }
 
   pages.forEach(page => {
+    // @ts-ignore
     config.rolldownOptions.input[page] = getPageInput(page);
   });
   

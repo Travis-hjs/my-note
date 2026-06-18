@@ -227,3 +227,31 @@ export function computeNumber(a: number, type: NumberSymbols, b: number) {
     },
   };
 }
+
+/**
+ * 获取范围随机数
+ * @param min 最小值 
+ * @param max 最大值
+ */
+export function ranInt(min: number, max: number) {
+  return Math.round(Math.random() * (max - min) + min);
+}
+
+/**
+ * 随机生成中文
+ * @param min 最小数
+ * @param max 最大数
+ */
+export function randomText(min = 1, max = 1) {
+  const len = Math.floor(Math.random() * max) + min;
+  const base = 20000;
+  const range = 1000;
+  let str = '';
+  let i = 0;
+  while (i < len) {
+    i++;
+    const lower = Math.floor(Math.random() * range);
+    str += String.fromCharCode(base + lower);
+  }
+  return str;
+}
