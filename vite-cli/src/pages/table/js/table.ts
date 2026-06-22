@@ -53,9 +53,9 @@ namespace CustomTable {
 
 /**
  * 生成表格到指定节点中
- * @param option 
+ * @param props 
  */
-export function createTable<T extends object>(option: CustomTable.Props<T>) {
+export function createTable<T extends object>(props: CustomTable.Props<T>) {
   const styleId = "the-table-style";
   if (!document.getElementById(styleId)) {
     const cssText = `
@@ -179,7 +179,7 @@ export function createTable<T extends object>(option: CustomTable.Props<T>) {
   const tableHeader = createElement("header");
   const tableBody = createElement("body");
   table.append(tableHeader, tableBody);
-  option.el.appendChild(table);
+  props.el.appendChild(table);
 
   /**
    * 获取表格栏的宽度样式
@@ -193,7 +193,7 @@ export function createTable<T extends object>(option: CustomTable.Props<T>) {
   }
 
   function renderHeader() {
-    const columns = option.columns.map(column => {
+    const columns = props.columns.map(column => {
       const el = createElement("tcolumn", getStyle(column));
       el.textContent = column.label || "-";
       return el;
@@ -215,11 +215,11 @@ export function createTable<T extends object>(option: CustomTable.Props<T>) {
     if (!Array.isArray(tableData)) return console.warn("传入的表格数据有误");
     let rowIndex = isPush ? _tableData.length : 0;
     const rowEls = tableData.map(row => {
-      const columnEls = option.columns.map(column => {
+      const columnEls = props.columns.map(column => {
         const columnEl = createElement("column", getStyle(column));
         let btnEls: Array<HTMLButtonElement> = [];
-        if (column.prop === "actions" && option.actions) {
-          btnEls = option.actions.map((btn, bIndex) => {
+        if (column.prop === "actions" && props.actions) {
+          btnEls = props.actions.map((btn, bIndex) => {
             const btnEl = createElement("btn") as HTMLButtonElement;
             btn.className && btnEl.classList.add(btn.className);
             btnEl.disabled = typeof btn.disabled === "function" ? !!btn.disabled(row) : !!btn.disabled;
@@ -262,14 +262,14 @@ export function createTable<T extends object>(option: CustomTable.Props<T>) {
 
   renderHeader();
 
-  renderBody(option.data);
+  renderBody(props.data);
 
   table.addEventListener("click", e => {
     const btn = e.target as HTMLButtonElement;
     if (btn && btn.tagName && btn.tagName.toLocaleLowerCase() === "button") {
       const rowIndex = Number(btn.dataset["row"]);
       const actionIndex = Number(btn.dataset["index"]);
-      const action = option.actions ? option.actions[actionIndex] : undefined;
+      const action = props.actions ? props.actions[actionIndex] : undefined;
       action && action.click && action.click(_tableData[rowIndex], rowIndex);
     }
   });
@@ -363,7 +363,7 @@ export function formatJson<T>(target: Array<T>, options: Array<FormatJsonOption<
   };
 }
 
-interface NativeExportOptions {
+interface NativeExportOption {
   /** 表格头部列表 */
   header: Array<string>
   /**
@@ -390,7 +390,7 @@ interface NativeExportOptions {
  * 原生导出`Excel`函数
  * @param option
  */
-export function exportExcelByNative(option: NativeExportOptions) {
+export function exportExcelByNative(option: NativeExportOption) {
   /** 字符串中包含`http`则默认为图片地址 */
   const reg = /http/;
   /** 表头的长度 */
@@ -456,11 +456,7 @@ export function exportExcelByNative(option: NativeExportOptions) {
     return window.btoa(binary);
   }
 
-  function format(value: string, info: Record<string, string>) {
-    return value.replace(/{(\w+)}/g, (_, p) => {
-      return info[p];
-    });
-  }
+  const format = (value: string, info: Record<string, string>) => value.replace(/{(\w+)}/g, (_, p) => info[p]);
 
   // 创建下载
   const label = document.createElement("a");
