@@ -42,7 +42,7 @@ function getBuildConfig(mode: string) {
  * 获取对应的构建模式配置
  * @param mode 
  */
-function getBuildByMode(mode: string): BuildEnvironmentOptions {  
+function getBuildByMode(mode: string): BuildEnvironmentOptions {
   return {
     outDir: `dist/${mode}`,
     // outDir: `../static/${mode}`,
