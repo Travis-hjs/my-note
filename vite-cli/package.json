@@ -12,6 +12,7 @@
     "build:lazy-load": "vite build --mode lazy-load",
     "build:parabola": "vite build --mode parabola",
     "build:table": "vite build --mode table",
+    "build:audio": "vite build --mode audio",
     "preview": "vite preview"
   },
   "devDependencies": {

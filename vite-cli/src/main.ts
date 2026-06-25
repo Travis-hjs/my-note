@@ -31,6 +31,10 @@ const pages = [
     page: "table",
     name: "表格相关"
   },
+  {
+    page: "audio",
+    name: "音频播放"
+  },
 ];
 
 const navList = pages.map(page => (`<li><a href="/src/pages/${page.page}/">${page.name}</a></li>`)).join("");

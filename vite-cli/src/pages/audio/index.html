@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>音频播放</title>
+</head>
+
+<body>
+  <div class="page">
+    <button onclick="playAudio()">播放标签音效</button>
+    <button onclick="pauseAudio()">停止标签音效</button>
+    <div class="webAudio">
+      <input class="file" type="file" onchange="uploadAudio(this)">
+    </div>
+    <button onclick="playWebAudio()">播放加载好的音频</button>
+  </div>
+  <script type="module" src="./main.ts"></script>
+</body>
+
+</html>

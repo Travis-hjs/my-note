@@ -1,13 +1,19 @@
+import { exportToWindow } from "@/utils/dom";
+import "./styles/index.scss";
+import Aclick from "./assets/click.mp3";
+import Adestroy from "./assets/destroy.mp3";
+import Asuccess from "./assets/success.mp3";
+
 /** 音频文件路径 列表 */
-const audios = ["audio/click.mp3", "audio/destroy.mp3", "audio/success.mp3"];
+const audios = [Aclick, Adestroy, Asuccess];
 
 /**
  * 创建一个`html`音频
  * [see](http://www.w3school.com.cn/jsref/dom_obj_audio.asp)
- * @param {string} src 音频路径
- * @param {boolean} loop 是否需要循环
+ * @param src 音频路径
+ * @param loop 是否需要循环
  */
-function createAudioLabel(src, loop) {
+function createAudioLabel(src: string, loop = false) {
   const label = new Audio();
   document.body.appendChild(label);
   // 设置或返回是否在就绪（加载完成）后随即播放音频
@@ -40,23 +46,11 @@ function pauseAudio() {
  * @description 解决在移动端网页上标签播放音频延迟的方案 貌似`H5`游戏引擎也是使用这个实现
  */
 function audioComponent() {
-  /**
-   * 音频上下文
-   * @type {AudioContext}
-   */
-  const context = new (window.AudioContext || window.webkitAudioContext || window.mozAudioContext || window.msAudioContext)();
-  /** 
-   * @type {AnalyserNode} 
-   */
-  const analyser = context.createAnalyser();;
-  /**
-   * @type {AudioBufferSourceNode}
-   */
-  let bufferNode = null;
-  /**
-   * @type {AudioBuffer}
-   */
-  let buffer = null;
+  /** 音频上下文 */
+  const context = new window.AudioContext();
+  const analyser = context.createAnalyser();
+  let bufferNode: AudioBufferSourceNode;
+  let buffer: AudioBuffer;
   /** 是否加载完成 */
   let loaded = false;
 
@@ -65,10 +59,10 @@ function audioComponent() {
   return {
     /**
      * 加载路径音频文件
-     * @param {string} url 音频路径
-     * @param {(res: AnalyserNode) => void} callback 加载完成回调
+     * @param url 音频路径
+     * @param callback 加载完成回调
      */
-    loadPath(url, callback) {
+    loadPath(url: string, callback?: (res: AnalyserNode) => void) {
       const XHR = new XMLHttpRequest();
       XHR.open("GET", url, true);
       XHR.responseType = "arraybuffer";
@@ -86,14 +80,14 @@ function audioComponent() {
 
     /** 
      * 加载 input 音频文件
-     * @param {File} file 音频文件
-     * @param {(res: AnalyserNode) => void} callback 加载完成回调
+     * @param file 音频文件
+     * @param callback 加载完成回调
      */
-    loadFile(file, callback) {
+    loadFile(file: File, callback?: (res: AnalyserNode) => void) {
       const FR = new FileReader();
       // 先加载音频文件
       FR.onload = e => {
-        const res = e.target.result;
+        const res = e.target!.result as ArrayBuffer;
         // 然后解码
         context.decodeAudioData(res, audioBuffer => {
           // 最后缓存音频资源
@@ -126,14 +120,11 @@ function audioComponent() {
 
 /**
  * 音频图表组件
- * @param {HTMLCanvasElement} canvas canvas节点
+ * @param canvas canvas节点
  */
-function audioChart(canvas) {
-  const context = canvas.getContext("2d");
-  /**
-   * @type {AnalyserNode}
-   */
-  let analyser = null;
+function audioChart(canvas: HTMLCanvasElement) {
+  const context = canvas.getContext("2d")!;
+  let analyser: AnalyserNode;
 
   canvas.width = 800;
   canvas.height = 400;
@@ -172,9 +163,9 @@ function audioChart(canvas) {
   return {
     /**
      * 设置音频数据
-     * @param {AnalyserNode} res 
+     * @param res 
      */
-    setAnalyser(res) {
+    setAnalyser(res: AnalyserNode) {
       analyser = res;
     }
   }
@@ -182,27 +173,28 @@ function audioChart(canvas) {
 
 /**
  * 上传音频文件
- * @param {HTMLInputElement} el 
+ * @param el 
  */
-function uploadAudio(el) {
+function uploadAudio(el: HTMLInputElement) {
   const component = audioComponent();
-  const box = el.parentNode;
+  const box = el.parentNode!;
   const item = document.createElement("div");
 
-  component.loadFile(el.files[0], function (analyser) {
+  component.loadFile(el.files![0], function (analyser) {
     const canvas = document.createElement("canvas");
     const btn = document.createElement("button");
-    btn.innerHTML = "播放" + el.files[0].name;
+    btn.innerHTML = "播放" + el.files![0].name;
     item.className = "audio-item";
     item.appendChild(btn);
     item.appendChild(canvas);
     box.appendChild(item);
     const chart = audioChart(canvas);
     btn.onclick = function () {
+      component.stop();
       component.play();
       chart.setAnalyser(analyser);
     }
-    el.value = null;
+    el.value = "";
   });
 }
 
@@ -213,3 +205,10 @@ webAudio.loadPath("https://longgeniubi.oss-cn-shanghai.aliyuncs.com/audio/tip.mp
 function playWebAudio() {
   webAudio.play();
 }
+
+exportToWindow({
+  playAudio,
+  pauseAudio,
+  uploadAudio,
+  playWebAudio,
+});
