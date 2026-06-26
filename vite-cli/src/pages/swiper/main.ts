@@ -18,7 +18,7 @@ interface SwiperOption {
   /** 是否垂直滚动 */
   vertical?: boolean;
   /** 是否需要自动播放 */
-  autoPaly?: boolean;
+  autoPlay?: boolean;
   /** 是否需要底部圆点 */
   pagination?: boolean;
   /** 滑动/切换结束回调 */
@@ -56,7 +56,7 @@ function swiper(params: SwiperOption) {
   /** 方向 `X => true` | `Y => false` */
   const direction = params.vertical || false;
   /** 是否需要自动播放 */
-  const autoPaly = params.autoPaly || false;
+  const autoPlay = params.autoPlay || false;
   /** 自动播放间隔（毫秒）默认 3000 */
   const interval = params.interval || 3000;
   /** 过渡时间（毫秒）默认 300 */
@@ -150,11 +150,13 @@ function swiper(params: SwiperOption) {
       if ((endTime - startTime) < 200) return true;
       // 这里判断方向（正值和负值）
       if (slideDistance < 0) {
-        if ((endDistance - startDistance) < (slideDistance / 2)) return true;
-        return false;
+        return (endDistance - startDistance) < (slideDistance / 2);
+        // if ((endDistance - startDistance) < (slideDistance / 2)) return true;
+        // return false;
       } else {
-        if ((endDistance - startDistance) > (slideDistance / 2)) return true;
-        return false;
+        return (endDistance - startDistance) > (slideDistance / 2);
+        // if ((endDistance - startDistance) > (slideDistance / 2)) return true;
+        // return false;
       }
     }
 
@@ -263,7 +265,7 @@ function swiper(params: SwiperOption) {
     }
 
     // 判断是否需要开启自动播放
-    if (autoPaly && nodeItems.length > 1) startAuto();
+    if (autoPlay && nodeItems.length > 1) startAuto();
 
     // 开始触摸
     function getClientDistance(ev: TouchEvent | MouseEvent) {
@@ -427,7 +429,7 @@ createList();
 swiper({
   el: ".swiper",
   pagination: true,
-  autoPaly: true,
+  autoPlay: true,
   // interval: 5000,
   // loop: true,
   // moveTime: 400,
@@ -452,7 +454,7 @@ btn.addEventListener("click", function() {
     pagination: true,
     loop: true,
     vertical: true,
-    autoPaly: true,
+    autoPlay: true,
     interval: 5000,
     // slideCallback(index) {
     //     console.log(className + "索引 >>", index);
