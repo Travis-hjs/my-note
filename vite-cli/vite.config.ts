@@ -16,7 +16,7 @@ const getPageInput = (page: string) => resolve(__dirname, `src/pages/${page}/ind
  * @param mode 
  */
 function getBuildConfig(mode: string) {
-  const pages = ["home", "about", "snapdom", "lazy-load", "parabola", "table", "audio"];
+  const pages = ["home", "about", "snapdom", "lazy-load", "parabola", "table", "audio", "swiper"];
 
   if (pages.includes(mode)) {
     return getBuildByMode(mode);

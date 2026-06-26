@@ -35,6 +35,10 @@ const pages = [
     page: "audio",
     name: "音频播放"
   },
+  {
+    page: "swiper",
+    name: "轮播图"
+  },
 ];
 
 const navList = pages.map(page => (`<li><a href="/src/pages/${page.page}/">${page.name}</a></li>`)).join("");

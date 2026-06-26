@@ -1,63 +1,67 @@
+import "@/styles/common.scss";
+import "@/styles/custom-button.scss";
+import "./styles/index.scss";
+import { find } from "@/utils/dom";
+
+interface SwiperOption {
+  /**
+   * 组件节点
+   * - `string`类型为 class|id|<label>
+   */
+  el: string | HTMLElement;
+  /** 过渡时间（毫秒）默认 300 */
+  moveTime?: number;
+  /** 自动播放间隔（毫秒）默认 3000 */
+  interval?: number;
+  /** 是否需要回路 */
+  loop?: boolean;
+  /** 是否垂直滚动 */
+  vertical?: boolean;
+  /** 是否需要自动播放 */
+  autoPaly?: boolean;
+  /** 是否需要底部圆点 */
+  pagination?: boolean;
+  /** 滑动/切换结束回调 */
+  slideCallback?: (index: number) => void
+}
+
 /**
  * 轮播组件
- * @author https://github.com/Hansen-hjs
- * @description 
- * 移动端`swiper`组件，如果需要兼容`pc`自行修改对应的`touch`到`mouse`事件即可。现成效果预览：https://huangjingsheng.gitee.io/hjs/face/
- * @param {object} params 配置传参
- * @param {string} params.el 组件节点 class|id|<label>
- * @param {number} params.moveTime 过渡时间（毫秒）默认 300
- * @param {number} params.interval 自动播放间隔（毫秒）默认 3000
- * @param {boolean} params.loop 是否需要回路
- * @param {boolean} params.vertical 是否垂直滚动
- * @param {boolean} params.autoPaly 是否需要自动播放
- * @param {boolean} params.pagination 是否需要底部圆点
- * @param {(index: number) => void} params.slideCallback 滑动/切换结束回调
+ * - 现成效果预览：https://travis-hjs.github.io/face/
+ * @param params 配置传参
  */
-function swiper(params) {
+function swiper(params: SwiperOption) {
+  if (typeof params !== "object") return console.warn("传参有误");
   /**
    * css class 命名列表
-   * @dec ["滑动列表","滑动item","圆点容器","底部圆点","圆点高亮"]
+   * - ["滑动列表","滑动item","圆点容器","底部圆点","圆点高亮"]
    */
   const classNames = [".swiper_list", ".swiper_item", ".swiper_pagination", ".swiper_dot", ".swiper_dot_active"];
   /** 滑动结束函数 */
   const slideEnd = params.slideCallback || function () { };
-  /**
-   * 组件节点
-   * @type {HTMLElement}
-   */
-  let node = null;
-  /**
-   * item列表容器
-   * @type {HTMLElement}
-   */
-  let nodeItem = null;
-  /**
-   * item节点列表
-   * @type {Array<HTMLElement>}
-   */
-  let nodeItems = [];
-  /**
-   * 圆点容器
-   * @type {HTMLElement}
-   */
-  let nodePagination = null;
-  /**
-   * 圆点节点列表
-   * @type {Array<HTMLElement>}
-   */
-  let nodePaginationItems = [];
+  /** 组件节点 */
+  let node: HTMLElement;
+  /** item列表容器 */
+  let nodeItem: HTMLElement;
+  /** item节点列表 */
+  let nodeItems: Array<HTMLElement> = [];
+  /** 圆点容器 */
+  let nodePagination: HTMLElement;
+  /** 圆点节点列表 */
+  let nodePaginationItems: Array<HTMLElement> = [];
   /** 是否需要底部圆点 */
-  let pagination = false;
+  const pagination = params.pagination || false;;
   /** 是否需要回路 */
-  let isLoop = false;
+  const isLoop = params.loop || false;
   /** 方向 `X => true` | `Y => false` */
-  let direction = false;
+  const direction = params.vertical || false;
   /** 是否需要自动播放 */
-  let autoPaly = false;
+  const autoPaly = params.autoPaly || false;
   /** 自动播放间隔（毫秒）默认 3000 */
-  let interval = 3000;
+  const interval = params.interval || 3000;
   /** 过渡时间（毫秒）默认 300 */
-  let moveTime = 300;
+  const moveTime = params.moveTime || 300;
+  const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile/i.test(navigator.userAgent);
 
   /** 设置动画 */
   function startAnimation() {
@@ -71,9 +75,9 @@ function swiper(params) {
 
   /**
    * 属性样式滑动
-   * @param {number} n 移动的距离
+   * @param n 移动的距离
    */
-  function slideStyle(n) {
+  function slideStyle(n: number) {
     let x = 0, y = 0;
     if (direction) {
       y = n;
@@ -85,15 +89,12 @@ function swiper(params) {
 
   /**
    * 事件开始
-   * @param {number} width 滚动容器的宽度
-   * @param {number} height 滚动容器的高度
+   * @param width 滚动容器的宽度
+   * @param height 滚动容器的高度
    */
-  function main(width, height) {
-    /**
-     * 动画帧
-     * @type {requestAnimationFrame}
-     */
-    const animation = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame || window.msRequestAnimationFrame;
+  function main(width: number, height: number) {
+    /** 动画帧 */
+    const animation = window.requestAnimationFrame;
     /** 触摸开始时间 */
     let startTime = 0;
     /** 触摸结束时间 */
@@ -142,9 +143,9 @@ function swiper(params) {
 
     /**
      * 判断触摸处理函数 
-     * @param {number} slideDistance 滑动的距离
+     * @param slideDistance 滑动的距离
      */
-    function judgeTouch(slideDistance) {
+    function judgeTouch(slideDistance: number) {
       //	这里我设置了200毫秒的有效拖拽间隔
       if ((endTime - startTime) < 200) return true;
       // 这里判断方向（正值和负值）
@@ -165,9 +166,9 @@ function swiper(params) {
 
     /**
      * 滑动
-     * @param {number} slideDistance 滑动的距离
+     * @param slideDistance 滑动的距离
      */
-    function slideMove(slideDistance) {
+    function slideMove(slideDistance: number) {
       startAnimation();
       slideStyle(slideDistance);
       loopCount = 0;
@@ -197,7 +198,7 @@ function swiper(params) {
       }
       // console.log(`第${ index+1 }张`);	// 这里可以做滑动结束回调
       if (pagination) {
-        nodePagination.querySelector(classNames[4]).className = classNames[3].slice(1);
+        nodePagination.querySelector(classNames[4])!.className = classNames[3].slice(1);
         nodePaginationItems[index].classList.add(classNames[4].slice(1));
       }
     }
@@ -265,24 +266,31 @@ function swiper(params) {
     if (autoPaly && nodeItems.length > 1) startAuto();
 
     // 开始触摸
-    nodeItem.addEventListener("touchstart", ev => {
+    function getClientDistance(ev: TouchEvent | MouseEvent) {
+      if ("touches" in ev) {
+        const touch = ev.touches[0] || ev.changedTouches[0];
+        return direction ? touch.clientY : touch.clientX;
+      }
+      return direction ? ev.clientY : ev.clientX;
+    }
+
+    function onStart(ev: TouchEvent | MouseEvent) {
       startTime = Date.now();
       count = 0;
       loopCount = moveTime / 1000 * 60;
       stopAnimation();
-      startDistance = direction ? ev.touches[0].clientY : ev.touches[0].clientX;
-    });
+      startDistance = getClientDistance(ev);
+      endDistance = startDistance;
+    }
 
-    // 触摸移动
-    nodeItem.addEventListener("touchmove", ev => {
+    function onMove(ev: TouchEvent | MouseEvent) {
       ev.preventDefault();
       count = 0;
-      endDistance = direction ? ev.touches[0].clientY : ev.touches[0].clientX;
+      endDistance = getClientDistance(ev);
       slideStyle(getDragDistance());
-    });
+    }
 
-    // 触摸离开
-    nodeItem.addEventListener("touchend", () => {
+    function onEnd() {
       endTime = Date.now();
       // 判断是否点击
       if (endState !== endDistance) {
@@ -294,16 +302,38 @@ function swiper(params) {
       endState = endDistance;
       // 重新打开自动播
       count = 0;
-    });
+    }
+
+    if (isMobile) {
+      nodeItem.addEventListener("touchstart", onStart);
+      nodeItem.addEventListener("touchmove", onMove, { passive: false });
+      nodeItem.addEventListener("touchend", onEnd);
+    } else {
+      let isMouseDown = false;
+      nodeItem.addEventListener("mousedown", ev => {
+        isMouseDown = true;
+        onStart(ev);
+      });
+      nodeItem.addEventListener("mousemove", ev => {
+        if (!isMouseDown) return;
+        onMove(ev);
+      });
+      document.addEventListener("mouseup", () => {
+        if (!isMouseDown) return;
+        isMouseDown = false;
+        onEnd();
+      });
+    }
   }
 
   /**
    * 输出回路：如果要回路的话前后增加元素
-   * @param {number} width 滚动容器的宽度
-   * @param {number} height 滚动容器的高度
+   * @param width 滚动容器的宽度
+   * @param height 滚动容器的高度
    */
-  function outputLoop(width, height) {
-    const first = nodeItems[0].cloneNode(true), last = nodeItems[nodeItems.length - 1].cloneNode(true);
+  function outputLoop(width: number, height: number) {
+    const first = nodeItems[0].cloneNode(true) as HTMLElement;
+    const last = nodeItems[nodeItems.length - 1].cloneNode(true) as HTMLElement;
     nodeItem.insertBefore(last, nodeItems[0]);
     nodeItem.appendChild(first);
     nodeItems.unshift(last);
@@ -317,10 +347,10 @@ function swiper(params) {
 
   /**
    * 输出动态布局
-   * @param {number} width 滚动容器的宽度
-   * @param {number} height 滚动容器的高度
+   * @param width 滚动容器的宽度
+   * @param height 滚动容器的高度
    */
-  function outputLayout(width, height) {
+  function outputLayout(width: number, height: number) {
     if (direction) {
       for (let i = 0; i < nodeItems.length; i++) {
         nodeItems[i].style.height = `${height}px`;
@@ -335,8 +365,8 @@ function swiper(params) {
 
   /** 输出底部圆点 */
   function outputPagination() {
-    let paginations = "";
-    nodePagination = node.querySelector(classNames[2]);
+    let paginationContent = "";
+    nodePagination = node.querySelector(classNames[2]) as HTMLElement;
     // 如果没有找到对应节点则创建一个
     if (!nodePagination) {
       nodePagination = document.createElement("div");
@@ -344,20 +374,24 @@ function swiper(params) {
       node.appendChild(nodePagination);
     }
     for (let i = 0; i < nodeItems.length; i++) {
-      paginations += `<div class="${classNames[3].slice(1)}"></div>`;
+      paginationContent += `<div class="${classNames[3].slice(1)}"></div>`;
     }
-    nodePagination.innerHTML = paginations;
-    nodePaginationItems = [...nodePagination.querySelectorAll(classNames[3])];
-    nodePagination.querySelector(classNames[3]).classList.add(classNames[4].slice(1));
+    nodePagination.innerHTML = paginationContent;
+    nodePaginationItems = [...nodePagination.querySelectorAll(classNames[3])] as Array<HTMLElement>;
+    nodePagination.querySelector(classNames[3])!.classList.add(classNames[4].slice(1));
   }
 
   /** 初始化动态布局 */
   function initLayout() {
-    node = document.querySelector(params.el);
+    if (typeof params.el === "string") {
+      node = document.querySelector(params.el) as HTMLElement;
+    } else if (params.el instanceof HTMLElement) {
+      node = params.el;
+    }
     if (!node) return console.warn("没有可执行的节点！");
-    nodeItem = node.querySelector(classNames[0]);
+    nodeItem = node.querySelector(classNames[0])!;
     if (!nodeItem) return console.warn(`缺少"${classNames[0]}"节点！`);
-    nodeItems = [...node.querySelectorAll(classNames[1])];
+    nodeItems = [...node.querySelectorAll(classNames[1])] as Array<HTMLElement>;
     if (nodeItems.length == 0) return console.warn("滑动节点个数必须大于0！");
     const moveWidth = node.offsetWidth, moveHeight = node.offsetHeight;
     if (pagination) outputPagination();
@@ -366,38 +400,25 @@ function swiper(params) {
     main(moveWidth, moveHeight);
   }
 
-  /** 初始化参数 */
-  function initParams() {
-    if (typeof params !== "object") return console.warn("传参有误");
-    pagination = params.pagination || false;
-    direction = params.vertical || false;
-    autoPaly = params.autoPaly || false;
-    isLoop = params.loop || false;
-    moveTime = params.moveTime || 300;
-    interval = params.interval || 3000;
-    initLayout();
-  }
-  initParams();
+  initLayout();
 }
 
 /** 页面容器节点 */
-const page = document.querySelector(".page");
+const page = find(".page");
 
 /** 颜色列表 */
 const colors = ["#2196f3", "#9c27b0", "#e91e63", "#f44336"];
 
 /**
  * 动态生成组件html
- * @param {string} className 
+ * @param className 
  */
 function createList(className = "") {
   let itemList = "";
   for (let i = 0; i < colors.length; i++) {
-    itemList += `<div class="swiper_item" style="background-color: ${colors[i]}"><p>silder-${i + 1}</p></div>`;
+    itemList += `<div class="swiper_item" style="background-color: ${colors[i]}"><p>slider-${i + 1}</p></div>`;
   }
-  let component = `<div class="swiper ${className}">
-                        <div class="swiper_list">${itemList}</div>
-                    </div>`;
+  let component = `<div class="swiper ${className}"><div class="swiper_list">${itemList}</div></div>`;
   page.insertAdjacentHTML("beforeend", component);
 }
 
@@ -416,11 +437,14 @@ swiper({
   // }
 });
 
-/**
- * 添加一个`swiper`组件
- * @param {HTMLElement} el 
- */
-function addSwiper(el) {
+const div = document.createElement("div");
+div.style.textAlign = "center";
+div.style.marginBottom = "10px";
+
+const btn = document.createElement("button");
+btn.className = "the-custom-btn";
+btn.textContent = "新增一个Swiper";
+btn.addEventListener("click", function() {
   const className = "swiper_" + Date.now().toString();
   createList(className);
   swiper({
@@ -428,8 +452,13 @@ function addSwiper(el) {
     pagination: true,
     loop: true,
     vertical: true,
+    autoPaly: true,
+    interval: 5000,
     // slideCallback(index) {
     //     console.log(className + "索引 >>", index);
     // }
   });
-}
+});
+
+div.appendChild(btn);
+page.appendChild(div);

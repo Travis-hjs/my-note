@@ -13,6 +13,7 @@
     "build:parabola": "vite build --mode parabola",
     "build:table": "vite build --mode table",
     "build:audio": "vite build --mode audio",
+    "build:swiper": "vite build --mode swiper",
     "preview": "vite preview"
   },
   "devDependencies": {
