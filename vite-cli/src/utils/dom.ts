@@ -1,5 +1,4 @@
 import { formatDate } from "./index";
-import { message } from "./message";
 
 /**
  * 查找单个元素
@@ -46,11 +45,7 @@ export function copyText(text: string, success?: () => void, fail?: (res: string
   clipboard.setSelectionRange(0, clipboard.value.length);
   const state = document.execCommand("copy");
   if (state) {
-    if (success) {
-      success();
-    } else {
-      message.success("复制成功!");
-    }
+    success && success();
   } else {
     fail && fail("复制失败");
   }
